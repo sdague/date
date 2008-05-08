@@ -1501,7 +1501,7 @@ class views_handler_argument_date extends views_handler_argument_formula {
     parent::options($options);
     $parts = $this->date_handler->date_parts();
     unset($parts['adjustment']);
-    $options['granularity'] = 'day');
+    $options['granularity'] = 'day';
   }
 
   /**
