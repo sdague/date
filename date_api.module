@@ -169,8 +169,8 @@ function date_week_days($required = FALSE, $refresh = TRUE) {
 function date_week_days_abbr($required = FALSE, $refresh = TRUE, $length = 3) {
   if ($refresh || empty($weekdays)) {
     $weekdays = array();
-    foreach (date_week_days_untranslated($refresh) as $key => $day) {
-      $weekdays[$key] = t(substr($day, 0, $length));
+    foreach (date_week_days($refresh) as $key => $day) {
+      $weekdays[$key] = substr($day, 0, $length);
     }
   }
   $none = array('' => '');
