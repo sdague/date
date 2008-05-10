@@ -454,6 +454,13 @@ function date_text_input_value($element) {
   if (date_is_valid($value)) {
     return $value;
   }
+  // If that didn't work, try strtotime().
+  else {
+   $date = strtotime($input, 0);
+   if (date_is_valid($date, DATE_UNIX)) {
+     return date_convert($date, DATE_UNIX, DATE_DATETIME);
+   }
+  }
   return NULL;
 }
 
