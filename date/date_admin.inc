@@ -484,7 +484,7 @@ function date_timezone_handling_options() {
     'site' => t('Site\'s time zone'),
     'date' => t('Date\'s time zone'),
     'user' => t('User\'s time zone'),
-    'gmt' => 'UTC',
+    'utc' => 'UTC',
     'none' => t('No time zone conversion'),
     );
 }
