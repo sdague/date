@@ -5,7 +5,7 @@
  * Token module integration.
  */
 
-function _date_token_list($type = 'all') {
+function date_token_list($type = 'all') {
   if ($type == 'field' || $type == 'all') {
     $tokens = array();
 
@@ -31,7 +31,7 @@ function _date_token_list($type = 'all') {
   }
 }
 
-function _date_token_values($type, $object = NULL, $options = array()) {
+function date_token_values($type, $object = NULL, $options = array()) {
   if ($type == 'field') {
     $item = $object[0];
 
