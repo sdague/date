@@ -6,7 +6,7 @@ views_include_handlers();
 /**
  * Implementation of hook_views_data().
  */
-function _date_views_data($field) {
+function date_views_data($field) {
   $data = content_views_field_views_data($field);
   $db_info = content_database_info($field);
   $table_alias = content_views_tablename($field);
