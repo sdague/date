@@ -73,7 +73,7 @@ function _date_api_elements() {
     '#element_validate' => array('date_select_validate'),
     ));
   $type['date_text'] = array_merge($date_base, array(
-    '#process' => array('date_text_process' => array()),
+    '#process' => array('date_text_process'),
     '#element_validate' => array('date_text_validate'),
     ));
   $type['date_timezone'] = array(
