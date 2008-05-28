@@ -139,7 +139,7 @@ function date_timezone_cron() {
  * have current information to process.
  */
 function date_timezone_user($op, &$edit, &$account, $category = NULL) {
-  if ($account->uid && $op == 'login' && variable_get('configurable_timezones', 1)) {
+  if (isset($account->uid) && $op == 'login' && variable_get('configurable_timezones', 1)) {
     if (strlen($account->timezone_name)) {
       $date = date_now($account->timezone_name);
       $offset = date_offset_get($date);
