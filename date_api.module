@@ -1329,10 +1329,6 @@ function date_api_theme() {
     'path' => "$path/theme",
   );
   return array(
-     'date_nav' => $base + array(
-       'template' => 'date-nav', 
-       'arguments' => array('view' => NULL)
-       ),
     'date_nav_title' => array('arguments' => array('type' => NULL, 'view' => NULL)),
     'date_timezone' => array('arguments' => array('element' => NULL)),
     'date_select' => array('arguments' => array('element' => NULL)),

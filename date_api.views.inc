@@ -262,7 +262,7 @@ class date_api_argument_handler extends views_handler_argument_formula {
     $min_utc = isset($this->min_utc) ? $this->min_utc : NULL;
     $max_date = isset($this->max_date) ? $this->max_date : NULL;
     $max_utc = isset($this->max_utc) ? $this->max_utc : NULL;
-    
+    $this->query_fields = array();
     foreach ($this->options['date_fields'] as $delta => $name) {
       if ($field = $fields[$name]) {
         $date_handler = new date_sql_handler();
@@ -836,13 +836,30 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 }
 
 /**
+ *  Identify all potential date/timestamp fields and cache the data.
+ */
+function date_api_fields($base = 'node', $reset = FALSE) {
+  static $fields;
+  if (empty($fields[$base]) || $reset) {
+    $cid = 'date_api_fields_'. $base;
+    if (!$reset && $cached = cache_get($cid, 'cache_views')) {
+      $fields[$base] = $cached->data;
+    }
+    else {
+      $fields[$base] = _date_api_fields($base);
+    }
+  }
+  return $fields[$base];
+}
+
+/**
  *  Identify all potential date/timestamp fields.
  *
  *  @return
  *   array with fieldname, type, and table
  */
-function date_api_fields($base = 'node') {
-  $cid = 'date_api_fields';
+function _date_api_fields($base = 'node') {
+  $cid = 'date_api_fields_'. $base;
   cache_clear_all($cid, 'cache_views');
   
   $all_fields = views_fetch_fields($base, 'field');
