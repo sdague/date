@@ -403,7 +403,8 @@ function date_combo_validate($element, &$form_state) {
         $item[$from_field] = date_convert($item[$from_field], DATE_DATETIME, $field['type']);
         $item[$to_field] = date_convert($item[$to_field], DATE_DATETIME, $field['type']);
       }
-      $item['rrule'] = $rrule;
+      // TODO get RRULE working.
+      //$item['rrule'] = $rrule;
         
       form_set_value($element, $item, $form_state);
     }
