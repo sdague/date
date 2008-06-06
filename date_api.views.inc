@@ -88,28 +88,19 @@ function date_api_views_plugins() {
         'even empty' => TRUE,
       ),
     ),
-    // Add an option to set a default value for an empty date argument.
-    'argument default' => array(
-      'date' => $base + array(
-        'title' => t('Current date'),
-        'handler' => 'date_plugin_argument_default',
-      ),
-    ),
   );
 }
 
 /**
  * Date API argument handler.
  */
-class date_api_argument_handler extends views_handler_argument_formula {
+class date_api_argument_handler extends views_handler_argument_date {
   function construct() {
     parent::construct();
     include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
     $this->date_handler = new date_sql_handler();
     $this->date_handler->construct();
-    $this->date_handler->granularity = $this->options['granularity'];
     if (isset($this->definition['content_field'])) {
-      $this->date_handler->date_type = $this->definition['content_field']['type'];
       $this->content_field = content_fields($this->definition['content_field_name']);
       $this->additional_fields = $this->definition['additional fields'];
     }
@@ -122,6 +113,10 @@ class date_api_argument_handler extends views_handler_argument_formula {
   function init(&$view, $options) {
     parent::init($view, $options);
     $date_handler = $this->date_handler;
+    $date_handler->granularity = $this->options['granularity'];
+    if (isset($this->definition['content_field'])) {
+      $date_handler->date_type = $this->definition['content_field']['type'];
+    }
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
   }
@@ -196,6 +191,29 @@ class date_api_argument_handler extends views_handler_argument_formula {
     }
   }
 
+  /**
+   * Set the empty argument value to the current date, 
+   * formatted appropriately for this argument.
+   */
+  function get_default_argument($raw = FALSE) {
+    if (!$raw && $this->options['default_argument_type'] == 'date') {
+      return date($this->format(), time());
+    }
+    else {
+      return parent::get_default_argument($raw);
+    }
+  }
+    
+  function format() {
+    if (!empty($this->options['granularity'])) {
+      $date_handler = new date_sql_handler();
+      return $date_handler->views_formats($this->options['granularity']);
+    }
+    else {
+      return !empty($this->options[$this->option_name]) ? $this->options[$this->option_name] : 'Y-m';
+    }
+  }
+    
   /**
    * Provide a link to the next level of the view from the summary.
    */
@@ -359,54 +377,6 @@ class date_api_argument_handler extends views_handler_argument_formula {
   }
 }
   
-/**
- * Default argument plugin to default to the current date.
- */
-class date_plugin_argument_default extends views_plugin_argument_default {
-  var $option_name = 'default_argument_date';
-
-  // If used on a date argument that is tracking granularity, use that
-  // for the format, otherwise get a format to use for the argument.
-  
-  function argument_form(&$form, &$form_state) {
-    if (!empty($this->argument->options['granularity'])) {
-      return;
-    }
-    else {
-      $form[$this->option_name] = array(
-        '#title' => t('Current date format'),
-        '#description' => t('Select a format to use when creating a missing argument from the current date.'),
-        '#type' => 'select',
-        '#options' => array('Y-m-d' => 'YYYY-MM-DD', 'Ymd' => 'YYYYMMDD', 
-          'Y-m' => 'YYYY-MM', 'Ym' => 'YYYYMM', 'Y' => 'YYYY', 
-          'Y-\Ww' => 'YYYY-W99', 'Y\Ww' => 'YYYYW99'),
-        '#default_value' => $this->format(),
-        '#process' => array('views_process_dependency'),
-        '#dependency' => array(
-          'radio:options[default_action]' => array('default'),
-          'radio:options[default_argument_type]' => array($this->id)
-        ),
-        '#dependency_count' => 2,
-      );
-      $this->check_access($form);
-    }
-  }
-  
-  function format() {
-    if (!empty($this->argument->options['granularity'])) {
-      $date_handler = new date_sql_handler();
-      return $date_handler->views_formats($this->argument->options['granularity']);
-    }
-    else {
-      return !empty($this->argument->options[$this->option_name]) ? $this->argument->options[$this->option_name] : 'Y-m';
-    }
-  }
-  
-  function get_argument() {
-    return date($this->format(), time());
-  }
-}
-
 /**
  * The plugin that handles date navigation attachments.
  * 
@@ -897,6 +867,14 @@ function _date_api_fields($base = 'node') {
     // Don't do anything if this is not a date field we can handle.
     if (!empty($type)) {
 
+      // Handling for simple timestamp fields
+      $fromto = array($alias, $alias);
+      $tz_handling = 'site';
+      $related_fields = array();
+      $timezone_field = '';
+      $offset_field = '';
+      $granularity = array('year', 'month', 'day', 'hour', 'minute');
+       
       // dates with from and to dates need to handle both fields as one
       // add the from and to dates to the first one found and ignore the second
       $fields[$name]['table_name'] = $table_name;
@@ -904,46 +882,40 @@ function _date_api_fields($base = 'node') {
       $fields[$name]['type'] = $type;
       
       // Handling for content field dates
-      if ($handler->content_field['tz_handling']) {
+      if (isset($handler->content_field['tz_handling'])) {
         $tz_handling = $handler->content_field['tz_handling'];
         $db_info = content_database_info($handler->content_field);
         if ($tz_handling == 'date') {
           $offset_field = $table_name .'.'. $db_info['columns']['offset']['column'];
         }
         $related_fields = array(
-          $table_name .'.'. $field_name,
-          $table_name .'.'. $db_info['columns']['value2']['column'],
-          $table_name .'.'. $db_info['columns']['timezone']['column'],
+          $table_name .'.'. $field_name
           );
-        $timezone_field = $table_name .'.'. $db_info['columns']['timezone']['column'];
-      }
-      // Handling for simple timestamp fields
-      else {
-        $fromto = array($alias, $alias);
-        $tz_handling = 'site';
-        $related_fields = array();
-        $timezone_field = '';
-      }
-      // Handling for cck fromto dates
-      switch ($handler->content_field['type']) {
-        case 'date':
-        case 'datetime':
-        case 'datestamp':
-          $db_info = content_database_info($handler->content_field);
-          $fromto = array(
-            $table_name .'_'. $db_info['columns']['value']['column'],
-            $table_name .'_'. ($handler->content_field['todate'] ? $db_info['columns']['value2']['column'] : $db_info['columns']['value']['column']),
-            );
-          break;
-      }
-      
-      if (is_array($handler->content_field['granularity'])) {
-        $granularity = $handler->content_field['granularity'];
-      }
-      else {
-        $granularity = array('year', 'month', 'day', 'hour', 'minute');
+        if (isset($db_info['columns']['value2']['column'])) {
+          $related_fields = array_merge($related_fields, array($table_name .'.'. $db_info['columns']['value2']['column']));
+        }
+        if (isset($db_info['columns']['timezone']['column'])) {
+          $related_fields = array_merge($related_fields, array($table_name .'.'. $db_info['columns']['timezone']['column']));
+          $timezone_field = $table_name .'.'. $db_info['columns']['timezone']['column'];
+        }
       }
 
+      // Handling for cck fromto dates
+      if (isset($handler->content_field)) {
+        switch ($handler->content_field['type']) {
+          case 'date':
+          case 'datetime':
+          case 'datestamp':
+            $db_info = content_database_info($handler->content_field);
+            $fromto = array(
+              $table_name .'_'. $db_info['columns']['value']['column'],
+              $table_name .'_'. ($handler->content_field['todate'] ? $db_info['columns']['value2']['column'] : $db_info['columns']['value']['column']),
+              );
+            break;
+        }
+        $granularity = $handler->content_field['granularity'];
+      }
+      
       // CCK fields append a column name to the field, others do not
       // need a real field_name with no column name appended for cck date formatters
       switch ($type) {

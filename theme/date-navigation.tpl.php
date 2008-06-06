@@ -2,7 +2,7 @@
 // $Id$
 /**
  * @file
- * Template to display date naviagion links.
+ * Template to display date navigation links.
  *
  * $nav_title
  *   The formatted title for this calendar. In the case of mini
