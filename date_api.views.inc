@@ -21,7 +21,6 @@
  *   date argument default to set a starting point for the view.
  */
 //views_include_handlers();
-
 /**
  * Implementation of hook_views_data()
  */
@@ -282,7 +281,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $max_utc = isset($this->max_utc) ? $this->max_utc : NULL;
     $this->query_fields = array();
     foreach ($this->options['date_fields'] as $delta => $name) {
-      if ($field = $fields[$name]) {
+      if (array_key_exists($name, $fields) && $field = $fields[$name]) {
         $date_handler = new date_sql_handler();
         $date_handler->construct($field['sql_type'], date_default_timezone_name());
         $tz_handling  = $field['tz_handling'];
@@ -328,7 +327,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     foreach ($parts[0]['date'] as $key => $part) {
       // The last part evaluated is the one that will 'stick'
       // as the date type.
-      $this->date_type = $key;
+      $this->granularity = $key;
       $this->$key = $part;
     }
     $range = $this->date_handler->arg_range($this->argument);
@@ -349,29 +348,30 @@ class date_api_argument_handler extends views_handler_argument_date {
     $this->max_utc = drupal_clone($max_date);
     date_timezone_set($this->max_utc, timezone_open('UTC'));
         
-    // Use set_where_group() with the selected date_method 
-    // of 'AND' or 'OR' to create the where clause.
-    $this->query->set_where_group($this->options['date_method'], 'date');
-    $this->ensure_my_table();
-
     $this->get_query_fields();
-    foreach ($this->query_fields as $query_field) {
-      $field = $query_field['field'];
-      $date_handler = $query_field['date_handler'];
+    if (!empty($this->query_fields)) {
+      // Use set_where_group() with the selected date_method 
+      // of 'AND' or 'OR' to create the where clause.
+      $this->query->set_where_group($this->options['date_method'], 'date');
+      $this->ensure_my_table();
+      foreach ($this->query_fields as $query_field) {
+        $field = $query_field['field'];
+        $date_handler = $query_field['date_handler'];
       
-      // Make sure this field is added to the query.
-      $this->query->add_field($field['table_name'], $field['field_name']);
-      foreach ($field['related_fields'] as $related) {
-        $bits = explode('.', $related);
-        if ($bits[1] != $field['field_name']) {
-          $this->query->add_field($field['table_name'], $bits[1]);
+        // Make sure this field is added to the query.
+        $this->query->add_field($field['table_name'], $field['field_name']);
+        foreach ($field['related_fields'] as $related) {
+          $bits = explode('.', $related);
+          if ($bits[1] != $field['field_name']) {
+            $this->query->add_field($field['table_name'], $bits[1]);
+          }
         }
-      }
-      $from = $date_handler->sql_where_date('DATE', $field['fullname'], '>=', date_format($date_handler->min_date, DATE_FORMAT_DATETIME));
-      $to   = $date_handler->sql_where_date('DATE', $field['fullname'], '<=', date_format($date_handler->max_date, DATE_FORMAT_DATETIME));
-      $sql = str_replace('***table***', $this->table_alias, "($from AND $to)");
-      if ($sql) {
-        $this->query->add_where('date', $sql);
+        $from = $date_handler->sql_where_date('DATE', $field['fullname'], '>=', date_format($date_handler->min_date, DATE_FORMAT_DATETIME));
+        $to   = $date_handler->sql_where_date('DATE', $field['fullname'], '<=', date_format($date_handler->max_date, DATE_FORMAT_DATETIME));
+        $sql = str_replace('***table***', $this->table_alias, "($from AND $to)");
+        if ($sql) {
+          $this->query->add_where('date', $sql);
+        }
       }
     }
   }
@@ -443,7 +443,7 @@ class date_navigation_plugin_style extends views_plugin_style {
     $i = 0;    
     foreach ($this->view->argument as $delta => $argument) {
       if ($argument['id'] == 'date_argument') {
-        $this->view->date_type = $argument['handler']->date_type;
+        $this->view->granularity = $argument['handler']->granularity;
         $this->view->date_arg = $argument['handler']->argument;
         $this->view->date_arg_pos = $i;
         $this->view->year = $argument['handler']->year;
@@ -832,7 +832,7 @@ function _date_api_fields($base = 'node') {
   $cid = 'date_api_fields_'. $base;
   cache_clear_all($cid, 'cache_views');
   
-  $all_fields = views_fetch_fields($base, 'field');
+  $all_fields = date_api_views_fetch_fields($base, 'field');
   $fields = array();
   foreach ((array) $all_fields as $name => $val) {
     $fromto = array();

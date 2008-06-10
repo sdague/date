@@ -1356,3 +1356,14 @@ function date_api_set_db_timezone($offset = '+00:00') {
   $handler = new date_sql_handler();
   return $handler->set_db_timezone($offset);
 }
+
+/**
+ * Wrapper function to make sure this function will always work.
+ */
+function date_api_views_fetch_fields($base, $type) {
+  if (!module_exists('views')) {
+    return array();
+  }
+  include_once(drupal_get_path('module', 'views') .'/includes/admin.inc');
+  return views_fetch_fields($base, $type);
+}
