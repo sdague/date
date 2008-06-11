@@ -516,6 +516,12 @@ class date_sql_handler {
    * and the current values if type = 'now'.
    */
   function complete_date($selected, $type = 'now') {
+    // Special case for weeks.
+    if (array_key_exists('week', $selected)) {
+      $dates = date_week_range($selected['week'], $selected['year']);
+      return date_format($dates[0], 'Y-m-d H:i:s');
+    }
+    
     $compare = array_merge($this->part_info('empty_'. $type), $selected);
     // If this is a max date, make sure the last day of 
     // the month is the right one for this date.

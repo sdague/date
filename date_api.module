@@ -805,7 +805,7 @@ function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DAT
  * chosen first day of week for this site.
  */
 function date_week_range($week, $year) {
-  $min_date = date_make_date($view->year .'-01-01 00:00:00', date_default_timezone_name());
+  $min_date = date_make_date($year .'-01-01 00:00:00', date_default_timezone_name());
   date_timezone_set($min_date, date_default_timezone());
 
   // move to the right week
