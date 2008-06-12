@@ -372,7 +372,11 @@ function date_db_integrity($name) {
           $columns_start['rrule']['length'] = 80;
         }
       }
-      content_alter_db_field($field, $columns_start, $field, $columns_end);
+      $start_field = $field;
+      $start_field['columns'] = $columns_start;
+      $end_field = $field;
+      $end_field['columns'] = $columns_end;
+      content_alter_db($start_field, $end_field);
       $message = 'Date database integrity check. Updated table '. $table .' to set all columns to accept NULL values.';
       $ret[] = array('success' => TRUE, 'query' => $message);
     }
