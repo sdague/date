@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- Add RRULE to ical template. Make sure all event values get added into the ical feed.
 - Get rid of date_ical_export(). The ical export code has been moved into a template and pre_processor.
  
 Version 6.2 beta2
