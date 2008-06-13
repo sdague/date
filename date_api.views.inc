@@ -383,14 +383,14 @@ class date_api_argument_handler extends views_handler_argument_date {
  * Creates a special attachment for this purpose only. 
  */
 class date_plugin_display_attachment extends views_plugin_display_attachment {
-
+  
   // Require the date_nav style. That style has a date_nav type
   // so it won't show up as a style option on any other display.
   function get_style_type() { return 'date_nav'; }
   
   // No options to set style, force it to the right value.
   function defaultable_sections($section = NULL) {
-    if (in_array($section, array('style_plugin', 'row_options', 'row_plugin', 'items_per_page'))) {
+    if (in_array($section, array('row_options', 'row_plugin', 'items_per_page'))) {
       return FALSE;
     }
     return parent::defaultable_sections($section);
@@ -401,7 +401,7 @@ class date_plugin_display_attachment extends views_plugin_display_attachment {
     $display->display_options['style_plugin'] = 'date_nav';
     $display->display_options['items_per_page'] = 0;
     $display->display_options['row_plugin'] = '';
-    $display->display_options['defaults']['style_plugin'] = FALSE;
+    //$display->display_options['defaults']['style_plugin'] = FALSE;
     $display->display_options['defaults']['style_options'] = FALSE;
     $display->display_options['defaults']['items_per_page'] = FALSE;
     $display->display_options['defaults']['row_plugin'] = FALSE;
@@ -417,7 +417,7 @@ class date_plugin_display_attachment extends views_plugin_display_attachment {
  * value is set to the current date.
  */
 class date_navigation_plugin_style extends views_plugin_style {
-
+  
   /**
    * Style validation.
    */
@@ -446,10 +446,10 @@ class date_navigation_plugin_style extends views_plugin_style {
         $this->view->granularity = $argument->granularity;
         $this->view->date_arg = $argument->argument;
         $this->view->date_arg_pos = $i;
-        $this->view->year = $argument->year;
-        $this->view->month = $argument->month;
-        $this->view->day = $argument->day;
-        $this->view->week = $argument->week;
+        $this->view->year = isset($argument->year) ? $argument->year : NULL;
+        $this->view->month = isset($argument->month) ? $argument->month: NULL;
+        $this->view->day = isset($argument->day) ? $argument->day : NULL;
+        $this->view->week = isset($argument->week) ? $argument->week : NULL;
         $this->view->min_date = $argument->min_date;
         $this->view->max_date = $argument->max_date;
       }
@@ -458,7 +458,6 @@ class date_navigation_plugin_style extends views_plugin_style {
      
     // bring the node type into the query so we can use it in the theme
     $this->view->query->add_field('node', 'type');
-    
     parent::query();
   }
   
