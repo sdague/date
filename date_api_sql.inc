@@ -212,7 +212,7 @@ class date_sql_handler {
   function sql_tz($field, $offset = NULL) {
     // If the timezones are values they need to be quoted, but
     // if they are field names they do not.
-    $dbzone    = $this->db_timezone_field ? $this->db_timezone_field : "'{$this->db_timezone}'";
+    $db_zone    = $this->db_timezone_field ? $this->db_timezone_field : "'{$this->db_timezone}'";
     $localzone = $this->local_timezone_field ? $this->local_timezone_field : "'{$this->local_timezone}'"; 
      
     // If a fixed offset is required, use it.
@@ -238,7 +238,7 @@ class date_sql_handler {
       switch ($this->db_type) {
         case 'mysql':
         case 'mysqli':
-          return "CONVERT_TZ($field, $dbzone, $localzone)";
+          return "CONVERT_TZ($field, $db_zone, $localzone)";
         case 'pgsql':
           // WITH TIME ZONE assumes the date is using the system
           // timezone, which should have been set to UTC.
@@ -599,6 +599,16 @@ class date_sql_handler {
         break;
     }
     return $formats[$type];
+  }
+  
+  function granularity_form($granularity) {
+    $form = array(
+      '#title' => t('Granularity'),
+      '#type' => 'radios',
+      '#default_value' => $granularity,
+      '#options' => $this->date_parts(),
+      );
+    return $form;
   }
 
   /**

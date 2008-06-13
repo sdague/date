@@ -7,6 +7,7 @@ TODO
 Version 6.2-dev
 =================
 
+- #269569 Get new generic date filter working again.
 - Add a default view for the Date Browser.
 - Fix undefined indexes and add ability to override style in the Date Browser navigation attachment.
 - Add RRULE to ical template. Make sure all event values get added into the ical feed.

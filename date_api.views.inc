@@ -11,6 +11,13 @@
  *   The flexible argument will accept and evaluate most ISO date
  *   and period formats, like 2009-05-01, 2008-W25, P1W. 
  * 
+ * Date filter:
+ *   A generic date argument that has an option to select a 
+ *   Views date field to filter on, and provides a place to select
+ *   a value and an adjustment to use for the filtering. The value
+ *   can be a date or 'now', and the adjustment can be something like
+ *   '+90 days'. 
+ * 
  * Current date argument default
  *   Adds a default option to set the argument to the current date 
  *   when the argument is empty.
@@ -488,7 +495,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function construct() {
     parent::construct();
     include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
-    $this->date_handler = new views_date_handler();
+    $this->date_handler = new date_sql_handler();
     $this->date_handler->construct();
     $this->date_handler->granularity = $this->options['granularity'];
     if (isset($this->definition['content_field'])) {
@@ -508,14 +515,15 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   // Set default values for the date filter.
   function options(&$options) {
     parent::options($options);
-    $options['granularity'] = 'day';
+    $options['date_field'] = 'node.updated';
+    $options['granularity'] = 'month';
     $options['adjustment_field'] = 0;
 
     // We use different values than the parent form, so we must
     // construct our own value options.
     $options['value'] = array();
     foreach (array('value', 'min', 'max') as $prefix) {
-      foreach ($this->date_handler->date_parts() as $key => $part) {
+      foreach (array('date', 'adjustment') as $key => $part) {
         $options['value'][$prefix . $key] = '';
       }
     }
@@ -540,9 +548,22 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       );
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
     $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where you can select the year, month, and day. You will be able to choose a specific value, all values, or \'now\' for each date part in the filter.') .'</p>';
-    if (!$this->date_handler->has_tz_support()) {
+    if (!$this->date_handler->db_tz_support()) {
       $form['granularity']['#description'] .= '<p>'. t('This database does not appear to have native timezone support. Filtering using hour, minute, or second granularity is likely to return incorrect results at least some of the time on systems without native timezone support, so it is recommended to set the granularity to no more than \'day\'.') .'</p>';
     }
+    $fields = date_api_fields();
+    $options = array();
+    foreach ($fields['name'] as $name => $field) {
+      $options[$name] = $field['label'];
+    }
+    $form['date_field'] = array(
+      '#title' => t('Date field(s)'),
+      '#type' => 'radios',
+      '#options' => $options,
+      '#default_value' => $this->options['date_field'],
+      '#multiple' => FALSE,
+      '#description' => t('Select a date field to filter with this argument.'),
+    );
   }
 
   /**
@@ -577,19 +598,32 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $form['value'] += $this->date_parts_form('min', $source, $which, $this->operator_values(2));
       $form['value'] += $this->date_parts_form('max', $source, $which, $this->operator_values(2));
     }
+    $format = $handler->views_formats($handler->granularity, 'sql');
+    $format_help = $handler->format_help($format);
     $form['value']['description'] = array(
       '#prefix' => '<div class=""><div class="form-item"><div class="description">',
       '#suffix' => '</div></div></div>',
-      '#value' => t('Blank values do no filtering, \'now\' filters for the current value.'),
+      '#value' => t('Date format @format. Leave date blank to do no filtering, use \'now\' to filter for the current date.', array('@format' => $format_help)),
       );
     if ($this->options['adjustment_field'] == 1) {
-      $form['value']['description']['#value'] .= t(' \'Adjustment\' filters for an offset like \'+1 day\' from the other values, most useful when used with \'now\'.');
+      $form['value']['description']['#value'] .= t(' \'Adjustment\' filters for an offset like \'+1 day\' from the date value, most useful when used with \'now\'.');
     }
     elseif ($this->options['adjustment_field'] == 2) {
       $form['value']['description']['#value'] = t('\'Adjustment\' filters for an offset like \'+1 day\' from the current time.');
     }
   }
 
+  function date_filter_parts() {
+    switch ($this->options['adjustment_field']) {
+      case 1:
+        return array('date' => t('Date'), 'adjustment' => t('Adjustment'));
+      case 2:
+        return array('adjustment' => t('Adjustment'));
+      default:
+        return array('date' => t('Date'));
+    }
+  }
+  
   /**
    * A form element to select date part values.
    *
@@ -615,8 +649,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $limit = $handler->granularity;
     switch ($this->options['adjustment_field']) {
       case 1:
-        $parts = $handler->date_parts($limit) + array('adjustment' => t('Adjustment'));
-        $first_item = 'year';
+        $parts = array('date' => t('Date'), 'adjustment' => t('Adjustment'));
+        $first_item = 'date';
         $last_item = 'adjustment';
         break;
       case 2:
@@ -625,39 +659,21 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $last_item = 'adjustment';
         break;
       default:
-        $parts = $handler->date_parts($limit);
-        $first_item = 'year';
-        $last_item = $this->options['granularity'];
+        $parts = array('date' => t('Date'));
+        $first_item = 'date';
+        $last_item = 'date';
         break;
     }
     foreach ($parts as $key => $name) {
-      $options = array('' => '', 'now' => 'now');
-      $type = 'select';
-      if ($key == 'year' || $key == 'adjustment') {
-        $type = 'textfield';
-      }
+      $type = 'textfield';
       $form[$prefix . $key] = array(
         '#title' => t('@type @value', array('@type' => $prefixname, '@value' => $name)),
         '#type' => $type,
-        '#size' => $key == 'adjustment' ? 20 : ($key == 'year' ? 6 : 1),
+        '#size' => 20,
         '#default_value' => !empty($this->value[$prefix . $key]) ? $this->value[$prefix . $key] : '',
         '#prefix' => '<div class="views-exposed-date-filter">',
         '#suffix' => '</div>',
       );
-      switch ($key) {
-        case 'year':
-        case 'adjustment':
-          break;
-        case 'month':
-          $form[$prefix . $key]['#options'] = $options + drupal_map_assoc(range(1, 12), 'map_month');
-          break;
-        default:
-          $form[$prefix . $key]['#options'] = $options + drupal_map_assoc(range($min[$key], $max[$key]));
-          break;
-      }
-      if ($type == 'textfield') {
-        unset($form[$prefix . $key]['#options']);
-      }
       if ($which == 'all') {
         $dependency = array(
           '#process' => array('views_process_dependency'),
@@ -683,7 +699,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       return;
     }
     $handler = $this->date_handler;
-    $parts = $handler->date_parts();
+    $parts = $this->date_filter_parts();
     $min = $handler->part_info('min');
     $max = $handler->part_info('max');
     $values = $form_state['values']['options']['value'];
@@ -701,13 +717,17 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   // Update the summary values to provide
   // meaningful information for each option.
   function admin_summary() {
+    if (!empty($this->options['date_field'])) {
+      $field = $this->options['date_field'];
+    }
+    
     $handler = $this->date_handler;
-    $output = check_plain($this->operator) . ' ';
+    $output = "($field) ". check_plain($this->operator) . ' ';
     $parts = $handler->date_parts();
     
     // If the filter is exposed, display the granularity.
     if ($this->options['exposed']) {
-      return t('<strong>Exposed</strong> Granularity: @format', array('@format' => $parts[$handler->granularity]));
+      return t('(@field) <strong>Exposed</strong> Granularity: @format', array('@field' => $field, '@format' => $parts[$handler->granularity]));
     }
     // If the filter is not exposed, display the selected values.
     // Check both empty and is_numeric to show all non-blank values,
@@ -717,7 +737,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $handler = $this->date_handler;
     $separators = $handler->part_info('sep');
     if (in_array($this->operator, $this->operator_values(2))) {
-      foreach ($handler->date_parts($this->value['granularity']) as $key => $part) {
+      foreach ($this->date_filter_parts() as $key => $part) {
         if (!empty($this->value['min'. $key]) || !empty($this->value['max'. $key])
         || is_numeric($this->value['min'. $key]) || is_numeric($this->value['max'. $key])) {
           $min .= $separators[$key] . check_plain($this->value['min'. $key]);
@@ -727,7 +747,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $output .= t('@min and @max', array('@min' => $min, '@max' => $max));
     }
     else {
-      foreach ($handler->date_parts($handler->granularity) as $key => $part) {
+      foreach ($this->date_filter_parts() as $key => $part) {
         if (!empty($this->value['value'. $key]) || is_numeric($this->value['value'. $key])) {
           $min .= $separators[$key] . check_plain($this->value['value'. $key]);
         }
@@ -749,57 +769,45 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
 
   function date_filter($prefix, $field, $operator) {
+    if (empty($this->value[$prefix .'adjustment']) && empty($this->value[$prefix .'date'])) {
+      return;
+    }
     $handler = $this->date_handler;
     $granularity = $handler->granularity;
     $parts = $handler->date_parts();
-    $filter_parts = $handler->date_parts($handler->granularity);
+    $filter_parts = $this->date_filter_parts();
     $adjustment = 0;
+    
+    $field = $this->options['date_field'];
+    $bits = explode('.', $field);
+    $this->query->ensure_table($bits[0]);
+    $this->query->add_field($bits[0], $bits[1]);
+    
     if (!empty($this->value[$prefix .'adjustment'])) {
       $adjustment = strtotime($this->value[$prefix .'adjustment'], 0);
-      // See if there are any filters other than the adjustment.
-      // If not, compare to NOW() and return.
-      if ($this->options['adjustment_field'] == 2) {
+      
+      // See if there are any filters other than the adjustment,
+      // of if the comparision is 'now', compare to NOW() and return.
+      if ($this->options['adjustment_field'] == 2 || $this->options[$prefix .'date'] == 'now') {
         $sql = $handler->sql_field($field, 0) . " $operator ". $handler->sql_field('NOW', $adjustment);
         $this->query->add_where($this->options['group'], $sql);
         return;
       }
     }
-    $format = '';
-    $selected = array();
-    $separators = $handler->part_info('sep');
-    $formats = $handler->part_info('format');
-    foreach ($filter_parts as $key => $part) {
-      $sep = $separators[$key];
-      $pattern = $key == 'year' ? '%04d' : '%02d';
-      if (is_numeric($this->value[$prefix . $key]) || $this->value[$prefix . $key] == 'now') {
-        $format .= !empty($format) ? $sep : '';
-        $format .= $formats[$key];
-      }
-      if (is_numeric($this->value[$prefix . $key])) {
-        $selected[$key] = sprintf($pattern, check_plain($this->value[$prefix . $key]));  
-      }
-      elseif ($this->value[$prefix . $key] == 'now') {
-        $selected[$key] = date($formats[$key]);
-      }
-      else {
-        // When we hit an empty (all values) option in the middle of
-        // our date parts, stop and start a new query.
-        if ($format > '' && $format != $sep) {
-          $date = date_make_date($handler->complete_date($selected));
-          $value = date_format($date, $format);
-          $sql = $handler->sql_where_format($format, $field, $operator, $value);
-          $this->query->add_where($this->options['group'], $sql);
-        }
-        $format = '';
-        $selected = array();
-      }
+    if ($this->value[$prefix .'date'] == 'now') {
+      $date = date_now();
     }
-    if ($format > '' && $format != $sep) {
-      $date = date_make_date($handler->complete_date($selected));
-      $value = date_format($date, $format);
-      $sql = $handler->sql_where_format($format, $field, $operator, $value);
-      $this->query->add_where($this->options['group'], $sql);
+    else {
+      $selected = $handler->arg_parts($this->value[$prefix .'date']);
+      $date = date_make_date($handler->complete_date($selected[0]['date']));
     }
+    if (!empty($adjustment)) {
+      date_modify($date, "+$adjustment seconds");
+    }
+    $format = $handler->views_formats($handler->granularity, 'sql');
+    $value = date_format($date, $format);
+    $sql = $handler->sql_where_format($format, $field, $operator, $value);
+    $this->query->add_where($this->options['group'], $sql);
     return;
   }
 }
