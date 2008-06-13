@@ -3,6 +3,10 @@ Date Module 6.x
 =================
 TODO
  - Get repeating dates working again.
+
+Version 6.2-dev
+=================
+- Get rid of date_ical_export(). The ical export code has been moved into a template and pre_processor.
  
 Version 6.2 beta2
 =================

@@ -91,6 +91,7 @@ function template_preprocess_date_vcalendar(&$vars) {
   foreach ($events_in as $uid => $event) {
     // Omit any items with empty dates.
     if (!empty($event['start'])) {
+      $events[$uid] = $event;
       $timezone = timezone_name_get(date_timezone_get($event['start']));
       if (!empty($timezone)) {
         $events[$uid]['timezone'] = "TZID=$timezone;";

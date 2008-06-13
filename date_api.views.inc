@@ -873,6 +873,7 @@ function _date_api_fields($base = 'node') {
       $related_fields = array();
       $timezone_field = '';
       $offset_field = '';
+      $rrule_field = '';
       $granularity = array('year', 'month', 'day', 'hour', 'minute');
        
       // dates with from and to dates need to handle both fields as one
@@ -897,6 +898,10 @@ function _date_api_fields($base = 'node') {
         if (isset($db_info['columns']['timezone']['column'])) {
           $related_fields = array_merge($related_fields, array($table_name .'.'. $db_info['columns']['timezone']['column']));
           $timezone_field = $table_name .'.'. $db_info['columns']['timezone']['column'];
+        }
+        if (isset($db_info['columns']['rrule']['column'])) {
+          $related_fields = array_merge($related_fields, array($table_name .'.'. $db_info['columns']['rrule']['column']));
+          $rrule_field = $table_name .'.'. $db_info['columns']['rrule']['column'];
         }
       }
 
@@ -942,6 +947,7 @@ function _date_api_fields($base = 'node') {
         'tz_handling' => $tz_handling,
         'offset_field' => $offset_field,
         'timezone_field' => $timezone_field,
+        'rrule_field' => $rrule_field,
         'related_fields' => $related_fields,
       );
       $fields['alias'][$alias] = $fields['name'][$name];
