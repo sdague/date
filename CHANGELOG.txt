@@ -6,8 +6,13 @@ TODO
 
 Version 6.2-dev
 =================
+
+- Add a default view for the Date Browser.
+- Fix undefined indexes and add ability to override style in the Date Browser navigation attachment.
 - Add RRULE to ical template. Make sure all event values get added into the ical feed.
 - Get rid of date_ical_export(). The ical export code has been moved into a template and pre_processor.
+- Make Date API changes needed to get iCal export working in Calendar.
+- #251830 Replace D5 function name with D6 function name, content_alter_db_field() is D5 only.
  
 Version 6.2 beta2
 =================
