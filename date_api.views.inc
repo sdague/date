@@ -508,15 +508,15 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function init(&$view, $options) {
     parent::init($view, $options);
     $handler = $this->date_handler;
-    $handler->granularity = $options['granularity'];
-    $handler->adjustment_field = $options['adjustment_field'];
+    $handler->granularity = isset($options['granularity']) ? $options['granularity'] : 'day';
+    $handler->adjustment_field = isset($options['adjustment_field']) ? $options['adjustment_field'] : 0;
   }
 
   // Set default values for the date filter.
   function options(&$options) {
     parent::options($options);
     $options['date_field'] = 'node.updated';
-    $options['granularity'] = 'month';
+    $options['granularity'] = 'day';
     $options['adjustment_field'] = 0;
 
     // We use different values than the parent form, so we must
@@ -544,10 +544,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         1 => t('Both date and adjustment'), 
         2 => t('Adjustment only'),
         ),
-      '#description' => t('Choose a date to filter on, or use an adjustment field for a value like \'+1 day\'. When you use both date and adjustment, the adjustment will be added to the date. When the adjustment field is used with no date field, the adjustment will be made to the current date.'),
+      '#description' => t('Choose a date to filter on, or use an adjustment field for a value like \'+1 day\'. When you use both date and adjustment, the adjustment will be added to the date. When the adjustment field is used with no date field, the adjustment will be made to the current date. The date can be a specific date, or \'now\'.'),
       );
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
-    $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where you can select the year, month, and day. You will be able to choose a specific value, all values, or \'now\' for each date part in the filter.') .'</p>';
+    $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where you can select the year, month, and day as YYYY-MM-DD.') .'</p>';
     if (!$this->date_handler->db_tz_support()) {
       $form['granularity']['#description'] .= '<p>'. t('This database does not appear to have native timezone support. Filtering using hour, minute, or second granularity is likely to return incorrect results at least some of the time on systems without native timezone support, so it is recommended to set the granularity to no more than \'day\'.') .'</p>';
     }
