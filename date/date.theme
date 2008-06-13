@@ -214,24 +214,24 @@ function theme_date_views_browser_items($view, $nodes, $type, $teasers, $links) 
     $item = '';
     foreach ($view->field as $field) {
       if ($fields[$field['id']]['visible'] !== FALSE) {
-        if ($field['label']) {
-          $item .= "<div class='view-label ". views_css_safe('view-label-'. $field['queryname']) ."'>" . $field['label'] . "</div>";
+        if ($field->options['label']) {
+          $item .= "<div class='view-label ". views_css_safe('view-label-'. $field->queryname) ."'>" . $field->options['label'] . "</div>";
         }
         // If this is the date field, format and display the current value.
-        if (strstr($field['handler'], 'content_views_')) {
+        if (strstr($field->definition['handler'], 'content_views_')) {
           $field_name = explode('_value', $field['field']);
           if (!empty($node->date_combo)) {
             $values = explode('|', $node->date_combo);
             $node_item = array('value' => $values[0], 'value2' => $values[1]);
           }
           else {
-            $node_item = array('value' => $node->$field['field']);
+            $node_item = array('value' => $node->$field->field);
           }
-          $item .=  "<div class='view-field ". views_css_safe('view-data-'. $field['queryname']) ."'>" . content_format($field_name[0], $node_item, $field['options'], $node) . "</div>";
+          $item .=  "<div class='view-field ". views_css_safe('view-data-'. $field->queryname) ."'>" . content_format($field_name[0], $node_item, $field->options, $node) . "</div>";
         }
         // If this is a non-date field, just display it normally.
         else {
-          $item .= "<div class='view-field ". views_css_safe('view-data-'. $field['queryname']) ."'>" . views_theme_field('views_handle_field', $field['queryname'], $fields, $field, $node, $view) . "</div>";
+          $item .= "<div class='view-field ". views_css_safe('view-data-'. $field->queryname) ."'>" . views_theme_field('views_handle_field', $field->queryname, $fields, $field, $node, $view) . "</div>";
         }
       }
     }

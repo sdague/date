@@ -441,17 +441,17 @@ class date_navigation_plugin_style extends views_plugin_style {
         
     // Bring the argument information into the view so our theme can access it.
     $i = 0;    
-    foreach ($this->view->argument as $delta => $argument) {
-      if ($argument['id'] == 'date_argument') {
-        $this->view->granularity = $argument['handler']->granularity;
-        $this->view->date_arg = $argument['handler']->argument;
+    foreach ($this->view->argument as $id => $argument) {
+      if ($id == 'date_argument') {
+        $this->view->granularity = $argument->granularity;
+        $this->view->date_arg = $argument->argument;
         $this->view->date_arg_pos = $i;
-        $this->view->year = $argument['handler']->year;
-        $this->view->month = $argument['handler']->month;
-        $this->view->day = $argument['handler']->day;
-        $this->view->week = $argument['handler']->week;
-        $this->view->min_date = $argument['handler']->min_date;
-        $this->view->max_date = $argument['handler']->max_date;
+        $this->view->year = $argument->year;
+        $this->view->month = $argument->month;
+        $this->view->day = $argument->day;
+        $this->view->week = $argument->week;
+        $this->view->min_date = $argument->min_date;
+        $this->view->max_date = $argument->max_date;
       }
       $i++;
     }

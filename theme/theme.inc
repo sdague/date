@@ -59,3 +59,60 @@ function theme_date_nav_title($granularity, $view) {
     	return t('Week of @date', array('@date' => date_format($view->min_date, 'F j')));
   }
 }
+
+/**
+ *  Preprocessor to construct an ical vcalendar
+ * 
+ * @param $events
+ *   An array of events where each event is an array keyed on the uid:
+ *    'start'         => start date object,
+ *    'end'           => end date object,
+ *                         optional, omit for all day event.
+ *    'summary'       => Title of event (Text)
+ *    'description'   => Description of event (Text)
+ *    'location'      => Location of event (Text)
+ *    'uid'           => ID of the event for use by calendaring program.
+ *                         Recommend the url of the node
+ *    'url'           => URL of event information
+ *
+ * @param $calname
+ *   Name of the calendar.  Use site name if none is specified.
+ * 
+ */
+function template_preprocess_date_vcalendar(&$vars) {
+    
+  $vars['current_date'] = date_format(date_now(), DATE_FORMAT_ICAL);
+  $vars['site_timezone'] = date_default_timezone_name();
+  $vars['calname'] = !empty($vars['calname']) ? $vars['calname'] : date_ical_escape_text(variable_get('site_name', ''));
+  
+  // Format the event results as iCal expects.
+  $events_in = $vars['events'];
+  $events = array();
+  foreach ($events_in as $uid => $event) {
+    // Omit any items with empty dates.
+    if (!empty($event['start'])) {
+      $timezone = timezone_name_get(date_timezone_get($event['start']));
+      if (!empty($timezone)) {
+        $events[$uid]['timezone'] = "TZID=$timezone;";
+      }
+      else {
+        $events[$uid]['timezone'] = '';
+      }
+      $events[$uid]['start'] = date_format($event['start'], DATE_FORMAT_ICAL);
+      if ($event['start'] && $event['end']) {
+        $events[$uid]['end'] = date_format($event['end'], DATE_FORMAT_ICAL);
+      }
+      else {
+        $events[$uid]['end'] = $events[$uid]['start'];
+      }
+      // Escape text values.
+      foreach ($event as $key => $value) {
+        if (in_array($key, array('summary', 'description', 'location'))) {
+          $events[$uid][$key] = date_ical_escape_text($value);
+        }
+      }
+    }
+  }
+  
+  $vars['events'] = $events;  
+}
