@@ -7,6 +7,10 @@ TODO
 Version 6.2-dev
 =================
 
+- #270626 Fix documentation errors that use create_date() instead of date_create().
+
+Version 6.2-beta3
+=================
 - #269569 Get new generic date filter working again.
 - Add a default view for the Date Browser.
 - Fix undefined indexes and add ability to override style in the Date Browser navigation attachment.
