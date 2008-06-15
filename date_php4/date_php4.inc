@@ -399,7 +399,7 @@ if (!function_exists('date_modify')) {
  * Will work for things like date_modify($date, '+1 Sunday');
  *
  * @param $date
- *   a date object created by create_date() to use as a reference
+ *   a date object created by date_create() to use as a reference
  *   point for the calculation.
  * @param $change
  *   something like following phrases:
