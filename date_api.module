@@ -41,6 +41,16 @@ define('DATE_REGEX_ICAL_DATETIME', '/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})
  */
 function date_api_init() {
   drupal_add_css(drupal_get_path('module', 'date_api')  .'/date.css');
+  
+  // Make sure the Date PHP4 module is always enabled when needed.
+  
+  // TODO Not sure how efficient this is, but it should prevent the
+  // errors that kept getting reported when the module is not enabled.
+  // Need to re-visit this to see if it is the right fix.
+  if (!function_exists('date_create') && !module_exists('date_php4')) {
+    module_enable('date_php4');
+  }
+      
 }
 
 /**

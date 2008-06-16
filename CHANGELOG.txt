@@ -6,7 +6,8 @@ TODO
 
 Version 6.2-dev
 =================
-
+- #270267 Auto-enable the Date PHP4 module when needed.
+- #269569 Get the Date Views filter working.
 - #270626 Fix documentation errors that use create_date() instead of date_create().
 
 Version 6.2-beta3
