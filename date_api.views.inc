@@ -820,9 +820,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         }
         if (!empty($this->value[$prefix .'adjustment'])) {
           // See if there are any filters other than the adjustment,
-          // of if the comparision is 'now', compare to NOW() and return.
-          if ($this->options['adjustment_field'] == 2 || $this->options[$prefix .'date'] == 'now') {
-            $sql = $handler->sql_field($field, 0) . " $operator ". $date_handler->sql_field('NOW', $adjustment);
+          // if not, compare to NOW() and return.
+          if ($this->options['adjustment_field'] == 2) {
+            $sql = $date_handler->sql_field($field['fullname'], 0) . " $operator ". $date_handler->sql_field('NOW', $adjustment);
             $this->query->add_where($this->options['group'], $sql);
             continue;
           }
