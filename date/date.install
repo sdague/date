@@ -318,6 +318,51 @@ function date_update_5205() {
   return $ret;
 }
 
+/**
+ * Granularity options were not saved correctly by CCK if created using checkboxes.
+ * Checkboxes have been changed back to a select and we need to fix the values
+ * stored in the settings.
+ * 
+ * The bad values would have been stored in the form
+ *   array(
+ *     'year' => 'year'
+ *     'month' => 'month',
+ *     'day' => 0,
+ *     'hour' => 0,
+ *     'minute' => 0,
+ *     'second' => 0,
+ *   );
+ * 
+ * Good values would have been stored in the form
+ *   array(
+ *     'year' => 'year',
+ *     'month' => 'month',
+ *   );
+ * 
+ * This might or might not have gotten updated in D5.2,
+ * we need to force it again in D6 just in case.
+ *
+ * @return unknown
+ */
+function date_update_5206() {
+  $ret = array();
+  return $ret;
+}
+function date_update_6000() {
+  date_install_load();
+  $ret = array();
+  $result = db_query("SELECT field_name, global_settings from {node_field} where type LIKE 'date_%'");
+  while ($field = db_fetch_array($result)) {
+    // Change the format to one date_popup can use.
+    $field_settings = unserialize($field['global_settings']);
+    $granularity = array_filter($field_settings['granularity']);
+    $field_settings['granularity'] = $granularity;
+    db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
+  }
+  content_clear_type_cache();
+  return $ret;
+}
+
 function date_db_integrity($name) {
   $ret = array();
   $fields = content_fields();

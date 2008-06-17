@@ -364,14 +364,12 @@ function date_field_settings_form($field) {
     '#default_value' => $field['todate'] ? $field['todate'] : '',
     );
   $form['input']['granularity'] = array(
-    '#type' => 'checkboxes', '#title' => t('Granularity'),
+    '#type' => 'select', '#title' => t('Granularity'),
     '#default_value' => $field['granularity'] ? $field['granularity'] : array('year', 'month', 'day', 'hour', 'minute'),
     '#options' => date_granularity_names(),
     '#multiple' => TRUE,
-    '#size' => min(count($options), 6),
     '#description' => t('Set the date elements to be stored (at least a year is required).'),
     );
-
   $form['output']['simple'] = date_formatter_setup_form($field, 0);
   $form['output']['simple']['#title'] = t('Default Display');
 
