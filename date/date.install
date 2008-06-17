@@ -351,13 +351,13 @@ function date_update_5206() {
 function date_update_6000() {
   date_install_load();
   $ret = array();
-  $result = db_query("SELECT field_name, global_settings from {node_field} where type LIKE 'date_%'");
+  $result = db_query("SELECT field_name, global_settings from {". content_field_tablename() ."} where type LIKE 'date_%'");
   while ($field = db_fetch_array($result)) {
     // Change the format to one date_popup can use.
     $field_settings = unserialize($field['global_settings']);
     $granularity = array_filter($field_settings['granularity']);
     $field_settings['granularity'] = $granularity;
-    db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
+    db_query("UPDATE {". content_field_tablename() ."}  SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
   }
   content_clear_type_cache();
   return $ret;
