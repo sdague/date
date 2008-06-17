@@ -122,7 +122,7 @@ function date_month_names_abbr($required = FALSE) {
   if (empty($month_names)) {
     $month_names = array();
     foreach (date_month_names_untranslated() as $key => $month) {
-      $month_names[$key] = t(substr($month, 0, 3));
+      $month_names[$key] = t(drupal_substr($month, 0, 3));
     }
   }
   $none = array('' => '');
@@ -180,7 +180,7 @@ function date_week_days_abbr($required = FALSE, $refresh = TRUE, $length = 3) {
   if ($refresh || empty($weekdays)) {
     $weekdays = array();
     foreach (date_week_days($refresh) as $key => $day) {
-      $weekdays[$key] = substr($day, 0, $length);
+      $weekdays[$key] = drupal_substr($day, 0, $length);
     }
   }
   $none = array('' => '');
@@ -468,11 +468,11 @@ function date_t($string) {
     // Translate the whole name first, then look for abbreviations.
     foreach (date_month_names_untranslated() as $month) {
       $replace[$month] = t($month);
-      $replace[substr($month, 0, 3)] = t(substr($month, 0, 3));
+      $replace[drupal_substr($month, 0, 3)] = t(drupal_substr($month, 0, 3));
     }
     foreach (date_week_days_untranslated() as $day) {
       $replace[$day] = t($day);
-      $replace[substr($day, 0, 3)] = t(substr($day, 0, 3));
+      $replace[drupal_substr($day, 0, 3)] = t(drupal_substr($day, 0, 3));
     }
   }
   return strtr($string, $replace);

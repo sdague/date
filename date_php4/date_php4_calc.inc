@@ -570,7 +570,7 @@ function date_calc_get_month_abbrname($month, $length = 3) {
   if (empty($month)) {
     $month = date_calc_get_month();
   }
-  return substr(date_calc_get_month_fullname($month), 0, $length);
+  return drupal_substr(date_calc_get_month_fullname($month), 0, $length);
 }
 
 /**
