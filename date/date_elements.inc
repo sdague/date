@@ -129,6 +129,11 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
 
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   $timezone = date_get_timezone($field['tz_handling'], isset($items[0]['timezone']) ? $items[0]['timezone'] : date_default_timezone_name());
+  // TODO see if there's a way to keep the timezone element from ever being
+  // nested as array('timezone' => 'timezone' => value)). After struggling
+  // with this a while, I can find no way to get it displayed in the form
+  // correctly and get it to use the timezone element without ending up
+  // with nesting.
   if (is_array($timezone)) {
     $timezone = $timezone['timezone'];
   }
