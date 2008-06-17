@@ -129,7 +129,10 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
 
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   $timezone = date_get_timezone($field['tz_handling'], isset($items[0]['timezone']) ? $items[0]['timezone'] : date_default_timezone_name());
-
+  if (is_array($timezone)) {
+    $timezone = $timezone['timezone'];
+  }
+  
   // Convert UTC dates to their local values in DATETIME format,
   // and adjust the default values as specified in the field settings.
 
