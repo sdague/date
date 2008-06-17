@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- #270304 Timezone was not getting saved. 
 - Empty values were getting saved.
 - #257353 No need for format description when using select widget.
 - #270267 Auto-enable the Date PHP4 module when needed.

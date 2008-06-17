@@ -344,9 +344,9 @@ function date_combo_validate($element, &$form_state) {
 
   // Update the timezone, if changed.
   $timezone = $element['#date_timezone'];
-  if (!empty($form_values['timezone']) &&
-    $form_values[$field_name]['timezone'] != $element['#date_timezone']) {
-    $timezone = $form_values[$field_name]['timezone'];
+  if (!empty($form_values[$field_name][0]['timezone']) &&
+    $form_values[$field_name][0]['timezone'] != $element['#date_timezone']) {
+    $timezone = $form_values[$field_name][0]['timezone'];
   }
 
   if (empty($item[$from_field])) {
