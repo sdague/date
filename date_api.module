@@ -412,7 +412,7 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
   if (empty($zonenames)) {
     $zonenames = array();
     $cached = cache_get('date_timezone_identifiers_list');
-    if ($refresh || !$data = $cached->data) {
+    if ($refresh || empty($cached) || !$data = $cached->data) {
       $data = timezone_identifiers_list();
     }
     foreach ($data as $delta => $zone) {
@@ -979,9 +979,19 @@ function date_convert($date, $from_type, $to_type) {
  * Create valid datetime value from incomplete ISO dates or arrays.
  */
 function date_fuzzy_datetime($date) {
+  // A text ISO date, like MMMM-YY-DD HH:MM:SS
   if (!is_array($date)) {
     $date = date_iso_array($date);
   }
+  // An date/time value in the format:
+  //  array('date' => MMMM-YY-DD, 'time' => HH:MM:SS).
+  elseif (array_key_exists('date', $date) || array_key_exists('time', $date)) {
+    $date_part = array_key_exists('date', $date) ? $date['date'] : '';
+    $time_part = array_key_exists('time', $date) ? $date['time'] : '';
+    $date = date_iso_array(trim($date_part .' '. $time_part));
+  }
+  // Otherwise date must in in format:
+  //  array('year' => YYYY, 'month' => MM, 'day' => DD).
   if (empty($date['year'])) {
     $date['year'] = date('Y');
   }
