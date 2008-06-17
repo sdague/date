@@ -138,6 +138,13 @@ function date_text_process($element, $edit, $form_state, $form) {
 
   // Don't overwrite values already added to $element['date'] in case
   // using something like jscalendar that needs to set custom values.
+  if (empty($element['date']['#description'])) {
+    $element['date']['#description'] = '';
+  }
+  if (empty($element['date']['#attributes']['class'])) {
+    $element['date']['#attributes']['class'] = '';
+  }
+  
   $element['#tree'] = TRUE;
   $element['date']['#type'] = 'textfield';
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
