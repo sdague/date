@@ -54,6 +54,7 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
     // Don't save empty values.
     if (empty($item['value']) && $delta !== 0) {
       unset($items[$delta]);
+      continue;
     }
     // For convenience, we process all possible columns in the element,
     // but now we need to remove columns not used by this field.
