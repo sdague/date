@@ -283,7 +283,9 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     '#date_label_position' => $field['widget']['label_position'],
     );
 
-  $element[$from_field]['#description'] .= ' '. t('Format: @date', array('@date' => date($element[$from_field]['#date_format'], time())));
+  if ($field['widget']['type'] != 'date_select') {
+    $element[$from_field]['#description'] .= ' '. t('Format: @date', array('@date' => date($element[$from_field]['#date_format'], time())));
+  }
   
   // Give this element the right type, using a Date API
   // or a Date Popup element type.
