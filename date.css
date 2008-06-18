@@ -38,6 +38,10 @@
   clear:both;
   }
 
+/* Need to add a little extra room in the collapsible fieldsets or we get scroll bars */
+html.js fieldset.collapsible .container-inline-date {padding-bottom:16px;)
+html.js fieldset.collapsible .container-inline-date .form-item {padding-bottom:0;)
+  
 /* Fixes for date popup css so it will behave in Drupal */
 #calendar_div, #calendar_div td, #calendar_div th {
   margin:0;
