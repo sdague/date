@@ -103,7 +103,7 @@ function date_api_views_plugins() {
 class date_api_argument_handler extends views_handler_argument_date {
   function construct() {
     parent::construct();
-    include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
+    include_once( drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
     $this->date_handler = new date_sql_handler();
     $this->date_handler->construct();
   }
@@ -488,7 +488,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   // Add a date handler to the filter.
   function construct() {
     parent::construct();
-    include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
+    include_once( drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
     $this->date_handler = new date_sql_handler();
     $this->date_handler->construct();
     $this->date_handler->granularity = $this->options['granularity'];

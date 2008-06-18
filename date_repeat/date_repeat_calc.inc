@@ -32,7 +32,7 @@
  * Compute dates that match the requested rule, within a specified date range.
  */
 function _date_repeat_calc($rrule, $start, $end, $exceptions) {
-  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
 
   // TODO, is this the right timezone to use? Generally date calculations
   // work best if done in UTC, but need to verify it won't create problems.
