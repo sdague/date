@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- Add a is_string() test to the date_is_valid() function.
 - The timezone element can sometimes be a nested value.
 - Date_fuzzy_date was not handling input from date_popup or date_text in the right way.
 - #260611 Replace substr with drupal_substr where used to get month and day abbreviations.
