@@ -6,7 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
-- #232959 Need to add a little extra room in the css for the collapsible fieldsets or we get scroll bars.
+- #232959 Get rid of unwanted scrollbars in date fieldsets using trick discovered by threexk.
 - Clean up install file included files and include file paths, and auto-enable date_timezone and date_php4.
 - Add a is_string() test to the date_is_valid() function.
 - The timezone element can sometimes be a nested value.

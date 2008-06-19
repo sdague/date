@@ -65,15 +65,31 @@ function theme_date_nav_title($granularity, $view) {
  * 
  * @param $events
  *   An array of events where each event is an array keyed on the uid:
- *    'start'         => start date object,
- *    'end'           => end date object,
- *                         optional, omit for all day event.
- *    'summary'       => Title of event (Text)
- *    'description'   => Description of event (Text)
- *    'location'      => Location of event (Text)
- *    'uid'           => ID of the event for use by calendaring program.
- *                         Recommend the url of the node
- *    'url'           => URL of event information
+ *    'start'
+ *      Start date object,
+ *    'end'
+ *      End date object, optional, omit for all day event.
+ *    'summary'
+ *      Title of event (Text)
+ *    'description'
+ *      Description of event (Text)
+ *    'location'
+ *      Location of event (Text or vvenue id)
+ *    'uid'
+ *      ID of the event for use by calendaring program, usually the url of the node
+ *    'url'
+ *      URL of event information
+ * 
+ *    'alarm'
+ *      sub-array of alarm information for the event, including:
+ *      - 'action' - the action to take, either 'DISPLAY' or 'EMAIL'
+ *      - 'trigger' - the time period for the trigger, like -P2D.
+ *      - 'repeat' - the number of times to repeat the alarm.
+ *      - 'duration' - the time period between repeated alarms, like P1D.
+ *      - 'description' - the description of the alarm.
+ *      An email alarm should have two additional parts:
+ *      - 'email' - a comma-separated list of email recipients.
+ *      - 'summary' - the subject of the alarm email.
  *
  * @param $calname
  *   Name of the calendar.  Use site name if none is specified.
@@ -108,7 +124,14 @@ function template_preprocess_date_vcalendar(&$vars) {
       }
       // Escape text values.
       foreach ($event as $key => $value) {
-        if (in_array($key, array('summary', 'description', 'location'))) {
+        if ($key == 'alarm') {
+          foreach ($value as $alarm_key => $alarm_value) {
+            if (in_array($alarm_key, array('summary', 'description'))) {
+              $events[$uid]['alarm'][$alarm_key] = date_ical_escape_text($alarm_value);
+            }
+          }
+        }
+        elseif (in_array($key, array('summary', 'description', 'location'))) {
           $events[$uid][$key] = date_ical_escape_text($value);
         }
       }
