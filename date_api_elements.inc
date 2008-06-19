@@ -621,7 +621,7 @@ function theme_date_select($element) {
   if (isset($element['#children'])) {
     $output = $element['#children'];
   }
-  return '<div class="container-inline-date clear-block">'. theme('form_element', $element, $output) .'</div>';
+  return '<div class="container-inline-date date-clear-block">'. theme('form_element', $element, $output) .'</div>';
 }
 
 /**

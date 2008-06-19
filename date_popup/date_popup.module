@@ -440,5 +440,5 @@ function date_popup_popup_to_format($format) {
  * Use a class that will float date and time next to each other.
  */
 function theme_date_popup($element) {
-  return '<div class="container-inline-date clear-block">'. theme('form_element', $element, $element['#children']) .'</div>';
+  return '<div class="container-inline-date date-clear-block">'. theme('form_element', $element, $element['#children']) .'</div>';
 }
