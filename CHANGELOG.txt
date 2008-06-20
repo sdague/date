@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- Fix undefined indexes in date_repeat_calc.inc.
 - Change method of showing multiple values with timezones on forms and show them in every instance. 
   This is to simplify the processing and avoid errors when trying to apply the timezone in the 
   first item to all other items.
