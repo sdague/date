@@ -164,9 +164,9 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
     '#element_validate' => array('date_combo_validate', 'date_widget_validate'),
   );
 
-  if ($field['tz_handling'] == 'date' && $delta == 0) {
+  if ($field['tz_handling'] == 'date') {
     $element['timezone'] = array(
-      '#type' => $delta == 0 ? 'date_timezone' : 'hidden',
+      '#type' => 'date_timezone',
       '#delta' => $delta,
       '#default_value' => $timezone,
       '#weight' => $delta + .2,
@@ -277,7 +277,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
 
   $element[$from_field] = array(
     '#field'         => $field,
-    '#title'         => t($field['widget']['label']),
+    '#title'         => !$field['multiple'] ? t($field['widget']['label']) : '',
     '#weight'        => $field['widget']['weight'],
     '#description'   => empty($field['todate']) ? t($field['widget']['description']) : '',
     '#required'      => ($field['required'] && $delta == 0) ? 1 : 0,
@@ -346,17 +346,10 @@ function date_combo_validate($element, &$form_state) {
   $offset_field = 'offset';
   $offset_field2 = 'offset2';
 
-  // Update the timezone, if changed.
-  $timezone = $element['#date_timezone'];
-  if (!empty($form_values[$field_name][0]['timezone']) &&
-    $form_values[$field_name][0]['timezone'] != $element['#date_timezone']) {
-    $timezone = $form_values[$field_name][0]['timezone'];
-  }
-
   if (empty($item[$from_field])) {
     $item[$from_field] = NULL;
     $item[$to_field]   = NULL;
-    $item[$tz_field]   = $timezone;
+    $item[$tz_field]   = NULL;
     $item[$offset_field] = NULL;
     $item[$offset_field2] = NULL;
     form_set_value($element, $item, $form_state);
@@ -396,6 +389,7 @@ function date_combo_validate($element, &$form_state) {
       // Convert input dates back to their UTC values and re-format to ISO
       // or UNIX instead of the DATETIME format used in element processing.
       if (date_timezone_convert($field, $item)) {
+        $timezone = !empty($item[$tz_field]) ? $item[$tz_field] : $element['#date_timezone'];
         $item[$tz_field] = $timezone;
         $from_date = date_make_date($item[$from_field], $timezone);
         $item[$offset_field] = date_offset_get($from_date);

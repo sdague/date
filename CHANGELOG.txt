@@ -6,6 +6,10 @@ TODO
 
 Version 6.2-dev
 =================
+- Change method of showing multiple values with timezones on forms and show them in every instance. 
+  This is to simplify the processing and avoid errors when trying to apply the timezone in the 
+  first item to all other items.
+- #272597 Remove php tag from timezone.js.
 - #272551 Add option to expand or collapse repeating date options.
 - #261610 Prepare for a jQuery popup in the calendar by adding a unique id to the 'node'
    and altering the date theme to surpress all other dates if $node->date_id is set.
