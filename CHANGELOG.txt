@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- Clean up Date popup validation.
 - Add templates for ical vevent and valarm.
 - Fix undefined indexes in date_repeat_calc.inc.
 - Change method of showing multiple values with timezones on forms and show them in every instance. 

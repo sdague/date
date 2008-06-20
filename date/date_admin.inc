@@ -402,7 +402,7 @@ function date_field_settings_form($field) {
       '#default_value' => !empty($field['repeat_collapsed']) ? intval($field['repeat_collapsed']) : 0,
       '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
       '#title' => t('Repeat display'),
-      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Yes\' to make those options less obtrusive.'),
+      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Collapsed\' to make those options less obtrusive.'),
       );
   }
 
