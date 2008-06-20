@@ -241,7 +241,7 @@ function _date_field_settings($op, $field) {
 
     case 'save':
 
-      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat');
+      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat', 'repeat_collapsed');
       for ($i = 0; $i <= 3; $i++) {
         switch ($i) {
         case(1):
@@ -353,7 +353,7 @@ function date_field_settings_form($field) {
       '#title' => t('Number of values'),
       '#options' => array(1 => t('Unlimited'), 99 => t('Repeating'), 0 => 1) + drupal_map_assoc(range(2, 10)),
       '#default_value' => !empty($field['repeat']) ? 99 : $field['multiple'],
-      '#description' => t('Select a specific number of values for this field, or \'Unlimited\' to provide an \'Add more\' button so the users can add as many values as they like.  Repeating dates display options to allow the user to select when and how often the date will repeat.') .'<br/><strong>'. t('Warning! Changing this setting after data has been created could result in the loss of data!') .'</strong>',
+      '#description' => t('Select a specific number of values for this field, or \'Unlimited\' to provide an \'Add more\' button so the users can add as many values as they like.  Repeating dates will allow the user to select when and how often the date will repeat.') .'<br/><strong>'. t('Warning! Changing this setting after data has been created could result in the loss of data!') .'</strong>',
     );
   }
 
@@ -395,6 +395,16 @@ function date_field_settings_form($field) {
     '#type' => 'hidden',
     '#value' => 'UTC',
     );
+
+  if (module_exists('date_repeat')) {
+    $form['repeat_collapsed'] = array(
+      '#type' => 'radios',
+      '#default_value' => $field['repeat_collapsed'] ? $field['repeat_collapsed'] : 0,
+      '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
+      '#title' => t('Repeat display'),
+      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Yes\' to make those options less obtrusive.'),
+      );
+  }
 
   $form['#suffix'] = t('<div class="form-item"><div class="description">* The custom format, if provided, will override the selected display or input options. Define a php date format string like \'m-d-Y H:i\' (see !link for more details).</div></div>', array('!link' => l('http://php.net/date', 'http://php.net/date')));
 

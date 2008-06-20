@@ -55,8 +55,8 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   $element['#title'] = t('Repeat');
   $element['#description'] = t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
   $element['#collapsible'] = TRUE;
-  $element['#collapsed'] = FALSE;
-
+  $element['#collapsed'] = !empty($element['#repeat_collapsed']) ? $element['#repeat_collapsed'] : 0;
+  
   $element['INTERVAL'] = array(
     '#type' => 'select',
     //'#title' => t('Interval'),

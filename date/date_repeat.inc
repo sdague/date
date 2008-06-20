@@ -37,6 +37,7 @@ function _date_repeat_widget($element, $field, $items, $delta) {
     '#prev_value' => $items[0]['value'],
     '#prev_value2' => $items[0]['value2'],
     '#prev_rrule' => isset($items[0]['rrule']) ? $items[0]['rrule'] : '',
+    '#repeat_collapsed' => $field['repeat_collapsed'],
     );
   return $element;
 }
