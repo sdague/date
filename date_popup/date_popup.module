@@ -238,16 +238,6 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   return $sub_element;
 }
 
-function date_popup_form_alter(&$form, &$form_state, $form_id = NULL) {
-  if ($form_id == 'content_add_more_js') {
-    $field_name = array_pop(array_keys($form));
-    $fields = content_fields();
-    $field = $fields[$field_name];
-    
-    dsm($form);
-  }
-}
-
 /**
  * Process the time portion of the element.
  */
