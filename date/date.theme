@@ -31,10 +31,10 @@ function theme_date_display_combination($element) {
   // If we're trying to display only a single date on a node, see if
   // this is the right one.
   if (isset($node->date_id)) {
-    $parts = explode(':', $node->date_id);
-    $id_field = $node->{$parts[1]};
-    $id_date = $id_field[$parts[2]][$parts[3]];
-    if ($id_date != $item) {
+    list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
+    $id_field = $node->{$field_name};
+    $id_date = $id_field[$delta];
+    if ($id_date != $element['#item']) {
       return;
     }
   }
@@ -100,6 +100,18 @@ function theme_date_display_combination($element) {
  *
  */
 function theme_date_format_interval($element) {
+  $node = $element['#node'];
+  // If we're trying to display only a single date on a node, see if
+  // this is the right one.
+  if (isset($node->date_id)) {
+    list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
+    $id_field = $node->{$field_name};
+    $id_date = $id_field[$delta];
+    if ($id_date != $element['#item']) {
+      return;
+    }
+  }
+
   $dates = date_formatter_process($element);
   // Time to compare dates to
   $now = date_format(date_make_date('now', date_default_timezone()), DATE_FORMAT_DATETIME);

@@ -6,6 +6,8 @@ TODO
 
 Version 6.2-dev
 =================
+- #244025 Didn't get the right code into the original commit for the single jquery class. 
+    Still have the problem that it won't work with AHAH add more.
 - #273130 Conform to new Drupal 6 method of indicating long and short month names.
 - Clean up Date popup validation.
 - Add templates for ical vevent and valarm.
