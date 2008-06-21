@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- #273130 Conform to new Drupal 6 method of indicating long and short month names.
 - Clean up Date popup validation.
 - Add templates for ical vevent and valarm.
 - Fix undefined indexes in date_repeat_calc.inc.

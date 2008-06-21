@@ -467,7 +467,7 @@ function date_t($string) {
     $replace = array();
     // Translate the whole name first, then look for abbreviations.
     foreach (date_month_names_untranslated() as $month) {
-      $replace[$month] = t($month);
+      $replace[$month] = trim(t('!long-month-name '. $month, array('!long-month-name' => '')));
       $replace[drupal_substr($month, 0, 3)] = t(drupal_substr($month, 0, 3));
     }
     foreach (date_week_days_untranslated() as $day) {
