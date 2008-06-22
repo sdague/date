@@ -7,6 +7,7 @@ TODO
 Version 6.2-dev
 =================
 
+- #270358 Fix handling of year-only or month-only text fields to save the right values.
 - Remove unneeded hook_form_alter() used to fix radio values for granularity.
 - Make sure granularity is in correct format before setting value in field settings form.
 - #244025 Didn't get the right code into the original commit for the single jquery class. 

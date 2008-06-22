@@ -460,6 +460,14 @@ function date_text_input_value($element) {
 
   $value = date_convert_from_custom($input, $element['#date_format']);
 
+  // Check for special case when using partial dates, like year only.
+  // We have to create a valid date out of the results to test validity.
+  $granularity = date_format_order($element['#date_format']);
+  $non_granularity = date_nongranularity($granularity);
+  if (array_intersect($non_granularity, array('year', 'month', 'day'))) {
+    $value = date_fuzzy_datetime(str_replace(' ', 'T', $value));
+  }
+
   // If it creates a valid date, use it.
   if (date_is_valid($value)) {
     return $value;
