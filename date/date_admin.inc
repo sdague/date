@@ -363,9 +363,16 @@ function date_field_settings_form($field) {
     '#description' => t("Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in."),
     '#default_value' => $field['todate'] ? $field['todate'] : '',
     );
+  // Make sure granularity is in the right format and has no empty values.
+  if (!empty($field['granularity']) && is_array($field['granularity'])) {
+    $granularity = array_filter($field['granularity']);  
+  }
+  else {
+    $granularity = array('year', 'month', 'day', 'hour', 'minute');
+  }
   $form['input']['granularity'] = array(
     '#type' => 'select', '#title' => t('Granularity'),
-    '#default_value' => $field['granularity'] ? $field['granularity'] : array('year', 'month', 'day', 'hour', 'minute'),
+    '#default_value' => $granularity,
     '#options' => date_granularity_names(),
     '#multiple' => TRUE,
     '#description' => t('Set the date elements to be stored (at least a year is required).'),
