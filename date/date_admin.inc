@@ -46,11 +46,17 @@ function _date_widget_settings($op, &$field) {
  */
 function date_widget_settings_validate(&$form, &$form_state) {
   $form_values = $form_state['values'];
-  // Only a limited set of formats is available for the Date Popup module
   if ($form_values['widget_type'] == 'date_popup') {
+    // Only a limited set of formats is available for the Date Popup module
     if (!empty($form_values['input_format_custom']) || !in_array($form_values['input_format'], date_popup_formats())) {
       form_set_value($form['input_format_custom'], NULL, $form_state);
       form_set_value($form['input_format'], DATE_FORMAT_DATETIME, $form_state);
+    }
+    // The jQuery calendar requires year, month, and day or it won't work.
+    $date_parts = array('year', 'month', 'day');
+    $intersection = array_intersect($date_parts, $field['granularity']);
+    if ($intersection != $date_parts) {
+      form_set_error('granularity', t('The Date Popup widget not work unless granularity includes year, month, and day.'));
     }
   }
   if (isset($form_values['advanced']['label_position'])) {
