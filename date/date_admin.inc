@@ -238,7 +238,7 @@ function _date_field_settings($op, $field) {
 
     case 'validate':
       if (!in_array('year', $field['granularity'])) {
-        form_set_error('granularity', t('Input granularity must include a year.'));
+        form_set_error('granularity', t('Granularity must include a year.'));
       }
       if ($field['tz_handling'] != 'none' && !in_array('hour', array_filter($field['granularity']))) {
         form_set_error('tz_handling', t('Dates without hours granularity must not use any timezone handling.'));
