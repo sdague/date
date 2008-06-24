@@ -6,7 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
-
+- Date Popup was not handling empty non-required values correctly and they were defaulting to current date.
 - #273727 Small fixes to field settings validation.
 - #248338 and #254819 clean up date_limit_format() to better handle punctuation and escaped letters.
 - The jQuery calendar requires year, month, and day or it won't work, add validation for that in the settings.
