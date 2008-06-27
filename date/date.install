@@ -1,47 +1,32 @@
 <?php
 // $Id$
-
-function date_install_load() {
-  // Updates happen in random order so include critical code here just to be sure.
+function date_install_clear() {
+  cache_clear_all('date_', 'cache', '*');
   include_once(drupal_get_path('module', 'content') .'/content.module');
-  include_once(drupal_get_path('module', 'content') .'/includes/content.admin.inc');
-  include_once(drupal_get_path('module', 'date_api') .'/date_api.module');
-  if (version_compare(PHP_VERSION, '5.2', '<') && !module_exists('date_php4')) {
-    include_once(drupal_get_path('module', 'date_php4') .'/date_php4/date_php4.module');
-  }
-  include_once(drupal_get_path('module', 'date_timezone') .'/date_timezone.module');
-  include_once(drupal_get_path('module', 'date') .'/date.module');
-  if (module_exists('views')) {
-    include_once(drupal_get_path('module', 'date') .'/date_views.inc');
-  }
+  content_clear_type_cache();
 }
 
 /**
  * Implementation of hook_install().
  */
-
 /**
  * Implementation of hook_install().
  * Reset the date caches.
  */
 function date_install() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   content_notify('install', 'date');
-  $ret = array();
-  date_clear_all();
-  return $ret;
+  date_install_clear();
 }
 
 /**
  * Implementation of hook_uninstall().
  */
 function date_uninstall() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   content_notify('uninstall', 'date');
-  $ret = array();
   // Empty the date caches.
-  date_clear_all(TRUE);
-  return $ret;
+  date_install_clear();
 }
 
 /**
@@ -49,9 +34,9 @@ function date_uninstall() {
  * Reset the calendar caches.
  */
 function date_enable() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   content_notify('enable', 'date');
-  date_clear_all();
+  date_install_clear();
 }
 
 /**
@@ -59,9 +44,9 @@ function date_enable() {
  * Empty the date caches.
  */
 function date_disable() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   content_notify('disable', 'date');
-  date_clear_all(TRUE);
+  date_install_clear();;
 }
 
 function date_update_last_removed() {
@@ -72,7 +57,7 @@ function date_update_last_removed() {
  * Prepare for Version 5.2 updates, make changes to field and widget settings.
  */
 function date_update_5100() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -181,10 +166,9 @@ function date_update_5101() {
  * Make sure date module loads after date_api.
  */
 function date_update_5102() {
-  date_install_load();
   variable_del('date_version');
   $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'date'");
-  return date_db_integrity('5103');
+  return $ret;
 }
 
 /**
@@ -202,7 +186,6 @@ function date_update_5103() {
  * automatically whenever views_invalidate_cache() is called.
  */
 function date_update_5104() {
-  date_install_load();
   $ret = array();
   cache_clear_all('date_browser_views', 'cache');
   return $ret;
@@ -212,7 +195,7 @@ function date_update_5104() {
  * Version 5.2 updates.
  */
 function date_update_5200() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
   module_enable(array('date_timezone'));
 
@@ -247,7 +230,7 @@ function date_update_5200() {
  * @return unknown
  */
 function date_update_5201() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
   if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
     $result = db_query("SELECT field_name, widget_type, widget_settings from {". content_instance_tablename() ."} where widget_type = 'date_js'");
@@ -267,7 +250,6 @@ function date_update_5201() {
  * Database integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5202() {
-  date_install_load();
   return date_db_integrity('5202');
 }
 
@@ -275,15 +257,16 @@ function date_update_5202() {
  * Data integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5203() {
-  date_install_load();
-  return date_data_integrity('5203');
+  //return date_data_integrity('5203');
+  $ret = array();
+  return $ret;
 }
 
 /**
  * Get rid of deprecated timezone names.
  */
 function date_update_5204() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -306,7 +289,7 @@ function date_update_5204() {
 }
 
 function date_update_5205() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -354,7 +337,7 @@ function date_update_5206() {
   return $ret;
 }
 function date_update_6000() {
-  date_install_load();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
   $result = db_query("SELECT field_name, global_settings from {". content_field_tablename() ."} where type LIKE 'date_%'");
   while ($field = db_fetch_array($result)) {
@@ -369,6 +352,12 @@ function date_update_6000() {
 }
 
 function date_db_integrity($name) {
+  $ret = array();
+  if (!module_exists('content') || !module_exists('date_api')) {
+    return $ret;
+  }
+  include_once(drupal_get_path('module', 'content') .'/content.module');
+  include_once(drupal_get_path('module', 'content') .'/includes/content.admin.inc');
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -441,19 +430,16 @@ function date_db_integrity($name) {
  * @param name - name of the update
  */
 function date_data_integrity($name, $force_recalc = FALSE) {
+  $ret = array();
+  if (!module_exists('content') || !module_exists('date_api')) {
+    return $ret;
+  }
+  include_once(drupal_get_path('module', 'content') .'/content.module');
+  include_once(drupal_get_path('module', 'content') .'/includes/content.admin.inc');
   // Use this to turn extra debugging on or off.
   $debug = TRUE;
 
-  $ret = array();
   $update_name = 'date_update_'. $name;
-  // Make sure Date API module is installed before proceeding.
-  if (!module_exists('date_api')) {
-    drupal_install_modules(array('date_api'));
-  }
-  if (!module_exists('content')) {
-    drupal_install_modules(array('content'));
-  }
-
   // See if being called for the first time
   if (!isset($_SESSION[$update_name]) || empty($_SESSION[$update_name]['search'])) {
     // Find all nids that have date fields and store them in an array.
