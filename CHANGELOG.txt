@@ -6,6 +6,8 @@ TODO
 
 Version 6.2-dev
 =================
+- Rework PHP4 date handling to avoid any use of date() or mktime(), which may inject an incorrect timezone offset.
+- Get rid of the adodb method of computing the gmt offset for PHP4 and use the date_offset_get() computation.
 - Fix use of wrong value for timezone in repeating dates.
 - Remove as many dependencies as possible from install files and auto-enable necessary modules.
 - #270267 Remove timezone_identifiers_list() in the install file from the global space.
