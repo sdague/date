@@ -93,7 +93,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
     // By the time we get here, the start and end dates have been 
     // adjusted back to UTC, but we want localtime dates to do
     // things like '+1 Tuesday', so adjust back to localtime.
-    $timezone = date_get_timezone($field['tz_handling'], $item[0]['timezone']);
+    $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
     if (date_timezone_convert($field, $item)) {
       $start = date_make_date($item['value'], 'UTC', $field['type']);
       date_timezone_set($start, timezone_open($timezone));
