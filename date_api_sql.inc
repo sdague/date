@@ -147,7 +147,7 @@ class date_sql_handler {
     if (strtoupper($field) == 'NOW') {
       // NOW() will be in UTC since that is what we set the db timezone to.
       $this->local_timezone = 'UTC';
-      return 'NOW()';
+      return $this->sql_offset('NOW()', $offset);
     }
     switch ($this->db_type) {
       case 'mysql':
