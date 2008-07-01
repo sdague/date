@@ -54,6 +54,7 @@ function theme_date_display_combination($element) {
   $timezone = $dates['value']['formatted'];
   $timezone = str_replace($dates['value']['formatted_date'], '', $timezone);
   $timezone = str_replace($dates['value']['formatted_time'], '', $timezone);
+  $timezone = trim($timezone);
 
   $date1 = str_replace($timezone, '', $date1);
   $date2 = str_replace($timezone, '', $date2);
