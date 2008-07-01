@@ -382,7 +382,7 @@ if (!function_exists('date_modify')) {
   function date_modify(&$date, $change) {
     $cdate = $date->value;
     $time = substr($date->value, 11, 8);
-
+    $change = trim($change);   
     //Date is too old for strtotime(), or looking for custom +/- values, use date_calc instead.
     if (substr($change, 0, 1) != '+' && substr($change, 0, 1) != '-'
     && 1971 < date_part_extract($cdate, 'year')
@@ -397,10 +397,13 @@ if (!function_exists('date_modify')) {
       include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
       $days = date_week_days_untranslated();
       $dows = array_flip($days);
-      preg_match('/([+|-])([0-9]{1,4}).([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?}second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
+      preg_match('/([+|-])([0-9]{1,32}).([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
       $direction = $results[1];
       $count = $results[2];
       $item = $results[3];
+      if (empty($results) || empty($item)) {
+        return;
+      }
       if (substr($item, -1) == 's') {
         $item = substr($item, 0, strlen($item) - 1);
       }
