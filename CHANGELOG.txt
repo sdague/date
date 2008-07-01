@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- #274882 Fix typo using $field instead of $form_values.
 - #276544 Rework system for handling timezone in date theme.
 - Add code to adjust NOW() by a number of seconds to allow NOW() to be the beginning of the day.
 - Rework PHP4 date handling to avoid any use of date() or mktime(), which may inject an incorrect timezone offset.

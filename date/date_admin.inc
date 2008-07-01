@@ -54,7 +54,7 @@ function date_widget_settings_validate(&$form, &$form_state) {
     }
     // The jQuery calendar requires year, month, and day or it won't work.
     $date_parts = array('year', 'month', 'day');
-    $intersection = array_intersect($date_parts, $field['granularity']);
+    $intersection = array_intersect($date_parts, $form_values['granularity']);
     if ($intersection != $date_parts) {
       form_set_error('granularity', t('The Date Popup widget will not work unless granularity includes year, month, and day.'));
     }
