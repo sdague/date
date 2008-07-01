@@ -203,7 +203,12 @@ function date_local_date($delta, $item, $timezone, $field, $part = 'value') {
       return NULL;
     }
     elseif ($part == 'value2' && $default_value == 'same' && !empty($item['value'])) {
-      $date = date_make_date($item['value'], $timezone);
+      if ($field['widget']['default_value'] == 'blank') {
+        return NULL;
+      }
+      else {
+        $date = date_make_date($item['value'], $timezone);
+      }
     }
     // Special case for 'now' when using dates with no timezone,
     // make sure 'now' isn't adjusted to UTC value of 'now'.
