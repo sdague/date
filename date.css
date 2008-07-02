@@ -20,8 +20,12 @@
 .container-inline-date .form-item option {
   margin-right:5px;}
 
+/* Force from/to dates to float using inline-block, where it works, otherwise inline. */
 .container-inline-date {
+  display: inline;
   display: inline-block;
+  vertical-align:top;
+  margin-right: 0.5em;
  }
 
 .container-inline-date .date-spacer {
@@ -105,6 +109,11 @@ span.date-display-separator {
   text-align:center;
   width:50%;
   float:left;
+}
+
+.date-clear {
+  clear:both;
+  display:block;
 }
 
 /*

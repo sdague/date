@@ -146,6 +146,16 @@ function date_text_process($element, $edit, $form_state, $form) {
   }
   
   $element['#tree'] = TRUE;
+
+  // Pass date-clear in as another class to keep multiple date elements 
+  // from floating together on the same line. 
+  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
+    $element['#attributes']['class'] .= ' container-inline-date';
+  }
+  else {
+    $element['#attributes'] = array('class' => 'container-inline-date');
+  }
+
   $element['date']['#type'] = 'textfield';
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
   $element['date']['#default_value'] = is_object($date) ? date_format($date , $element['#date_format']) : '';
@@ -193,7 +203,16 @@ function date_select_process($element, $edit, $form_state, $form) {
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
-  
+
+  // Pass date-clear in as another class to keep multiple date elements 
+  // from floating together on the same line. 
+  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
+    $element['#attributes']['class'] .= ' container-inline-date';
+  }
+  else {
+    $element['#attributes'] = array('class' => 'container-inline-date');
+  }
+
   // Store a hidden value for all date parts not in the current display.
   $granularity = date_format_order($element['#date_format']);
   $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j', 'hour' => 'H', 'minute' => 'i', 'second' => 's');
@@ -629,7 +648,7 @@ function theme_date_select($element) {
   if (isset($element['#children'])) {
     $output = $element['#children'];
   }
-  return '<div class="container-inline-date date-clear-block">'. theme('form_element', $element, $output) .'</div>';
+  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
 }
 
 /**
@@ -642,7 +661,11 @@ function theme_date_select($element) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_text($element) {
-  return theme('form_element', $element, $element['#children']);
+  $output = '';
+  if (isset($element['#children'])) {
+    $output = $element['#children'];
+  }
+  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
 }
 
 /**

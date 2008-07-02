@@ -284,7 +284,6 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     '#field'         => $field,
     '#title'         => !$field['multiple'] ? t($field['widget']['label']) : '',
     '#weight'        => $field['widget']['weight'],
-    '#description'   => empty($field['todate']) ? t($field['widget']['description']) : '',
     '#required'      => ($field['required'] && $delta == 0) ? 1 : 0,
     '#default_value' => isset($element['#value'][$from_field]) ? $element['#value'][$from_field] : '',
     '#field'         => $field,
@@ -296,12 +295,19 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     '#date_year_range'  => $field['widget']['year_range'],
     '#date_label_position' => $field['widget']['label_position'],
     );
+    
+  $description =  empty($field['todate']) ? t($field['widget']['description']) : ''; 
   
   // Give this element the right type, using a Date API
   // or a Date Popup element type.
 
   switch ($field['widget']['type']) {
     case 'date_select':
+      // From/to selectors with lots of parts will look better if displayed 
+      // on two rows instead of in a single row.
+      if (!empty($field['todate']) && count($field['granularity']) > 3) {
+        $element[$from_field]['#attributes'] = array('class' => 'date-clear');
+      }
       $element[$from_field]['#type'] = 'date_select';
       break;
     case 'date_popup':
@@ -316,21 +322,24 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   // for the 'To' date, and adapt titles to make it clear which
   // is the 'From' and which is the 'To'.
 
-  if ($field['todate']) {
+  if (!empty($field['todate'])) {
     $element[$from_field]['#title']  = t('From date');
     $element[$to_field] = $element[$from_field];
     $element[$to_field]['#title'] = t('To date');
     $element[$to_field]['#default_value'] = isset($element['#value'][$to_field]) ? $element['#value'][$to_field] : '';
     $element[$to_field]['#required'] = false;
     $element[$to_field]['#weight'] += .1;
-    $element[$to_field]['#description'] = t('Empty \'To date\' values will use the \'From date\' values.');
-    $element['#fieldset_description'] = t($field['widget']['description']);
+    $description .= t('Empty \'To date\' values will use the \'From date\' values.');
+    $element['#fieldset_description'] = $description;
+  }
+  else {
+    $element[$from_field]['#description'] = $description;
   }
 
   // Make sure field info will be available to the validator which
   // does not get the values in $form.
   $form_state['#field_info'][$field['field_name']] = $field;
-
+  
   return $element;
 }
 
