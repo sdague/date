@@ -64,11 +64,11 @@ if (!function_exists('date_create')) {
   function date_create($date_in = NULL, $timezone = NULL) {
     if (empty($date_in) || strtolower($date_in) == 'now') {
       // Create a current date for an empty value or 'now'.
-      $date_out = date_date('Y-m-d H:i:s', time() - date('Z'));
+      $date_out = date_date('Y-m-d H:i:s', (time() - date('Z')));
     }
     elseif (substr($date_in, 0, 1) == '@' && is_numeric(substr($date_in, 1))) {
       // An number prefixed with '@' is interpreted as a timestamp.
-      $date_out = date_gmdate('Y-m-d H:i', substr($date_in, 1));
+      $date_out = date_date('Y-m-d H:i', substr($date_in, 1), $timezone);
     }
     elseif (preg_match(DATE_REGEX_LOOSE, $date_in, $regs)) {
       $date_out = date_pad($regs[1], 4) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]) .
@@ -80,7 +80,7 @@ if (!function_exists('date_create')) {
       // won't make it into a negative value.
       $test = @strtotime($date_in .' '. $timezone);
       if ($test > 86400) {
-        $date_out = date_gmdate('Y-m-d H:i', $test);
+        $date_out = date_date('Y-m-d H:i', $test, $timezone);
       }
     }
     if (empty($date_out)) {
@@ -88,7 +88,7 @@ if (!function_exists('date_create')) {
     }
     $date = new StdClass();
     $date->value = $date_out;
-    $date->timestamp = date_datetime2timestamp($date->value);
+    $date->timestamp = date_datetime2timestamp($date->value, $timezone);
     $date->timezone = $timezone;
     if (!date_is_valid($date, DATE_OBJECT)) {
       // Must be a value we can't interpret. Throw an error.
@@ -259,11 +259,11 @@ if (!function_exists('date_timezone_set')) {
  *
  */
   function date_timezone_set(&$date, $timezone) {
-    $offset_old = timezone_offset_get($date->timezone, $date);
+    $offset_old = date_offset_get($date);
     $new_date = date_create($date->value, $timezone);
     $offset_new = date_offset_get($new_date);
     $date->timestamp = ($date->timestamp - $offset_old + $offset_new);
-    $date->value = date_gmdate(DATE_FORMAT_DATETIME, $date->timestamp);
+    $date->value = date_date(DATE_FORMAT_DATETIME, $date->timestamp, $timezone);
     $date->timezone = $timezone;
     return $date;
   }
@@ -379,7 +379,7 @@ if (!function_exists('date_modify')) {
  *   the date that matches the phrase.
  *
  */
-  function date_modify(&$date, $change) {
+  function date_modify(&$date, $change) { 
     $cdate = $date->value;
     $time = substr($date->value, 11, 8);
     $change = trim($change);   
@@ -390,10 +390,9 @@ if (!function_exists('date_modify')) {
       $cdate = strtotime($change, strtotime($cdate .' UTC'));
       // strtotime will sometimes end up with a bogus adjustment for daylight
       // savings time, so compute the date and force them time back to the original.
-      $date->value = substr_replace(date_gmdate(DATE_FORMAT_DATETIME, $cdate), $time, 11);
+      $date->value = substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
     }
     else {
-
       include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
       $days = date_week_days_untranslated();
       $dows = array_flip($days);
@@ -507,10 +506,10 @@ if (!function_exists('date_modify')) {
           default:
             $timestamp = $date->timestamp + $count;
         }
-        $date->value = date_gmdate('Y-m-d H:i:s', $timestamp);
+        $date->value = date_date('Y-m-d H:i:s', $timestamp, $date->timezone);
       }
     }
-    $date->timestamp = date_datetime2timestamp($date->value);
+    $date->timestamp = date_datetime2timestamp($date->value, $date->timezone);
     return $date;
   }
 }
@@ -564,9 +563,9 @@ if (!function_exists('timezone_abbreviations_list')) {
  * Can't use date_convert() to turn datetime to unix within the
  * PHP 4 emulation  because it creates endless loops.
  */
-function date_datetime2timestamp($datetime) {
+function date_datetime2timestamp($datetime, $timezone) {
   preg_match(DATE_REGEX_LOOSE, $datetime, $regs);
-  return date_gmmktime($regs[5], $regs[6], $regs[7], $regs[2], $regs[3], $regs[1]);
+  return date_mktime($regs[5], $regs[6], $regs[7], $regs[2], $regs[3], $regs[1], $timezone);
 }
 
 /**
@@ -589,7 +588,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
   include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
   $region = $timezone_map[$timezone]['dst_region'];
       
-  $year = date_gmdate('Y', $timestamp);
+  $year = date_date('Y', $timestamp, $timezone);
   // Information on Daylight Saving time was obtained from http://webexhibits.org/daylightsaving/g.html
   switch ($region) {
     case 0:
