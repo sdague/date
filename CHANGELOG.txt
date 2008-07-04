@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- Fix computation of 'N' in PHP4 date_format() wrapper to get date_week() working right in PHP4.
 - #274403 Fix typo in date_hours().
 - #269834 Add timezone adjustment to PHP4 date_format() wrapper.
 - #272110 Alter css so that from/to dates can float next to each other.

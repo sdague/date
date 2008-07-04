@@ -156,6 +156,9 @@ if (!function_exists('date_format')) {
               date_part_extract($date->value, 'year'));
             break;
           case 'N':
+            $w = date_date('w', $timestamp, $date->timezone);
+            $date_string .= $w != 0 ? $w : 7;
+            break;
           case 'o':
             $iso_week = date_calc_gregorian_to_ISO(date_part_extract($date->value, 'day'),
               date_part_extract($date->value, 'month'),
