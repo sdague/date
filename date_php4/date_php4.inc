@@ -119,7 +119,7 @@ if (!function_exists('date_format')) {
     $max = strlen($format);
     for ($i = 0; $i < $max; $i++) {
       $c = $format[$i];
-      if (date_part_extract($date->value, 'year') > variable_get('date_php_min_year', 1970)
+      if ($date->timezone == 'UTC' && date_part_extract($date->value, 'year') > variable_get('date_php_min_year', 1970)
         && !in_array($c, $php5_formats)) {
         $date_string .= gmdate($c, $timestamp);
       }
@@ -184,7 +184,7 @@ if (!function_exists('date_format')) {
             break;
           default:
             if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuWwYyZz', $c) !== FALSE) {
-              $date_string .= date_gmdate($c, $timestamp);
+              $date_string .= date_date($c, $timestamp, $date->timezone);
             }
             else {
               $date_string .= $c;
