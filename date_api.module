@@ -267,7 +267,7 @@ function date_hours($format = 'H', $required = FALSE) {
     $max = 23;
   }
   for ($i = $min; $i <= $max; $i++) {
-    $hours[$i] = $i < 10 && $format == 'H' || $format == 'h' ? "0$i" : $i;
+    $hours[$i] = $i < 10 && ($format == 'H' || $format == 'h') ? "0$i" : $i;
   }
   $none = array('' => '');
   return !$required ? $none + $hours : $hours;
