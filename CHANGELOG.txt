@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- Fix PHP4 handler for date_timezone_set() which was incorrectly altering the timestamp value.
 - Fix computation of 'N' in PHP4 date_format() wrapper to get date_week() working right in PHP4.
 - #274403 Fix typo in date_hours().
 - #269834 Add timezone adjustment to PHP4 date_format() wrapper.

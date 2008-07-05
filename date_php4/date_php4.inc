@@ -262,10 +262,6 @@ if (!function_exists('date_timezone_set')) {
  *
  */
   function date_timezone_set(&$date, $timezone) {
-    $offset_old = date_offset_get($date);
-    $new_date = date_create($date->value, $timezone);
-    $offset_new = date_offset_get($new_date);
-    $date->timestamp = ($date->timestamp - $offset_old + $offset_new);
     $date->value = date_date(DATE_FORMAT_DATETIME, $date->timestamp, $timezone);
     $date->timezone = $timezone;
     return $date;
