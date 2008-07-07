@@ -519,7 +519,17 @@ class date_sql_handler {
     // Special case for weeks.
     if (array_key_exists('week', $selected)) {
       $dates = date_week_range($selected['week'], $selected['year']);
-      return date_format($dates[0], 'Y-m-d H:i:s');
+      switch ($type) {
+        case 'empty_now':
+        case 'empty_min':
+        case 'min':
+          return date_format($dates[0], 'Y-m-d H:i:s');
+        case 'empty_max':
+        case 'max':
+          return date_format($dates[1], 'Y-m-d H:i:s');
+        default:
+          return;
+      }
     }
     
     $compare = array_merge($this->part_info('empty_'. $type), $selected);
@@ -669,6 +679,20 @@ class date_sql_handler {
       $values[] = $parts;
     }
     return $values;
+  }
+
+  /**
+   * Use the parsed values from the ISO argument to determine the
+   * granularity of this period.
+   */
+  function arg_granularity($arg) {
+    $granularity = '';
+    $parts = $this->arg_parts($arg);
+    $date = !empty($parts[0]['date']) ? $parts[0]['date'] : (!empty($parts[1]['date']) ? $parts[1]['date'] : array());
+    foreach ($date as $key => $part) {
+      $granularity = $key;    
+    }
+    return $granularity;
   }
 
   /**
