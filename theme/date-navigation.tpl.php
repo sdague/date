@@ -25,15 +25,15 @@
  */
 ?>
 <div class="date-nav clear-block">
-  <div class="prev">
+  <div class="date-prev">
     <?php if (!empty($prev_url)) : ?>
       <span class="next"> <?php print l($block ? '«' : t('« prev'), $prev_url); ?></span>
     <?php endif; ?>
   &nbsp;</div>
-  <div class="heading">
+  <div class="date-heading">
     <h3><?php print $nav_title ?></h3>
   </div>
-  <div class="next">&nbsp;
+  <div class="date-next">&nbsp;
     <?php if (!empty($next_url)) : ?>
       <span class="next"> <?php print l($block ? '»' : t('next »'), $next_url); ?></span>
     <?php endif; ?>  
