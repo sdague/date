@@ -76,7 +76,7 @@ class date_sql_handler {
           }
           break;
         case 'pgsql':
-          $test = "TIMESTAMP WITH TIME ZONE '2008-02-15 12:00:00' AT TIME ZONE 'US/Central'";
+          $test = db_result(db_query("'2008-02-15 12:00:00 UTC' AT TIME ZONE 'US/Central'"));
           if ($test == '2008-02-15 06:00:00') {
             $has_support = TRUE;
           }
