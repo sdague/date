@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- #279932 Remove length from integer rows so they don't create errors in postgres.
 - #270316 Fix postgres timezone adjustment.
 - #279051 Fix postgres timezone test.
 - Add week handling and granularity tests to date_sql_handler().
