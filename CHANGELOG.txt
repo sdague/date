@@ -6,6 +6,7 @@ TODO
 
 Version 6.2-dev
 =================
+- #277420 Add missing format information for minutes and seconds to date_sql_handler.
 - Make sure the timezone always goes on its own line now that date elements float.
 - #279932 Remove length from integer rows so they don't create errors in postgres.
 - #270316 Fix postgres timezone adjustment.
