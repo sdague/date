@@ -69,7 +69,7 @@ function _date_getdate($timestamp = false, $timezone = false) {
   }
 
   $timestamp_in = $timestamp;
-  $timestamp =  $timestamp - date_get_gmt_diff_ts($timestamp, $timezone);
+  $timestamp =  $timestamp + date_get_gmt_diff_ts($timestamp, $timezone);
   $_day_power = 86400;
   $_hour_power = 3600;
   $_min_power = 60;

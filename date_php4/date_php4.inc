@@ -262,8 +262,8 @@ if (!function_exists('date_timezone_set')) {
  *
  */
   function date_timezone_set(&$date, $timezone) {
-    $date->value = date_date(DATE_FORMAT_DATETIME, $date->timestamp, $timezone);
     $date->timezone = $timezone;
+    $date->value = date_date(DATE_FORMAT_DATETIME, $date->timestamp, $timezone);
     return $date;
   }
 }
@@ -312,7 +312,7 @@ if (!function_exists('timezone_offset_get')) {
  *    the offset in seconds for the supplied date object.
  */
   function timezone_offset_get($timezone, $date) {
-    $cached = cache_get('date_timezone_offsets:'. $date->timezone);
+    $cached = cache_get('date_timezone_offsets:'. $timezone);
     $offsets = isset($cached->data) ? ($cached->data) : array();
     if (empty($offsets)) {
       $offsets = array('dst' => 0);
@@ -587,7 +587,12 @@ function date_is_dst($timestamp, $timezone = NULL) {
   include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
   $region = $timezone_map[$timezone]['dst_region'];
       
-  $year = date_date('Y', $timestamp, $timezone);
+  // This should really be done with date_date() to get the right timezone
+  // adjustment for the year, but that leads to circular code that won't
+  // work, so we're stuck with date(), which hopefully will create the right
+  // year in most cases.
+  $year = date('Y', $timestamp);
+
   // Information on Daylight Saving time was obtained from http://webexhibits.org/daylightsaving/g.html
   switch ($region) {
     case 0:
@@ -816,15 +821,21 @@ function date_gmgetdate($timestamp = false) {
  *   Use 'UTC' to avoid timezone conversion.
  */
 function date_date($format, $timestamp = false, $timezone = false) {
+  // date($format) will adjust to the server timezone, which may
+  // not be right, but we don't use it in this module anywhere and 
+  // there is no easy way to get it working right without creating 
+  // circular code.
   if ($timestamp === false) return ($is_gmt)? @gmdate($format): @date($format);
   if ($timezone === FALSE) {
     $timezone = date_default_timezone_name();
   }
+  // Anything with a timezone other than UTC needs to be forced to the
+  // low level function to compute the timezone offset correctly.
   $is_gmt = $timezone == 'UTC' ? TRUE : FALSE;
   if (abs($timestamp) <= 0x7FFFFFFF) {
     // Below PHP 5.2 in windows, must be positive integer
-    if ($timestamp >= 0) {
-      return ($is_gmt)? @gmdate($format, $timestamp): @date($format, $timestamp);
+    if ($timestamp >= 0 && $is_gmt) {
+      return @gmdate($format, $timestamp);
     }
   }
   include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
