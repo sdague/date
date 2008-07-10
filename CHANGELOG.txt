@@ -7,7 +7,7 @@ TODO
 Version 6.2-dev
 =================
 
-- Rework date_content_generate() a bit so it creates unique dates.
+- #280899, #273344 Make sure Date Popup doesn't inject the current date into empty fields.
 - Fix undefined index for timezone field.
 - Fix computation of year range in date_content_generate.
 - #275797 Remove invalid and unneeded css display:relative.
