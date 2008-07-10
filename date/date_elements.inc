@@ -45,7 +45,7 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
   $field_name = $field['field_name'];
 
   $format = $field['type'] == DATE_ISO ? DATE_FORMAT_ISO : DATE_FORMAT_UNIX;
-  $timezone = date_get_timezone($field['tz_handling'], $items[0]['timezone']);
+  $timezone = date_get_timezone($field['tz_handling'], array_key_exists('timezone', $items[0]) ? $items[0]['timezone'] : '');
   $db_info = content_database_info($field);
   $columns = array_keys($db_info['columns']);
 
