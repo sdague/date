@@ -164,7 +164,7 @@ class date_sql_handler {
         }
         break;
       case 'pgsql':
-        switch ($date_type) {
+        switch ($this->date_type) {
           case DATE_UNIX:
             $field = "$field::ABSTIME";
             break;
