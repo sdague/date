@@ -252,13 +252,9 @@ function date_granularity($field) {
  */
 function date_get_timezone($handling, $timezone = '') {
   switch ($handling) {
-    case('site'):
-      $timezone = date_default_timezone_name(FALSE);
-      break;
     case('date'):
       $timezone = !empty($timezone) ? $timezone : date_default_timezone_name();
       break;
-    case('none'):
     case('utc'):
       $timezone = 'UTC';
       break;
