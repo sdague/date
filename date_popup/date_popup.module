@@ -331,10 +331,10 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
   date_popup_load();
   $granularity = date_format_order($element['#date_format']);
   $format = date_limit_format($element['#date_format'], $granularity);
-  $input = $element['#value']['date'];
+  $input = !empty($element['#value']['date']) ? $element['#value']['date'] : '';
   $value = '';
   if (is_array($element['#value']) && !empty($element['#value']['date'])) {
-    $input = $element['#value']['date'] .' '. $element['#value']['time'];
+    $input = $element['#value']['date'] .(!empty($element['#value']['time']) ? ' '. $element['#value']['time'] : '');
     $value = date_convert_from_custom(trim($input), $format);
   }
   if (date_is_valid($value, DATE_DATETIME)) {

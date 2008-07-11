@@ -176,7 +176,9 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
   // Add a date repeat form element, if needed.
   if (module_exists('date_repeat') && $field['repeat'] == 1) {
     include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
-    $element = array_merge($element, _date_repeat_widget($element, $field, $items, $delta));
+    $repeat = _date_repeat_widget($element, $field, $items, $delta);
+    $element['rrule'] = $repeat['rrule'];
+    $element['rrule']['#weight'] = $delta + .4;
   }
   return $element;
 }
@@ -351,15 +353,19 @@ function date_combo_validate($element, &$form_state) {
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
   $delta = $element['#delta'];
-  $item = $form_values[$field_name][$delta];
+  
+  // Repeating dates have a different form structure, so get the
+  // right item values.
+  $item = isset($form_values[$field_name]['rrule']) ? $form_values[$field_name] : $form_values[$field_name][$delta];
+  $posted = isset($form_values[$field_name]['rrule']) ? $element['#post'][$field_name] : $element['#post'][$field_name][$delta];
+  
   $field = $form_state['#field_info'][$element['#field_name']];
-  $delta = $element['#delta'];
   $from_field = 'value';
   $to_field = 'value2';
   $tz_field = 'timezone';
   $offset_field = 'offset';
   $offset_field2 = 'offset2';
-
+  
   if (empty($item[$from_field])) {
     $item[$from_field] = NULL;
     $item[$to_field]   = NULL;
@@ -375,8 +381,8 @@ function date_combo_validate($element, &$form_state) {
 
     if ($field['todate']) {
       $merged_date = array();
-      foreach ($element['#post'][$field_name][$delta][$to_field] as $part => $value) {
-        $merged_date[$part] = empty($value) ? $element['#post'][$field_name][$delta][$from_field][$part] : $value;
+      foreach ($posted[$to_field] as $part => $value) {
+        $merged_date[$part] = empty($value) ? $posted[$from_field][$part] : $value;
         if ($part == 'ampm' && $merged_date['ampm'] == 'pm' && $merged_date['hour'] < 12) {
           $merged_date['hour'] += 12;
         }
@@ -395,7 +401,6 @@ function date_combo_validate($element, &$form_state) {
     else {
       $item[$to_field] = $item[$from_field];
     }
-
     if ($item[$from_field] > $item[$to_field]) {
       form_set_error(implode('][', $element['#parents']), t('The To date must be greater than the From date.'));
     }
@@ -418,9 +423,10 @@ function date_combo_validate($element, &$form_state) {
         $item[$from_field] = date_convert($item[$from_field], DATE_DATETIME, $field['type']);
         $item[$to_field] = date_convert($item[$to_field], DATE_DATETIME, $field['type']);
       }
-      // TODO get RRULE working.
-      //$item['rrule'] = $rrule;
-        
+      
+      if (isset($form_values[$field_name]['rrule'])) {
+        $item['rrule'] = $form_values[$field['field_name']]['rrule'];
+      }
       form_set_value($element, $item, $form_state);
     }
   }
@@ -434,7 +440,6 @@ function date_widget_validate($element, &$form_state) {
   $field_name = $element['#field_name'];
   $fields = content_fields();
   $field = $form_state['#field_info'][$element['#field_name']];
-
   if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
     include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
     return _date_repeat_widget_validate($element, $form_state);

@@ -1,12 +1,10 @@
 //$Id$
 Date Module 6.x
 =================
-TODO
- - Get repeating dates working again.
-
 Version 6.2-dev
 =================
 
+- Get repeating dates working.
 - #280899, #273344 Make sure Date Popup doesn't inject the current date into empty fields.
 - Fix undefined index for timezone field.
 - Fix computation of year range in date_content_generate.

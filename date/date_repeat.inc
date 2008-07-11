@@ -55,10 +55,9 @@ function _date_repeat_widget_validate($element, &$form_state) {
   $item = $form_values[$field_name];
 
   $values = date_repeat_merge($element['#post'][$field_name]['rrule']);
-
   // If no start date was set, clean up the form and return.
   // If no repeats are set, clean up the form and return.
-  if (empty($form_values[$field_name][0]['value']) || $values['FREQ'] == 'NONE') {
+  if (empty($form_values[$field_name]['value']) || $values['FREQ'] == 'NONE') {
     form_set_value($element, $values[$field_name], $form_state);
     form_set_value($element['rrule'], NULL);
     return;
@@ -89,7 +88,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
     //|| $form_values[$field_name][0]['value2'] != $element['rrule']['#prev_value2'])
     ) {
 
-    $item = $form_values[$field_name][0];
+    $item = $form_values[$field_name];
     
     // By the time we get here, the start and end dates have been 
     // adjusted back to UTC, but we want localtime dates to do
@@ -98,7 +97,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
     if (date_timezone_convert($field, $item)) {
       $start = date_make_date($item['value'], 'UTC', $field['type']);
       date_timezone_set($start, timezone_open($timezone));
-      if (!empty($item['value2']) && $new_field['value2'] != $item['value']) {
+      if (!empty($item['value2']) && $item['value2'] != $item['value']) {
         $end = date_make_date($item['value2'], 'UTC', $field['type']);
         date_timezone_set($end, timezone_open($timezone));
       }
@@ -108,7 +107,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
     }
     else {
       $start = date_make_date($item['value'], $timezone, $field['type']);
-      if (!empty($item['value2']) && $new_field['value2'] != $item['value']) {
+      if (!empty($item['value2']) && $item['value2'] != $item['value']) {
         $end = date_make_date($item['value2'], $timezone, $field['type']);
       }
       else {
