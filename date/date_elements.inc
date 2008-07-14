@@ -325,6 +325,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   // is the 'From' and which is the 'To'.
 
   if (!empty($field['todate'])) {
+    $element['#date_float'] = TRUE;
     $element[$from_field]['#title']  = t('From date');
     $element[$to_field] = $element[$from_field];
     $element[$to_field]['#title'] = t('To date');
