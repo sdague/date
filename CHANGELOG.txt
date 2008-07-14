@@ -3,6 +3,8 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
+
+- Switch old jscalendar widgets to use date_select instead of date_popup since date_popup may not be available.
 - Make sure empty time does not get value on submit.
 - Format interval theme added 'ago' twice to past events.
 - Need a space between the date and the timezone name in the Date theme.

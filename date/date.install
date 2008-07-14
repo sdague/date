@@ -225,7 +225,8 @@ function date_update_5200() {
 }
 
 /**
- * Get rid of jscalendar popup and use jQuery popup instead.
+ * Get rid of jscalendar popup widget.
+ * Could switch to date_popup, but that may not be installed, so use date_select instead.
  *
  * @return unknown
  */
@@ -235,11 +236,7 @@ function date_update_5201() {
   if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
     $result = db_query("SELECT field_name, widget_type, widget_settings from {". content_instance_tablename() ."} where widget_type = 'date_js'");
     while ($widget = db_fetch_array($result)) {
-      // Change the format to one date_popup can use.
-      $widget_settings = unserialize($widget['widget_settings']);
-      $widget_settings['input_format'] = DATE_FORMAT_DATETIME;
-      $widget_settings['input_format_custom'] = '';
-      db_query("UPDATE {". content_instance_tablename() ."} SET widget_type = 'date_popup', widget_settings = '%s' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_type = 'date_select' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
     }
   }
   content_clear_type_cache();
