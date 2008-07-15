@@ -710,10 +710,9 @@ class date_sql_handler {
    * min and max date for this period.
    */
   function arg_range($arg) {
-      
     // Parse the argument to get its parts
     $parts = $this->arg_parts($arg);
-
+   
     // Intercept invalid info and fall back to the current date.
     if (empty($parts[0]) || empty($parts[0]['date']) && empty($parts[0]['period'])) {
       $now = date_now();
@@ -731,11 +730,12 @@ class date_sql_handler {
       return array($min_date, $max_date);
     }
     if (!empty($parts[0]['date'])) {
-      $min_date = date_make_date($this->complete_date($parts[0]['date'], 'min'));
-      
+      $value = date_fuzzy_datetime($this->complete_date($parts[0]['date']), 'min');
+      $min_date = date_make_date($value);
       // Build a range from a single date-only argument.
       if (empty($parts[1]) || (empty($parts[1]['date']) && empty($parts[1]['period']))) {
-        $max_date = date_make_date($this->complete_date($parts[0]['date'], 'max'));
+        $value = date_fuzzy_datetime($this->complete_date($parts[0]['date']), 'max');
+        $max_date = date_make_date($value);
         return array($min_date, $max_date);
       }
       // Build a range from start date + period.
@@ -750,7 +750,8 @@ class date_sql_handler {
     }
     // Build a range from start date and end date.
     if (!empty($parts[1]['date'])) {
-      $max_date = $this->complete_date($parts[1]['date'], 'max');
+      $value = date_fuzzy_datetime($this->complete_date($parts[1]['date']), 'max');
+      $max_date = date_make_date($value);
       if (isset($min_date)) {
         return array($min_date, $max_date);
       }
