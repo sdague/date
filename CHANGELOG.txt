@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Don't user format_date() and strtotime() to create argument titles and links.
 - #282408 Make sure dates only float when there are two of them by adding #date_float parameter.
 - #281623 Switch old jscalendar widgets to use date_text instead of date_popup since date_popup may not be available.
 - Make sure empty time does not get value on submit.

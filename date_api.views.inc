@@ -276,8 +276,11 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function summary_name($data) {
     $format = $this->date_handler->views_formats($this->options['granularity'], 'display');
-    $created = $data->{$this->name_alias};
-    return format_date(strtotime($created), 'custom', $format, 0);
+    $value = $data->{$this->name_alias};
+    $datetime = $field_type == DATE_ISO ? date_fuzzy_datetime($value) : date_convert($value, DATE_UNIX, DATE_DATETIME);
+    $range = $date_handler->arg_range($value);
+    $date = date_make_date($datetime, $this->date_handler->local_timezone);
+    return date_format_date($date, 'custom', $format);
   }
 
   /**
@@ -293,7 +296,8 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function title() {
     $format = $this->date_handler->views_formats($this->options['granularity'], 'display');
-    return format_date(strtotime($this->argument), 'custom', $format, 0);
+    $range = $this->date_handler->arg_range($this->argument);
+    return date_format_date($range[0], 'custom', $format);
   }
 
   /**
