@@ -730,12 +730,12 @@ class date_sql_handler {
       return array($min_date, $max_date);
     }
     if (!empty($parts[0]['date'])) {
-      $value = date_fuzzy_datetime($this->complete_date($parts[0]['date']), 'min');
-      $min_date = date_make_date($value);
+      $value = date_fuzzy_datetime($this->complete_date($parts[0]['date'], 'min'));
+      $min_date = date_make_date($value, date_default_timezone_name(), DATE_ISO);
       // Build a range from a single date-only argument.
       if (empty($parts[1]) || (empty($parts[1]['date']) && empty($parts[1]['period']))) {
-        $value = date_fuzzy_datetime($this->complete_date($parts[0]['date']), 'max');
-        $max_date = date_make_date($value);
+        $value = date_fuzzy_datetime($this->complete_date($parts[0]['date'], 'max'));
+        $max_date = date_make_date($value, date_default_timezone_name(), DATE_ISO);
         return array($min_date, $max_date);
       }
       // Build a range from start date + period.
@@ -750,8 +750,8 @@ class date_sql_handler {
     }
     // Build a range from start date and end date.
     if (!empty($parts[1]['date'])) {
-      $value = date_fuzzy_datetime($this->complete_date($parts[1]['date']), 'max');
-      $max_date = date_make_date($value);
+      $value = date_fuzzy_datetime($this->complete_date($parts[1]['date'], 'max'));
+      $max_date = date_make_date($value, date_default_timezone_name(), DATE_ISO);
       if (isset($min_date)) {
         return array($min_date, $max_date);
       }
