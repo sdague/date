@@ -129,7 +129,6 @@ function date_popup_elements() {
       '#date_increment' => 1,
       '#date_year_range' => '-3:+3',
       '#process' => array('date_popup_process'),
-      '#element_validate' => array('date_popup_validate'),
       ),
     );
 }
@@ -137,21 +136,23 @@ function date_popup_elements() {
 /**
  * Javascript popup element processing.
  * Add popup attributes to $element.
+ * 
+ * In regular FAPI processing $element['#value'] will contain a string
+ * value before the form is submitted, and an array during submission.
+ * 
+ * In regular FAPI processing $edit is empty until the form is submitted
+ * when it will contain an array.
+ * 
+ * Views widget processing now receives the same values as normal FAPI
+ * processing (that was not true in Views 1).
+ * 
  */
 function date_popup_process($element, $edit, $form_state, $form) {
   date_popup_load();
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
 
-  // There are some cases, like when using this as a Views form element,
-  // where $edit is empty and $element['#value'] holds an array of input values.
-  // This happens when the processing bypasses the element validation step
-  // that resets the value from the date and time
-  // subparts.
   $date = NULL;
-  if (!empty($edit) || is_array($element['#value'])) {
-    if (empty($edit)) {
-      $edit = $element['#value'];
-    }
+  if (!empty($edit)) {
     $input = $edit['date'] . (!empty($edit['time']) ? ' '. $edit['time'] : '');
     $datetime = date_convert_from_custom($input, $element['#date_format']);
     $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
@@ -181,7 +182,7 @@ function date_popup_process($element, $edit, $form_state, $form) {
   else {
     $element['#attributes'] = array('class' => $class);
   }
-
+  $element['#element_validate'] = array('date_popup_validate');
   return $element;
 }
 
@@ -289,10 +290,21 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
 
 /**
  * Massage the input values back into a single date.
+ * 
+ * When used as a Views widget, the validation step always gets triggered,
+ * even with no form submission. Before form submission $element['#value']
+ * contains a string, after submission it contains an array.
+ * 
  */
 function date_popup_validate($element, &$form_state) {
+  if (is_string($element['#value'])) {
+    return;
+  }
+
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  
   date_popup_load();
+  $parents = $element['#parents'];
   $valid_value = date_popup_input_value($element);
   if (empty($valid_value) && !$element['#required']) {
     form_set_value($element, NULL, $form_state);

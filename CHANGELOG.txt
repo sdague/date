@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Adapt date elements so they will work correctly as Views 2 widgets.
+- Move #validate parameters to element processing step instead of hook_element() to help ensure they don't get wiped out.
 - Make sure partial dates, like year-only, get the right range computed for them.
 - Don't user format_date() and strtotime() to create argument titles and links.
 - #282408 Make sure dates only float when there are two of them by adding #date_float parameter.

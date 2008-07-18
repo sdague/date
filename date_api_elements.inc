@@ -70,16 +70,13 @@ function _date_api_elements() {
     );
   $type['date_select'] = array_merge($date_base, array(
     '#process' => array('date_select_process'),
-    '#element_validate' => array('date_select_validate'),
     ));
   $type['date_text'] = array_merge($date_base, array(
     '#process' => array('date_text_process'),
-    '#element_validate' => array('date_text_validate'),
     ));
   $type['date_timezone'] = array(
     '#input' => TRUE, '#tree' => TRUE,
     '#process' => array('date_timezone_process'),
-    '#element_validate' => array('date_timezone_validate'),
     );
   return $type;
 }
@@ -102,6 +99,7 @@ function date_timezone_process($element, $edit, $form_state, $form) {
     '#attributes' => array('class' => 'date-timezone date-clear-block'),
     '#theme' => 'date_select_element',
   );
+  $element['#element_validate'] = array('date_timezone_validate');
   return $element;
 }
 
@@ -112,18 +110,20 @@ function date_timezone_process($element, $edit, $form_state, $form) {
  *
  * The exact parts displayed in the field are those in #date_granularity.
  * The display of each part comes from #date_format.
+ * 
+ * In regular FAPI processing $element['#value'] will contain a string
+ * value before the form is submitted, and an array during submission.
+ * 
+ * In regular FAPI processing $edit is empty until the form is submitted
+ * when it will contain an array.
+ * 
+ * Views widget processing now receives the same values as normal FAPI
+ * processing (that was not true in Views 1).
+ * 
  */
 function date_text_process($element, $edit, $form_state, $form) {
-  // There are some cases, like when using this as a Views form element,
-  // where $edit is empty and $element['#value'] holds an array of input values.
-  // This happens when the processing bypasses the element validation step
-  // that resets the value from the date and time
-  // subparts.
   $date = NULL;
-  if (!empty($edit) || is_array($element['#value'])) {
-    if (empty($edit)) {
-      $edit = $element['#value'];
-    }
+  if (!empty($edit)) {
     $datetime = date_convert_from_custom($edit['date'], $element['#date_format']);
     $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
   }
@@ -169,6 +169,7 @@ function date_text_process($element, $edit, $form_state, $form) {
   // We'll set our own message on the parent element.
   //$element['date']['#required'] = $element['#required'];
   $element['date']['#theme'] = 'date_textfield_element';
+  $element['#element_validate'] = array('date_text_validate');
   return $element;
 }
 
@@ -181,18 +182,20 @@ function date_text_process($element, $edit, $form_state, $form) {
  *
  * The exact parts displayed in the field are those in #date_granularity.
  * The display of each part comes from ['#date_settings']['format'].
+ * 
+ * In regular FAPI processing $element['#value'] will contain a string
+ * value before the form is submitted, and an array during submission.
+ * 
+ * In regular FAPI processing $edit is empty until the form is submitted
+ * when it will contain an array.
+ * 
+ * Views widget processing now receives the same values as normal FAPI
+ * processing (that was not true in Views 1).
+ * 
  */
 function date_select_process($element, $edit, $form_state, $form) {
-  // There are some cases, like when using this as a Views form element,
-  // where $edit is empty and $element['#value'] holds an array of input values.
-  // This happens when the processing bypasses the element validation step
-  // that resets the value from the date and time
-  // subparts.
   $date = NULL;
-  if (!empty($edit) || is_array($element['#value'])) {
-    if (empty($edit)) {
-      $edit = $element['#value'];
-    }
+  if (!empty($edit)) {
     $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY);
   }
   elseif (!empty($element['#value'])) {
@@ -212,8 +215,13 @@ function date_select_process($element, $edit, $form_state, $form) {
   if (empty($element['#date_float'])) {
     $class .= ' date-clear-block';
   }
-  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' '. $class;
+  if (isset($element['#attributes'])) {
+    if (isset($element['#attributes']['class'])) {
+      $element['#attributes']['class'] .= ' '. $class;
+    }
+    else {
+      $element['#attributes']['class'] = $class;
+    }
   }
   else {
     $element['#attributes'] = array('class' => $class);
@@ -229,6 +237,7 @@ function date_select_process($element, $edit, $form_state, $form) {
         '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
     }
   }
+  $element['#element_validate'] = array('date_select_validate');
   return $element;
 }
 
@@ -390,13 +399,22 @@ function date_increment_round(&$date, $increment) {
 
 /**
  *  Validation function for date selector.
+ * 
+ * When used as a Views widget, the validation step always gets triggered,
+ * even with no form submission. Before form submission $element['#value']
+ * contains a string, after submission it contains an array.
+ * 
  */
 function date_select_validate($element, &$form_state) {
-  if (empty($element['#value'])) {
-    $element['#value'] = array();
+  if (is_string($element['#value'])) {
+    return;
   }
-  $error_field = implode('][', $element['#parents']);
+  
+  $parents = $element['#parents'];
+  $form_values = $form_state['values'][$parents[0]];
+  $error_field = implode('][', $parents);
   $granularity = array_values(date_format_order($element['#date_format']));
+  
   // Strip field labels out of the results.
   foreach ($element['#value'] as $field => $value) {
     if (substr($value, 0, 1) == '-') {
@@ -458,9 +476,20 @@ function date_select_input_value($element) {
 
 /**
  *  Validation for text input.
+ * 
+ * When used as a Views widget, the validation step always gets triggered,
+ * even with no form submission. Before form submission $element['#value']
+ * contains a string, after submission it contains an array.
+ * 
  */
 function date_text_validate($element, &$form_state) {
-  $form_values = $element['#value'];
+  if (is_string($element['#value'])) {
+    return;
+  }
+  $parents = $element['#parents'];
+  $form_values = $form_state['values'][$parents[0]];
+  $element['#value'] = !empty($form_values) ? $form_values : $element['#value'];
+
   $value = date_text_input_value($element);
 
   if (!$element['#required'] && empty($value)) {
