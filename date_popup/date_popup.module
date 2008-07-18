@@ -160,11 +160,6 @@ function date_popup_process($element, $edit, $form_state, $form) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone']);
   }
-  // TODO keep an eye on this, commented out so it is possible to provide
-  // blank initial value for required date.
-  //elseif ($element['#required']) {
-  //  $date = date_now($element['#date_timezone']);
-  //}
 
   date_increment_round($date, $element['#date_increment']);
   $element['#tree'] = TRUE;
