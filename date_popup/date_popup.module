@@ -171,8 +171,13 @@ function date_popup_process($element, $edit, $form_state, $form) {
   if (empty($element['#date_float'])) {
     $class .= ' date-clear-block';
   }
-  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' '. $class;
+  if (isset($element['#attributes'])) {
+    if (isset($element['#attributes']['class'])) {
+      $element['#attributes']['class'] .= ' '. $class;
+    }
+    else {
+      $element['#attributes']['class'] = $class;
+    }
   }
   else {
     $element['#attributes'] = array('class' => $class);

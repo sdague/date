@@ -131,15 +131,6 @@ function date_text_process($element, $edit, $form_state, $form) {
     $date = date_make_date($element['#value'], $element['#date_timezone']);
   }
 
-  // Don't overwrite values already added to $element['date'] in case
-  // using something like jscalendar that needs to set custom values.
-  if (empty($element['date']['#description'])) {
-    $element['date']['#description'] = '';
-  }
-  if (empty($element['date']['#attributes']['class'])) {
-    $element['date']['#attributes']['class'] = '';
-  }
-  
   $element['#tree'] = TRUE;
 
   // Add #date_float to allow date parts to float together on the same line. 
@@ -147,8 +138,13 @@ function date_text_process($element, $edit, $form_state, $form) {
   if (empty($element['#date_float'])) {
     $class .= ' date-clear-block';
   }
-  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' '. $class;
+  if (isset($element['#attributes'])) {
+    if (isset($element['#attributes']['class'])) {
+      $element['#attributes']['class'] .= ' '. $class;
+    }
+    else {
+      $element['#attributes']['class'] = $class;
+    }
   }
   else {
     $element['#attributes'] = array('class' => $class);
