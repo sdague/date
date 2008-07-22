@@ -2,63 +2,6 @@
 //$Id$
 
 /**
- * Central function for setting up the right timezone values
- * in the SQL date handler.
- * 
- * Min and max date are always available or important, but the
- * timezone is.
- */
-function date_views_set_timezone(&$date_handler, &$view, $field) {
-  $min_date = NULL;
-  $max_date = NULL;
-  $min_utc = NULL;
-  $max_utc = NULL;
-  if (isset($view->min_date) && isset($view->max_date)) {
-    $min_date = $view->min_date;
-    $max_date = $view->max_date;
-    if (empty($view->min_utc)) {
-      $view->min_utc = drupal_clone($min_date);
-      date_timezone_set($view->min_utc, timezone_open('UTC'));
-    }
-    if (empty($view->max_utc)) {
-      $view->max_utc = drupal_clone($max_date);
-      date_timezone_set($view->max_utc, timezone_open('UTC'));   
-    }
-    $min_utc = $view->min_utc;
-    $max_utc = $view->max_utc;
-  }
-  
-  $tz_handling  = $field['tz_handling'];
-  switch ($tz_handling) {
-    case 'date' :
-      $date_handler->db_timezone = 'UTC';
-      $date_handler->local_timezone_field = $field['timezone_field'];
-      $date_handler->local_offset_field = $field['offset_field'];
-      $date_handler->min_date = $min_date;
-      $date_handler->max_date = $max_date;
-      break;
-    case 'none':
-      $date_handler->db_timezone = date_default_timezone_name();
-      $date_handler->local_timezone = date_default_timezone_name();
-      $date_handler->min_date = $min_date;
-      $date_handler->max_date = $max_date;
-      break;
-    case 'utc':
-      $date_handler->db_timezone = 'UTC';
-      $date_handler->local_timezone = 'UTC';
-      $date_handler->min_date = $min_utc;
-      $date_handler->max_date = $max_utc;
-      break;
-    default :
-      $date_handler->db_timezone = 'UTC';
-      $date_handler->local_timezone = 'UTC';
-      $date_handler->min_date = $min_utc;
-      $date_handler->max_date = $max_utc;
-      break;
-  }
-}
-
-/**
  * @file
  * Defines date-related Views data and plugins:
  * 
@@ -368,20 +311,6 @@ class date_api_argument_handler extends views_handler_argument_date {
     $min_date = $range[0];
     $max_date = $range[1];
     
-    // Create min and max dates in both local and UTC time.
-    // We'll compare fields to the UTC date whenever possible
-    // to avoid the need to do timezone conversions. When that
-    // isn't possible (the date is not stored in UTC or needs to
-    // be converted back to a time that may be different than
-    // the local timezone) we will have to do tz conversions in
-    // the database.
-    $this->min_date = $min_date;
-    $this->min_utc = drupal_clone($min_date);
-    date_timezone_set($this->min_utc, timezone_open('UTC'));
-    $this->max_date = $max_date;
-    $this->max_utc = drupal_clone($max_date);
-    date_timezone_set($this->max_utc, timezone_open('UTC'));
-        
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       // Use set_where_group() with the selected date_method 
@@ -400,8 +329,8 @@ class date_api_argument_handler extends views_handler_argument_date {
             $this->query->add_field($field['table_name'], $bits[1]);
           }
         }
-        $from = $date_handler->sql_where_date('DATE', $field['fullname'], '>=', date_format($date_handler->min_date, DATE_FORMAT_DATETIME));
-        $to   = $date_handler->sql_where_date('DATE', $field['fullname'], '<=', date_format($date_handler->max_date, DATE_FORMAT_DATETIME));
+        $from = $date_handler->sql_where_date('DATE', $field['fullname'], '>=', date_format($min_date, DATE_FORMAT_DATETIME));
+        $to   = $date_handler->sql_where_date('DATE', $field['fullname'], '<=', date_format($max_date, DATE_FORMAT_DATETIME));
         $sql = str_replace('***table***', $this->table_alias, "($from AND $to)");
         if ($sql) {
           $this->query->add_where('date', $sql);
@@ -568,11 +497,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         ),
       '#description' => t('Choose a date to filter on, or use an adjustment field for a value like \'+1 day\'. When you use both date and adjustment, the adjustment will be added to the date. When the adjustment field is used with no date field, the adjustment will be made to the current date. The date can be a specific date, or \'now\'.'),
       );
+    
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
     $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where you can select the year, month, and day as YYYY-MM-DD.') .'</p>';
-    if (!$this->date_handler->db_tz_support()) {
-      $form['granularity']['#description'] .= '<p>'. t('This database does not appear to have native timezone support. Filtering using hour, minute, or second granularity is likely to return incorrect results at least some of the time on systems without native timezone support, so it is recommended to set the granularity to no more than \'day\'.') .'</p>';
-    }
+    
     $fields = date_api_fields();
     $options = array();
     foreach ($fields['name'] as $name => $field) {
@@ -580,7 +508,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
     $form['date_fields'] = array(
       '#title' => t('Date field(s)'),
-      '#type' => 'radios',
+      '#type' => 'checkboxes',
       '#options' => $options,
       '#default_value' => $this->options['date_fields'],
       '#multiple' => FALSE,
@@ -588,6 +516,16 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     );
   }
 
+  function extra_options_validate($form, &$form_state) {
+    if (empty($form_state['values']['options']['date_fields'])) {
+      form_error($form, t('You must select at least one date field for this filter.'));
+    }
+  }
+  
+  function extra_options_submit($form, &$form_state) {
+    $form_state['values']['options']['date_fields'] = array_filter($form_state['values']['options']['date_fields']);
+  }
+    
   /**
    * Add the selectors to the value form using the date handler.
    */
@@ -739,14 +677,14 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   // Update the summary values to provide
   // meaningful information for each option.
   function admin_summary() {
-    if (!empty($this->options['date_fields'])) {
-      $field = $this->options['date_fields'];
+    if (empty($this->options['date_fields'])) {
+      return t('Missing date fields!');
     }
-    
     $handler = $this->date_handler;
-    $output = "($field) ". check_plain($this->operator) . ' ';
+    $field = implode(', ', $this->options['date_fields']);
+    $output = "$field ". check_plain($this->operator) . ' ';
     $parts = $handler->date_parts();
-    
+
     // If the filter is exposed, display the granularity.
     if ($this->options['exposed']) {
       return t('(@field) <strong>Exposed</strong> Granularity: @format', array('@field' => $field, '@format' => $parts[$handler->granularity]));
@@ -818,16 +756,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $min_date = $range[0];
     $max_date = $range[1];
     
-    // Create min and max dates in both local and UTC time.
-    // We'll compare fields to the UTC date whenever possible
-    // to avoid the need to do timezone conversions. 
-    $this->min_date = $min_date;
-    $this->min_utc = drupal_clone($min_date);
-    date_timezone_set($this->min_utc, timezone_open('UTC'));
-    $this->max_date = $max_date;
-    $this->max_utc = drupal_clone($max_date);
-    date_timezone_set($this->max_utc, timezone_open('UTC'));
-    
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       // Use set_where_group() with the selected date_method 
@@ -856,7 +784,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
             continue;
           }
         }
-        $value = $prefix == 'max' ? date_format($date_handler->max_date, $this->format) : date_format($date_handler->min_date, $this->format);
+        $value = $prefix == 'max' ? date_format($max_date, $this->format) : date_format($min_date, $this->format);
         $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
         $this->query->add_where($this->options['group'], $sql);
         continue;
@@ -877,42 +805,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $date_handler = new date_sql_handler();
         $date_handler->construct($field['sql_type'], date_default_timezone_name());
         $date_handler->granularity = $this->options['granularity'];
-        
-        $tz_handling  = $field['tz_handling'];
-        switch ($tz_handling) {
-          // Date-specific timezone fields must always be converted
-          // before comparing them.
-          case 'date' :
-            $date_handler->db_timezone = 'UTC';
-            $date_handler->local_timezone_field = $field['timezone_field'];
-            $date_handler->local_offset_field = $field['offset_field'];
-            $date_handler->min_date = $min_date;
-            $date_handler->max_date = $max_date;
-            break;
-          // Dates with no timezones and dates that are always UTC
-          // must never be converted before comparing them.  
-          case 'none':
-            $date_handler->db_timezone = date_default_timezone_name();
-            $date_handler->local_timezone = date_default_timezone_name();
-            $date_handler->min_date = $min_date;
-            $date_handler->max_date = $max_date;
-            break;
-          case 'utc':
-            $date_handler->db_timezone = 'UTC';
-            $date_handler->local_timezone = 'UTC';
-            $date_handler->min_date = $min_utc;
-            $date_handler->max_date = $max_utc;
-            break;
-          // We're comparing partial dates in the filter, like
-          // Y-m-d H, so we have to convert the db date to the local 
-          // timezone to get the right results.  
-          default:
-            $date_handler->db_timezone = 'UTC';
-            $date_handler->local_timezone = date_default_timezone_name(); 
-            $date_handler->min_date = $min_date;
-            $date_handler->max_date = $max_date;
-
-        }
+        date_views_set_timezone(&$date_handler, $this->view, $field);
         $this->query_fields[] = array('field' => $field, 'date_handler' => $date_handler);
       }
     }
@@ -990,12 +883,6 @@ function _date_api_fields($base = 'node') {
       $rrule_field = '';
       $granularity = array('year', 'month', 'day', 'hour', 'minute');
        
-      // dates with from and to dates need to handle both fields as one
-      // add the from and to dates to the first one found and ignore the second
-      $fields[$name]['table_name'] = $table_name;
-      $fields[$name]['field_name'] = $field_name;
-      $fields[$name]['type'] = $type;
-      
       // Handling for content field dates
       if (isset($handler->content_field['tz_handling'])) {
         $tz_handling = $handler->content_field['tz_handling'];
@@ -1064,10 +951,56 @@ function _date_api_fields($base = 'node') {
         'rrule_field' => $rrule_field,
         'related_fields' => $related_fields,
       );
+      if (isset($handler->content_field)) {
+        if (substr($field_name, -1) == '2') {
+          $len = (strlen($field_name) - 7);
+        }
+        else {
+          $len = (strlen($field_name) - 6);
+        }
+        $fields['name'][$name]['real_field_name'] = substr($field_name, 0, $len);
+      }
+      else {
+        $fields['name'][$name]['real_field_name'] = $field_name;
+      }
       $fields['alias'][$alias] = $fields['name'][$name];
     }
   }
   
   //cache_set($cid, $fields, 'cache_views');
   return $fields;
+}
+
+/**
+ * Central function for setting up the right timezone values
+ * in the SQL date handler.
+ * 
+ * The date handler will use this information to decide if the
+ * database value needs a timezone conversion.
+ * 
+ * In Views, we will always be comparing to a local date value,
+ * so the goal is to convert the database value to the right
+ * value to compare to the local value.
+ */
+function date_views_set_timezone(&$date_handler, &$view, $field) {
+  $tz_handling  = $field['tz_handling'];
+  switch ($tz_handling) {
+    case 'date' :
+      $date_handler->db_timezone = 'UTC';
+      $date_handler->local_timezone_field = $field['timezone_field'];
+      $date_handler->local_offset_field = $field['offset_field'];
+      break;
+    case 'none':
+      $date_handler->db_timezone = date_default_timezone_name();
+      $date_handler->local_timezone = date_default_timezone_name();
+      break;
+    case 'utc':
+      $date_handler->db_timezone = 'UTC';
+      $date_handler->local_timezone = 'UTC';
+      break;
+    default :
+      $date_handler->db_timezone = 'UTC';
+      $date_handler->local_timezone = date_default_timezone_name();
+      break;
+  }
 }
