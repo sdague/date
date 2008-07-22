@@ -82,12 +82,12 @@ span.date-display-separator {
   float:none;
 }
 
-/* TODO Removed if this gets added to Views */
-.views-exposed-date-filter {
+.date-views-filter input {
   float:left !important;
   margin-right:2px !important;
   padding:0 !important;
   width:12em;
+  min-width:12em;
 }
 
 .date-nav {

@@ -561,8 +561,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $format = $handler->views_formats($handler->granularity, 'sql');
     $format_help = $handler->format_help($format);
     $form['value']['description'] = array(
-      '#prefix' => '<div class=""><div class="form-item"><div class="description">',
-      '#suffix' => '</div></div></div>',
       '#value' => t('Date format @format. Leave date blank to do no filtering, use \'now\' to filter for the current date.', array('@format' => $format_help)),
       );
     if ($this->options['adjustment_field'] == 1) {
@@ -571,6 +569,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     elseif ($this->options['adjustment_field'] == 2) {
       $form['value']['description']['#value'] = t('\'Adjustment\' filters for an offset like \'+1 day\' from the current time.');
     }
+    $form['value']['#theme'] = 'date_views_filter_form';  
   }
 
   function date_filter_parts() {
@@ -631,8 +630,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         '#type' => $type,
         '#size' => 20,
         '#default_value' => !empty($this->value[$prefix . $key]) ? $this->value[$prefix . $key] : '',
-        '#prefix' => '<div class="views-exposed-date-filter">',
-        '#suffix' => '</div>',
       );
       if ($which == 'all') {
         $dependency = array(
@@ -640,14 +637,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
           '#dependency' => array($source => $operator_values),
         );
         $form[$prefix . $key] += $dependency;
-      }
-      // Add wrappers to force each date grouping to a separate line.
-      if ($key == $first_item) {
-        $form[$prefix . $key]['#prefix'] = '<div class="clear-block"><div class="views-left-75">' .
-          $form[$prefix . $key]['#prefix'];
-      }
-      if ($key == $last_item) {
-        $form[$prefix . $key]['#suffix'] .= '</div></div>';
       }
     }
     return $form;

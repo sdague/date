@@ -146,9 +146,10 @@ function template_preprocess_date_views_filter_form(&$vars) {
   $vars['date'] = drupal_render($form['valuedate']);
   $vars['mindate'] = drupal_render($form['mindate']);
   $vars['maxdate'] = drupal_render($form['maxdate']);
-  $vars['description'] = drupal_render($form['description']);
-  $vars['default_date'] = drupal_render($form['default_date']);
-  $vars['default_to_date'] = drupal_render($form['default_to_date']);
+  $vars['adjustment'] = drupal_render($form['valueadjustment']);
+  $vars['minadjustment'] = drupal_render($form['minadjustment']);
+  $vars['maxadjustment'] = drupal_render($form['maxadjustment']);
+  $vars['description'] = drupal_render($form['description']) . drupal_render($form);
 }
 
 /**

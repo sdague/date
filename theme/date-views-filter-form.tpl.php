@@ -1,11 +1,55 @@
-<div class="container-inline-date clear-block">
-  <?php print $date ?>
-  <?php print $mindate ?>
-  <?php print $maxdate ?>
-</div>
+<?php
+// $Id$
+/**
+ * @file
+ * Template to display the Views date filter form.
+ *
+ * Values available vary depending on the operator. The availability
+ * of date vs adjustment depending on the filter settings. It can
+ * be date-only, date and adjustment, or adjustment only.
+ * 
+ * If the operator is anything but 'Is between' or 'Is not between',
+ * a single date and adjustment field is available.
+ * 
+ * $date
+ * $adjustment
+ * 
+ * If the operator is 'Is between' or 'Is not between',
+ * two date and adjustment fields are available.
+ * 
+ * $mindate
+ * $minadjustment
+ * $maxdate
+ * $maxadjustment
+ * 
+ * A description field is also available.
+ * 
+ * $description
+ */
+?>
 <div>
-  <?php print $default_date ?>
-  <?php print $default_to_date ?>
-  <?php print $description ?>
+<div class="container-inline-date date-clear">
+<?php if (!empty($date)) : ?> 
+  <div class="date-clear"> 
+    <div class="date-views-filter"><?php print $date; ?></div>
+    <div class="date-views-filter"><?php print $adjustment ?></div>
+  </div>
+<?php endif; ?>
+<?php if (!empty($mindate)) : ?>  
+  <div class="date-clear">
+    <div class="date-views-filter"><?php print $mindate; ?></div>
+    <div class="date-views-filter"><?php print $minadjustment; ?></div>
+  </div>
+<?php endif; ?>
+<?php if (!empty($maxdate)) : ?>  
+  <div class="date-clear">
+    <div class="date-views-filter"><?php print $maxdate; ?></div>
+    <div class="date-views-filter"><?php print $maxadjustment; ?></div>
+  </div>
+<?php endif; ?>
 </div>
-  
+<div class="date-clear form-item"><div class="description">
+  <?php print $description; ?>
+</div>
+</div>
+</div>  

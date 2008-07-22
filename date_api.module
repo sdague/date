@@ -1072,7 +1072,7 @@ function date_part_extract($date, $part, $type = DATE_DATETIME) {
     'hour' => 9, 'minute' => 11, 'second' => 13);
   switch ($type) {
     case DATE_ARRAY:
-      return (integer) $date[$part];
+      return (integer) array_key_exists($part, $date) ? $date[$part] : NULL;
     case DATE_DATETIME:
     case DATE_ISO:
       return (integer) substr($date, $positions[$part], $part == 'year' ? 4 : 2);
@@ -1102,9 +1102,10 @@ function date_is_valid($date, $type = DATE_DATETIME) {
   if ($type == DATE_ARRAY and !is_array($date)) return FALSE;
 
   // If checkdate works, no need for further tests.
-  $year = date_part_extract($date, 'year', $type);
-  $month = date_part_extract($date, 'month', $type);
-  $day = date_part_extract($date, 'day', $type);
+  // Make sure integer values are sent to checkdate.
+  $year = intval(date_part_extract($date, 'year', $type));
+  $month = intval(date_part_extract($date, 'month', $type));
+  $day = intval(date_part_extract($date, 'day', $type));
 
   if (!checkdate($month, $day, $year)) {
     // ISO dates and arrays can have empty date parts
@@ -1372,6 +1373,9 @@ function date_api_theme() {
     'date_part_label_second' => $base + array('arguments' => array('element' => NULL)),
     'date_part_label_ampm' => $base + array('arguments' => array('element' => NULL)),
     'date_part_label_timezone' => $base + array('arguments' => array('element' => NULL)),
+    'date_views_filter_form' => $base + array(
+      'template' => 'date-views-filter-form',
+      'arguments' => array('form' => NULL)),
     );
 }
 
