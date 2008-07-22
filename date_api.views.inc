@@ -553,12 +553,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
     $handler = $this->date_handler;
     if ($which == 'all' || $which == 'value') {
-      $form['value'] += $this->date_parts_form('value', $source, $which, $this->operator_values(1));
+      $form['value'] = array_merge($form['value'], $this->date_parts_form('value', $source, $which, $this->operator_values(1)));
     }
 
     if ($which == 'all' || $which == 'minmax') {
-      $form['value'] += $this->date_parts_form('min', $source, $which, $this->operator_values(2));
-      $form['value'] += $this->date_parts_form('max', $source, $which, $this->operator_values(2));
+      $form['value'] = array_merge($form['value'], $this->date_parts_form('min', $source, $which, $this->operator_values(2)));
+      $form['value'] = array_merge($form['value'], $this->date_parts_form('max', $source, $which, $this->operator_values(2)));
     }
     $format = $handler->views_formats($handler->granularity, 'sql');
     $format_help = $handler->format_help($format);
@@ -644,22 +644,32 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     return $form;
   }
 
-  // User the date handler to validate the form.
+  /**
+   * Value validation.
+   * 
+   * TODO add in more validation.
+   */
   function options_validate(&$form, &$form_state) {
     if (!isset($form_state['values']['options']['value'])) {
       return;
     }
     $handler = $this->date_handler;
     $parts = $this->date_filter_parts();
-    $min = $handler->part_info('min');
-    $max = $handler->part_info('max');
     $values = $form_state['values']['options']['value'];
+    $granularity = $this->options['granularity'];
+    
     // Validate date values.
-    unset($values['offset']);
     foreach ($values as $name => $value) {
-      $part = str_replace(array('min', 'max', 'value'), '', $value);
-      if (!empty($part) && $value != '' && $value != 'now' &&
-        ($value < $min[$part] || $value > $max[$part])) {
+      if (empty($value)) {
+        continue;
+      }
+      $error = FALSE;
+      $part = str_replace(array('min', 'max', 'value'), '', $name);
+      $prefix = str_replace(array_keys($parts), '', $name);
+      if ($part != 'adjustment' && $granularity != $handler->arg_granularity($value)) {
+        $error = TRUE;
+      }
+      if ($error) {
         form_error($form['value'][$name], t('@value is invalid.', array('@value' => $parts[$part])));
       }
     }
@@ -691,8 +701,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       foreach ($this->date_filter_parts() as $key => $part) {
         if (!empty($this->value['min'. $key]) || !empty($this->value['max'. $key])
         || is_numeric($this->value['min'. $key]) || is_numeric($this->value['max'. $key])) {
-          $min .= $separators[$key] . check_plain($this->value['min'. $key]);
-          $max .= $separators[$key] . check_plain($this->value['max'. $key]);
+          $min .= check_plain($this->value['min'. $key]);
+          $max .= check_plain($this->value['max'. $key]);
         }
       }
       $output .= t('@min and @max', array('@min' => $min, '@max' => $max));
@@ -700,7 +710,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     else {
       foreach ($this->date_filter_parts() as $key => $part) {
         if (!empty($this->value['value'. $key]) || is_numeric($this->value['value'. $key])) {
-          $min .= $separators[$key] . check_plain($this->value['value'. $key]);
+          $output .= check_plain($this->value['value'. $key]);
         }
       }
       $output .= $min;
