@@ -29,19 +29,19 @@
 ?>
 <div>
 <div class="container-inline-date date-clear">
-<?php if (!empty($date)) : ?> 
+<?php if (!empty($date) || !empty($adjustment)) : ?> 
   <div class="date-clear"> 
     <div class="date-views-filter"><?php print $date; ?></div>
     <div class="date-views-filter"><?php print $adjustment ?></div>
   </div>
 <?php endif; ?>
-<?php if (!empty($mindate)) : ?>  
+<?php if (!empty($mindate) || !empty($minadjustment)) : ?>  
   <div class="date-clear">
     <div class="date-views-filter"><?php print $mindate; ?></div>
     <div class="date-views-filter"><?php print $minadjustment; ?></div>
   </div>
 <?php endif; ?>
-<?php if (!empty($maxdate)) : ?>  
+<?php if (!empty($maxdate) || !empty($maxadjustment)) : ?>  
   <div class="date-clear">
     <div class="date-views-filter"><?php print $maxdate; ?></div>
     <div class="date-views-filter"><?php print $maxadjustment; ?></div>

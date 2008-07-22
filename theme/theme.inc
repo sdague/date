@@ -141,6 +141,9 @@ function template_preprocess_date_vcalendar(&$vars) {
   $vars['events'] = $events;  
 }
 
+/**
+ * Preprocessor for Date Views filter form.
+ */
 function template_preprocess_date_views_filter_form(&$vars) {
   $form = $vars['form'];
   $vars['date'] = drupal_render($form['valuedate']);
