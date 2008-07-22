@@ -60,7 +60,7 @@
  */
 function _date_api_elements() {
   $date_base = array(
-    '#input' => TRUE, '#tree' => TRUE, '#date' => NULL,
+    '#input' => TRUE, '#tree' => TRUE,
     '#date_timezone' => date_default_timezone_name(),
     '#date_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
     '#date_text_parts' => array(),
@@ -133,28 +133,11 @@ function date_text_process($element, $edit, $form_state, $form) {
 
   $element['#tree'] = TRUE;
 
-  // Add #date_float to allow date parts to float together on the same line. 
-  $class = 'container-inline-date';
-  if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
-  }
-  if (isset($element['#attributes'])) {
-    if (isset($element['#attributes']['class'])) {
-      $element['#attributes']['class'] .= ' '. $class;
-    }
-    else {
-      $element['#attributes']['class'] = $class;
-    }
-  }
-  else {
-    $element['#attributes'] = array('class' => $class);
-  }
-  
   $element['date']['#type'] = 'textfield';
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
   $element['date']['#default_value'] = is_object($date) ? date_format($date , $element['#date_format']) : '';
-  $element['date']['#attributes']['class'] = $element['date']['#attributes']['class'] .' date-date';
-  $element['date']['#description'] .= ' '. t('Format: @date', array('@date' => date($element['#date_format'], time())));
+  $element['date']['#attributes'] = array('class' => $element['#attributes']['class'] .' date-date');
+  $element['date']['#description'] = ' '. t('Format: @date', array('@date' => date($element['#date_format'], time())));
   
   // Keep the system from creating an error message for the sub-element.
   // We'll set our own message on the parent element.
@@ -196,23 +179,6 @@ function date_select_process($element, $edit, $form_state, $form) {
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
-
-  // Add #date_float to allow date parts to float together on the same line. 
-  $class = 'container-inline-date';
-  if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
-  }
-  if (isset($element['#attributes'])) {
-    if (isset($element['#attributes']['class'])) {
-      $element['#attributes']['class'] .= ' '. $class;
-    }
-    else {
-      $element['#attributes']['class'] = $class;
-    }
-  }
-  else {
-    $element['#attributes'] = array('class' => $class);
-  }
   
   // Store a hidden value for all date parts not in the current display.
   $granularity = date_format_order($element['#date_format']);
@@ -637,116 +603,4 @@ function date_convert_from_custom($date, $format) {
   else {
     return NULL;
   }
-}
-
-/**
- * Format a date timezone element.
- *
- * @param $element
- *   An associative array containing the properties of the element.
- *   Properties used: title, value, options, description, required and attributes.
- * @return
- *   A themed HTML string representing the date selection boxes.
- */
-function theme_date_timezone($element) {
-  return '<div class="date-clear">'. theme('form_element', $element, $element['#children']) .'</div>';
-}
-
-/**
- * Format a date selection element.
- *
- * @param $element
- *   An associative array containing the properties of the element.
- *   Properties used: title, value, options, description, required and attributes.
- * @return
- *   A themed HTML string representing the date selection boxes.
- */
-function theme_date_select($element) {
-  $output = '';
-  if (isset($element['#children'])) {
-    $output = $element['#children'];
-  }
-  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
-}
-
-/**
- * Format a date text element.
- *
- * @param $element
- *   An associative array containing the properties of the element.
- *   Properties used: title, value, options, description, required and attributes.
- * @return
- *   A themed HTML string representing the date selection boxes.
- */
-function theme_date_text($element) {
-  $output = '';
-  if (isset($element['#children'])) {
-    $output = $element['#children'];
-  }
-  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
-}
-
-/**
- *  Themes for date input form elements
- */
-function theme_date_select_element($element) {
-  $part = array_pop($element['#parents']);
-  return '<div class="date-'. $part .'">'. theme('select', $element) .'</div>';
-}
-
-function theme_date_textfield_element($element) {
-  $part = array_pop($element['#parents']);
-  return '<div class="date-'. $part .'">'. theme('textfield', $element) .'</div>';
-}
-
-/**
- * Functions to separate date parts in form.
- *
- * Separators float up to the title level for elements with titles,
- * so won't work if this element has titles above the element date parts.
- */
-function theme_date_part_hour_prefix($element) {
-  if ($element['#date_label_position'] != 'above') {
-    return '<span class="form-item date-spacer">&nbsp;-&nbsp;</span>';
-  }
-}
-
-function theme_date_part_minsec_prefix($element) {
-  if ($element['#date_label_position'] != 'above') {
-    return '<span class="form-item date-spacer">:</span>';
-  }
-}
-
-/**
- * Format labels for each date part in a date_select.
- *
- * @param $part_type
- *   the type of field used for this part, 'textfield' or 'select'
- * @param $element
- *   An associative array containing the properties of the element.
- *   Properties used: title, value, options, description, required and attributes.
- */
-function theme_date_part_label_year($part_type, $element) {
-  return t('Year');
-}
-function theme_date_part_label_month($part_type, $element) {
-  return t('Month');
-}
-function theme_date_part_label_day($part_type, $element) {
-  return t('Day');
-}
-function theme_date_part_label_hour($part_type, $element) {
-  return t('Hour');
-}
-function theme_date_part_label_minute($part_type, $element) {
-  return t('Minute');
-}
-function theme_date_part_label_second($part_type, $element) {
-  return t('Second');
-}
-function theme_date_part_label_ampm($part_type, $element) {
-  return t('am/pm');
-}
-function theme_date_part_label_timezone($part_type, $element) {
-  return t('Timezone');
 }
