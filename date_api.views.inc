@@ -310,6 +310,8 @@ class date_api_argument_handler extends views_handler_argument_date {
     $range = $this->date_handler->arg_range($this->argument);
     $min_date = $range[0];
     $max_date = $range[1];
+    $this->min_date = $min_date;
+    $this->max_date = $max_date;
     
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
