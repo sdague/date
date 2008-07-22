@@ -33,31 +33,44 @@ function template_preprocess_date_navigation(&$vars) {
   $vars['next_url'] = $next_path;
   $vars['prev_url'] = $prev_path;
     
-  if (!empty($view->block) && $view->granularity == 'month') {
-	  // Month navigation titles are used as links in the block view.
-	  $nav_title = l(date_format_date($view->min_date, 'custom', 'M'), str_replace($view->date_arg, date_format($view->min_date, 'Y-m'), $view->get_url()));
+  $link = FALSE;
+  // Month navigation titles are used as links in the block view.
+	if (!empty($view->block) && $view->granularity == 'month') {
+	  $link = TRUE;
   }
-  else {
-    // Otherwise, just show the date.
-    $nav_title = theme('date_nav_title', $view->granularity, $view);
-  }
+  $nav_title = theme('date_nav_title', $view->granularity, $view, $link);
   $vars['nav_title'] = $nav_title;
   $vars['block'] = !empty($view->block);
 }
 /**
  * Theme the calendar title
  */
-function theme_date_nav_title($granularity, $view) {
+function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL) {
   switch ($granularity) {
     case 'year':
-      return $view->year;
+      $title = $view->year;
+      $url = $view->url .'/'. $view->year;
+      break;
     case 'month':
-      return date_format_date($view->min_date, 'custom', 'F');
+      $title = date_format_date($view->min_date, 'custom', !empty($format) ? $format : 'F');
+      $url = $view->url .'/'. $view->year .'-'. date_pad($view->month);
+      break;
     case 'day':
-      return date_format_date($view->min_date, 'custom', 'l, F j Y');
+      $title = date_format_date($view->min_date, 'custom', !empty($format) ? $format : 'l, F j Y');
+      $url = $view->url .'/'. $view->year .'-'. date_pad($view->month) .'-'. date_pad($view->day);
+      break;
     case 'week':
-    	return t('Week of @date', array('@date' => date_format($view->min_date, 'F j')));
+    	$title = t('Week of @date', array('@date' => date_format_date($view->min_date, 'custom', !empty($format) ? $format : 'F j')));
+    	$url = $view->url .'/'. $view->year .'-W'. date_pad($view->week);
+    	break;
   }
+  if ($view->mini || $link) {
+  	// Month navigation titles are used as links in the mini view.
+  	return l($title, $url, array(), calendar_url_append($view));
+  }
+  else {
+    return $title;
+  }  
 }
 
 /**
