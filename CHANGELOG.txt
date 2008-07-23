@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Set a warning message for invalid non-required Date popup values instead of silently setting to NULL.
 - #244025 Fix jquery calendar so it works correctly with multiple value fields.
 - #269569 Make sure more than one date filter will work on the same view. 
 - Add a template for the Date Views filter form.
