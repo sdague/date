@@ -4,10 +4,11 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #244025 Fix jquery calendar so it works correctly with multiple value fields.
+- #269569 Make sure more than one date filter will work on the same view. 
 - Add a template for the Date Views filter form.
 - Check for invalid inputs to the date handler argument handling.
 - Move the class configuration to the theme so it is easier for themers.
-- Change Date filter to use a choice of date elements as selectors. This will break existing filters and no update path is provided, so edit and re-save existing filters to use the new options.
 - Remove code previously commented out that forced required value to current date, seems to be working right.
 - Adapt date elements so they will work correctly as Views 2 widgets.
 - Move #validate parameters to element processing step instead of hook_element() to help ensure they don't get wiped out.
