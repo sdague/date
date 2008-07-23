@@ -809,7 +809,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $date_handler = new date_sql_handler();
         $date_handler->construct($field['sql_type'], date_default_timezone_name());
         $date_handler->granularity = $this->options['granularity'];
-        date_views_set_timezone(&$date_handler, $this->view, $field);
+        date_views_set_timezone($date_handler, $this->view, $field);
         $this->query_fields[] = array('field' => $field, 'date_handler' => $date_handler);
       }
     }
