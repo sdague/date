@@ -471,7 +471,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $options['date_fields'] = array();
     $options['granularity'] = 'day';
     $options['adjustment_field'] = 0;
-
+  }
+  
+  function option_definition() {
+    $options = parent::option_definition();
     // We use different values than the parent form, so we must
     // construct our own value options.
     $options['value'] = array();
@@ -480,6 +483,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $options['value'][$prefix . $key] = '';
       }
     }
+    return $options;
   }
 
   /**
@@ -631,7 +635,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         '#title' => t('@type @value', array('@type' => $prefixname, '@value' => $name)),
         '#type' => $type,
         '#size' => 20,
-        '#default_value' => !empty($this->value[$prefix . $key]) ? $this->value[$prefix . $key] : '',
+        '#default_value' => $this->value[$prefix . $key],
       );
       if ($which == 'all') {
         $dependency = array(
@@ -649,7 +653,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * 
    * TODO add in more validation.
    */
-  function options_validate(&$form, &$form_state) {
+  function value_validate(&$form, &$form_state) {
     if (!isset($form_state['values']['options']['value'])) {
       return;
     }
@@ -657,7 +661,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $parts = $this->date_filter_parts();
     $values = $form_state['values']['options']['value'];
     $granularity = $this->options['granularity'];
-    
     // Validate date values.
     foreach ($values as $name => $value) {
       if (empty($value)) {
