@@ -937,8 +937,9 @@ function date_convert($date, $from_type, $to_type) {
     case DATE_DATETIME:
     case DATE_ISO:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;
+      $date = date_fuzzy_datetime($date);
       $date = str_replace('T', ' ', $date);
-      $obj = date_make_date(date_fuzzy_datetime($date), 'UTC');
+      $obj = date_create($date, timezone_open('UTC'));
       break;
     case DATE_ICAL:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;
