@@ -376,7 +376,7 @@ function date_combo_validate($element, &$form_state) {
     form_set_value($element, $item, $form_state);
   }
   elseif (!form_get_errors()) {
-
+        
     // Check todate input for blank values and substitute in fromdate
     // values where needed, then re-compute the todate with those values.
 

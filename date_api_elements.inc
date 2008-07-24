@@ -538,7 +538,6 @@ function date_convert_from_custom($date, $format) {
   $regex2 = str_replace('a', '(am|pm)', $regex2);
   preg_match('`^'. $regex2 .'$`', $date, $values);
   array_shift($values);
-
   // if we did not find all the values for the patterns in the format, abort
   if (count($letters) != count($values)) {
     return  NULL;
