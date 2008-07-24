@@ -885,7 +885,7 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false,
   // to be sure timezone adjustments and month and day additions
   // won't push our date outside this window.
   if (1971 < $year && $year < 2037 && $is_gmt) {
-    return @gmmktime($hr, $min, $sec, $mon, $day, $year, 0);
+    return @gmmktime($hr, $min, $sec, $mon, $day, $year);
   }
   
   include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
