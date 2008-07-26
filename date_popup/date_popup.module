@@ -22,6 +22,8 @@
 
 /**
  * Load needed files.
+ * 
+ * Play nice with jQuery UI, if it is installed.
  */
 function date_popup_load() {
   static $loaded = FALSE;
@@ -29,7 +31,12 @@ function date_popup_load() {
     return;
   }
   $path = drupal_get_path('module', 'date_popup');
-  drupal_add_js($path .'/lib/ui.calendar.js');
+  if (module_exists('jquery_ui')) {
+    jquery_ui_add('ui.datepicker');
+  }
+  else {
+    drupal_add_js($path .'/lib/ui.datepicker.js');
+  }
   drupal_add_js($path .'/lib/jquery.timeentry.pack.js');
   $loaded = TRUE;
 }
@@ -38,7 +45,7 @@ function date_popup_load() {
  * Implementation of hook_init().
  */
 function date_popup_init() {
-  drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/white.calendar.css');
+  drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/datepicker.css');
   drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/timeentry.css');
 }
 
@@ -95,40 +102,6 @@ function date_popup_js_settings_id($pfx, $id, $func, $settings) {
   return $return_id;
 }
 
-/**
- * Create a unique CSS class name and output a single inline JS block
- * for each unique combination of startup function to call and
- * settings array to pass it.  This allows the dynamic use of any
- * number of custom settings without requiring a duplicate copy for
- * every element that uses them.
- *
- * @param $pfx
- *   The CSS class prefix to search the DOM for.
- * @param $func
- *   The jQuery function to invoke on each DOM element containing the
- * returned CSS class.
- * @param $settings
- *   The settings array to pass to the jQuery function.
- * @returns
- *   The CSS class name to assign to an element that should have
- * $func($settings) invoked on it.
- */
-function date_popup_js_settings_class($pfx, $func, $settings) {
-  static $cache = array();
-  static $cnt = 0;
-
-  $serial = serialize($settings);
-  $key = $pfx .':'. $func;
-  if (! isset($cache[$key][$serial])) {
-    $class = $cache[$key][$serial] = $pfx .'-'. $cnt++;
-    drupal_add_js('// Global Killswitch
-    if (Drupal.jsEnabled) {
-      $(document).ready(function() {$(\'.'. $class .'\').'. $func .'({'. $settings. '});
-      })}', 'inline');
-  }
-  return $cache[$key][$serial];
-}
-
 function date_popup_theme() {
   return array(
     'date_popup' => array('arguments' => array('element' => NULL)),
@@ -153,16 +126,7 @@ function date_popup_theme() {
  *   The local timezone to be used to create this date.
  *
  * #date_format
- *   The #date_format parts can be in any order, and use any of the normal
- *   separators, but are limited to the following formats:
- *     Y, m, d, H, h, i, s, a
- *
- *   So valid formats include:
- *     Y-m-d H:i
- *     m/d/Y h:ia
- *
- *   Invalid formats include things like:
- *     m/j/y G:i
+ *   Unlike earlier versions of this popup, most formats will work.
  *
  * #date_increment
  *   Increment minutes and seconds by this amount, default is 1.
@@ -254,22 +218,25 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     'currentText' => t('Today'),
     'clearText' => t('Clear'),
     'closeText' => t('Close'),
-    'firstDay' => variable_get('date_first_day', 0),
-    'dayNames' => date_week_days_abbr(TRUE, TRUE, 1),
-    'monthNames' => date_month_names(TRUE),
+    'firstDay' => intval(variable_get('date_first_day', 0)),
+    'dayNames' => date_week_days(TRUE),
+    'dayNamesShort' => date_week_days_abbr(TRUE, TRUE, 3),
+    'dayNamesMin' => date_week_days_abbr(TRUE, TRUE, 2),
+    'monthNames' => array_values(date_month_names(TRUE)),
+    'monthNamesShort' => array_values(date_month_names_abbr(TRUE)),
     //'buttonImage' => base_path() . drupal_get_path('module', 'date_api') ."/images/calendar.png",
-    //'buttonImageOnly' => FALSE,
+    //'buttonImageOnly' => TRUE,
     'autoPopUp' => 'focus',
     'closeAtTop' => FALSE,
     'speed' => 'immediate',
-    'dateFormat' => date_popup_format_to_popup($date_format),
+    'dateFormat' => date_popup_format_to_popup($date_format, 'datepicker'),
     'yearRange' => $year_range,
     // Custom setting, will be expanded in Drupal.behaviors.date_popup()
     'fromTo' => isset($fromto),
     );    
-
-  // Create a unique class for each set of custom settings.
-  $id = date_popup_js_settings_id('jquery-calendar', $element['#id'], 'calendar', $settings);
+  
+  // Create a unique id for each set of custom settings.
+  $id = date_popup_js_settings_id('jquery-calendar', $element['#id'], 'datepicker', $settings);
   $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => !empty($element['#value']['date']) && is_object($date) ? date_format($date, $date_format) : '',
@@ -300,16 +267,12 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
     'fromTo' => isset($fromto),
     );
 
-  // TODO Figure out why the js isn't working right in the time entry box
-  // unless you click first in the date box. Commenting the js out
-  // until this is figured out.
-  
-  // Create a unique class for each set of custom settings.
+  // Create a unique id for each set of custom settings.
   $id = date_popup_js_settings_id('jquery-timeentry', $element['#id'], 'timeEntry', $settings);
   $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => !empty($element['#value']['time']) && is_object($date) ? date_format($date, $time_format) : '',
-    //'#id' => $id,
+    '#id' => $id,
     '#size' => 10,
     '#maxlength' => 10,
     );
@@ -404,23 +367,6 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
 }
 
 /**
- * Allowable date formats.
- */
-function date_popup_date_formats() {
-  return array(
-    'd/m/Y',
-    'd-m-Y',
-    'd.m.Y',
-    'm/d/Y',
-    'm-d-Y',
-    'm.d.Y',
-    'Y/m/d',
-    'Y-m-d',
-    'Y.m.d',
-    );
-}
-
-/**
  * Allowable time formats.
  */
 function date_popup_time_formats($with_seconds = FALSE) {
@@ -430,14 +376,14 @@ function date_popup_time_formats($with_seconds = FALSE) {
     );
 }
 
+/**
+ * Format options array.
+ * 
+ * There are just a few options available for the earlier 'calendar'
+ * version.
+ */
 function date_popup_formats() {
-  $formats = array();
-  foreach (date_popup_date_formats() as $format) {
-    foreach (date_popup_time_formats() as $time_format) {
-      $formats[] = $format .' '. $time_format;
-    }
-  }
-  return $formats;
+  return array_keys(date_format_options());
 }
 
 /**
@@ -446,19 +392,16 @@ function date_popup_formats() {
  * @param string $format
  *   a normal date format string, like Y-m-d
  * @return string
- *   a format string in popup format, like YMD-
+ *   A format string in popup format, like YMD-, for the 
+ *   earlier 'calendar' version, or m/d/Y for the later 'datepicker' 
+ *   version.
  */
 function date_popup_format_to_popup($format) {
   if (empty($format)) {
     $format = 'Y-m-d';
   }
-  $sep = array();
-  ereg('\/|-|\.| ', $format, $sep);
-  $format = str_replace(array('d', 'j'), 'D', $format);
-  $format = str_replace(array('m', 'n'), 'M', $format);
-  $format = str_replace('y', 'Y', $format);
-  $format = str_replace(array(' ', '/', '-', '.', ':', 'l', 'z', 'w', 'W', 'g', 'G', 'h', 'H', 'i', 's', 'a', 'A'), '', $format);
-  return $format . $sep[0];
+  $replace = datepicker_format_replacements();
+  return strtr($format, $replace);
 }
 
 /**
@@ -489,9 +432,26 @@ function date_popup_format_to_popup_time($format) {
  *   a normal date format string, like Y-m-d
  */
 function date_popup_popup_to_format($format) {
-  $sep = substr($format, -1);
-  ereg('(MDY)', $format, $parts);
-  return implode($sep, $parts);
+  $replace = array_flip(datepicker_format_replacements());
+  return strtr($format, $replace);
+}
+
+/**
+ * The format replacement patterns for the new datepicker.
+ */
+function datepicker_format_replacements() {
+  return array(
+   'd' => 'dd',
+   'j' => 'd',
+   'l' => 'DD',
+   'D' => 'D',
+   'm' => 'mm',
+   'n' => 'm',
+   'F' => 'MM',
+   'M' => 'M',
+   'Y' => 'yy',
+   'y' => 'y',
+   );
 }
 
 /**

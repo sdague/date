@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add test for jQueryUI and load datepicker from there if it exists.
+- Update to latest versions of jQuery datepicker and timeentry.
 - Hide image div in Date Popup timeentry css to keep FF from displaying a 'helpful' dropdown.
 - Move date_format_options() to Date API so other code can use it.
 - #279247 Make sure date_timezone element works no matter what the parent element name is.
