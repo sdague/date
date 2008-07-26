@@ -491,9 +491,8 @@ function date_text_input_value($element) {
  *  Move the timezone value from the nested field back to the original field.
  */
 function date_timezone_validate($element, &$form_state) {
-  dsm('timezone validate');
-  //array_pop($element['#parents']);
-  //form_set_value($element, $element['#value']['timezone'], $form_state);
+  array_pop($element['#parents']);
+  form_set_value($element, $element['#value']['timezone'], $form_state);
 }
 
 
