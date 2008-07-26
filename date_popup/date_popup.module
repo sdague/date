@@ -241,8 +241,8 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     '#type' => 'textfield',
     '#default_value' => !empty($element['#value']['date']) && is_object($date) ? date_format($date, $date_format) : '',
     '#id' => $id,    
-    '#size' => 20,
-    '#maxlength' => 20,
+    '#size' => 30,
+    '#maxlength' => 30,
     );
   // TODO, figure out exactly when we want this description. In many places it is not desired.
   $sub_element['#description'] = t(' Format: @date', array('@date' => date($date_format, time())));
