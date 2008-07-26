@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #286864 Fix wrong RRULE value being passed to validator and add trim() to get repeating dates working again.
 - #286864 Need a different fix for timezone API since this fix broke Date Repeat.
 - #283107 Evaluate date and time parts separately since we can't know or care how they're combined in the complete date format.
 - #283107 Date Popup timepicker formats need adjustment before using date_convert_from_custom().

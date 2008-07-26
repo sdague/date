@@ -122,7 +122,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
 
     // Split the RRULE into RRULE and EXDATE parts.
     $parts = date_repeat_split_rrule($rrule);
-    $rule = (array) $parts[0];
+    $rule = explode("\n", $rrule);
     $parsed_exceptions = (array) $parts[1];
     $exceptions = array();
     foreach ($parsed_exceptions as $exception) {
@@ -130,7 +130,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
       $exceptions[] = date_format($date, 'Y-m-d');
     }
 
-    $dates = date_repeat_calc($rule, $start_datetime, $end_datetime, $exceptions);
+    $dates = date_repeat_calc($rule[0], $start_datetime, $end_datetime, $exceptions);
     foreach ($dates as $delta => $date) {
       // date_repeat_calc always returns DATE_DATETIME dates, which is
       // not necessarily $field['type'] dates.
