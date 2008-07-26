@@ -491,8 +491,9 @@ function date_text_input_value($element) {
  *  Move the timezone value from the nested field back to the original field.
  */
 function date_timezone_validate($element, &$form_state) {
-  array_pop($element['#parents']);
-  form_set_value($element, $element['#value'], $form_state);
+  dsm('timezone validate');
+  //array_pop($element['#parents']);
+  //form_set_value($element, $element['#value']['timezone'], $form_state);
 }
 
 
@@ -597,10 +598,7 @@ function date_convert_from_custom($date, $format) {
   elseif (isset($ampm) && $ampm == 'am' && $final_date['hour'] == 12) {
     $final_date['hour'] -= 12;
   }
-  if (date_is_valid($final_date, DATE_ARRAY)) {
-    return date_convert($final_date, DATE_ARRAY, DATE_DATETIME);
-  }
-  else {
-    return NULL;
-  }
+  // Don't test for valid date, we might use this to extract
+  // incomplete date part info from user input.
+  return date_convert($final_date, DATE_ARRAY, DATE_DATETIME);
 }

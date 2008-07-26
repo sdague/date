@@ -354,11 +354,15 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
   $format = $element['#date_format'];
   $format = strtr($format, timepicker_format_replacements());
   $format = date_limit_format($format, $granularity);
-  $input = !empty($element['#value']['date']) ? $element['#value']['date'] : '';
+  // Evaluate date and time parts separately since we can't know or care
+  // how they're combined in the complete date format.
+  $time_format = date_limit_format($format, array('hour', 'minute', 'second'));
+  $date_format = date_limit_format($format, array('year', 'month', 'day'));
   $value = '';
   if (is_array($element['#value']) && !empty($element['#value']['date'])) {
-    $input = $element['#value']['date'] .(!empty($element['#value']['time']) ? ' '. $element['#value']['time'] : '');
-    $value = date_convert_from_custom(trim($input), $format);
+    $date = date_convert_from_custom(trim(!empty($element['#value']['date']) ? $element['#value']['date'] : ''), $date_format);
+    $time = date_convert_from_custom(trim(!empty($element['#value']['time']) ? $element['#value']['time'] : ''), $time_format);
+    $value = trim(substr($date, 0, 10) .' '. substr($time, 11, 8));
   }
   if (date_is_valid($value, DATE_DATETIME)) {
     $date = date_make_date($value, $element['#date_timezone'], DATE_DATETIME);
