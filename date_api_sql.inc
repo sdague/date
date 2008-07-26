@@ -41,14 +41,14 @@ function date_sql_pad($str, $size = 2, $pad = '0', $side = 'l') {
  */
 class date_sql_handler {
   var $db_type = 'mysql';
-  var $date_type = DATE_UNIX;
+  var $date_type = DATE_DATETIME;
   var $db_timezone = 'UTC'; // A string timezone name.
   var $local_timezone = NULL; // A string timezone name.
   var $db_timezone_field = NULL; // Use if the db timezone is stored in a field.
   var $local_timezone_field = NULL; // Use if the local timezone is stored in a field.
   var $offset_field = NULL; // Use if the offset is stored in a field.
   
-  function construct($date_type = DATE_UNIX, $local_timezone = NULL) {
+  function construct($date_type = DATE_DATETIME, $local_timezone = NULL) {
     $this->db_type = $GLOBALS['db_type'];
     $this->date_type = $date_type;
     $this->db_timezone = 'UTC';
