@@ -469,44 +469,6 @@ function date_formatter_setup_form($field, $delta) {
 }
 
 /**
- * Store personalized format options for each user.
- *
- * Store to avoid work of re-creating it over and over,
- * personalize for each user to preserve translation.
- *
- * @return array
- */
-function date_format_options() {
-  global $user;
-  $options = array();
-  $cached = cache_get('date_format_options:'. $user->uid);
-  $options = isset($cached->data) ? $cached->data : array();
-  if (empty($options)) {
-    $formats = array_merge(date_short_formats(), date_medium_formats(), date_long_formats());
-    $options = array();
-    $now = date_example_date();
-    if (!empty($now)) {
-      foreach ($formats as $format) {
-        // Create an option that shows date only without time, along with the
-        // default string which has both date and time.
-        $no_time = date_limit_format($format, array('month', 'day', 'year'));
-        $zones = array('', 'O', 'P', 'e');
-        foreach ($zones as $zone) {
-          $time_format = !empty($zone) ? $format .' '. $zone : $format;
-          $options[$no_time] = date_format_date($now, 'custom', $no_time);
-          $options[$time_format] = date_format_date($now, 'custom', $time_format);
-        }
-      }
-      asort($options);
-    }
-    if (!empty($options)) {
-      cache_set('date_format_options:'. $user->uid, $options, 'cache', CACHE_TEMPORARY);
-    }
-  }
-  return $options;
-}
-
-/**
  *  Timezone handling options
  *
  *  the 'none' option will do no timezone conversions and will store and display dates exactly as entered
