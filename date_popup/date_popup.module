@@ -351,7 +351,9 @@ function date_popup_validate($element, &$form_state) {
 function date_popup_input_value($element, $auto_complete = FALSE) {
   date_popup_load();
   $granularity = date_format_order($element['#date_format']);
-  $format = date_limit_format($element['#date_format'], $granularity);
+  $format = $element['#date_format'];
+  $format = strtr($format, timepicker_format_replacements());
+  $format = date_limit_format($format, $granularity);
   $input = !empty($element['#value']['date']) ? $element['#value']['date'] : '';
   $value = '';
   if (is_array($element['#value']) && !empty($element['#value']['date'])) {
@@ -416,10 +418,8 @@ function date_popup_format_to_popup_time($format) {
   if (empty($format)) {
     $format = 'H:i';
   }
-  $format = str_replace(array('G'), 'H', $format);
-  $format = str_replace(array('g'), 'h', $format);
-  $format = str_replace(array('a'), 'A', $format);
-  $format = str_replace(array(' ', '/', '-', '.', 'l', 'z', 'w', 'W', 'd', 'j', 'm', 'n', 'y', 'Y'), '', $format);
+  $format = strtr($format, timepicker_format_replacements());
+  $format = str_replace(array(' ', '/', '-', '.', ',', 'F', 'M', 'l', 'z', 'w', 'W', 'd', 'j', 'm', 'n', 'y', 'Y'), '', $format);
   return $format;
 }
 
@@ -434,6 +434,14 @@ function date_popup_format_to_popup_time($format) {
 function date_popup_popup_to_format($format) {
   $replace = array_flip(datepicker_format_replacements());
   return strtr($format, $replace);
+}
+
+function timepicker_format_replacements() {
+  return array(
+    'G' => 'H',
+    'g' => 'h',
+    'a' => 'A',
+    );
 }
 
 /**

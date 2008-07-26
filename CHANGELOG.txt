@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #283107 Date Popup timepicker formats need adjustment before using date_convert_from_custom().
 - Exception dates were getting lost when parsing the RRULE.
 - Increase size of Date Popup input box to accept longer formats that the new datepicker allows.
 - #287325 Change the default date type in the date handler to DATE_DATETIME.
