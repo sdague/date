@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Remove old D5 themes, this is now handled by the Date API date browser attachment.
 - #286864 Fix wrong RRULE value being passed to validator and add trim() to get repeating dates working again.
 - #286864 Need a different fix for timezone API since this fix broke Date Repeat.
 - #283107 Evaluate date and time parts separately since we can't know or care how they're combined in the complete date format.
