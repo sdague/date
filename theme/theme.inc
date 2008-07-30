@@ -17,12 +17,12 @@ function template_preprocess_date_navigation(&$vars) {
       case 'week':
         $next_week = date_week(date_format($next_date, 'Y-m-d'));
         $prev_week = date_week(date_format($prev_date, 'Y-m-d'));
-        $next_path = str_replace($view->date_arg, date_format($next_date, 'Y-\W') . $next_week, $view->get_url());
-        $prev_path = str_replace($view->date_arg, date_format($prev_date, 'Y-\W') . $prev_week, $view->get_url());
+        $next_path = str_replace($view->date_arg, date_format($next_date, 'Y-\W') . $next_week, $view->url);
+        $prev_path = str_replace($view->date_arg, date_format($prev_date, 'Y-\W') . $prev_week, $view->url);
         break;
       default:
-        $next_path = str_replace($view->date_arg, date_format($next_date, $format[$view->granularity]), $view->get_url());
-        $prev_path = str_replace($view->date_arg, date_format($prev_date, $format[$view->granularity]), $view->get_url());
+        $next_path = str_replace($view->date_arg, date_format($next_date, $format[$view->granularity]), $view->url);
+        $prev_path = str_replace($view->date_arg, date_format($prev_date, $format[$view->granularity]), $view->url);
     }
   }
   else {
@@ -64,7 +64,7 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
     	$url = $view->url .'/'. $view->year .'-W'. date_pad($view->week);
     	break;
   }
-  if ($view->mini || $link) {
+  if (!empty($view->mini) || $link) {
   	// Month navigation titles are used as links in the mini view.
   	return l($title, $url, array(), calendar_url_append($view));
   }

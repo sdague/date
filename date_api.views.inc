@@ -115,6 +115,11 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function init(&$view, $options) {
     parent::init($view, $options);
+    
+    // Identify the type of display we're using.
+    $this->display_handler = $view->display_handler->definition['handler'];
+    
+    // Add a date handler to the display.
     $date_handler = $this->date_handler;
     $date_handler->granularity = $this->options['granularity'];
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
@@ -372,6 +377,7 @@ class date_plugin_display_attachment extends views_plugin_display_attachment {
     $display->display_options['defaults']['row_plugin'] = FALSE;
     $display->display_options['defaults']['row_options'] = FALSE;
   } 
+
 }
 
 /**
@@ -417,6 +423,7 @@ class date_navigation_plugin_style extends views_plugin_style {
         $this->view->week = isset($argument->week) ? $argument->week : NULL;
         $this->view->min_date = $argument->min_date;
         $this->view->max_date = $argument->max_date;
+        $this->view->url = $this->view->get_url();
       }
       $i++;
     }
