@@ -13,11 +13,12 @@
  *   and period formats, like 2009-05-01, 2008-W25, P1W. 
  * 
  * Date filter:
- *   A generic date argument that has an option to select a 
- *   Views date field to filter on, and provides a place to select
- *   a value and an adjustment to use for the filtering. The value
- *   can be a date or 'now', and the adjustment can be something like
- *   '+90 days'. 
+ *   A generic date filter that has an option to select a 
+ *   Views date field to filter on, with a choice of a widget to use
+ *   for the filter form and an option to set the default value to 
+ *   a set date or something like 'now +90 days'. If the operator is 
+ *   set to 'between' or 'not between' you can set a default value for
+ *   both the from and to dates. 
  * 
  * Current date argument default
  *   Adds a default option to set the argument to the current date 
@@ -477,7 +478,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     parent::options($options);
     $options['date_fields'] = array();
     $options['granularity'] = 'day';
-    $options['adjustment_field'] = 0;
+    $options['form_type'] = 'date_select';
+    $options['default_date'] = '';
+    $options['default_to_date'] = '';
   }
   
   function option_definition() {
@@ -486,7 +489,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // construct our own value options.
     $options['value'] = array();
     foreach (array('value', 'min', 'max') as $prefix) {
-      foreach (array('date', 'adjustment') as $key => $part) {
+      foreach (array('date') as $key => $part) {
         $options['value'][$prefix . $key] = '';
       }
     }
@@ -498,21 +501,34 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     */
   function has_extra_options() { return TRUE; }
 
-  function extra_options_form(&$form, &$form_state) {
-    $form['adjustment_field'] = array(
-      '#type' => 'radios',
-      '#title' => t('Filter type'),
-      '#default_value' => $this->options['adjustment_field'],
-      '#options' => array(
-        0 => t('Date only'), 
-        1 => t('Both date and adjustment'), 
-        2 => t('Adjustment only'),
-        ),
-      '#description' => t('Choose a date to filter on, or use an adjustment field for a value like \'+1 day\'. When you use both date and adjustment, the adjustment will be added to the date. When the adjustment field is used with no date field, the adjustment will be made to the current date. The date can be a specific date, or \'now\'.'),
+  /**
+   * Date selection options.
+   * 
+   * TODO Only select widget is working right now.
+   */
+  function widget_options() {
+    $options = array(
+      'date_select' => t('Select'), 
+      //'date_text' => t('Text'), 
+      //'date_popup' => t('Popup'),
       );
-    
+    //if (!module_exists('date_popup')) {
+    //  unset($options['date_popup']);
+    //}  
+    return $options;
+  }
+   
+  function extra_options_form(&$form, &$form_state) {
+    $form['form_type'] = array(
+      '#type' => 'radios',
+      '#title' => t('Date form type'),
+      '#default_value' => $this->options['form_type'],
+      '#options' => $this->widget_options(),
+      '#description' => t('Choose the form element to use for date selection (more options will be available later).'),
+      );
+   
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
-    $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where you can select the year, month, and day as YYYY-MM-DD.') .'</p>';
+    $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where users can select the year, month, and day.') .'</p>';
     
     $fields = date_api_fields();
     $options = array();
@@ -564,38 +580,39 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
     $handler = $this->date_handler;
     if ($which == 'all' || $which == 'value') {
-      $form['value'] = array_merge($form['value'], $this->date_parts_form('value', $source, $which, $this->operator_values(1)));
+      $form['value'] += $this->date_parts_form($form_state, 'value', $source, $which, $this->operator_values(1));
     }
 
     if ($which == 'all' || $which == 'minmax') {
-      $form['value'] = array_merge($form['value'], $this->date_parts_form('min', $source, $which, $this->operator_values(2)));
-      $form['value'] = array_merge($form['value'], $this->date_parts_form('max', $source, $which, $this->operator_values(2)));
+      $form['value'] += $this->date_parts_form($form_state, 'min', $source, $which, $this->operator_values(2));
+      $form['value'] += $this->date_parts_form($form_state, 'max', $source, $which, $this->operator_values(2));
     }
-    $format = $handler->views_formats($handler->granularity, 'sql');
-    $format_help = $handler->format_help($format);
-    $form['value']['description'] = array(
-      '#value' => t('Date format @format. Leave date blank to do no filtering, use \'now\' to filter for the current date.', array('@format' => $format_help)),
+    
+    $form['value']['default_date'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Date default'),
+      '#default_value' => $this->options['default_date'],
+      '#prefix' => t('<div class="form-item"><label>Relative values</label><p>Leave the date fields empty to use relative values instead of absolute dates for the filter. These values will also be used to set the inital value of the exposed filter. Use \'now\' to default to the current date at runtime or add modifiers like \'now +1 day\'. The To date default value is used when the the operator is set to \'between\' or \'not between\'. Leave both date and default values blank to start with no value in the exposed filter. </p></div>'),
       );
-    if ($this->options['adjustment_field'] == 1) {
-      $form['value']['description']['#value'] .= t(' \'Adjustment\' filters for an offset like \'+1 day\' from the date value, most useful when used with \'now\'.');
-    }
-    elseif ($this->options['adjustment_field'] == 2) {
-      $form['value']['description']['#value'] = t('\'Adjustment\' filters for an offset like \'+1 day\' from the current time.');
+    $form['value']['default_to_date'] = array(
+      '#type' => 'textfield',
+      '#title' => t('To date default'),
+      '#default_value' => $this->options['default_to_date'],
+      );
+
+    // Test if this value is in the UI or exposed, only show these elements in the UI.
+    // We'll save it as an option rather than a value to store it for use
+    // in the exposed filter.
+    if (!empty($form_state['exposed'])) {
+      $form['value']['default_date']['#type'] = 'hidden';
+      $form['value']['default_date']['#value'] = $form['value']['default_date']['#default_value'];
+      $form['value']['default_to_date']['#type'] = 'hidden';
+      $form['value']['default_to_date']['#value'] = $form['value']['default_to_date']['#default_value'];
+      unset($form['value']['default_date']['#prefix']);
     }
     $form['value']['#theme'] = 'date_views_filter_form';  
   }
 
-  function date_filter_parts() {
-    switch ($this->options['adjustment_field']) {
-      case 1:
-        return array('date' => t('Date'), 'adjustment' => t('Adjustment'));
-      case 2:
-        return array('adjustment' => t('Adjustment'));
-      default:
-        return array('date' => t('Date'));
-    }
-  }
-  
   /**
    * A form element to select date part values.
    *
@@ -613,76 +630,79 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * @return
    *   The form date part element for this instance.
    */
-  function date_parts_form($prefix, $source, $which, $operator_values) {
-    $prefixname = $prefix == 'value' ? '' : ($prefix == 'min' ? t('From') : t('To'));
-    $handler = $this->date_handler;
-    $min = $handler->part_info('min');
-    $max = $handler->part_info('max');
-    $limit = $handler->granularity;
-    switch ($this->options['adjustment_field']) {
-      case 1:
-        $parts = array('date' => t('Date'), 'adjustment' => t('Adjustment'));
-        $first_item = 'date';
-        $last_item = 'adjustment';
+  function date_parts_form($form_state, $prefix, $source, $which, $operator_values) {
+    include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+    switch($prefix) {
+      case 'min':
+        $name = t('From date');
         break;
-      case 2:
-        $parts = array('adjustment' => t('Adjustment'));
-        $first_item = 'adjustment';
-        $last_item = 'adjustment';
+      case 'max':
+        $name = t('To date');
         break;
       default:
-        $parts = array('date' => t('Date'));
-        $first_item = 'date';
-        $last_item = 'date';
+        $name = '';
         break;
     }
-    foreach ($parts as $key => $name) {
-      $type = 'textfield';
-      $form[$prefix . $key] = array(
-        '#title' => t('@type @value', array('@type' => $prefixname, '@value' => $name)),
-        '#type' => $type,
-        '#size' => 20,
-        '#default_value' => $this->value[$prefix . $key],
+    $type = $this->options['form_type'];
+    $format = $this->date_handler->views_formats($this->options['granularity'], 'sql');
+    $granularity = array_keys($this->date_handler->date_parts($this->options['granularity']));
+    
+    // Don't set a default date in the UI, only in the exposed form.
+    $default_date = '';
+    if (!empty($form_state['exposed'])) {
+      $default_date = $this->default_value($prefix);
+    }
+    $form[$prefix . 'date'] = array(
+      '#type' => $type,
+      '#title' => $name,
+      '#size' => 20,
+      '#default_value' => !empty($this->value[$prefix . 'date']) ? $this->value[$prefix . 'date'] : $default_date,
+      '#date_format' => date_limit_format($format, $granularity),
+      '#date_label_position' => 'within',
+    );
+    if ($which == 'all') {
+      $dependency = array(
+        '#process' => array($type .'_process', 'views_process_dependency'),
+        '#dependency' => array($source => $operator_values),
       );
-      if ($which == 'all') {
-        $dependency = array(
-          '#process' => array('views_process_dependency'),
-          '#dependency' => array($source => $operator_values),
-        );
-        $form[$prefix . $key] += $dependency;
-      }
+      $form[$prefix . 'date'] += $dependency;
     }
     return $form;
   }
 
+   function default_value($prefix) {
+    $default_date = '';
+    $default_option = $prefix == 'max' ? $this->options['default_to_date'] : $this->options['default_date'];
+    if (!empty($default_option)) {
+      $date = date_now();
+      if ($add = trim(str_replace('now', '', $default_option))) {
+        date_modify($date, $add);
+      }
+      $default_date = date_format($date, DATE_FORMAT_DATETIME);
+    }
+    return $default_date;
+  }
+  
   /**
    * Value validation.
    * 
    * TODO add in more validation.
+   * 
+   * We are setting an extra option using a value form
+   * because it makes more sense to set it there. 
+   * That's not the normal method, so we have to manually
+   * transfer the selected value back to the option.
    */
   function value_validate(&$form, &$form_state) {
-    if (!isset($form_state['values']['options']['value'])) {
-      return;
+    if (($form_state['values']['options']['operator'] == 'between' || $form_state['values']['options']['operator'] == 'not between') && 
+    !empty($form_state['values']['options']['value']['default_date']) && empty($form_state['values']['options']['value']['default_to_date'])) {
+      form_error($form['value']['default_to_date'], t('Please set a default value for the To date as well as the From date when using default values with the Between or Not between operators.'));
     }
-    $handler = $this->date_handler;
-    $parts = $this->date_filter_parts();
-    $values = $form_state['values']['options']['value'];
-    $granularity = $this->options['granularity'];
-    // Validate date values.
-    foreach ($values as $name => $value) {
-      if (empty($value)) {
-        continue;
-      }
-      $error = FALSE;
-      $part = str_replace(array('min', 'max', 'value'), '', $name);
-      $prefix = str_replace(array_keys($parts), '', $name);
-      if ($part != 'adjustment' && $granularity != $handler->arg_granularity($value)) {
-        $error = TRUE;
-      }
-      if ($error) {
-        form_error($form['value'][$name], t('@value is invalid.', array('@value' => $parts[$part])));
-      }
+    if (isset($form_state['values']['options']['value']['default_date'])) {
+      $this->options['default_date'] = $form_state['values']['options']['value']['default_date'];
+      $this->options['default_to_date'] = $form_state['values']['options']['value']['default_to_date'];
     }
+    parent::value_validate($form, $form_state);
   }
   
   // Update the summary values to provide
@@ -695,35 +715,20 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $field = implode(', ', $this->options['date_fields']);
     $output = "$field ". check_plain($this->operator) . ' ';
     $parts = $handler->date_parts();
-
+    
+    $widget_options = $this->widget_options();
     // If the filter is exposed, display the granularity.
     if ($this->options['exposed']) {
-      return t('(@field) <strong>Exposed</strong> Granularity: @format', array('@field' => $field, '@format' => $parts[$handler->granularity]));
+      return t('(@field) <strong>Exposed</strong> @widget @format', array('@field' => $field, '@format' => $parts[$handler->granularity], '@widget' => $widget_options[$this->options['form_type']]));
     }
-    // If the filter is not exposed, display the selected values.
-    // Check both empty and is_numeric to show all non-blank values,
-    // including zero values.
-    $min = '';
-    $max = '';
-    $handler = $this->date_handler;
-    $separators = $handler->part_info('sep');
+    // If not exposed, display the value.
     if (in_array($this->operator, $this->operator_values(2))) {
-      foreach ($this->date_filter_parts() as $key => $part) {
-        if (!empty($this->value['min'. $key]) || !empty($this->value['max'. $key])
-        || is_numeric($this->value['min'. $key]) || is_numeric($this->value['max'. $key])) {
-          $min .= check_plain($this->value['min'. $key]);
-          $max .= check_plain($this->value['max'. $key]);
-        }
-      }
+      $min = check_plain(!empty($this->options['default_date']) ? $this->options['default_date'] : $this->options['value']['mindate']);
+      $max = check_plain(!empty($this->options['default_to_date']) ? $this->options['default_to_date'] : $this->options['value']['maxdate']);
       $output .= t('@min and @max', array('@min' => $min, '@max' => $max));
     }
     else {
-      foreach ($this->date_filter_parts() as $key => $part) {
-        if (!empty($this->value['value'. $key]) || is_numeric($this->value['value'. $key])) {
-          $output .= check_plain($this->value['value'. $key]);
-        }
-      }
-      $output .= $min;
+      $output .= check_plain(!empty($this->options['default_date']) ? $this->options['default_date'] : $this->options['value']['valuedate']);
     }
     return $output;
   }
@@ -740,32 +745,29 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
 
   function date_filter($prefix, $field, $operator) {
-    if (empty($this->value[$prefix .'adjustment']) && empty($this->value[$prefix .'date'])) {
-      return;
+    // If no value is supplied from an exposed filter,
+    // use the default value, if any.
+    if (empty($this->value[$prefix .'date'])) {
+      $default = $this->default_value($prefix);
+      if (empty($default)) {
+        return;
+      }
+      else {
+        $this->value[$prefix .'date'] = $default;
+      }
     }
     $date_handler = $this->date_handler;
     $granularity = $this->options['granularity'];
-    $filter_parts = $this->date_filter_parts();
-    $adjustment = 0;
-    if (!empty($this->value[$prefix .'adjustment'])) {
-      $adjustment = strtotime($this->value[$prefix .'adjustment'], 0);
-    }
-    if ($this->value[$prefix .'date'] == 'now') {
-      $date = date_now();
-    }
-    else {
-      $selected = $date_handler->arg_parts($this->value[$prefix .'date']);
-      $date = date_make_date($date_handler->complete_date($selected[0]['date']));
-    }
-    if (!empty($adjustment)) {
-      date_modify($date, "+$adjustment seconds");
-    }
+    $selected = $date_handler->arg_parts($this->value[$prefix .'date']);
+    $date = date_make_date($date_handler->complete_date($selected[0]['date']));
     $this->format = $date_handler->views_formats($granularity, 'sql');
     $value = date_format($date, $this->format);
-        
     $range = $this->date_handler->arg_range($value);
     $min_date = $range[0];
     $max_date = $range[1];
+    
+    $this->min_date = $min_date;
+    $this->max_date = $max_date;
     
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
@@ -786,7 +788,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
             $this->query->add_field($field['table_name'], $bits[1]);
           }
         }
-        if (!empty($this->value[$prefix .'adjustment'])) {
+        if (!empty($this->value['adjustment'])) {
           // See if there are any filters other than the adjustment,
           // if not, compare to NOW() and return.
           if ($this->options['adjustment_field'] == 2) {
