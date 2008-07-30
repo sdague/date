@@ -589,7 +589,7 @@ function date_datetime2timestamp($datetime, $timezone) {
  *   0 or 1
  */
 function date_is_dst($timestamp, $timezone = NULL) {
-  if ($timestamp < 86400) {
+  if (abs($timestamp) > 0x7FFFFFFF) {
     return FALSE;
   }
   if (empty($timezone)) {

@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Make sure PHP4 wrapper code doesn't try to use date() on values outside the 32 bit signed range.
 - Get the url into the theme processing.
 - Remove old D5 themes, this is now handled by the Date API date browser attachment.
 - #286864 Fix wrong RRULE value being passed to validator and add trim() to get repeating dates working again.
