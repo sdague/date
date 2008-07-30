@@ -539,7 +539,7 @@ class date_sql_handler {
     // If this is a max date, make sure the last day of 
     // the month is the right one for this date.
     if ($type == 'max') {
-      $compare['day'] = date('t', mktime(0, 0, 0, $compare['month'], 1, $compare['year']));
+      $compare['day'] = date_days_in_month($compare, DATE_ARRAY);
     }
     $value = '';
     $separators = $this->part_info('sep');
