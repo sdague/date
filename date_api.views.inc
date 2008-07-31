@@ -485,14 +485,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   
   function option_definition() {
     $options = parent::option_definition();
-    // We use different values than the parent form, so we must
-    // construct our own value options.
-    $options['value'] = array();
-    foreach (array('value', 'min', 'max') as $prefix) {
-      foreach (array('date') as $key => $part) {
-        $options['value'][$prefix . $key] = '';
-      }
-    }
     return $options;
   }
 
@@ -563,13 +555,19 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // construct our own form element.
     $form['value'] = array();
     $form['value']['#tree'] = TRUE;
+    
+    // We have to make some choices when creating this as an exposed
+    // filter form. For example, if the operator is locked and thus
+    // not rendered, we can't render dependencies; instead we only
+    // render the form items we need.
     $which = 'all';
+    $source = '';
     if (!empty($form['operator'])) {
       $source = ($form['operator']['#type'] == 'radios') ? 'radio:options[operator]' : 'edit-options-operator';
     }
 
     if (!empty($form_state['exposed'])) {
-      if (empty($this->options['expose']['operator'])) {
+      if (empty($this->options['expose']['use_operator']) || empty($this->options['expose']['operator'])) {
         // exposed and locked.
         $which = in_array($this->operator, $this->operator_values(2)) ? 'minmax' : 'value';
       }
@@ -652,11 +650,11 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($form_state['exposed'])) {
       $default_date = $this->default_value($prefix);
     }
-    $form[$prefix . 'date'] = array(
+    $form[$prefix] = array(
       '#type' => $type,
       '#title' => $name,
       '#size' => 20,
-      '#default_value' => !empty($this->value[$prefix . 'date']) ? $this->value[$prefix . 'date'] : $default_date,
+      '#default_value' => !empty($this->value[$prefix]) ? $this->value[$prefix] : $default_date,
       '#date_format' => date_limit_format($format, $granularity),
       '#date_label_position' => 'within',
     );
@@ -665,14 +663,17 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         '#process' => array($type .'_process', 'views_process_dependency'),
         '#dependency' => array($source => $operator_values),
       );
-      $form[$prefix . 'date'] += $dependency;
+      $form[$prefix] += $dependency;
     }
     return $form;
   }
 
-   function default_value($prefix) {
+   function default_value($prefix, $options = NULL) {
     $default_date = '';
-    $default_option = $prefix == 'max' ? $this->options['default_to_date'] : $this->options['default_date'];
+    if (empty($options)) {
+      $options = $this->options;
+    }
+    $default_option = $prefix == 'max' ? $options['default_to_date'] : $options['default_date'];
     if (!empty($default_option)) {
       $date = date_now();
       if ($add = trim(str_replace('now', '', $default_option))) {
@@ -703,6 +704,44 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $this->options['default_to_date'] = $form_state['values']['options']['value']['default_to_date'];
     }
     parent::value_validate($form, $form_state);
+  }
+
+  /**
+   * Be sure that default values get set properly when there is no input.
+   */
+  function accept_exposed_input($input) {
+    if (empty($this->options['exposed'])) {
+      return TRUE;
+    }
+    if (!empty($this->options['expose']['use_operator']) && !empty($this->options['expose']['operator']) && isset($input[$this->options['expose']['operator']])) {
+      $this->operator = $input[$this->options['expose']['operator']];
+    }
+    if (!empty($this->options['expose']['identifier'])) {
+      $value = $input[$this->options['expose']['identifier']];
+      if (!isset($_GET[$this->options['expose']['identifier']])) {
+        $value['min'] = $this->default_value('min');
+        $value['max'] = $this->default_value('max');
+        $value['value'] = $this->default_value('value');
+      }
+      
+      // Various ways to check for the absence of optional input.
+      if (!empty($this->options['expose']['optional'])) {
+        if ($value == 'All' || $value === array()) {
+          return FALSE;
+        }
+        if (!empty($this->no_single) && $value === '') {
+          return FALSE;
+        }
+      }
+
+      if (isset($value)) {
+        $this->value = $value;
+      }
+      else {
+        return FALSE;
+      }
+    }
+    return TRUE;
   }
   
   // Update the summary values to provide
@@ -745,21 +784,26 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
 
   function date_filter($prefix, $field, $operator) {
-    // If no value is supplied from an exposed filter,
-    // use the default value, if any.
-    if (empty($this->value[$prefix .'date'])) {
+    // If no value is supplied from an exposed filter use the default value.
+    if (empty($this->options['exposed']) && empty($this->value[$prefix])) {
       $default = $this->default_value($prefix);
       if (empty($default)) {
         return;
       }
       else {
-        $this->value[$prefix .'date'] = $default;
+        $this->value[$prefix] = $default;
       }
+    }
+    // If there is no value, do no filtering.
+    if (empty($this->value[$prefix])) {
+      return;
     }
     $date_handler = $this->date_handler;
     $granularity = $this->options['granularity'];
-    $selected = $date_handler->arg_parts($this->value[$prefix .'date']);
-    $date = date_make_date($date_handler->complete_date($selected[0]['date']));
+    //$selected = $date_handler->arg_parts($this->value[$prefix]);
+    //$complete_date = $date_handler->complete_date($selected[0]['date']);
+    $complete_date = $this->value[$prefix];
+    $date = date_make_date($complete_date);
     $this->format = $date_handler->views_formats($granularity, 'sql');
     $value = date_format($date, $this->format);
     $range = $this->date_handler->arg_range($value);
@@ -786,15 +830,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
           $bits = explode('.', $related);
           if ($bits[1] != $field['field_name']) {
             $this->query->add_field($field['table_name'], $bits[1]);
-          }
-        }
-        if (!empty($this->value['adjustment'])) {
-          // See if there are any filters other than the adjustment,
-          // if not, compare to NOW() and return.
-          if ($this->options['adjustment_field'] == 2) {
-            $sql = $date_handler->sql_field($field['fullname'], 0) . " $operator ". $date_handler->sql_field('NOW', $adjustment);
-            $this->query->add_where($this->options['group'], $sql);
-            continue;
           }
         }
         $value = $prefix == 'max' ? date_format($max_date, $this->format) : date_format($min_date, $this->format);
