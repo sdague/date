@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add validation for Date Browser to be sure only one date argument is used in the view.
 - Rework the install file so variables can be corrected and dependent modules enabled by disabling and re-enabling Date API.
 - #280863 Make sure Date Timezone and Date PHP4 can be uninstalled by keeping module_enable() in the install.
 - Rework of date filter to provide a choice of a widget to use for the filter form and an option to set the default value to a set date or something like 'now +90 days'. You must delete any previously-created date filters and re-create them to pick up the new parameters.
