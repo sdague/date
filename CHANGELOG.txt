@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix validation code that checks if arguments and filters have date fields selected, need to array_filter() the selections.
 - #269569 Override Views default method of combining tables when adding two fields from the same table, needed to avoid broken queries.
 - Add validation for Date Browser to be sure only one date argument is used in the view.
 - Rework the install file so variables can be corrected and dependent modules enabled by disabling and re-enabling Date API.

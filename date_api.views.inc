@@ -178,8 +178,9 @@ class date_api_argument_handler extends views_handler_argument_date {
   }
     
   function options_validate($form, &$form_state) {
-    if (empty($form_state['values']['options']['date_fields'])) {
-      form_error($form, t('You must select at least one date field for this argument.'));
+    $check_fields = array_filter($form_state['values']['options']['date_fields']);
+    if (empty($check_fields)) {
+      form_error($form['date_fields'], t('You must select at least one date field for this argument.'));
     }
   }
   
@@ -549,8 +550,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
 
   function extra_options_validate($form, &$form_state) {
-    if (empty($form_state['values']['options']['date_fields'])) {
-      form_error($form, t('You must select at least one date field for this filter.'));
+    $check_fields = array_filter($form_state['values']['options']['date_fields']);
+    if (empty($check_fields)) {
+      form_error($form['date_fields'], t('You must select at least one date field for this filter.'));
     }
   }
   
