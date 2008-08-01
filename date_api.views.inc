@@ -324,12 +324,14 @@ class date_api_argument_handler extends views_handler_argument_date {
       // Use set_where_group() with the selected date_method 
       // of 'AND' or 'OR' to create the where clause.
       $this->query->set_where_group($this->options['date_method'], 'date');
-      $this->ensure_my_table();
       foreach ($this->query_fields as $query_field) {
         $field = $query_field['field'];
         $date_handler = $query_field['date_handler'];
       
-        // Make sure this field is added to the query.
+        // Explicitly add this table using add_table so Views does not
+        // remove it if it is a duplicate, since that will break the query.
+        $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
+        // Make sure the real field is added to the query.
         $this->query->add_field($field['table_name'], $field['field_name']);
         foreach ($field['related_fields'] as $related) {
           $bits = explode('.', $related);
@@ -827,13 +829,15 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       // Use set_where_group() with the selected date_method 
       // of 'AND' or 'OR' to create the where clause.
       //$this->query->set_where_group($this->options['date_method'], 'date');
-      $this->ensure_my_table();
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
         $date_handler = $query_field['date_handler'];
         $parts = $date_handler->date_parts();
     
-        // Make sure this field is added to the query.
+        // Explicitly add this table using add_table so Views does not
+        // remove it if it is a duplicate, since that will break the query.
+        $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
+        // Make sure the real field is added to the query.
         $this->query->add_field($field['table_name'], $field['field_name']);
         foreach ($field['related_fields'] as $related) {
           $bits = explode('.', $related);
