@@ -588,6 +588,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
 
     $handler = $this->date_handler;
+       
     if ($which == 'all' || $which == 'value') {
       $form['value'] += $this->date_parts_form($form_state, 'value', $source, $which, $this->operator_values(1));
     }
@@ -597,11 +598,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $form['value'] += $this->date_parts_form($form_state, 'max', $source, $which, $this->operator_values(2));
     }
     
+    $form['value']['value']['#prefix'] = t('<div class="form-item"><label>Absolute value</label></div>');
     $form['value']['default_date'] = array(
       '#type' => 'textfield',
       '#title' => t('Date default'),
       '#default_value' => $this->options['default_date'],
-      '#prefix' => t('<div class="form-item"><label>Relative values</label><p>Leave the date fields empty to use relative values instead of absolute dates for the filter. These values will also be used to set the inital value of the exposed filter. Use \'now\' to default to the current date at runtime or add modifiers like \'now +1 day\'. The To date default value is used when the the operator is set to \'between\' or \'not between\'. Leave both date and default values blank to start with no value in the exposed filter. </p></div>'),
+      '#prefix' => t('<div class="form-item"><label>Relative value</label><p>Relative values will be used if no date is set above. Use \'now\' to default to the current date at runtime or add modifiers like \'now +1 day\'. The To date default value is used when the operator is set to \'between\' or \'not between\'. </p><p>If the filter is exposed, these values will be used to set the inital value of the exposed filter. Leave both date and default values blank to start with no value in the exposed filter. </p></div>'),
       );
     $form['value']['default_to_date'] = array(
       '#type' => 'textfield',
@@ -619,6 +621,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $form['value']['default_to_date']['#value'] = $form['value']['default_to_date']['#default_value'];
       unset($form['value']['default_date']['#prefix']);
     }
+    
     $form['value']['#theme'] = 'date_views_filter_form';  
   }
 
