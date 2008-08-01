@@ -342,7 +342,7 @@ class date_api_argument_handler extends views_handler_argument_date {
         }
         $from = $date_handler->sql_where_date('DATE', $field['fullname'], '>=', date_format($min_date, DATE_FORMAT_DATETIME));
         $to   = $date_handler->sql_where_date('DATE', $field['fullname'], '<=', date_format($max_date, DATE_FORMAT_DATETIME));
-        $sql = str_replace('***table***', $this->table_alias, "($from AND $to)");
+        $sql = str_replace('***table***', $field['table_name'], "($from AND $to)");
         if ($sql) {
           $this->query->add_where('date', $sql);
         }
