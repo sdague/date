@@ -33,7 +33,7 @@ function template_preprocess_date_navigation(&$vars) {
   $vars['next_url'] = $next_path;
   $vars['prev_url'] = $prev_path;
     
-  if ($view->block) {
+  if (!empty($view->block)) {
     $current = $_GET;
     $current_query = '';
     $block_identifier = isset($view->block_identifier) ? $view->block_identifier : 'mini';
