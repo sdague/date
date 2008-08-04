@@ -307,6 +307,20 @@ class date_api_argument_handler extends views_handler_argument_date {
    * The argument sent may be found at $this->argument.
    */
   function query() { 
+    $block_identifier = isset($this->view->block_identifier) ? $this->view->block_identifier : 'mini';
+    if ($this->view->block && isset($_GET[$block_identifier])) {
+      $mini_args = explode('/', str_replace($this->view->get_path() .'/', '', $_GET[$block_identifier]));
+      $this->view->args = $mini_args;
+      $i = 0;
+      foreach ($this->view->argument as $argument) {
+        if ($argument->field == 'date_argument') {
+          $this->argument = $this->view->args[$argument->position];
+          break;
+        }
+        $i++;
+      }
+    }
+    
     $parts = $this->date_handler->arg_parts($this->argument);
     foreach ($parts[0]['date'] as $key => $part) {
       // The last part evaluated is the one that will 'stick'

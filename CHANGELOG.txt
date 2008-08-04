@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #270318 Get date browser and calendar navigation working correctly when used in a block.
 - Add new DATE_FORMAT_DATE for date-only format that is used throughout the calendar.
 - Fix validation code that checks if arguments and filters have date fields selected, need to array_filter() the selections.
 - #269569 Override Views default method of combining tables when adding two fields from the same table, needed to avoid broken queries.
