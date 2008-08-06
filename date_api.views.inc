@@ -354,9 +354,11 @@ class date_api_argument_handler extends views_handler_argument_date {
             $this->query->add_field($field['table_name'], $bits[1]);
           }
         }
-        $from = $date_handler->sql_where_date('DATE', $field['fullname'], '>=', date_format($min_date, DATE_FORMAT_DATETIME));
-        $to   = $date_handler->sql_where_date('DATE', $field['fullname'], '<=', date_format($max_date, DATE_FORMAT_DATETIME));
-        $sql = str_replace('***table***', $field['table_name'], "($from AND $to)");
+        $from_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][0]);
+        $to_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][1]);
+        $from = $date_handler->sql_where_date('DATE', $from_field, '>=', date_format($min_date, DATE_FORMAT_DATETIME));
+        $to   = $date_handler->sql_where_date('DATE', $to_field, '<=', date_format($max_date, DATE_FORMAT_DATETIME));
+        $sql = str_replace('***table***', $field['table_name'], "($from OR $to)");
         if ($sql) {
           $this->query->add_where('date', $sql);
         }
