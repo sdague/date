@@ -5,6 +5,9 @@
  */
 function template_preprocess_date_navigation(&$vars) {
   $view = $vars['view'];
+  $next_args = $view->args;
+  $prev_args = $view->args;
+  $pos = $view->date_arg_pos;
   if (!isset($view->hide_nav)) {
     $min_date = is_object($view->min_date) ? $view->min_date : date_now();
     $max_date = is_object($view->max_date) ? $view->max_date : date_now();
@@ -17,13 +20,17 @@ function template_preprocess_date_navigation(&$vars) {
       case 'week':
         $next_week = date_week(date_format($next_date, 'Y-m-d'));
         $prev_week = date_week(date_format($prev_date, 'Y-m-d'));
-        $next_path = str_replace($view->date_arg, date_format($next_date, 'Y-\W') . $next_week, $view->url);
-        $prev_path = str_replace($view->date_arg, date_format($prev_date, 'Y-\W') . $prev_week, $view->url);
+        $next_arg = date_format($next_date, 'Y-\W') . $next_week;
+        $prev_arg = date_format($prev_date, 'Y-\W') . $prev_week;
         break;
       default:
-        $next_path = str_replace($view->date_arg, date_format($next_date, $format[$view->granularity]), $view->url);
-        $prev_path = str_replace($view->date_arg, date_format($prev_date, $format[$view->granularity]), $view->url);
+        $next_arg = date_format($next_date, $format[$view->granularity]);
+        $prev_arg = date_format($prev_date, $format[$view->granularity]);
     }
+    $next_path = str_replace($view->date_arg, $next_arg, $view->url);
+    $prev_path = str_replace($view->date_arg, $prev_arg, $view->url);
+    $next_args[$pos] = $next_arg;
+    $prev_args[$pos] = $prev_arg;
   }
   else {
     $next_path = '';
