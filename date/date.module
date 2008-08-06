@@ -136,18 +136,45 @@ function date_field_formatter_info() {
  */
 function date_theme() {
   return array(
-    'date_combo' => array('arguments' => array('element' => NULL)),
-    'date_text_parts' => array('arguments' => array('element' => NULL)),
-    'date' => array('arguments' => array('element' => NULL)),
-    'date_formatter_default' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_long' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_medium' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_short' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_timestamp' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_iso' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_ical' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_feed' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_display_combination'),
-    'date_formatter_format_interval' => array('arguments' => array('element' => NULL), 'function' => 'theme_date_format_interval'),
+    'date_combo' => array(
+      'arguments' => array('element' => NULL)),
+    'date_all_day' => array(
+      'arguments' => array(
+        'which' => NULL, 'date1' => NULL, 'date2' => NULL, 
+        'format' => NULL, 'node' => NULL, 'view' => NULL)),
+    'date_all_day_label' => array(
+      'arguments' => array()),
+    'date_text_parts' => array(
+      'arguments' => array('element' => NULL)),
+    'date' => array(
+      'arguments' => array('element' => NULL)),
+    'date_formatter_default' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_long' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_medium' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_short' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_timestamp' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_iso' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_ical' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_feed' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_format_interval' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_format_interval'),
   );
 }
 
@@ -175,6 +202,7 @@ function date_theme() {
  *      )
  */
 function date_formatter_process($element) {
+  $node = $element['#node'];
   $dates = array();
   $timezone = date_default_timezone_name();
   if (empty($timezone)) {
@@ -230,6 +258,19 @@ function date_formatter_process($element) {
         }  
       }
     }
+  }
+  if (empty($dates['value2'])) {
+    $dates['value2'] = $dates['value'];
+  }
+  $date1 = $dates['value']['local']['object'];
+  $date2 = $dates['value2']['local']['object'];
+  $all_day1 = theme('date_all_day', 'date1', $date1, $date2, $format, $node);
+  $all_day2 = theme('date_all_day', 'date2', $date1, $date2, $format, $node);
+  if ($all_day1 != $dates['value']['formatted'] || $all_day2 != $dates['value2']['formatted']) {
+    $dates['value']['formatted_time'] = theme('date_all_day_label');
+    $dates['value2']['formatted_time'] = theme('date_all_day_label'); 
+    $dates['value']['formatted'] = $all_day1;
+    $dates['value2']['formatted'] = $all_day2;
   }
   $dates['format'] = $format;
   return $dates;
