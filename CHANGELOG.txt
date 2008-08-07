@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Check for date values before using new all day theme.
 - Add 'All day' themes for use in nodes and calendar psuedo nodes.
 - #290826 Fix logic error that was missing date ranges that start before the current period by changing 'AND' to 'OR' in argument filter.
 
