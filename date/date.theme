@@ -162,7 +162,7 @@ function theme_date_repeat_display($field, $item, $node = NULL, $dates) {
  * @return formatted date.
  */
 function theme_date_all_day($which, $date1, $date2, $format, $node, $view = NULL) {
-  if (empty($date1) || !is_object($date)) {
+  if (empty($date1) || !is_object($date1)) {
     return '';
   }
   if (empty($date2)) {

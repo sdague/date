@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #292436 Fix critical typo in new date_all_day function and add test to date_formatter_process() to keep empty value from wiping out a good one.
 - Check for date values before using new all day theme.
 - Add 'All day' themes for use in nodes and calendar psuedo nodes.
 - #290826 Fix logic error that was missing date ranges that start before the current period by changing 'AND' to 'OR' in argument filter.
