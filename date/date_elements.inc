@@ -298,7 +298,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     '#date_label_position' => $field['widget']['label_position'],
     );
     
-  $description =  empty($field['todate']) ? t($field['widget']['description']) : ''; 
+  $description =  !empty($field['widget']['description']) ? t($field['widget']['description']) : ''; 
   
   // Give this element the right type, using a Date API
   // or a Date Popup element type.
@@ -332,7 +332,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     $element[$to_field]['#default_value'] = isset($element['#value'][$to_field]) ? $element['#value'][$to_field] : '';
     $element[$to_field]['#required'] = false;
     $element[$to_field]['#weight'] += .1;
-    $description .= t('Empty \'To date\' values will use the \'From date\' values.');
+    $description .= t(' Empty \'To date\' values will use the \'From date\' values.');
     $element['#fieldset_description'] = $description;
   }
   else {
