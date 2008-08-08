@@ -108,6 +108,10 @@ span.date-display-separator {
   width:50%;
   float:left;
 }
+.date-nav div.date-heading h3 {
+  margin:0;
+  padding:0;
+}
 
 .date-clear {
   clear:both;

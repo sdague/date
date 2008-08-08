@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #292680 Make sure themes don't add padding to navigation h3 causing misalignment.
 - #292602 Make sure dates without times do not get 'All day' added.
 - #292436 Fix critical typo in new date_all_day function and add test to date_formatter_process() to keep empty value from wiping out a good one.
 - Check for date values before using new all day theme.
