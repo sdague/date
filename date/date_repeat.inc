@@ -31,7 +31,6 @@
 function _date_repeat_widget($element, $field, $items, $delta) {
   $element['rrule'] = array(
     '#type' => 'date_repeat_rrule',
-    '#weight' => ($field['widget']['weight'] + .3),
     '#default_value' => isset($items[0]['rrule']) ? $items[0]['rrule'] : '',
     '#date_timezone' => $element['#date_timezone'],
     '#prev_value' => $items[0]['value'],
