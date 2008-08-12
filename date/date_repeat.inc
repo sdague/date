@@ -58,7 +58,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
   // If no repeats are set, clean up the form and return.
   if (empty($form_values[$field_name]['value']) || $values['FREQ'] == 'NONE') {
     form_set_value($element, $values[$field_name], $form_state);
-    form_set_value($element['rrule'], NULL);
+    form_set_value($element['rrule'], NULL, $form_state);
     return;
   }
 
