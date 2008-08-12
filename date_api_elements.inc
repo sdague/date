@@ -100,7 +100,12 @@ function date_timezone_process($element, $edit, $form_state, $form) {
     '#attributes' => array('class' => 'date-timezone date-clear-block'),
     '#theme' => 'date_select_element',
   );
-  $element['#element_validate'] = array('date_timezone_validate');
+  if (isset($element['#element_validate'])) {
+    array_push($element['#element_validate'], 'date_timezone_validate');
+  }
+  else {
+    $element['#element_validate'] = array('date_timezone_validate');
+  }
   return $element;
 }
 
@@ -144,7 +149,12 @@ function date_text_process($element, $edit, $form_state, $form) {
   // We'll set our own message on the parent element.
   //$element['date']['#required'] = $element['#required'];
   $element['date']['#theme'] = 'date_textfield_element';
-  $element['#element_validate'] = array('date_text_validate');
+  if (isset($element['#element_validate'])) {
+    array_push($element['#element_validate'], 'date_text_validate');
+  }
+  else {
+    $element['#element_validate'] = array('date_text_validate');
+  }
   return $element;
 }
 
@@ -191,7 +201,12 @@ function date_select_process($element, $edit, $form_state, $form) {
         '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
     }
   }
-  $element['#element_validate'] = array('date_select_validate');
+  if (isset($element['#element_validate'])) {
+    array_push($element['#element_validate'], 'date_select_validate');
+  }
+  else {
+    $element['#element_validate'] = array('date_select_validate');
+  }
   return $element;
 }
 

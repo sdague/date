@@ -183,7 +183,12 @@ function date_popup_process($element, $edit, $form_state, $form) {
   $element['date'] = date_popup_process_date($element, $edit, $date);
   $element['time'] = date_popup_process_time($element, $edit, $date);
   
-  $element['#element_validate'] = array('date_popup_validate');
+  if (isset($element['#element_validate'])) {
+    array_push($element['#element_validate'], 'date_popup_validate');
+  }
+  else {
+    $element['#element_validate'] = array('date_popup_validate');
+  }
   return $element;
 }
 
