@@ -244,7 +244,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $id = date_popup_js_settings_id('jquery-calendar', $element['#id'], 'datepicker', $settings);
   $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => !empty($element['#value']['date']) && is_object($date) ? date_format($date, $date_format) : '',
+    '#default_value' => (!empty($element['#value']['date']) || !empty($edit['date'])) && is_object($date) ? date_format($date, $date_format) : '',
     '#id' => $id,    
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
@@ -276,7 +276,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
   $id = date_popup_js_settings_id('jquery-timeentry', $element['#id'], 'timeEntry', $settings);
   $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => !empty($element['#value']['time']) && is_object($date) ? date_format($date, $time_format) : '',
+    '#default_value' => (!empty($element['#value']['time']) || !empty($edit['time'])) && is_object($date) ? date_format($date, $time_format) : '',
     '#id' => $id,
     '#size' => 10,
     '#maxlength' => 10,
