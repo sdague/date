@@ -1,10 +1,19 @@
+** Reset link properties and then override them with !important */
+#ui-datepicker-div a, .ui-datepicker-inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	color: #000;
+}
+
 /* Main Style Sheet for jQuery ui-datepicker */
 #ui-datepicker-div, .ui-datepicker-inline {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	padding: 0;
 	margin: 0;
-	background: #fff;
+	background-color: #fff;
 }
 #ui-datepicker-div {
 	display: none;
@@ -22,7 +31,7 @@
   padding: 0;
 }
 #ui-datepicker-div, .ui-datepicker-control, .ui-datepicker-links, .ui-datepicker-header, .ui-datepicker {
-	width: 183px;
+	width: 185px;
 }
 .ui-datepicker-inline {
 	float: left;
@@ -42,13 +51,13 @@ img.ui-datepicker-trigger {
 }
 .ui-datepicker-month-cell {
 	float: left;
-	width: 181px;
+	width: 185px;
 	padding: 2px;
-	background: #ddd;
+	background-color: #ddd;
 	color: #000;
 }
 * html .ui-datepicker-month-cell {
-	width: 183px;
+	width: 185px;
 }
 .ui-datepicker-control, .ui-datepicker-links, .ui-datepicker-header, .ui-datepicker {
 	clear: both;
@@ -56,15 +65,15 @@ img.ui-datepicker-trigger {
 	color: #000;
 }
 .ui-datepicker-control, .ui-datepicker-header {
-	background: #eee;
+	background-color: #eee;
 }
 .ui-datepicker-links {
-	background: #fff;
+	background-color: #fff;
 }
 .ui-datepicker-control, .ui-datepicker-links {
 	font-size: 80%;
 	letter-spacing: 1px;
-	background: #eee;
+	background-color: #eee;
 }
 .ui-datepicker-links label { /* disabled links */
 	padding: 2px 5px;
@@ -84,16 +93,16 @@ img.ui-datepicker-trigger {
 	width: 35px;
 }
 .ui-datepicker-header {
-	background: #ddd;
+	background-color: #ddd;
 	text-align: center;
 }
 .ui-datepicker-header select {
-	background: #ddd;
+	background-color: #ddd;
 	color: #000;
 	border: 0px;
 }
 .ui-datepicker {
-	background: #fff;
+	background-color: #fff;
 	text-align: center;
 	font-size: 100%;
 }
@@ -104,10 +113,10 @@ img.ui-datepicker-trigger {
 	margin: 0;
 }
 .ui-datepicker .ui-datepicker-title-row {
-	background: #eee;
+	background-color: #eee;
 }
 .ui-datepicker .ui-datepicker-days-row {
-	background: #fff;
+	background-color: #fff;
 	color: #666;
 }
 .ui-datepicker .ui-datepicker-days-cell {
@@ -118,31 +127,27 @@ img.ui-datepicker-trigger {
 	display: block;
 }
 .ui-datepicker .ui-datepicker-week-end-cell {
-	background: #fff;
+	background-color: #fff;
+}
+.ui-datepicker .ui-datepicker-title-row .ui-datepicker-week-end-cell {
+	background-color: #eee;
 }
 .ui-datepicker .ui-datepicker-days-cell-over {
-	background: #fff;
+	background-color: #fff;
 }
 .ui-datepicker .ui-datepicker-unselectable {
 	color: #333;
 }
 .ui-datepicker-today {
-	background: #eee !important;
+	background-color: #eee !important;
 }
 .ui-datepicker-currentDay {
-	background: #ddd !important;
+	background-color: #ddd !important;
 }
 
 /* ________ CALENDAR LINKS _______
 
-** Reset link properties and then override them with !important */
-#ui-datepicker-div a, .ui-datepicker-inline a {
-	cursor: pointer;
-	margin: 0;
-	padding: 0;
-	background: none;
-	color: #000;
-}
+
 .ui-datepicker-inline .ui-datepicker-links a {
 	padding: 0 5px !important;
 }
@@ -154,11 +159,11 @@ img.ui-datepicker-trigger {
 	color: #333 !important;
 }
 .ui-datepicker-control a:hover {
-	background: #eee !important;
+	background-color: #eee !important;
 	color: #333 !important;
 }
 .ui-datepicker-links a:hover, .ui-datepicker-title-row a:hover {
-	background: #eee !important;
+	background-color: #eee !important;
 	color: #333 !important;
 }
 
@@ -172,6 +177,6 @@ img.ui-datepicker-trigger {
     filter: mask(); /*must have*/
     top: -4px; /*must have*/
     left: -4px; /*must have*/
-    width: 193px; /*must have to match width and borders*/
+    width: 185px; /*must have to match width and borders*/
     height: 200px; /*must have to match maximum height*/
 }
