@@ -4,6 +4,9 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+Version 6.2-rc1
+=================
+
 - Fix Date Popup process that was ignoring $edit values.
 - #289215 Shorten the size of Date Popup date box and allow the API to control the size.
 - #291882 Do some tweaking of the Date Popup css to be sure backgrounds are hidden and values are overridden.
