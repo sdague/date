@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #289215 Shorten the size of Date Popup date box and allow the API to control the size.
 - #291882 Do some tweaking of the Date Popup css to be sure backgrounds are hidden and values are overridden.
 - #292945 See if there is an existing validation array before adding validation.
 - #293685 Add missing $form_state in form_set_value() call in date_repeat.inc.
