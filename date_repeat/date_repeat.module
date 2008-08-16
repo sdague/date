@@ -165,7 +165,7 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
   $rrule = date_repeat_adjust_rrule($parts[0], $start_date);
   $description = array(t('Repeats '));
 
-  if ($rrule['BYDAY']) {
+  if (!empty($rrule['BYDAY'])) {
     $days = date_repeat_dow_day_options();
     $counts = date_repeat_dow_count_options();
     $results = array();
@@ -180,10 +180,10 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
     }
     $description[] = t('!days', array('!days' => implode(t(' and '), $results)));
   }
-  if ($rrule['BYMONTHDAY']) {
+  if (!empty($rrule['BYMONTHDAY'])) {
     $description[] = t('day @number', array('@number' => implode(', ', $rrule['BYMONTHDAY']))) .' ';
   }
-  if ($rrule['BYMONTH']) {
+  if (!empty($rrule['BYMONTH'])) {
     if (sizeof($rrule['BYMONTH']) < 12) {
       $results = array();
       $months = date_month_names();
@@ -211,10 +211,10 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
       $description[] = format_plural($rrule['INTERVAL'], t('every day '), t('every @count days '));
       break;
   }
-  if ($rrule['COUNT']) {
+  if (!empty($rrule['COUNT'])) {
     $description[] = t('for !times occurences ', array('!times' => $rrule['COUNT']));
   }
-  if ($rrule['UNTIL']) {
+  if (!empty($rrule['UNTIL'])) {
     $until = date_ical_date($rrule['UNTIL']);
     $description[] = t('until !until ', array('!until' => date_format_date($until, 'custom', $format)));
   }
@@ -225,7 +225,7 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
     }
     $description[] = t('except !dates ', array('!dates' => implode(', ', $values)));
   }
-  if ($rrule['WKST']) {
+  if (!empty($rrule['WKST'])) {
     $day_names = date_repeat_dow_day_options();
     //$description[] = t('where the week starts on !start ', array('!start' => $day_names[$rrule['WKST']]));
   }
