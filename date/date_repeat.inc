@@ -54,11 +54,12 @@ function _date_repeat_widget_validate($element, &$form_state) {
   $item = $form_values[$field_name];
 
   $values = date_repeat_merge($element['#post'][$field_name]['rrule']);
+  
   // If no start date was set, clean up the form and return.
   // If no repeats are set, clean up the form and return.
   if (empty($form_values[$field_name]['value']) || $values['FREQ'] == 'NONE') {
-    form_set_value($element, $values[$field_name], $form_state);
-    form_set_value($element['rrule'], NULL, $form_state);
+    $form_values[$field_name]['rrule'] = NULL;
+    form_set_value($element, array($form_values[$field_name]), $form_state);
     return;
   }
 
