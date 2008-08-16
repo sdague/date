@@ -16,6 +16,55 @@ function date_init() {
   }
 }
 
+function date_menu() {
+  $items = array();
+  // Repeat dates tab on node
+  if (!module_exists('date_repeat')) {
+    return $items;
+  }
+  $items['node/%node/repeats'] = array(
+    'title' => 'Repeats',
+    'page callback' => 'date_repeat_page', 
+    'page arguments' => array(1), 
+    'type' => MENU_LOCAL_TASK, 
+    'access arguments' => array('access content'),
+  );
+  return $items;  
+}
+
+function date_repeat_type($type_name) {
+  $type = content_types($type_name);
+  foreach ($type['fields'] as $field_name => $field) {
+    if (in_array($field['type'], array('date', 'datestamp', 'datetime')) && $field['repeat']) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+function date_repeat_fields($type_name) {
+  $type = content_types($type_name);
+  $fields = array();
+  foreach ($type['fields'] as $field_name => $field) {
+    if (in_array($field['type'], array('date', 'datestamp', 'datetime')) && $field['repeat']) {
+      $fields[] = $field_name;
+    }
+  }
+  return $fields;
+}
+
+function date_repeat_page($node) {
+  drupal_set_title($node->title);
+  $node->date_repeat_show = TRUE;
+  $field_names = date_repeat_fields($node->type);
+  $view = node_view($node, FALSE, TRUE);
+  $output = '';
+  foreach ($field_names as $field_name) {
+    $output .= theme('content_field', $node->content[$field_name]);
+  }
+  return $output;
+}
+
 /**
  * Implementation of hook_content_is_empty().
  */
@@ -175,6 +224,11 @@ function date_theme() {
     'date_formatter_format_interval' => array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_format_interval'),
+    'date_repeat_display' => array(
+      'arguments' => array('field' => NULL, 
+      'item' => NULL, 'node' => NULL, 'dates' => NULL),
+      'function' => 'theme_date_repeat_display',
+      ),  
   );
 }
 

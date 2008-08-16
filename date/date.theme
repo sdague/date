@@ -11,23 +11,53 @@
  * Formatter themes
  */
 /**
- *  Theme from/to date combination in the view.
+ * Theme from/to date combination in the view.
  *
- *  Useful values:
- *    $dates['format'] - the format string used on these dates
- *    $dates['value']['local']['object'] - the local date object for the From date
- *    $dates['value2']['local']['object'] - the local date object for the To date
- *    $dates['value']['local']['datetime'] - the datetime value of the From date database (GMT) value
- *    $dates['value2']['local']['datetime'] - the datetime value of the To date database (GMT) value
- *    $dates['value']['formatted'] = formatted From date, i.e. 'February 15, 2007 2:00 pm';
- *    $dates['value']['formatted_date'] - only the date part of the formatted From date
- *    $dates['value']['formatted_time'] - only the time part of the formatted From date
- *    $dates['value2']['formatted'] = formatted To date, i.e. 'February 15, 2007 6:00 pm';
- *    $dates['value2']['formatted_date'] - only the date part of the formatted To date
- *    $dates['value2']['formatted_time'] - only the time part of the formatted To date
+ * Useful values:
+ * 
+ *   $node->date_id 
+ *     If set, this will show only an individual date on a field with 
+ *     multiple dates. The value should be a string that contains
+ *     the following values, separated with colons:
+ *     - module name of the module adding the item
+ *     - node nid
+ *     - field name
+ *     - delta value of the field to be displayed
+ *     - other information the module's custom theme might need
+ * 
+ *     Used by the calendar module and available for other uses.
+ *     example: 'date:217:field_date:3:test'
+ * 
+ *   $node->date_repeat_show
+ *     If true, tells the theme to show all the computed values
+ *     of a repeating date. If not true or not set, only the
+ *     start date and the repeat rule will be displayed.
+ * 
+ *   $dates['format'] - the format string used on these dates
+ *   $dates['value']['local']['object'] - the local date object for the From date
+ *   $dates['value2']['local']['object'] - the local date object for the To date
+ *   $dates['value']['local']['datetime'] - the datetime value of the From date database (GMT) value
+ *   $dates['value2']['local']['datetime'] - the datetime value of the To date database (GMT) value
+ *   $dates['value']['formatted'] = formatted From date, i.e. 'February 15, 2007 2:00 pm';
+ *   $dates['value']['formatted_date'] - only the date part of the formatted From date
+ *   $dates['value']['formatted_time'] - only the time part of the formatted From date
+ *   $dates['value2']['formatted'] = formatted To date, i.e. 'February 15, 2007 6:00 pm';
+ *   $dates['value2']['formatted_date'] - only the date part of the formatted To date
+ *   $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($element) {
   $node = $element['#node'];
+  $field_name = $element['#field_name'];
+  $fields = content_fields();
+  $field = $fields[$field_name];
+  $item = $element['#item'];
+    
+  // Only display the start date for a repeating date
+  // unless we're showing all dates.
+  if (empty($node->date_id) && empty($node->date_repeat_show) 
+    && module_exists('date_repeat') && $field['repeat'] == 1) {
+    $node->date_id = 'date:'. $node->nid .':'. $field['field_name'] .':0:0';
+  }
   // If we're trying to display only a single date on a node, see if
   // this is the right one.
   if (isset($node->date_id)) {
