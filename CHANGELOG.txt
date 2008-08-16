@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Clean up some invalid combinations like using 'DAILY' with an option like 'First Tuesday'.
 - #284557 Fix errors saving repeating date when no repeat options were selected.
 - #295095 Change the repeating dates theme to show only the start and rule on the node and move the list of repeating dates to a separate tab.
 

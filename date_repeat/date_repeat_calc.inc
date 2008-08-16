@@ -37,10 +37,10 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   // TODO, is this the right timezone to use? Generally date calculations
   // work best if done in UTC, but need to verify it won't create problems.
   $timezone = 'UTC';
-
+  
   // Get the parsed array of rule values.
   $rrule = date_ical_parse_rrule('RRULE:', $rrule);
-
+  
   // Create a date object for the start and end dates.
   $start_date = date_make_date($start, $timezone);
   $end_date = date_make_date($end, $timezone);
@@ -61,6 +61,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
     $rrule['FREQ'] = 'DAILY';
   }
 
+  // Make sure DAILY frequency isn't used in places it won't work;
+  if (!empty($rrule['BYMONTHDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'YEARLY'))) {
+    $rrule['FREQ'] = 'MONTHLY';
+  }
+  if (!empty($rrule['BYDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'WEEKLY', 'YEARLY'))) {
+    $rrule['FREQ'] = 'MONTHLY';
+  }
+  
   // Find the time period to jump forward between dates.
   switch ($rrule['FREQ']) {
    case 'DAILY':
@@ -88,9 +96,6 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   // This process is only valid when frequency is monthly or yearly.
 
   if (!empty($rrule['BYMONTHDAY'])) {
-    if (!in_array($rrule['FREQ'], array('MONTHLY', 'YEARLY'))) {
-      return $days;
-    }
     $finished = FALSE;
     $current_day = drupal_clone($start_date);
     $time = date_format($start_date, 'H:i:s');
