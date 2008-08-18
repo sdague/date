@@ -123,6 +123,10 @@ function date_timezone_update_site($element, &$form_state) {
     variable_set('date_default_timezone_name', $timezone);
     $date = date_make_date('now', $timezone);
     form_set_value($element, date_offset_get($date), $form_state);
+    if (module_exists('event') && function_exists('event_zonelist_by_name')) {
+      $event_zone = event_zonelist_by_name(str_replace('_', ' ', $timezone));
+      variable_set('date_default_timezone_id', $event_zone['timezone']);
+    }
   }
 }
 
@@ -136,6 +140,10 @@ function date_timezone_update_user($element, &$form_state) {
     $date = date_make_date('now', $timezone);
     $offset = date_offset_get($date);
     form_set_value($element['timezone'], $offset, $form_state);
+    if (module_exists('event') && function_exists('event_zonelist_by_name')) {
+      $event_zone = event_zonelist_by_name(str_replace('_', ' ', $timezone));
+      db_query('UPDATE {users} SET timezone_id=%d WHERE uid = %d', $event_zone['timezone'], arg(1));
+    }
   }
 }
 
