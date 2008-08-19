@@ -388,7 +388,7 @@ function date_select_validate($element, &$form_state) {
   
   // If the field is empty and not required, set it to empty and return.
   if (empty($value) && !$element['#required']) {
-    form_set_value($element, NULL);
+    form_set_value($element, NULL, $form_state);
     return;
   }
  
