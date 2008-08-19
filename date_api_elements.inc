@@ -142,7 +142,7 @@ function date_text_process($element, $edit, $form_state, $form) {
   $element['date']['#type'] = 'textfield';
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
   $element['date']['#default_value'] = is_object($date) ? date_format($date , $element['#date_format']) : '';
-  $element['date']['#attributes'] = array('class' => $element['#attributes']['class'] .' date-date');
+  $element['date']['#attributes'] = array('class' => (isset($element['#attributes']['class']) ? $element['#attributes']['class'] : '') .' date-date');
   $element['date']['#description'] = ' '. t('Format: @date', array('@date' => date($element['#date_format'], time())));
   
   // Keep the system from creating an error message for the sub-element.
