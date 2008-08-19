@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #292617 Make sure the Date Repeat form works properly will all possible date widgets.
+- #273656 Make the Date Repeat form use the same widget the regular date form uses.
 - #240156 Update Event module timezone values if the Date module is handling the timezone form.
 - #296051 Fix error in computation of last day of calendar month.
 - Clean up some invalid combinations like using 'DAILY' with an option like 'First Tuesday'.

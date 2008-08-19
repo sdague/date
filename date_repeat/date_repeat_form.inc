@@ -36,8 +36,13 @@
  */
 function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  
+  if (empty($element['#date_repeat_widget'])) {
+    $element['#date_repeat_widget'] = module_exists('date_popup') ? 'date_popup' : 'date_select';
+  }
+  $element['#date_format'] = date_limit_format($element['#date_format'], array('year', 'month', 'day'));
   if (is_array($element['#value'])) {
-    $element['#value'] = date_repeat_merge($element['#value']);
+    $element['#value'] = date_repeat_merge($element['#value'], $element);
     $rrule = date_api_ical_build_rrule($element['#value']);
   }
   else {
@@ -55,7 +60,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   $element['#title'] = t('Repeat');
   $element['#description'] = t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
   $element['#collapsible'] = TRUE;
-  $element['#collapsed'] = !empty($element['#repeat_collapsed']) ? $element['#repeat_collapsed'] : 0;
+  $element['#collapsed'] = !empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0;
   
   // Make sure we don't get floating parts where we don't want them.
   $element['#prefix'] = '<div class="date-clear">';
@@ -81,25 +86,22 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
 
   $UNTIL = '';
   if (!empty($rrule['UNTIL']['datetime'])) {
-    if (!is_array(!empty($rrule['UNTIL']['datetime']))) {
-      $UNTIL = $rrule['UNTIL']['datetime'];
-    }
-    else {
-      $UNTIL = $rrule['UNTIL']['datetime']['date'];
-    }
+    $UNTIL = $rrule['UNTIL']['datetime'];
   }
   $element['UNTIL'] = array(
     '#tree' => TRUE,
     '#prefix' => '<div class="date-clear">',
     '#suffix' => '</div>',
     'datetime' => array(
-      '#type' => module_exists('date_popup') ? 'date_popup' : 'date_select',
+      '#type' => $element['#date_repeat_widget'],
       '#title' => t('Until'),
-      '#description' => t('Date to stop repeating this item.'),
+      '#description' => t('Date to stop repeating this item. The \'Until\' date will NOT be included in the results.'),
       '#default_value' => $UNTIL,
-      '#date_timezone' => $element['#date_timezone'],
-      '#date_format' => 'Y-m-d',
-      '#date_label_position' => 'within',
+      '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name(),
+      '#date_format' => !empty($element['#date_format']) ? $element['#date_format'] : 'Y-m-d',
+      '#date_text_parts'  => !empty($element['#date_text_parts']) ? $element['#date_text_parts'] : array(),
+      '#date_year_range'  => !empty($element['#date_year_range']) ? $element['#date_year_range'] : '-3:+3',
+      '#date_label_position' => !empty($element['#date_label_position']) ? $element['#date_label_position'] : 'within',
       ),
     'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
     'all_day' => array('#type' => 'hidden', '#value' => 1),
@@ -107,7 +109,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     );
 
   $collapsed = TRUE;
-  $merged_values = date_repeat_merge($rrule);
+  $merged_values = date_repeat_merge($rrule, $element);
   if (!empty($merged_values['BYDAY']) || !empty($merged_values['BYMONTH'])) {
     $collapsed = FALSE;
   }
@@ -169,26 +171,23 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   for ($i = 0; $i <= $max; $i++) {
     $EXCEPT = '';
     if (!empty($exceptions[$i]['datetime'])) {
-      if (!is_array(!empty($exceptions[$i]['datetime']))) {
-        $EXCEPT = $exceptions[$i]['datetime'];
-      }
-      else {
-        $EXCEPT = $exceptions[$i]['datetime']['date'];
-      }
+      $EXCEPT = $exceptions[$i]['datetime'];
     }
     $element['exceptions']['EXDATE'][$i] = array(
       '#tree' => TRUE,
       'datetime' => array(
-         '#type' => module_exists('date_popup') ? 'date_popup' : 'date_select',
-         '#default_value' => $EXCEPT,
-         '#date_timezone' => $element['#date_timezone'],
-         '#date_format' => 'Y-m-d',
-         '#date_label_position' => 'within',
-         ),
-       'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
-       'all_day' => array('#type' => 'hidden', '#value' => 1),
-       'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
-       );
+        '#type' => $element['#date_repeat_widget'],
+        '#default_value' => $EXCEPT,
+        '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name(),
+        '#date_format' => !empty($element['#date_format']) ? $element['#date_format'] : 'Y-m-d',
+        '#date_text_parts'  => !empty($element['#date_text_parts']) ? $element['#date_text_parts'] : array(),
+        '#date_year_range'  => !empty($element['#date_year_range']) ? $element['#date_year_range'] : '-3:+3',
+        '#date_label_position' => !empty($element['#date_label_position']) ? $element['#date_label_position'] : 'within',
+        ),
+      'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
+      'all_day' => array('#type' => 'hidden', '#value' => 1),
+      'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
+      );
   }
   $element['help'] = array(
     '#type' => 'fieldset',
@@ -203,7 +202,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
 /**
  * Regroup values back into a consistant array, no matter what state it is in.
  */
-function date_repeat_merge($form_values) {
+function date_repeat_merge($form_values, $element) {
   if (empty($form_values) || !is_array($form_values)) {
     return $form_values;
   }
@@ -219,14 +218,20 @@ function date_repeat_merge($form_values) {
   if (array_key_exists('BYDAY', $form_values)) unset($form_values['BYDAY']['']);
   if (array_key_exists('BYMONTH', $form_values)) unset($form_values['BYMONTH']['']);
   if (array_key_exists('BYMONTHDAY', $form_values)) unset($form_values['BYMONTHDAY']['']);
-
-  if (is_array($form_values['UNTIL']['datetime']) && array_key_exists('date', $form_values['UNTIL']['datetime'])) {
-    $form_values['UNTIL']['datetime'] = $form_values['UNTIL']['datetime']['date'];
+      
+  if (is_array($form_values['UNTIL']['datetime'])) {
+    $function = $element['#date_repeat_widget'] .'_input_value';
+    $until_element = $element;
+    $until_element['#value'] = $form_values['UNTIL']['datetime'];
+    $form_values['UNTIL']['datetime'] = $function($until_element);
   }
   if (isset($form_values['EXDATE']) && is_array($form_values['EXDATE'])) {
+    $function = $element['#date_repeat_widget'] .'_input_value';
+    $exdate_element = $element;
     foreach ($form_values['EXDATE'] as $delta => $value) {
-      if (is_array($value['datetime']) && array_key_exists('date', $value['datetime'])) {
-       $form_values['EXDATE'][$delta]['datetime'] = $value['datetime']['date'];
+      if (is_array($value['datetime'])) {
+        $exdate_element['#value'] = $form_values['EXDATE'][$delta]['datetime'];
+        $form_values['EXDATE'][$delta]['datetime'] = $function($exdate_element);
       }
     }
   }
@@ -241,7 +246,7 @@ function date_repeat_rrule_validate($element, &$form_state) {
   $form_values = $form_state['values'];
   $field_name = $element['#parents'][0];
   $item = $form_values[$field_name]['rrule'];
-  $item = date_repeat_merge($item);
+  $item = date_repeat_merge($item, $element);
   $rrule = date_api_ical_build_rrule($item);
   form_set_value($element, $rrule, $form_state);
 }

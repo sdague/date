@@ -176,9 +176,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
   // Add a date repeat form element, if needed.
   if (module_exists('date_repeat') && $field['repeat'] == 1) {
     include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
-    $repeat = _date_repeat_widget($element, $field, $items, $delta);
-    $element['rrule'] = $repeat['rrule'];
-    $element['rrule']['#weight'] = $delta + .4;
+    _date_repeat_widget($element, $field, $items, $delta);
   }
   return $element;
 }

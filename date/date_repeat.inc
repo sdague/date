@@ -28,15 +28,21 @@
  * element, we'll compute the repeat sequence in the widget validation
  * to create the element delta values.
  */
-function _date_repeat_widget($element, $field, $items, $delta) {
+function _date_repeat_widget(&$element, $field, $items, $delta) {
   $element['rrule'] = array(
     '#type' => 'date_repeat_rrule',
     '#default_value' => isset($items[0]['rrule']) ? $items[0]['rrule'] : '',
     '#date_timezone' => $element['#date_timezone'],
+    '#date_format'      => date_limit_format(date_input_format($element, $field), $field['granularity']),
+    '#date_text_parts'  => (array) $field['widget']['text_parts'],
+    '#date_increment'   => $field['widget']['increment'],
+    '#date_year_range'  => $field['widget']['year_range'],
+    '#date_label_position' => $field['widget']['label_position'],
     '#prev_value' => $items[0]['value'],
     '#prev_value2' => $items[0]['value2'],
     '#prev_rrule' => isset($items[0]['rrule']) ? $items[0]['rrule'] : '',
-    '#repeat_collapsed' => $field['repeat_collapsed'],
+    '#date_repeat_widget' => $field['widget']['type'],
+    '#date_repeat_collapsed' => $field['repeat_collapsed'],
     );
   return $element;
 }
@@ -52,9 +58,8 @@ function _date_repeat_widget_validate($element, &$form_state) {
   $fields = content_fields();
   $field = $fields[$field_name];
   $item = $form_values[$field_name];
-
-  $values = date_repeat_merge($element['#post'][$field_name]['rrule']);
-  
+  $values = date_repeat_merge($element['#post'][$field_name]['rrule'], $element['rrule']);
+    
   // If no start date was set, clean up the form and return.
   // If no repeats are set, clean up the form and return.
   if (empty($form_values[$field_name]['value']) || $values['FREQ'] == 'NONE') {
