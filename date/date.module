@@ -56,11 +56,13 @@ function date_repeat_fields($type_name) {
 function date_repeat_page($node) {
   drupal_set_title($node->title);
   $node->date_repeat_show = TRUE;
+  $node->build_mode = NODE_BUILD_NORMAL;
+  $node->content = array();
   $field_names = date_repeat_fields($node->type);
-  $view = node_view($node, FALSE, TRUE);
+  $view = content_view($node, FALSE, TRUE);
   $output = '';
   foreach ($field_names as $field_name) {
-    $output .= theme('content_field', $node->content[$field_name]);
+    $output .= drupal_render($node->content[$field_name]);
   }
   return $output;
 }
