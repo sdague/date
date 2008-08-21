@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #296409 Fix the hidden repeat date logic so repeating dates are only hidden on the node.
+
 Version 6.2-rc2
 =================
 
