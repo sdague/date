@@ -26,10 +26,18 @@ function date_menu() {
     'title' => 'Repeats',
     'page callback' => 'date_repeat_page', 
     'page arguments' => array(1), 
+    'access callback' => 'date_repeat_node', 
+    'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK, 
-    'access arguments' => array('access content'),
   );
   return $items;  
+}
+
+function date_repeat_node($node) {
+  if (date_repeat_type($node->type)) {
+    return user_access('access content');
+  }
+  return FALSE;
 }
 
 function date_repeat_type($type_name) {
