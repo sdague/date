@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #295860 Fix flawed updates that were not resetting jscalendar widgets correctly.
 - #298158 Change drupal_get_path() to drupal_load() to be sure content module gets included correctly in install file.
 - #296409 Fix the hidden repeat date logic so repeating dates are only hidden on the node.
 
