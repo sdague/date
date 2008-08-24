@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #290212 To date with 'same' default value wasn't picking up blank value when needed.
 - #290652 Update jQuery datepicker to development version to pick up fix for duplicated dates when dst changes.
 - #298456 Add warnings to field settings page about changes that could result in loss of data.
 - #295095 Fix access control on repeating dates tab so it only shows on repeat nodes.

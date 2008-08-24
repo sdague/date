@@ -197,13 +197,12 @@ function date_local_date($delta, $item, $timezone, $field, $part = 'value') {
     $default_value = $field['widget']['default_value2'];
     $default_value_code = $field['widget']['default_value_code2'];
   }
-
   if (empty($item[$part])) {
     if (empty($default_value) || $default_value == 'blank') {
       return NULL;
     }
-    elseif ($part == 'value2' && $default_value == 'same' && !empty($item['value'])) {
-      if ($field['widget']['default_value'] == 'blank') {
+    elseif ($part == 'value2' && $default_value == 'same') {
+      if ($field['widget']['default_value'] == 'blank' || empty($item['value'])) {
         return NULL;
       }
       else {
