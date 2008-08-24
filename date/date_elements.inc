@@ -169,7 +169,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
       '#type' => 'date_timezone',
       '#delta' => $delta,
       '#default_value' => $timezone,
-      '#weight' => $delta + .2,
+      '#weight' => $field['widget']['weight'] + .2,
       );
   }
   
@@ -177,6 +177,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
   if (module_exists('date_repeat') && $field['repeat'] == 1) {
     include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
     _date_repeat_widget($element, $field, $items, $delta);
+    $element['rrule']['#weight'] = $field['widget']['weight'] + .4;
   }
   return $element;
 }
