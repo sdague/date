@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Clean up Date Popup validation.
 - #275919, #267195 Clean up date_select validation: 
     add field name to from and to date so the name can be used in error messages, 
     combine error messages for field parts into a single message, 
