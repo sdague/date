@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Change date description for empty 'to' dates to only be used on date_select, the only place it will work.
 - Clean up Date Popup validation.
 - #275919, #267195 Clean up date_select validation: 
     add field name to from and to date so the name can be used in error messages, 
