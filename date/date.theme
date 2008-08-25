@@ -81,11 +81,7 @@ function theme_date_display_combination($element) {
   
   // Pull the timezone, if any, out of the formatted result and tack it
   // back on at the end, if it is in the current formatted date.
-  $timezone = $dates['value']['formatted'];
-  $timezone = str_replace($dates['value']['formatted_date'], '', $timezone);
-  $timezone = str_replace($dates['value']['formatted_time'], '', $timezone);
-  $timezone = trim($timezone);
-
+  $timezone = $dates['value']['formatted_timezone'];
   $date1 = str_replace($timezone, '', $date1);
   $date2 = str_replace($timezone, '', $date2);
     
@@ -100,10 +96,18 @@ function theme_date_display_combination($element) {
   }
   // Same day, different times, don't repeat the date but show both From and To times.
   elseif ($dates['value']['formatted_date'] == $dates['value2']['formatted_date']) {
-    $output .= '<span class="date-display-single">'. $dates['value']['formatted_date'] .'</span> '.
-      '<span class="date-display-start">'. $dates['value']['formatted_time'] .'</span>'.
+    // Replace the original time with the from/to time in the formatted start date.  
+    // Make sure that parentheses or brackets wrapping the time will be retained in the
+    // final result.
+    $time1 = preg_replace('`^([\(\[])`', '', $dates['value']['formatted_time']);
+    $time1 = preg_replace('([\)\]]$)', '', $time1);
+    $time2 = preg_replace('`^([\(\[])`', '', $dates['value2']['formatted_time']);
+    $time2 = preg_replace('([\)\]]$)', '', $time2);
+    $time = '<span class="date-display-start">'. $time1 .'</span>'.
       '<span class="date-display-separator"> - </span>'.
-      '<span class="date-display-end">'. $dates['value2']['formatted_time'] .' '. $timezone .'</span>';
+      '<span class="date-display-end">'. $time2;
+    $replaced = str_replace($time1, $time, $date1);
+    $output .= '<span class="date-display-single">'. $replaced .' '. $timezone .'</span> ';
   }
   // Different days, display both in their entirety.
   else {

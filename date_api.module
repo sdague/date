@@ -1236,12 +1236,17 @@ function date_limit_format($format, $granularity) {
     
     }
   }
+  // Remove empty parentheses, brackets, pipes.
+  $regex[] = '(\(\))';
+  $regex[] = '(\[\])';
+  $regex[] = '(\|\|)';
+
   // Remove selected values from string.
   $format = trim(preg_replace($regex, array(), $format));
   // Remove orpaned punctuation at the beginning of the string.
-  $format = preg_replace('`^([\-/\.,:])`', '', $format);
+  $format = preg_replace('`^([\-/\.,:()])`', '', $format);
   // Remove orpaned punctuation at the end of the string.
-  $format = preg_replace('([\-/\.,:]$)', '', $format);
+  $format = preg_replace('([\-/\.,:()]$)', '', $format);
   return trim($format);
 }
 
