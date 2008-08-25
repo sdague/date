@@ -4,6 +4,11 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #275919, #267195 Clean up date_select validation: 
+    add field name to from and to date so the name can be used in error messages, 
+    combine error messages for field parts into a single message, 
+    remove #options from text elements so we don't get meaningless core message about an invalid option,
+    set error on whole element so error fields will get outlined.
 - Fix weights for timezone and repeat form to always keep them below the date.
 - #290212 To date with 'same' default value wasn't picking up blank value when needed.
 - #290652 Update jQuery datepicker to development version to pick up fix for duplicated dates when dst changes.
