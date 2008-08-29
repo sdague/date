@@ -177,6 +177,9 @@ class date_sql_handler {
             if ($this->db_type == 'mysqli' && version_compare(db_version(), '4.1.1', '>=')) {
               $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
             }
+            else {
+              $field = "REPLACE($field, 'T', ' ')";
+            }
             break;
           case DATE_DATETIME:
             break;
