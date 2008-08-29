@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #300319 Move apostrophe in PostgreSQL offset code.
 - #299594 Alter date_api_sql to handle MYSQL versions prior to 4.1.1.
 - #297733 Make more kinds of custom formats display correctly.
 - Change date description for empty 'to' dates to only be used on date_select, the only place it will work.
