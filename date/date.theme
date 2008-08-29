@@ -63,9 +63,10 @@ function theme_date_display_combination($element) {
   // this is the right one.
   if (isset($node->date_id)) {
     list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
-    $id_field = $node->{$field_name};
-    $id_date = $id_field[$delta];
-    if ($id_date != $element['#item']) {
+    //$id_field = $node->{$field_name};
+    //$id_date = $id_field[$delta];
+    //if ($id_date != $element['#item']) {
+    if ($delta != $element['#delta']) {
       return;
     }
   }
