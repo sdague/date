@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #301385 Change hook_requirements() to only set message in runtime to avoid install profile errors.
 - #299112 Adjust date_convert() to adapt to am/pm when data source is an array.
 - #299112 Don't change 12 hour time to 24 hour time until after validation.
 - Make sure date_week() trims input value so you can use it with a regular datetime value.
