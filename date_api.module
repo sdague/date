@@ -934,6 +934,7 @@ function date_convert($date, $from_type, $to_type) {
       $datetime = date_pad($regs[1], 4) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]) .
         'T'. date_pad($regs[5]) .':'. date_pad($regs[6]) .':'. date_pad($regs[7]);
       $obj = date_create($datetime, timezone_open('UTC'));
+      break;
     case DATE_UNIX:
       if (!is_numeric($date)) return NULL;
       $obj = date_create("@$date", timezone_open('UTC'));
