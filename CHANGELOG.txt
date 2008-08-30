@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Make sure date_week() trims input value so you can use it with a regular datetime value.
 - Change error messages for ical imports to watchdog messages.
 - #294185 Add function for cross-database test of non_null values using COALESCE.
 - #300319 Move apostrophe in PostgreSQL offset code.
