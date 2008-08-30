@@ -117,7 +117,7 @@ function theme_date_display_combination($element) {
       '<span class="date-display-end">'. $date2 .' '. $timezone. '</span>';
   }
   if (module_exists('date_repeat') && !empty($item['rrule'])) {
-    include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
+    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
     $output .= theme('date_repeat_display', $field, $item, $node, $dates);
   }
   return $output;

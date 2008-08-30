@@ -462,7 +462,6 @@ function date_select_validate($element, &$form_state) {
     }
   }
   $value = date_select_input_value($element);
-  
   // If there are no errors and the value is valid, set it.
   if (empty($errors) && !empty($value)) {
     form_set_value($element, $value, $form_state);

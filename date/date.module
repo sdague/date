@@ -10,9 +10,9 @@
  * Implementation of hook_init().
  */
 function date_init() {
-  include_once(drupal_get_path('module', 'date') .'/date.theme');
+  require_once('./'. drupal_get_path('module', 'date') .'/date.theme');
   if (module_exists('token')) {
-    include_once(drupal_get_path('module', 'date') .'/date_token.inc');
+    require_once('./'. drupal_get_path('module', 'date') .'/date_token.inc');
   }
 }
 
@@ -422,13 +422,13 @@ function date_form_alter(&$form, &$form_state, $form_id) {
 function date_field($op, &$node, $field, &$items, $teaser, $page) {
   switch ($op) {
     case 'validate':
-      include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
+      require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
       return _date_field_validate($op, $node, $field, $items, $teaser, $page);
       break;
 
     case 'insert':
     case 'update':
-      include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
+      require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
       return _date_field_update($op, $node, $field, $items, $teaser, $page);
       break;
 
@@ -448,7 +448,7 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
  * included only when processing forms.
  */
 function date_widget(&$form, &$form_state, &$field, $items, $delta) {
-  include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
+  require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
   return _date_widget($form, $form_state, $field, $items, $delta);
 }
 
@@ -459,7 +459,7 @@ function date_widget(&$form, &$form_state, &$field, $items, $delta) {
  * included only when processing forms.
  */
 function date_elements() {
-  include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
+  require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
   return _date_elements();
 }
 
@@ -467,7 +467,7 @@ function date_elements() {
  * Implementation of Devel module's hook_content_generate().
  */
 function date_content_generate($node, $field) {
-  include_once(drupal_get_path('module', 'date') .'/date_content_generate.inc');
+  require_once('./'. drupal_get_path('module', 'date') .'/date_content_generate.inc');
   return _date_content_generate($node, $field);
 }
 
@@ -476,12 +476,12 @@ function date_content_generate($node, $field) {
  * processing field settings.
  */
 function date_widget_settings($op, $widget) {
-  include_once(drupal_get_path('module', 'date') .'/date_admin.inc');
+  require_once('./'. drupal_get_path('module', 'date') .'/date_admin.inc');
   return _date_widget_settings($op, $widget);
 }
 
 function date_field_settings($op, $field) {
-  include_once(drupal_get_path('module', 'date') .'/date_admin.inc');
+  require_once('./'. drupal_get_path('module', 'date') .'/date_admin.inc');
   return _date_field_settings($op, $field);
 }
 

@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Replace all include_once() with require_once().
 - #276270 Add missing break in date_convert() switch for ICAL.
 - #301385 Change hook_requirements() to only set message in runtime to avoid install profile errors.
 - #299112 Adjust date_convert() to adapt to am/pm when data source is an array.

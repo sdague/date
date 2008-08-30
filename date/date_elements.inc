@@ -127,7 +127,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
     return content_multiple_value_form($form, $form_state, $field_copy, $items);
   }
 
-  include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   $timezone = date_get_timezone($field['tz_handling'], isset($items[0]['timezone']) ? $items[0]['timezone'] : date_default_timezone_name());
   // TODO see if there's a way to keep the timezone element from ever being
   // nested as array('timezone' => 'timezone' => value)). After struggling
@@ -175,7 +175,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
   
   // Add a date repeat form element, if needed.
   if (module_exists('date_repeat') && $field['repeat'] == 1) {
-    include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
+    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
     _date_repeat_widget($element, $field, $items, $delta);
     $element['rrule']['#weight'] = $field['widget']['weight'] + .4;
   }
@@ -442,7 +442,7 @@ function date_widget_validate($element, &$form_state) {
   $fields = content_fields();
   $field = $form_state['#field_info'][$element['#field_name']];
   if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
-    include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
+    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
     return _date_repeat_widget_validate($element, $form_state);
   }
 }
