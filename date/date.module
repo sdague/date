@@ -374,7 +374,7 @@ function date_get_timezone($handling, $timezone = '') {
 /**
  *  Function to figure out which db timezone applies to a date and select it
  */
-function date_get_db_timezone($handling, $timezone = '') {
+function date_get_timezone_db($handling, $timezone = '') {
   switch ($handling) {
     case('none'):
       $timezone = date_default_timezone_name();
@@ -440,7 +440,7 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
       foreach ($items as $delta => $item) {
         $timezone = $item['timezone'];
         $items[$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
-        $items[$delta]['db_timezone'] = date_get_db_timezone($field['tz_handling']);
+        $items[$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
         $items[$delta]['date_type'] = $field['type'];
       }
       return $items;
