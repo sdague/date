@@ -582,8 +582,18 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       unset($target_node->body);
     }
 
+    // Set the date timezone value.
     $timezone = !empty($event->timezone) && $tz_handling == 'date' && $event_tz_handling == 'event' ? $timezones[$event->timezone] : date_default_timezone_name();
 
+    // If this is a deprecated timezone, replace it.
+    require_once(drupal_get_path('module', 'date_timezone') .'/date_timezone.install');
+    $timezone = _date_timezone_replacement($timezone);
+
+    // Find the original timezone value (might not be the same as the date timezone).
+    $event_timezone = !empty($event->timezone) ? $timezones[$event->timezone] : date_default_timezone_name();
+    // If this is a deprecated timezone, replace it.
+    $event_timezone = _date_timezone_replacement($event_timezone);
+    
     if ($event_version == 1) {
       // Version 1 stores the UTC value in the database as a timestamp.
       $date = array(0 => array());
@@ -612,9 +622,15 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       // Version 2 stores the local value in the database as a datetime field.
       $date = array(0 => array());
       $data[0]['timezone'] = $timezone;
-      $start = date_make_date($event->event_start, $timezone, DATE_DATETIME);
+      $start = date_make_date($event->event_start, $event_timezone, DATE_DATETIME);
+      if ($event_timezone != $timezone) {
+        date_timezone_set($start, timezone_open($timezone));
+      }
       $data[0]['offset'] = date_offset_get($start);
-      $end = date_make_date($event->event_end, $timezone, DATE_DATETIME);
+      $end = date_make_date($event->event_end, $event_timezone, DATE_DATETIME);
+      if ($event_timezone != $timezone) {
+        date_timezone_set($end, timezone_open($timezone));
+      }
       $data[0]['offset2'] = date_offset_get($end);
 
       date_timezone_set($start, timezone_open('UTC'));
