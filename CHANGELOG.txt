@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #196468 Add link to add a date field to a content type in Date Copy, uses new CCK feature to import from file.
 - The timezone translation names in the install file must use underscores instead of spaces.
 - #302351 Add timezone info to node_load() and adjust tokens to set the right timezone.
 - Replace all include_once() with require_once().

@@ -82,6 +82,7 @@ function date_copy_type_form($target = TRUE) {
       $type_options[$field['type_name']] = $node_types[$field['type_name']];
     }
   }
+
   if (sizeof($type_options) < 1) {
     drupal_set_message(t('There are no date fields in this database to import the data into. Please add a date field to the desired node types and be sure to indicate it uses both a "from" and a "to" date.'));
     return $form;
@@ -92,8 +93,24 @@ function date_copy_type_form($target = TRUE) {
     '#type' => 'select',
     '#options' => $type_options,
     '#title' => $label,
+    '#description' => t('Only content types with date fields appear in this list as possible target types.'),
     '#default_value' => '',
     );
+
+  // If Content Copy is enabled, offer an import link.
+  if (module_exists('content_copy')) {
+    $form['macro'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Add'),
+      '#description' => t('If your desired target type does not already have a date field, follow this link and select a content type to add a date field to that type.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['macro']['link'] = array(
+      '#type' => 'markup',
+      '#value' => l(t('Add new date field'), 'admin/content/types/import', array('query' => 'macro_file='. drupal_get_path('module', 'date_copy') .'/date_field.php')),
+    );
+  }
   return $form;
 }
 
@@ -463,6 +480,7 @@ function date_copy_import_event_form($form_values = NULL) {
       );
       $form += date_copy_type_form(TRUE);
       $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+
       return $form;
 
     case 2: // Select the fields to import into.
