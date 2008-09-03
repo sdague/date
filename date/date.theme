@@ -57,16 +57,13 @@ function theme_date_display_combination($element) {
   if (arg(0) == 'node' && arg(1) == $node->nid // Make sure we're looking at the node 
     && empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
     && module_exists('date_repeat') && $field['repeat'] == 1) {
-    $node->date_id = 'date:'. $node->nid .':'. $field['field_name'] .':0:0';
+    $node->date_id = 'date:'. $node->nid .':'. $field_name .':0:0';
   }
   // If we're trying to display only a single date on a node, see if
   // this is the right one.
-  if (isset($node->date_id)) {
-    list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
-    //$id_field = $node->{$field_name};
-    //$id_date = $id_field[$delta];
-    //if ($id_date != $element['#item']) {
-    if ($delta != $element['#delta']) {
+  if (isset($node->date_id) && !empty($item['#delta'])) {
+    list($module, $nid, $item_field_name, $delta, $other) = explode(':', $node->date_id);
+    if ($item_field_name != $field_name || $delta != $item['#delta']) {
       return;
     }
   }
