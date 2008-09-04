@@ -1383,6 +1383,38 @@ function date_api_set_db_timezone($offset = '+00:00') {
 }
 
 /**
+ *  Function to figure out which local timezone applies to a date and select it
+ */
+function date_get_timezone($handling, $timezone = '') {
+  switch ($handling) {
+    case('date'):
+      $timezone = !empty($timezone) ? $timezone : date_default_timezone_name();
+      break;
+    case('utc'):
+      $timezone = 'UTC';
+      break;
+    default:
+      $timezone = date_default_timezone_name();
+  }
+  return $timezone > '' ? $timezone : date_default_timezone_name();
+}
+
+/**
+ *  Function to figure out which db timezone applies to a date and select it
+ */
+function date_get_timezone_db($handling, $timezone = '') {
+  switch ($handling) {
+    case('none'):
+      $timezone = date_default_timezone_name();
+      break;
+    default:
+      $timezone = 'UTC';
+      break;
+  }
+  return $timezone > '' ? $timezone : 'UTC';
+}
+
+/**
  * Wrapper function to make sure this function will always work.
  */
 function date_api_views_fetch_fields($base, $type) {
