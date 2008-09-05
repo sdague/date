@@ -1462,3 +1462,16 @@ function date_format_options() {
   }
   return $options;
 }
+
+/**
+ * Implementation of hook_views_api().
+ *
+ * This one is used as the base to reduce errors when updating.
+ */
+function date_api_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'date_api') .'/includes',
+  );
+}
+
