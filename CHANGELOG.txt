@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #304631 Fix validation check for required field that was always triggered.
+- #304762 Add missing folders for translations.
 - #198502 Make sure updates abort if Content module hasn't yet been updated.
 - Update to new Views2 API. Now requires latest versions of Views and CCK, and files have been re-arranged.
 - Move timezone handling logic to Date API so we can use it in Calendar, too.
