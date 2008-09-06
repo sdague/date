@@ -53,18 +53,33 @@ function date_api_views_handlers() {
  * Implementation of hook_views_plugins
  */
 function date_api_views_plugins() {
-  $path = drupal_get_path('module', 'date_api') .'/theme';
-  $file = 'theme.inc';
-  require_once "./$path/$file";
+  $path = drupal_get_path('module', 'date_api');
+  $views_path = drupal_get_path('module', 'views');
+  require_once "./$path/theme/theme.inc";
   return array(
     'module' => 'date_api', // This just tells our themes are elsewhere.
     'display' => array(
+      // Parents are not really displays, just needed so the files can
+      // be included.
+      'parent' => array(
+        'no ui' => TRUE,
+        'handler' => 'views_plugin_display',
+        'path' => "$views_path/plugins",
+        'parent' => '',
+      ),
+      'attachment' => array(
+        'no ui' => TRUE,
+        'handler' => 'views_plugin_display_attachment',
+        'path' => "$views_path/plugins",
+        'parent' => 'parent',
+      ),
       // Display plugin for date navigation.
       'date_nav' => array(
         'title' => t('Date browser'),
         'help' => t('Date back/next navigation to attach to other displays. Requires the Date argument.'),
         'handler' => 'date_plugin_display_attachment',
-        'parent' => 'views_plugin_display_attachment',
+        'parent' => 'attachment',
+        'path' => "$path/includes",
         'theme' => 'views_view',
         'use ajax' => TRUE,
         'admin' => t('Date browser'),
@@ -72,15 +87,25 @@ function date_api_views_plugins() {
       ),
     ),
     'style' => array(
-      // Style plugin for the navigation display.
+      'parent' => array(
+        // this isn't really a display but is necessary so the file can
+        // be included.
+        'no ui' => TRUE,
+        'handler' => 'views_plugin_style',
+        'path' => "$views_path/plugins",
+        'theme file' => 'theme.inc',
+        'theme path' => "$views_path/theme",
+        'parent' => '',
+      ),
       'date_nav' => array(
         'title' => t('Date browser style'),
         'help' => t('Creates back/next navigation.'),
         'handler' => 'date_navigation_plugin_style',
-        'parent' => 'views_plugin_style',
+        'path' => "$path/includes",
+        'parent' => 'parent',
         'theme' => 'date_navigation',
-        'theme file' => $file,
-        'theme path' => $path,
+        'theme file' => 'theme.inc',
+        'theme path' => "$path/theme",
         'uses row plugin' => FALSE,
         'uses fields' => FALSE,
         'uses options' => TRUE,
