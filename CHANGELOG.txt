@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add some validation to date repeat logic to avoid trying to process invalid values.
 - #303999 Add function and update to clear out theme registry and all the views caches to pick up changes in Views definitions.
 - #304631 Fix validation check for required field that was always triggered.
 - #304762 Add missing folders for translations.

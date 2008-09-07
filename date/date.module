@@ -279,7 +279,6 @@ function date_formatter_process($element) {
   $format = date_formatter_format($formatter, $field_name);
   $item = $element['#item'];
   $timezone = isset($item['timezone']) ? $item['timezone'] : '';
-
   $process = date_process_values($field);
   foreach ($process as $processed) {
     if (empty($item[$processed])) {
