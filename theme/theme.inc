@@ -90,13 +90,14 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
     	$url = $view->url .'/'. $view->year .'-W'. date_pad($view->week);
     	break;
   }
-  if (!empty($view->mini) || $link) {
-  	// Month navigation titles are used as links in the mini view.
-  	return l($title, $url, array(), calendar_url_append($view));
-  }
-  else {
+  // TODO Update this.
+  //if (!empty($view->mini) || $link) {
+  //	// Month navigation titles are used as links in the mini view.
+  //	return l($title, $url, array(), calendar_url_append($view));
+  //}
+  //else {
     return $title;
-  }  
+  //}  
 }
 
 /**
