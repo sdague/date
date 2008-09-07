@@ -146,3 +146,11 @@ function date_api_update_6000() {
   date_api_set_variables();
   return $ret;
 }
+
+/**
+ * Rebuild the theme registry and all the caches.
+ * needed to pick up changes created by updated Views API.
+ */
+function date_api_update_6001() {
+  date_api_views_clear();
+}
