@@ -152,5 +152,7 @@ function date_api_update_6000() {
  * needed to pick up changes created by updated Views API.
  */
 function date_api_update_6001() {
+  $ret = array();
   date_api_views_clear();
+  return $ret;
 }
