@@ -69,22 +69,6 @@ $handler->override_option('arguments', array(
   ),
 ));
 $handler->override_option('filters', array(
-  'type' => array(
-    'id' => 'type',
-    'table' => 'node',
-    'field' => 'type',
-    'operator' => 'in',
-    'value' => array(
-      'test' => 'test',
-    ),
-    'group' => 0,
-    'exposed' => FALSE,
-    'expose' => array(
-      'operator' => FALSE,
-      'label' => '',
-    ),
-    'relationship' => 'none',
-  ),
 ));
 $handler->override_option('access', array(
   'type' => 'none',
