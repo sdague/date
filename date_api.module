@@ -1535,8 +1535,5 @@ function date_api_views_clear() {
   if (db_table_exists('views_object_cache')) {
     db_query('DELETE FROM {views_object_cache}');
   }    
-  drupal_rebuild_theme_registry();
-  unset($GLOBALS['theme']);
-  init_theme();
-  menu_rebuild();
+  db_query("DELETE FROM {cache} where cid LIKE 'theme_registry%'");
 }
