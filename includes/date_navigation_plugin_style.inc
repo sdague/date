@@ -59,13 +59,11 @@ class date_navigation_plugin_style extends views_plugin_style {
      
     // bring the node type into the query so we can use it in the theme
     $this->view->query->add_field('node', 'type');
-    parent::query();
-  }
-  
-  /**
-   * Render the calendar navigation style.
-   */
-  function render() {
-    return theme($this->theme_functions(), $this->view, $this->options, array());
+     
+    // We don't need a query for the navigation. There's no way to
+    // completely turn it off, but we can set it to something simple.
+    $this->view->query->clear_fields();
+    $this->view->query->where = array();
+    $this->view->query->add_where(NULL, "0");
   }
 }

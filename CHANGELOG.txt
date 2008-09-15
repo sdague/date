@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Eliminate query for navigation display.
 - #306404 Make sure update 6001 returns an array.
 - Default Date Browser view should not have a content type filter in it.
 - Add some validation to date repeat logic to avoid trying to process invalid values.

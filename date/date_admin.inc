@@ -282,7 +282,7 @@ function _date_field_settings($op, $field) {
       unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
   
       // Add in another set of fields for the To date.
-      if ($field['todate']) {
+      if (!empty($field['todate'])) {
         $data[$table_alias][$field['field_name'] .'_value2'] = $data[$table_alias][$field['field_name'] .'_value'];
         $data[$table_alias][$field['field_name'] .'_value']['title'] = t('!label (!field value)', array('!label' => t($field['widget']['label']), '!field' => t($field['field_name'])));
         $data[$table_alias][$field['field_name'] .'_value2']['title'] = t('!label (!field value2)', array('!label' => t($field['widget']['label']), '!field' => t($field['field_name'])));
@@ -322,14 +322,14 @@ function date_columns($field) {
     $db_columns['value'] = array('type' => 'datetime', 'not null' => FALSE, 'sortable' => TRUE);
   }
   // If a second date is needed for 'To date', just make a copy of the first one.
-  if (isset($field['todate'])) {
+  if (!empty($field['todate'])) {
     $db_columns['value2'] = $db_columns['value'];
   }
   // timezone and offset columns are used only if date-specific dates are chosen.
   if (isset($field['tz_handling']) && $field['tz_handling'] == 'date') {
     $db_columns['timezone'] = array('type' => 'varchar', 'length' => 50, 'not null' => FALSE, 'sortable' => TRUE);
     $db_columns['offset'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
-    if ($field['todate']) $db_columns['offset2'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
+    if (!empty($field['todate'])) $db_columns['offset2'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
   }
   if (isset($field['repeat']) && $field['repeat'] == 1) {
     $db_columns['rrule'] = array('type' => 'text', 'not null' => FALSE, 'sortable' => FALSE);

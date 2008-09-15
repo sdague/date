@@ -196,3 +196,64 @@ function date_views_set_timezone(&$date_handler, &$view, $field) {
       break;
   }
 }
+
+function date_views_querystring($view, $extra_params = array()) {
+  $query_params = array_merge($_GET, $extra_params);
+  // Allow NULL params to be removed from the query string.
+  foreach ($extra_params AS $key => $value) {
+    if (!isset($value)) {
+      unset($query_params[$key]);
+    }
+  }
+  // Filter the special "q" and "view" variables out of the query string.
+  $exclude = array('q');
+  // If we don't explicitly add a value for "view", filter it out.
+  if (empty($extra_params['view'])) {
+    $exclude[] = 'view';
+  }
+  $query = drupal_query_string_encode($query_params, $exclude);
+  // To prevent an empty query string from adding a "?" on to the end of a URL,
+  // we return NULL.
+  return !empty($query) ? $query : NULL;
+}
+
+/**
+ * Identify the base url of the page,
+ * needed when the calendar is embedded so we
+ * don't set the url to the calendar url.
+ */
+function date_views_page_url($view) {
+  if ($view->build_type == 'page') {
+    return date_views_real_url($view, $view->real_args);
+  }
+  else {
+    $block_identifier = isset($view->block_identifier) ? $view->block_identifier : 'mini';
+    return url($_GET['q'], date_views_querystring($view, array($block_identifier => NULL)), NULL, TRUE);
+  }
+}
+
+/**
+ * Figure out what the URL of the calendar view we're currently looking at is.
+ */
+function date_views_real_url($view, $args) {
+  if (empty($args)) {
+    return $view->url;
+  }
+  // Add non-calendar arguments to the base url.
+  $parts = explode('/', $view->url);
+  $bump = 0;
+  foreach ($parts as $delta => $part) {
+    // If one of the args is buried in the url, add it here and adjust
+    // the delta values we'll compare the calendar arg positions to.
+    if (substr($part, 0, 1) == '$') {
+      $parts[$delta] = array_shift($args);
+      $bump++;
+    }
+  }
+  foreach ($args as $delta => $arg) {
+    if (!in_array($delta + $bump, calendar_arg_positions($view)) && !empty($arg)) {
+      array_push($parts, $arg);
+    }
+  }
+  return implode('/', $parts);
+}
