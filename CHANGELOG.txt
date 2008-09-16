@@ -4,6 +4,9 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+Version 6.2-rc3
+=================
+
 - #305376, #303999 Change method of clearing theme registry to avoid errors other themes during update.php.
 - #308353 Use long-month-name protocol for translations.
 - Eliminate query for navigation display.
