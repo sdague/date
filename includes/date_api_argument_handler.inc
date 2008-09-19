@@ -208,6 +208,7 @@ class date_api_argument_handler extends views_handler_argument_date {
    * The argument sent may be found at $this->argument.
    */
   function query() { 
+       
     $block_identifier = isset($this->view->block_identifier) ? $this->view->block_identifier : 'mini';
     if (!empty($this->view->block) && isset($_GET[$block_identifier])) {
       $mini_args = explode('/', str_replace($this->view->get_path() .'/', '', $_GET[$block_identifier]));

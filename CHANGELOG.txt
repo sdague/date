@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #309196, #310728 Get rid of attempt to simplify the navigation query, it is too easily broken. 
+
 Version 6.2-rc3
 =================
 
