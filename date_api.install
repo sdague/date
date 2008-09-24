@@ -77,6 +77,12 @@ function date_api_uninstall() {
   foreach ($variables as $variable) {
     variable_del($variable);
   }
+
+  $displays = array(
+    'date_nav', 
+    );
+  db_query("DELETE FROM {views_display} WHERE display_plugin IN ('". implode("','", $displays) ."')");
+  db_query("DELETE FROM {cache_views}");
   return $ret;
 }
 
