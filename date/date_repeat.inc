@@ -95,6 +95,14 @@ function _date_repeat_widget_validate($element, &$form_state) {
 
     $item = $form_values[$field_name];
     
+    // Avoid undefined index problems on dates that don't have all parts.
+    $possible_items = array('value', 'value2', 'timezone', 'offset', 'offset2');
+    foreach ($possible_items as $key) {
+      if (empty($item[$key])) {
+        $item[$key] = '';
+      }
+    }    
+    
     // By the time we get here, the start and end dates have been 
     // adjusted back to UTC, but we want localtime dates to do
     // things like '+1 Tuesday', so adjust back to localtime.
