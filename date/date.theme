@@ -59,6 +59,7 @@ function theme_date_display_combination($element) {
     && module_exists('date_repeat') && $field['repeat'] == 1) {
     $node->date_id = 'date:'. $node->nid .':'. $field_name .':0:0';
   }
+  
   // If we're trying to display only a single date on a node, see if
   // this is the right one.
   if (isset($node->date_id) && !empty($item['#delta'])) {
@@ -103,7 +104,7 @@ function theme_date_display_combination($element) {
     $time2 = preg_replace('([\)\]]$)', '', $time2);
     $time = '<span class="date-display-start">'. $time1 .'</span>'.
       '<span class="date-display-separator"> - </span>'.
-      '<span class="date-display-end">'. $time2;
+      '<span class="date-display-end">'. $time2 .'</span>';
     $replaced = str_replace($time1, $time, $date1);
     $output .= '<span class="date-display-single">'. $replaced .' '. $timezone .'</span> ';
   }

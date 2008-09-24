@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #312974 Add missing closing span in date theme.
 - Clean out date displays in Views tables when uninstalled.
 - Fix undefined indexes in Date repeat widget logic.
 - Add in special widgets for repeating dates so normal widgets can use the regular Content module multiple values handling.
