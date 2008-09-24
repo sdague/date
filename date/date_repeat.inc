@@ -38,10 +38,10 @@ function _date_repeat_widget(&$element, $field, $items, $delta) {
     '#date_increment'   => $field['widget']['increment'],
     '#date_year_range'  => $field['widget']['year_range'],
     '#date_label_position' => $field['widget']['label_position'],
-    '#prev_value' => $items[0]['value'],
-    '#prev_value2' => $items[0]['value2'],
+    '#prev_value' => isset($items[0]['value']) ? $items[0]['value'] : '',
+    '#prev_value2' => isset($items[0]['value2']) ? $items[0]['value2'] : '',
     '#prev_rrule' => isset($items[0]['rrule']) ? $items[0]['rrule'] : '',
-    '#date_repeat_widget' => $field['widget']['type'],
+    '#date_repeat_widget' => str_replace('_repeat', '', $field['widget']['type']),
     '#date_repeat_collapsed' => $field['repeat_collapsed'],
     );
   return $element;

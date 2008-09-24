@@ -372,6 +372,39 @@ function date_update_6001() {
   return $ret;
 }
 
+/**
+ * Switch to using different widgets for repeating dates so non-repeats
+ * can use standard Content module multiple values handling.
+ */
+function date_update_6002() {
+  drupal_load('module', 'content');
+  $ret = array();
+  $types = content_types();
+  $repeating_fields = array();
+  foreach ($types as $type) {
+    foreach ($type['fields'] as $field_name => $field) {
+      if (!empty($field['repeat'])) {
+        $repeating_fields[] = $field_name;
+      }
+    }
+  }
+  if (count($repeating_fields)) {
+    $replace = array(
+      'date_select' => 'date_select_repeat',
+      'date_text' => 'date_text_repeat',
+      'date_popup' => 'date_popup_repeat',
+      );
+    $result = db_query("SELECT * from {". content_instance_tablename() ."} WHERE widget_type IN('date_select', 'date_text', 'date_popup') AND field_name IN('". implode("','", $repeating_fields) ."')");
+    while ($widget = db_fetch_array($result)) {
+      db_query("UPDATE {". content_field_tablename() ."} SET multiple = 1 WHERE field_name = '%s'", $widget['field_name']);
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_type = '". $replace[$widget['widget_type']] ."' WHERE field_name = '%s' AND type_name = '%s'", $widget['field_name'], $widget['type_name']);
+    }
+    drupal_set_message(t('All repeating date fields have been updated to use the new repeating widgets.'));
+    content_clear_type_cache();
+  }
+  return $ret;
+}
+
 function date_db_integrity($name) {
   $ret = array();
   if (!module_exists('content') || !module_exists('date_api')) {

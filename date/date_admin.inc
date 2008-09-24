@@ -292,23 +292,6 @@ function _date_field_settings($op, $field) {
 }
 
 /**
- * Custom field settings manipulation.
- *
- * CCK field settings can't use form_set_value(),
- * so do it in a custom function.
- */
-function date_field_settings_validate(&$form, &$form_state) {
-  $form_values = $form_state['values'];
-  if ($form_values['multiple'] == 99) {
-    form_set_value($form['multiple'], 1, $form_state);
-    form_set_value($form['repeat'], 1, $form_state);
-  }
-  else {
-    form_set_value($form['repeat'], 0, $form_state);
-  }
-}
-
-/**
  *  Callback for field columns.
  */
 function date_columns($field) {
@@ -338,25 +321,16 @@ function date_columns($field) {
 }
 
 function date_field_settings_form($field) {
-  $form = array(
-    '#element_validate' => array('date_field_settings_validate')
-    );
+  $form = array();
   $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : (date_has_time($field['granularity']) ? 'site' : 'none');
 
-  $form['repeat'] = array(
-    '#type' => 'value',
-    '#value' => $field['repeat'],
-    );
-
   // If adding a repeat, override the Content module's handling of the multiple values option.
-  if (module_exists('date_repeat')) {
-    $form['multiple'] = array(
-      '#type' => 'select',
-      '#title' => t('Number of values'),
-      '#options' => array(1 => t('Unlimited'), 99 => t('Repeating'), 0 => 1) + drupal_map_assoc(range(2, 10)),
-      '#default_value' => !empty($field['repeat']) ? 99 : $field['multiple'],
-      '#description' => t('Select a specific number of values for this field, or \'Unlimited\' to provide an \'Add more\' button so the users can add as many values as they like.  Repeating dates will allow the user to select when and how often the date will repeat.') . date_data_loss_warning('Number of values'),
-    );
+  if (module_exists('date_repeat') && date_is_repeat_field($field)) {
+    $form['multiple'] = array('#type' => 'hidden', '#value' => 1);
+    $form['repeat'] = array('#type' => 'hidden', '#value' => 1);
+  }
+  else {
+    $form['repeat'] = array('#type' => 'hidden', '#value' => 0);
   }
 
   $description = t("Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in.");
@@ -409,13 +383,13 @@ function date_field_settings_form($field) {
     '#value' => 'UTC',
     );
 
-  if (module_exists('date_repeat')) {
+  if (module_exists('date_repeat') && date_is_repeat_field($field)) {
     $form['repeat_collapsed'] = array(
       '#type' => 'radios',
       '#default_value' => !empty($field['repeat_collapsed']) ? intval($field['repeat_collapsed']) : 0,
       '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
       '#title' => t('Repeat display'),
-      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Collapsed\' to make those options less obtrusive.'),
+      '#description' => t('Should the repeat options form start out expanded or collapsed? Set to \'Collapsed\' to make those options less obtrusive.'),
       );
   }
 

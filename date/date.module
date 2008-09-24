@@ -75,6 +75,18 @@ function date_repeat_page($node) {
   return $output;
 }
 
+function date_is_repeat_field($field) {
+  $repeat_widgets = array(
+    'date_select_repeat',
+    'date_text_repeat',
+    'date_popup_repeat',
+    );
+  if (in_array($field['widget']['type'], $repeat_widgets)) {
+      return TRUE;
+  }
+  return FALSE;
+}
+
 /**
  * Implementation of hook_content_is_empty().
  */
@@ -128,6 +140,14 @@ function date_widget_info() {
     'date_select' => array(
       'label' =>  t('Select List'),
       'field types' => array('date', 'datestamp', 'datetime'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_CUSTOM,
+        ),
+    ),
+    'date_select_repeat' => array(
+      'label' =>  t('Select List with Repeat options'),
+      'field types' => array('date', 'datestamp', 'datetime'),
       'multiple values' => CONTENT_HANDLE_MODULE,
       'callbacks' => array(
         'default value' => CONTENT_CALLBACK_CUSTOM,
@@ -135,6 +155,14 @@ function date_widget_info() {
     ),
     'date_text' => array(
       'label' =>  t('Text Field with custom input format'),
+      'field types' => array('date', 'datestamp', 'datetime'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_CUSTOM,
+        ),
+      ),
+    'date_text_repeat' => array(
+      'label' =>  t('Text Field with Repeat options'),
       'field types' => array('date', 'datestamp', 'datetime'),
       'multiple values' => CONTENT_HANDLE_MODULE,
       'callbacks' => array(
@@ -144,7 +172,15 @@ function date_widget_info() {
     );
   if (module_exists('date_popup')) {
     $info['date_popup'] = array(
-      'label' =>  t('Text Field with jquery pop-up calendar'),
+      'label' =>  t('Text Field with Date Pop-up calendar'),
+      'field types' => array('date', 'datestamp', 'datetime'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_CUSTOM,
+        ),
+    );
+    $info['date_popup_repeat'] = array(
+      'label' =>  t('Text Field with Date Pop-up and Repeat options'),
       'field types' => array('date', 'datestamp', 'datetime'),
       'multiple values' => CONTENT_HANDLE_MODULE,
       'callbacks' => array(

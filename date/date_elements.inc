@@ -116,15 +116,12 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
  *
  */
 function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
-
-  // If this is a multiple value form, get the Content module's
-  // multiple value form with its AHAH add more element and return that.
-  // Set a flag so we know to skip this step when the
-  // content_multiple_value_form() re-invokes this widget.
-  if (empty($field['repeat']) && empty($field['multiple_form'])) {
-    $field_copy = $field;
-    $field_copy['multiple_form'] = TRUE;
-    return content_multiple_value_form($form, $form_state, $field_copy, $items);
+  
+  // Be sure users that haven't run the update yet don't get
+  // a badly broken value.
+  if ($field['repeat'] && !strstr($field['widget']['type'], '_repeat')) {
+    $field['multiple'] = 0;
+    return;
   }
 
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
@@ -303,6 +300,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
 
   switch ($field['widget']['type']) {
     case 'date_select':
+    case 'date_select_repeat':
       // From/to selectors with lots of parts will look better if displayed 
       // on two rows instead of in a single row.
       if (!empty($field['todate']) && count($field['granularity']) > 3) {
@@ -311,6 +309,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
       $element[$from_field]['#type'] = 'date_select';
       break;
     case 'date_popup':
+    case 'date_popup_repeat':  
       $element[$from_field]['#type'] = 'date_popup';
       break;
     default:
@@ -342,7 +341,6 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   // Make sure field info will be available to the validator which
   // does not get the values in $form.
   $form_state['#field_info'][$field['field_name']] = $field;
-  
   return $element;
 }
 
