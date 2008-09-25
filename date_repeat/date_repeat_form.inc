@@ -95,7 +95,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     'datetime' => array(
       '#type' => $element['#date_repeat_widget'],
       '#title' => t('Until'),
-      '#description' => t('Date to stop repeating this item. The \'Until\' date will NOT be included in the results.'),
+      '#description' => t('Date to stop repeating this item.'),
       '#default_value' => $UNTIL,
       '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name(),
       '#date_format' => !empty($element['#date_format']) ? $element['#date_format'] : 'Y-m-d',
