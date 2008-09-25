@@ -130,9 +130,16 @@ function _date_repeat_widget_validate($element, &$form_state) {
 
     $duration = date_difference($start, $end);
     $start_datetime = date_format($start, DATE_FORMAT_DATETIME);
+    
+    // The UNTIL date has no time, set it to the same time as the
+    // start date to be sure the last day will be correctly included.
     $end = date_ical_date($values['UNTIL'], $timezone);
+    $hour = intval(date_format($start, 'H'));
+    $minute = intval(date_format($start, 'i'));
+    $second = intval(date_format($start, 's'));
+    date_time_set($end, $hour, $minute, $second);
     $end_datetime = date_format($end, DATE_FORMAT_DATETIME);
-
+    
     // Split the RRULE into RRULE and EXDATE parts.
     $parts = date_repeat_split_rrule($rrule);
     $rule = explode("\n", $rrule);

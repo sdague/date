@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #296529 Make sure UNTIL date takes time into account to avoid missing final date.
 - #312974 Add missing closing span in date theme.
 - Clean out date displays in Views tables when uninstalled.
 - Fix undefined indexes in Date repeat widget logic.
