@@ -393,7 +393,7 @@ function date_combo_validate($element, &$form_state) {
 
       // Call the right function to turn this altered user input into
       // a new value for the todate.
-      $function = $field['widget']['type'] .'_input_value';
+      $function = str_replace('_repeat', '', $field['widget']['type']) .'_input_value';
       $to_date = $function($element[$to_field]);
       $item[$to_field] = $to_date;
     }
