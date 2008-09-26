@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #304370 Fix typo in popup css.
 - #265076 Add some fallback handling for text input that can accept missing time.
 - #308353 Long month name translations again, I applied the fix to the wrong function.
 - #313447 Throw an error on required dates that have no values filled out.
