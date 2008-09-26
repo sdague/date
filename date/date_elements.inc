@@ -380,7 +380,9 @@ function date_combo_validate($element, &$form_state) {
 
     if ($field['todate']) {
       $merged_date = array();
+      $to_date_empty = TRUE;
       foreach ($posted[$to_field] as $part => $value) {
+        $to_date_empty = $to_date_empty && empty($value);
         $merged_date[$part] = empty($value) ? $posted[$from_field][$part] : $value;
         if ($part == 'ampm' && $merged_date['ampm'] == 'pm' && $merged_date['hour'] < 12) {
           $merged_date['hour'] += 12;
@@ -389,6 +391,16 @@ function date_combo_validate($element, &$form_state) {
           $merged_date['hour'] -= 12;
         }
       }
+      
+      // If all date values were empty and a date is required, throw 
+      // an error on the first element. We don't want to create 
+      // duplicate messages on every date part, so the error will 
+      // only go on the first.  
+      if ($to_date_empty && $field['todate'] == 'required') {
+        $error_field = implode('][', $element['#parents']) .'][value2]['. array_shift(array_keys($merged_date));
+        form_set_error($error_field, t('Some value must be entered in the To date.'));
+      }
+
       $element[$to_field]['#value'] = $merged_date;
 
       // Call the right function to turn this altered user input into

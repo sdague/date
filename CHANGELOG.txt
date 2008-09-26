@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #313447 Throw an error on required dates that have no values filled out.
 - #312539 Improvements in translation text.
 - #296529 Remove text saying UNTIL date is not included in results, it should be.
 - #296529 Make sure UNTIL date takes time into account to avoid missing final date.
