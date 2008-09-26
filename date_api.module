@@ -76,10 +76,6 @@ function date_month_names_untranslated() {
       4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July',
       8 => 'August', 9 => 'September', 10 => 'October',
       11 => 'November', 12 => 'December');
-    // See format_date() for an explanation of why !long-month-name is necessary
-    foreach ($month_names as $delta => $english) {
-      $month_names[$delta] = trim(t('!long-month-name '. $english, array('!long-month-name' => '')));
-    }
   }
   return $month_names;
 }
@@ -96,10 +92,11 @@ function date_month_names_untranslated() {
 function date_month_names_translated() {
   static $month_names;
   if (empty($month_names)) {
-    $month_names = array(1 => t('January'), 2 => t('February'), 3 => t('March'),
-      4 => t('April'), 5 => t('May'), 6 => t('June'), 7 => t('July'),
-      8 => t('August'), 9 => t('September'), 10 => t('October'),
-      11 => t('November'), 12 => t('December'));
+    // See format_date() for an explanation of why !long-month-name is necessary
+    $month_names = date_month_names_untranslated();
+    foreach ($month_names as $delta => $english) {
+      $month_names[$delta] = trim(t('!long-month-name '. $english, array('!long-month-name' => '')));
+    }
   }
   return $month_names;
 }
