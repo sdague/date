@@ -532,7 +532,7 @@ function date_text_input_value($element) {
   }
   else {
     // A wrapped strtotime, that respects desired timezone (and handles lots of input formats)
-    $date = date_make_date($value, $element['#date_timezone']);
+    $date = date_make_date($input, $element['#date_timezone']);
     if (date_is_valid($date, DATE_OBJECT)) {   
       return date_format($date, DATE_FORMAT_DATETIME);
     }
