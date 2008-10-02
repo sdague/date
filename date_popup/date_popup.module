@@ -252,7 +252,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
     );
   // TODO, figure out exactly when we want this description. In many places it is not desired.
-  $sub_element['#description'] = t(' Format: @date', array('@date' => date($date_format, time())));
+  $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date($date_format, time())));
   return $sub_element;
 }
 

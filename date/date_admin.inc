@@ -181,7 +181,7 @@ function date_widget_settings_form($widget) {
     '#options' => array('above' => t('Above'), 'within' => t('Within'), 'none' => t('None')),
     '#default_value' => !empty($widget['label_position']) ? $widget['label_position'] : 'above',
     '#title' => t('Position of date part labels'),
-    '#description' => t('The location of date part labels, like \'Year\', \'Month\', or \'Day\'. \'Above\' will display them as titles above each date part. \'Within\' will insert the label as the first option in the select list and in blank textfields. \'None\' will not label any of the date parts. The exact text in the label is controlled by themes like \'date_part_label_year\' and \'date_part_label_month\'.'),
+    '#description' => t("The location of date part labels, like 'Year', 'Month', or 'Day'. 'Above' will display them as titles above each date part. 'Within' will insert the label as the first option in the select list and in blank textfields. 'None' will not label any of the date parts. The exact text in the label is controlled by themes like 'date_part_label_year' and 'date_part_label_month'."),
     );
   $form['input']['advanced']['text_parts'] = array(
     '#theme' => $widget['type'] == 'date_select' ? 'date_text_parts' : '',
@@ -284,8 +284,8 @@ function _date_field_settings($op, $field) {
       // Add in another set of fields for the To date.
       if (!empty($field['todate'])) {
         $data[$table_alias][$field['field_name'] .'_value2'] = $data[$table_alias][$field['field_name'] .'_value'];
-        $data[$table_alias][$field['field_name'] .'_value']['title'] = t('!label (!field value)', array('!label' => t($field['widget']['label']), '!field' => t($field['field_name'])));
-        $data[$table_alias][$field['field_name'] .'_value2']['title'] = t('!label (!field value2)', array('!label' => t($field['widget']['label']), '!field' => t($field['field_name'])));
+        $data[$table_alias][$field['field_name'] .'_value']['title'] = t('!label (!field value)', array('!label' => t($field['widget']['label']), '!field' => $field['field_name']));
+        $data[$table_alias][$field['field_name'] .'_value2']['title'] = t('!label (!field value2)', array('!label' => t($field['widget']['label']), '!field' => $field['field_name']));
       }
       return $data;
   }
@@ -389,11 +389,11 @@ function date_field_settings_form($field) {
       '#default_value' => !empty($field['repeat_collapsed']) ? intval($field['repeat_collapsed']) : 0,
       '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
       '#title' => t('Repeat display'),
-      '#description' => t('Should the repeat options form start out expanded or collapsed? Set to \'Collapsed\' to make those options less obtrusive.'),
+      '#description' => t("Should the repeat options form start out expanded or collapsed? Set to 'Collapsed' to make those options less obtrusive."),
       );
   }
 
-  $form['#suffix'] = t('<div class="form-item"><div class="description">* The custom format, if provided, will override the selected display or input options. Define a php date format string like \'m-d-Y H:i\' (see !link for more details).</div></div>', array('!link' => l('http://php.net/date', 'http://php.net/date')));
+  $form['#suffix'] = '<div class="form-item"><div class="description">'. t("* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see !link for more details).", array('!link' => l('http://php.net/date', 'http://php.net/date'))) .'</div></div>';
 
   return $form;
 }
@@ -456,9 +456,9 @@ function date_formatter_setup_form($field, $delta) {
  */
 function date_timezone_handling_options() {
   return array(
-    'site' => t('Site\'s time zone'),
-    'date' => t('Date\'s time zone'),
-    'user' => t('User\'s time zone'),
+    'site' => t("Site's time zone"),
+    'date' => t("Date's time zone"),
+    'user' => t("User's time zone"),
     'utc' => 'UTC',
     'none' => t('No time zone conversion'),
     );

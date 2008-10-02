@@ -52,7 +52,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       '#options' => $options,
       '#default_value' => $this->options['granularity'],
       '#multiple' => TRUE,
-      '#description' => t('Select the type of date value to be used in defaults, summaries, and navigation. For example, a granularity of \'month\' will set the default date to the current month, summarize by month in summary views, and link to the next and previous month when using date navigation.'),
+      '#description' => t("Select the type of date value to be used in defaults, summaries, and navigation. For example, a granularity of 'month' will set the default date to the current month, summarize by month in summary views, and link to the next and previous month when using date navigation."),
     );
 
     $fields = date_api_fields();
