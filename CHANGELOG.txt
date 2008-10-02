@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #304813 Use new recommended method of testing CCK updates using content_check_update().
 - #307544 Get rid of extra line feed at end of ical description.
 - #304370 Fix typo in popup css.
 - #265076 Add some fallback handling for text input that can accept missing time.

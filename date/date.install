@@ -333,13 +333,11 @@ function date_update_5207() {
  * @return unknown
  */
 function date_update_6000() {
-  if (drupal_get_installed_schema_version('content') < 6000) {
-    drupal_set_message("Some updates are still pending. Please return to <a href=\"". url('update.php', array('query' => 'op=selection')). "\">update.php</a> and run the remaining updates.", 'warning');
-    $ret['#abort'] = array('success' => FALSE, 'query' => 'Updates for content.module need to be run first.<br/>Please re-run the update script.');
-    return $ret;
+  drupal_load('module', 'content');
+  if ($abort = content_check_update('date')) {
+    return $abort;
   }
 
-  drupal_load('module', 'content');
   $ret = array();
   $result = db_query("SELECT field_name, global_settings from {". content_field_tablename() ."} where type LIKE 'date_%'");
   while ($field = db_fetch_array($result)) {
@@ -359,6 +357,9 @@ function date_update_6000() {
  */
 function date_update_6001() {
   drupal_load('module', 'content');
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
     $replace = module_exists('date_popup') ? 'date_popup' : 'date_text';
@@ -378,6 +379,9 @@ function date_update_6001() {
  */
 function date_update_6002() {
   drupal_load('module', 'content');
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   $types = content_types();
   $repeating_fields = array();
