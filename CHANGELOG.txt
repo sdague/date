@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #316392 Hard code the date_api_views_clear() code to prevent update errors.
 - #315955 Translation cleanup.
 - Add new repeat selection widgets to widgets that can set increments and date parts.
 - #304813 Use new recommended method of testing CCK updates using content_check_update().

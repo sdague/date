@@ -159,6 +159,15 @@ function date_api_update_6000() {
  */
 function date_api_update_6001() {
   $ret = array();
-  date_api_views_clear();
+  if (db_table_exists('cache_content')) {
+    db_query('DELETE FROM {cache_content}');
+  }
+  if (db_table_exists('cache_views')) {
+    db_query('DELETE FROM {cache_views}');
+  }
+  if (db_table_exists('views_object_cache')) {
+    db_query('DELETE FROM {views_object_cache}');
+  }    
+  db_query("DELETE FROM {cache} where cid LIKE 'theme_registry%'");
   return $ret;
 }
