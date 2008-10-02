@@ -134,7 +134,7 @@ function date_widget_settings_form($widget) {
       '#value' => '',
       );
   }
-  if ($widget['type'] == 'date_select' || $widget['type'] == 'date_popup') {
+  if (in_array($widget['type'], array('date_select', 'date_popup', 'date_select_repeat', 'date_popup_repeat'))) {
     $form['input']['year_range'] = array(
       '#type' => 'textfield',
       '#title' => t('Years back and forward'),
