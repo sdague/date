@@ -250,6 +250,7 @@ function _date_elements() {
     '#delta' => 0,
     '#columns' => array('value', 'value2', 'timezone', 'offset', 'offset2'),
     '#process' => array('date_combo_process'),
+    '#element_validate' => array('date_combo_validate'),
     );
   return $type;
 }
@@ -336,13 +337,6 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   else {
     $element[$from_field]['#description'] = $description;
   }
-  
-  // Make sure #element_validate doesn't over-write validation added
-  // by other modules, like multigroup.
-  if (empty($element['#element_validate'])) {
-    $element['#element_validate'] = array();
-  }
-  array_push($element['#element_validate'], 'date_combo_validate');
 
   // Make sure field info will be available to the validator which
   // does not get the values in $form.
@@ -353,31 +347,17 @@ function date_combo_process($element, $edit, &$form_state, $form) {
 /**
  * Validate and update a combo element.
  * Don't try this if there were errors before reaching this point.
- * 
- * We don't know exactly where this element is, so we drill down
- * through form values until we get to our key.
- * 
  */
 function date_combo_validate($element, &$form_state) {
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
   $delta = $element['#delta'];
-    
-  $value = $form_state['values'];
-  $new_parents = array();
-  foreach ($element['#parents'] as $parent) {
-    $value = $value[$parent];
-    // Use === to be sure we get right results if parent is a zero (delta) value.
-    if ($parent === $field_name) {
-      if (!array_key_exists('value', $value)) {
-        $value = array_key_exists($delta, $value) ? $value[$delta] : $value[0];
-        $new_parents[] = $delta;
-      }        
-      break;
-    }
-    $new_parents[] = $parent;
-  }
-    
+  
+  // Repeating dates have a different form structure, so get the
+  // right item values.
+  $item = isset($form_values[$field_name]['rrule']) ? $form_values[$field_name] : $form_values[$field_name][$delta];
+  $posted = isset($form_values[$field_name]['rrule']) ? $element['#post'][$field_name] : $element['#post'][$field_name][$delta];
+  
   $field = $form_state['#field_info'][$element['#field_name']];
   $from_field = 'value';
   $to_field = 'value2';
@@ -399,19 +379,6 @@ function date_combo_validate($element, &$form_state) {
     // values where needed, then re-compute the todate with those values.
 
     if ($field['todate']) {
-      
-      // Dig down into the posted value to find the submitted values
-      // for this field. We can make no assumptions about the parents
-      // of this field, so we have to find it.
-      $parents = $element['#parents'];
-      $parent = array_shift($parents);
-      $post = $element['#post'][$parent];
-      foreach ($post as $key => $value) {
-        if ($key == $field_name) {
-          $posted = isset($value['rrule']) ? $post[$field_name] : $post[$field_name][$delta]; 
-        }
-        $post = $post[$key];
-      }
       $merged_date = array();
       $to_date_empty = TRUE;
       foreach ($posted[$to_field] as $part => $value) {
@@ -480,10 +447,11 @@ function date_combo_validate($element, &$form_state) {
  * Handle widget processing.
  */
 function date_widget_validate($element, &$form_state) {
-
+  $form_values = $form_state['values'];
+  $field_name = $element['#field_name'];
+  $fields = content_fields();
   $field = $form_state['#field_info'][$element['#field_name']];
-
-  if (module_exists('date_repeat') && !empty($field['repeat'])) {
+  if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
     require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
     return _date_repeat_widget_validate($element, $form_state);
   }
