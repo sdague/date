@@ -847,6 +847,9 @@ function date_date($format, $timestamp = false, $timezone = false) {
     if ($timestamp >= 0 && $is_gmt) {
       return @gmdate($format, $timestamp);
     }
+    elseif ($timestamp >= 0 && variable_get('date_use_server_zone', TRUE)) {
+      return @date($format, $timestamp);
+    }
   }
   require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_date($format, $timestamp, $timezone);

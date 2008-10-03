@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Date PHP4: Add new settings area where you can choose whether to use the faster native timezone adjustments for current dates.
 - #316392 Hard code the date_api_views_clear() code to prevent update errors.
 - #315955 Translation cleanup.
 - Add new repeat selection widgets to widgets that can set increments and date parts.
