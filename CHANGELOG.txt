@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #294851 Date PHP4: Make timezone_map into a static variable to reduce execution time.
 - #314959 Keep repeating dates off the teaser as well as the node.
 - #312598 Date PHP4 functions can be off by 1 hour during the day dst changes, add a fix for that.
 - Date PHP4: Add new settings area where you can choose whether to use the faster native timezone adjustments for current dates.

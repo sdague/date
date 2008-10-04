@@ -594,7 +594,11 @@ function date_is_dst($timestamp, $timezone = NULL) {
   if (empty($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
+  
+  static $timezone_map = array();
+  if (empty($timezone_map)) {
+    include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
+  }
   $region = $timezone_map[$timezone]['dst_region'];
       
   // This should really be done with date_date() to get the right timezone
