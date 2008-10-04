@@ -535,7 +535,10 @@ if (!function_exists('timezone_identifiers_list')) {
  *   ...
  */
   function timezone_identifiers_list() {
-    include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_identifiers.inc');
+    static $timezone_identifiers_list = array();
+    if (empty($timezone_identifiers_list)) {
+      include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_identifiers.inc');
+    }
     return $timezone_identifiers_list;
   }
 }
@@ -561,7 +564,10 @@ if (!function_exists('timezone_abbreviations_list')) {
  *
  */
   function timezone_abbreviations_list() {
-    include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_abbreviations_list.inc');
+    static $timezone_abbreviations_list = array();
+    if (empty($timezone_abbreviations_list)) {
+      include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_abbreviations_list.inc');
+    }
     return $timezone_abbreviations_list;
   }
 }
