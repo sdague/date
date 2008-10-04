@@ -281,19 +281,17 @@ function date_copy_import_csv_form() {
 /**
  * iCal import form.
  */
-function date_copy_import_ical_form($form_values = NULL) {
-  if (!empty($form_values)) {
-    foreach ($form_values as $key => $value) {
+function date_copy_import_ical_form($form_state) {
+  if (!empty($form_state['values'])) {
+    foreach ($form_state['values'] as $key => $value) {
       $form[$key] = array('#type' => 'hidden', '#default_value' => $value);
     }
   }
-  $step = intval($form_values['step'] + 1);
+  $step = intval($form_state['values']['step'] + 1);
   $form['step'] = array(
     '#type' => 'hidden',
     '#value' => $step,
   );
-  $form['#multistep'] = TRUE;
-  $form['#redirect'] = FALSE;
 
   switch ($step) {
     case 1: // Select a content type to import into.
@@ -309,13 +307,13 @@ function date_copy_import_ical_form($form_values = NULL) {
 
     case 2: // Select the fields to import into.
       $node_types = node_get_types('names');
-      $type = $form_values['target_type'];
+      $type = $form_state['values']['target_type'];
       $form['target_type'] = array(
         '#value' => $type,
         '#type' => 'hidden',
       );
       $form['source_file'] = array(
-        '#value' => $form_values['source_file'],
+        '#value' => $form_state['values']['source_file'],
         '#type' => 'hidden',
       );
       $form['fields'] = array(
@@ -331,8 +329,9 @@ function date_copy_import_ical_form($form_values = NULL) {
   return $form;
 }
 
-function date_copy_import_ical_form_submit($form_id, $form_values) {
-  extract($form_values);
+function date_copy_import_ical_form_submit($form, &$form_state) {
+  $form_state['rebuild'] = TRUE;
+  extract($form_state['values']);
   if ($step < 2) {
     return;
   }
@@ -443,7 +442,7 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
 /**
  *  Event import form.
  */
-function date_copy_import_event_form($form_values = NULL) {
+function date_copy_import_event_form($form_state) {
   // We can do an import if there are event fields available whether or not the event module is enabled
   // so we just check whether the table exists.
   if (!db_table_exists('event')) {
@@ -451,13 +450,11 @@ function date_copy_import_event_form($form_values = NULL) {
     return array();
   }
 
-  $step = intval($form_values['step'] + 1);
+  $step = intval($form_state['values']['step'] + 1);
   $form['step'] = array(
     '#type' => 'hidden',
     '#value' => $step,
   );
-  $form['#multistep'] = TRUE;
-  $form['#redirect'] = FALSE;
 
   switch ($step) {
     case 1: // Select a content type to import into.
@@ -484,13 +481,13 @@ function date_copy_import_event_form($form_values = NULL) {
       return $form;
 
     case 2: // Select the fields to import into.
-      $type = $form_values['target_type'];
+      $type = $form_state['values']['target_type'];
       $form['target_type'] = array(
         '#value' => $type,
         '#type' => 'hidden',
       );
       $form['source_type'] = array(
-        '#value' => $form_values['source_type'],
+        '#value' => $form_state['values']['source_type'],
         '#type' => 'hidden',
       );
       $form['fields'] = array(
@@ -510,8 +507,9 @@ function date_copy_import_event_form($form_values = NULL) {
 /**
  *  Event import processing.
  */
-function date_copy_import_event_form_submit($form_id, $form_values) {
-  extract($form_values);
+function date_copy_import_event_form_submit($form, &$form_state) {
+  $form_state['rebuild'] = TRUE;
+  extract($form_state['values']);
   if ($step != 2) return;
 
   // workaround to disable drupal messages when nodes are created or deleted

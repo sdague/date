@@ -45,26 +45,25 @@ function _date_widget_settings($op, &$field) {
  * so do it in a custom function.
  */
 function date_widget_settings_validate(&$form, &$form_state) {
-  $form_values = $form_state['values'];
-  if ($form_values['widget_type'] == 'date_popup') {
+  if ($form_state['values']['widget_type'] == 'date_popup') {
     // Only a limited set of formats is available for the Date Popup module
-    if (!empty($form_values['input_format_custom']) || !in_array($form_values['input_format'], date_popup_formats())) {
+    if (!empty($form_state['values']['input_format_custom']) || !in_array($form_state['values']['input_format'], date_popup_formats())) {
       form_set_value($form['input_format_custom'], NULL, $form_state);
       form_set_value($form['input_format'], DATE_FORMAT_DATETIME, $form_state);
     }
     // The jQuery calendar requires year, month, and day or it won't work.
     $date_parts = array('year', 'month', 'day');
-    $intersection = array_intersect($date_parts, $form_values['granularity']);
+    $intersection = array_intersect($date_parts, $form_state['values']['granularity']);
     if ($intersection != $date_parts) {
       form_set_error('granularity', t('The Date Popup widget will not work unless granularity includes year, month, and day.'));
     }
   }
-  if (isset($form_values['advanced']['label_position'])) {
-    form_set_value($form['label_position'], $form_values['advanced']['label_position'], $form_state);
+  if (isset($form_state['values']['advanced']['label_position'])) {
+    form_set_value($form['label_position'], $form_state['values']['advanced']['label_position'], $form_state);
   }
   // Munge the table display for text parts back into an array of text parts.
-  if (is_array($form_values['advanced']['text_parts'])) {
-    form_set_value($form['text_parts'], array_keys(array_filter($form_values['advanced']['text_parts'])), $form_state);
+  if (is_array($form_state['values']['advanced']['text_parts'])) {
+    form_set_value($form['text_parts'], array_keys(array_filter($form_state['values']['advanced']['text_parts'])), $form_state);
   }
 }
 

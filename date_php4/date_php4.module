@@ -57,6 +57,5 @@ function date_php4_settings_form() {
 }
 
 function date_php4_settings_form_submit($form, &$form_state) {
-  $form_values = $form_state['values'];
-  variable_set('date_use_server_zone', $form_values['date_use_server_zone']);
+  variable_set('date_use_server_zone', $form_state['values']['date_use_server_zone']);
 }
