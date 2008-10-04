@@ -286,6 +286,11 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
             $period_finished = TRUE;
           }
         }
+        
+        if ($finished) {
+          continue;
+        }
+        
         // Go back to the beginning of this period before we jump, to
         // ensure we jump to the first day of the next period. We've moved to
         // the next month or year, so it takes an extra jump back to get
