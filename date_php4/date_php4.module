@@ -26,8 +26,8 @@ function date_php4_perm() {
 function date_php4_menu() {
   $items = array();
   $items['admin/settings/date_php4'] = array(
-    'title'    => t('Date PHP4'),
-    'description' => t('Date PHP4 setup.'),
+    'title'    => 'Date PHP4',
+    'description' => 'Date PHP4 setup.',
     'access arguments'   => array('administer date_php4 settings'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('date_php4_settings_form'),
