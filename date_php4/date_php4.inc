@@ -857,7 +857,7 @@ function date_date($format, $timestamp = false, $timezone = false) {
     if ($timestamp >= 0 && $is_gmt) {
       return @gmdate($format, $timestamp);
     }
-    elseif ($timestamp >= 0 && variable_get('date_use_server_zone', TRUE)) {
+    elseif ($timestamp >= 0 && variable_get('date_use_server_zone', FALSE)) {
       return @date($format, $timestamp);
     }
   }
