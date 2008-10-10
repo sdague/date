@@ -83,7 +83,7 @@ function date_api_views_plugins() {
         'theme' => 'views_view',
         'use ajax' => TRUE,
         'admin' => t('Date browser'),
-        'help topic' => 'display-date_navigation',
+        'help topic' => 'date-browser',
       ),
     ),
     'style' => array(
@@ -132,7 +132,7 @@ function date_api_views_data() {
       'empty name field' => t('Undated'),
     ),
   );  
-  // The flexible date fliter.
+  // The flexible date filter.
   $data['node']['date_filter'] = array(
     'group' => t('Date'),
     'title' => t('Date'),
