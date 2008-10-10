@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #317660 Hard code line feeds in ical export to be sure they come through correctly in all systems.
 - Don't try to find repeating fields on types without fields.
 - #317021 Coder module patch by stella.
 - #312996 Break out of endless loop in date_repeat calculation.

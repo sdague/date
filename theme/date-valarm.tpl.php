@@ -16,19 +16,19 @@
  */
 ?>
 BEGIN:VALARM
-ACTION:<?php print $alarm['action']; ?>
+ACTION:<?php print $alarm['action']  . "\n";?>
 <?php if (!empty($alarm['trigger'])): ?>
-TRIGGER:<?php print $alarm['trigger']; ?> 
+TRIGGER:<?php print $alarm['trigger']  . "\n"; ?> 
 <?php endif; ?>
 <?php if (!empty($alarm['repeat'])): ?>
-REPEAT:<?php print $alarm['repeat']; ?>
+REPEAT:<?php print $alarm['repeat']  . "\n"; ?>
 <?php endif; ?>
 <?php if (!empty($alarm['duration'])): ?>
-DURATION:<?php print $alarm['duration']; ?>
+DURATION:<?php print $alarm['duration']  . "\n"; ?>
 <?php endif; ?>
 <?php if ($alarm['action'] == 'EMAIL'): ?>
-ATTENDEE:MAILTO:<?php print $alarm['email'] ?>
-SUMMARY:<?php print $alarm['summary'] ?>
+ATTENDEE:MAILTO:<?php print $alarm['email']  . "\n" ?>
+SUMMARY:<?php print $alarm['summary']  . "\n" ?>
 <?php endif; ?>
-DESCRIPTION:<?php print $alarm['description'] ?>
+DESCRIPTION:<?php print $alarm['description']  . "\n" ?>
 END:VALARM

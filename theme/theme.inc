@@ -162,6 +162,10 @@ function template_preprocess_date_vcalendar(&$vars) {
       else {
         $events[$uid]['end'] = $events[$uid]['start'];
       }
+      foreach ($event as $key => $value) {
+        $event[trim($key)] = trim($value);
+      }
+      
       // Escape text values.
       foreach ($event as $key => $value) {
         if ($key == 'alarm') {
