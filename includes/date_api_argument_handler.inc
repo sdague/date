@@ -66,7 +66,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       '#options' => $options,
       '#default_value' => $this->options['date_fields'],
       '#multiple' => TRUE,
-      '#description' => t('Select one or more date fields to filter with this argument.'),
+      '#description' => t("Select one or more date fields to filter with this argument. Do not select both the 'From date' and 'To date' for CCK date fields, only one of them is needed."),
     );
     $form['date_method'] = array(
       '#title' => t('Method'),

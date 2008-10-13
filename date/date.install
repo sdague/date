@@ -57,6 +57,9 @@ function date_update_last_removed() {
  * Prepare for Version 5.2 updates, make changes to field and widget settings.
  */
 function date_update_5100() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   drupal_load('module', 'content');
   $ret = array();
   $fields = content_fields();
@@ -195,6 +198,9 @@ function date_update_5104() {
  * Version 5.2 updates.
  */
 function date_update_5200() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   drupal_load('module', 'content');
   $ret = array();
   module_enable(array('date_timezone'));
@@ -238,6 +244,9 @@ function date_update_5201() {
  * Database integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5202() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   return date_db_integrity('5202');
 }
 
@@ -254,6 +263,9 @@ function date_update_5203() {
  * Get rid of deprecated timezone names.
  */
 function date_update_5204() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   drupal_load('module', 'content');
   $ret = array();
   $fields = content_fields();
@@ -277,6 +289,9 @@ function date_update_5204() {
 }
 
 function date_update_5205() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   drupal_load('module', 'content');
   $ret = array();
   $fields = content_fields();
@@ -333,11 +348,10 @@ function date_update_5207() {
  * @return unknown
  */
 function date_update_6000() {
-  drupal_load('module', 'content');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
-
+  drupal_load('module', 'content');
   $ret = array();
   $result = db_query("SELECT field_name, global_settings from {". content_field_tablename() ."} where type LIKE 'date_%'");
   while ($field = db_fetch_array($result)) {
@@ -356,10 +370,10 @@ function date_update_6000() {
  * Originally update_5201, but that was broken.
  */
 function date_update_6001() {
-  drupal_load('module', 'content');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
+  drupal_load('module', 'content');
   $ret = array();
   if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
     $replace = module_exists('date_popup') ? 'date_popup' : 'date_text';
@@ -378,10 +392,10 @@ function date_update_6001() {
  * can use standard Content module multiple values handling.
  */
 function date_update_6002() {
-  drupal_load('module', 'content');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
+  drupal_load('module', 'content');
   $ret = array();
   $types = content_types();
   $repeating_fields = array();
