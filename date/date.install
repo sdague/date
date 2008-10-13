@@ -161,6 +161,9 @@ function date_update_5100() {
  * Superceded by update 5103().
  */
 function date_update_5101() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   return $ret;
 }
@@ -169,6 +172,9 @@ function date_update_5101() {
  * Make sure date module loads after date_api.
  */
 function date_update_5102() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   variable_del('date_version');
   $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'date'");
   return $ret;
@@ -180,6 +186,9 @@ function date_update_5102() {
  * significant change.
  */
 function date_update_5103() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   return $ret;
 }
@@ -189,6 +198,9 @@ function date_update_5103() {
  * automatically whenever views_invalidate_cache() is called.
  */
 function date_update_5104() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   cache_clear_all('date_browser_views', 'cache');
   return $ret;
@@ -236,6 +248,9 @@ function date_update_5200() {
  * @return unknown
  */
 function date_update_5201() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   return $ret;
 }
@@ -254,6 +269,9 @@ function date_update_5202() {
  * Data integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5203() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   //return date_data_integrity('5203');
   $ret = array();
   return $ret;
@@ -310,12 +328,18 @@ function date_update_5205() {
 }
 
 function date_update_5206() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   // Same as 6000.
   return $ret;
 }
 
 function date_update_5207() {
+  if ($abort = content_check_update('date')) {
+    return $abort;
+  }
   $ret = array();
   // Same as 6001.
   return $ret;
