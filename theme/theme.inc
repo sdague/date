@@ -163,7 +163,9 @@ function template_preprocess_date_vcalendar(&$vars) {
         $events[$uid]['end'] = $events[$uid]['start'];
       }
       foreach ($event as $key => $value) {
-        $event[trim($key)] = trim($value);
+        if (is_string($value)) {
+          $event[trim($key)] = trim($value);
+        }
       }
       
       // Escape text values.
