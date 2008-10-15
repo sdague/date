@@ -203,12 +203,37 @@ class date_api_argument_handler extends views_handler_argument_date {
   }
  
   /**
+   * Make sure the date field is added to the query.
+   * 
+   * Do this in pre_query() so it will get done even if the argument 
+   * is the wildcard, since query() is skipped when the wildcard is used.
+   */
+  function pre_query() { 
+    $this->get_query_fields();
+    if (!empty($this->query_fields)) {
+      foreach ($this->query_fields as $query_field) {
+        $field = $query_field['field'];
+        // Explicitly add this table using add_table so Views does not
+        // remove it if it is a duplicate, since that will break the query.
+        $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
+        // Make sure the real field is added to the query.
+        $this->query->add_field($field['table_name'], $field['field_name']);
+        foreach ($field['related_fields'] as $related) {
+          $bits = explode('.', $related);
+          if ($bits[1] != $field['field_name']) {
+            $this->query->add_field($field['table_name'], $bits[1]);
+          }
+        }
+      }
+    }
+  }
+  
+  /**
    * Set up the query for this argument.
    *
    * The argument sent may be found at $this->argument.
    */
-  function query() { 
-       
+  function query() {
     $block_identifier = isset($this->view->block_identifier) ? $this->view->block_identifier : 'mini';
     if (!empty($this->view->block) && isset($_GET[$block_identifier])) {
       $mini_args = explode('/', str_replace($this->view->get_path() .'/', '', $_GET[$block_identifier]));
@@ -222,7 +247,6 @@ class date_api_argument_handler extends views_handler_argument_date {
         $i++;
       }
     }
-    
     $parts = $this->date_handler->arg_parts($this->argument);
     foreach ($parts[0]['date'] as $key => $part) {
       // The last part evaluated is the one that will 'stick'
@@ -245,17 +269,6 @@ class date_api_argument_handler extends views_handler_argument_date {
         $field = $query_field['field'];
         $date_handler = $query_field['date_handler'];
       
-        // Explicitly add this table using add_table so Views does not
-        // remove it if it is a duplicate, since that will break the query.
-        $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
-        // Make sure the real field is added to the query.
-        $this->query->add_field($field['table_name'], $field['field_name']);
-        foreach ($field['related_fields'] as $related) {
-          $bits = explode('.', $related);
-          if ($bits[1] != $field['field_name']) {
-            $this->query->add_field($field['table_name'], $bits[1]);
-          }
-        }
         $from_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][0]);
         $to_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][1]);
         $from = $date_handler->sql_where_date('DATE', $from_field, '<=', date_format($max_date, DATE_FORMAT_DATETIME));

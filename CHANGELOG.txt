@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Date argument handler: Add date field in pre_query() instead of query() so it works if the argument is set to the wildcard.
 - Don't try to trim date objects in the date ical preprocessor.
 - Make a few more fixes to CCK updates in date.install.
 - Start on Advanced help for the Date module.
