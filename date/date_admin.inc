@@ -356,12 +356,13 @@ function date_field_settings_form($field) {
     );
   $form['output']['simple'] = date_formatter_setup_form($field, 0);
   $form['output']['simple']['#title'] = t('Default Display');
+  $form['output']['simple']['#description'] = theme('advanced_help_topic', 'date_api', 'date-display') . t('Set up formatting for the date display.');
 
   $form['output']['advanced'] = array(
     '#type' => 'fieldset', '#title' => t('Additional Display Settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#description' => t('Define alternate formatting for the date display. Options other than the default are made available to views and themes. Possible formats are default, long, medium, and short.'),
+    '#description' => t('Options other than the default are made available to views and themes. Possible formats are default, long, medium, and short.'),
   );
   for ($i = 1; $i <= 3; $i++) {
     $form['output']['advanced'][$i] = date_formatter_setup_form($field, $i);
