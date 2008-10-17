@@ -294,7 +294,7 @@ class date_sql_handler {
           'd' => '%%d', 'j' => '%e',
           'H' => '%H',
           'i' => '%i',
-          's' => '%s',
+          's' => '%%s',
           );
         $format = strtr($format, $replace);
         return "DATE_FORMAT($field, '$format')";
