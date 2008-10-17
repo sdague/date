@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix Views date filter summary, which was using wrong index.
+
 Version 6.2-rc4
 =================
 

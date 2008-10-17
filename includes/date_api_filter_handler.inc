@@ -325,12 +325,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
     // If not exposed, display the value.
     if (in_array($this->operator, $this->operator_values(2))) {
-      $min = check_plain(!empty($this->options['default_date']) ? $this->options['default_date'] : $this->options['value']['mindate']);
-      $max = check_plain(!empty($this->options['default_to_date']) ? $this->options['default_to_date'] : $this->options['value']['maxdate']);
+      $min = check_plain(!empty($this->options['default_date']) ? $this->options['default_date'] : $this->options['value']['min']);
+      $max = check_plain(!empty($this->options['default_to_date']) ? $this->options['default_to_date'] : $this->options['value']['max']);
       $output .= t('@min and @max', array('@min' => $min, '@max' => $max));
     }
     else {
-      $output .= check_plain(!empty($this->options['default_date']) ? $this->options['default_date'] : $this->options['value']['valuedate']);
+      $output .= check_plain(!empty($this->options['default_date']) ? $this->options['default_date'] : $this->options['value']['value']);
     }
     return $output;
   }
