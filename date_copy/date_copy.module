@@ -275,7 +275,7 @@ function date_copy_export_form() {
 
 function date_copy_import_csv_form() {
   // PLACEHOLDER
-  drupal_set_message(t('Importing dates into CCK from a comma separated file can be done using the <a href="@link">Node Import module</a>.', array('@link' => url('http://drupal.org/project/node_import'))));
+  drupal_set_message(t('Importing dates into CCK from a comma separated file can be done using the <a href="@link">Node Import module</a>.', array('@link' => 'http://drupal.org/project/node_import')));
 }
 
 /**
