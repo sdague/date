@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #322446 Avoid extra space in date theme when there is no timezone.
 - #321733 Fix identification of error field for To date that is not greater than From date.
 - Fix Views date filter summary, which was using wrong index.
 
