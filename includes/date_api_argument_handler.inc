@@ -34,6 +34,7 @@ class date_api_argument_handler extends views_handler_argument_date {
   function options(&$options) {
     parent::options($options);
     $options['date_fields'] = array();
+    $options['year_range'] = '-3:+3';
     $options['date_method'] = 'OR';
     $options['granularity'] = 'month';
   }
@@ -55,6 +56,13 @@ class date_api_argument_handler extends views_handler_argument_date {
       '#description' => t("Select the type of date value to be used in defaults, summaries, and navigation. For example, a granularity of 'month' will set the default date to the current month, summarize by month in summary views, and link to the next and previous month when using date navigation."),
     );
 
+    $form['year_range'] = array(
+      '#title' => t('Date year range'),
+      '#type' => 'textfield',
+      '#default_value' => $this->options['year_range'],
+      '#description' => t("Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'.  When the argument is set to a date outside the range, the page will be treated as 'not found'."),
+    );
+    
     $fields = date_api_fields();
     $options = array();
     foreach ($fields['name'] as $name => $field) {
@@ -83,10 +91,24 @@ class date_api_argument_handler extends views_handler_argument_date {
     if (empty($check_fields)) {
       form_error($form['date_fields'], t('You must select at least one date field for this argument.'));
     }
+    if (!preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $form_state['values']['options']['year_range']) 
+      && !preg_match('@[0-9]{4}:[0-9]{4}@', $form_state['values']['options']['year_range'])) {
+      form_error($form['year_range'], t('Date year range must be in the format -9:+9 or 2005:2010.'));
+    }
   }
   
   function options_submit($form, &$form_state) {
     $form_state['values']['options']['date_fields'] = array_filter($form_state['values']['options']['date_fields']);
+  }
+  
+  function year_range() {
+    $year_range = explode(':', $this->options['year_range']);
+    if (substr($this->options['year_range'], 0, 1) == '-' || $year_range[0] < 0) {
+      $this_year = date_format(date_now(), 'Y');
+      $year_range[0] = $this_year + $year_range[0];
+      $year_range[1] = $this_year + $year_range[1];
+    }
+    return $year_range;
   }
   
   // Update the summary values to show selected granularity.
@@ -209,6 +231,7 @@ class date_api_argument_handler extends views_handler_argument_date {
    * is the wildcard, since query() is skipped when the wildcard is used.
    */
   function pre_query() { 
+    $this->date_year_range = $this->year_range();
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       foreach ($this->query_fields as $query_field) {
@@ -259,6 +282,12 @@ class date_api_argument_handler extends views_handler_argument_date {
     $max_date = $range[1];
     $this->min_date = $min_date;
     $this->max_date = $max_date;
+    
+    // See if we're outside the allowed date range for our argument.
+    if (date_format($min_date, 'Y') < $this->date_year_range[0] || date_format($max_date, 'Y') > $this->date_year_range[1]) {
+      drupal_not_found();
+      break;
+    }
     
     $this->get_query_fields();
     if (!empty($this->query_fields)) {

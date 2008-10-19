@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #174580 Add min/max year setting to Date argument and set Page Not Found outside that range.
 - #174580 Add rel=nofollow to back/next links.
 - #322649 Add escaping for %s in date format code.
 - #322446 Avoid extra space in date theme when there is no timezone.
