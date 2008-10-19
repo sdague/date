@@ -8,9 +8,10 @@ function template_preprocess_date_navigation(&$vars) {
   $next_args = $view->args;
   $prev_args = $view->args;
   $pos = $view->date_arg_pos;
+  $min_date = is_object($view->min_date) ? $view->min_date : date_now();
+  $max_date = is_object($view->max_date) ? $view->max_date : date_now();
+  
   if (!isset($view->hide_nav)) {
-    $min_date = is_object($view->min_date) ? $view->min_date : date_now();
-    $max_date = is_object($view->max_date) ? $view->max_date : date_now();
     $prev_date = drupal_clone($min_date);
     date_modify($prev_date, '-1 '. $view->granularity);
     $next_date = drupal_clone($min_date);
@@ -58,6 +59,16 @@ function template_preprocess_date_navigation(&$vars) {
     $vars['prev_url'] = $prev_path;
     $vars['next_options'] = $vars['prev_options'] = array();
   }
+
+  // Check whether navigation links would point to 
+  // a date outside the allowed range.
+  if (!empty($next_date) && !empty($vars['next_url']) && date_format($next_date, 'Y') > $view->date_max_year) {
+    $vars['next_url'] = '';    
+  }
+  if (!empty($prev_date) && !empty($vars['prev_url']) && date_format($prev_date, 'Y') < $view->date_min_year) {
+    $vars['prev_url'] = '';    
+  }
+  
   $vars['prev_options'] += array('attributes' => array('rel' => 'nofollow'));
   $vars['next_options'] += array('attributes' => array('rel' => 'nofollow'));
   

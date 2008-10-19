@@ -26,6 +26,9 @@ class date_api_argument_handler extends views_handler_argument_date {
     $date_handler->granularity = $this->options['granularity'];
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
+    $range = $this->year_range();
+    $this->view->date_min_year = !empty($range) && is_array($range) ? $range[0] : variable_get('date_min_year', 100);
+    $this->view->date_max_year = !empty($range) && is_array($range) ? $range[1] : variable_get('date_max_year', 4000);
   }
 
   /**
@@ -231,7 +234,6 @@ class date_api_argument_handler extends views_handler_argument_date {
    * is the wildcard, since query() is skipped when the wildcard is used.
    */
   function pre_query() { 
-    $this->date_year_range = $this->year_range();
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       foreach ($this->query_fields as $query_field) {
@@ -284,7 +286,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $this->max_date = $max_date;
     
     // See if we're outside the allowed date range for our argument.
-    if (date_format($min_date, 'Y') < $this->date_year_range[0] || date_format($max_date, 'Y') > $this->date_year_range[1]) {
+    if (date_format($min_date, 'Y') < $this->view->date_min_year || date_format($max_date, 'Y') > $this->view->date_max_year) {
       drupal_not_found();
       break;
     }
