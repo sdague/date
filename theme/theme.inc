@@ -58,7 +58,9 @@ function template_preprocess_date_navigation(&$vars) {
     $vars['prev_url'] = $prev_path;
     $vars['next_options'] = $vars['prev_options'] = array();
   }
-
+  $vars['prev_options'] += array('attributes' => array('rel' => 'nofollow'));
+  $vars['next_options'] += array('attributes' => array('rel' => 'nofollow'));
+  
   $link = FALSE;
   // Month navigation titles are used as links in the block view.
 	if (!empty($view->block) && $view->granularity == 'month') {

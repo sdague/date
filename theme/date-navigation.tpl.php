@@ -18,7 +18,7 @@
  * $prev_options
  * $next_options
  *   Query strings and other options for the links that need to
- *   be used in the l() function.
+ *   be used in the l() function, including rel=nofollow.
  * 
  * $block: 
  *   Whether or not this view is in a block.
