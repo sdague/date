@@ -91,26 +91,29 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
       $url = $view->url .'/'. $view->year;
       break;
     case 'month':
-      $title = date_format_date($view->min_date, 'custom', !empty($format) ? $format : 'F Y');
+      $format = !empty($format) ? $format : (!$view->mini ? 'F Y' : 'F');
+      $title = date_format_date($view->min_date, 'custom', $format);
       $url = $view->url .'/'. $view->year .'-'. date_pad($view->month);
       break;
     case 'day':
-      $title = date_format_date($view->min_date, 'custom', !empty($format) ? $format : 'l, F j Y');
+      $format = !empty($format) ? $format : (!$view->mini ? 'l, F j Y' : 'l, F j');
+      $title = date_format_date($view->min_date, 'custom', $format);
       $url = $view->url .'/'. $view->year .'-'. date_pad($view->month) .'-'. date_pad($view->day);
       break;
     case 'week':
-    	$title = t('Week of @date', array('@date' => date_format_date($view->min_date, 'custom', !empty($format) ? $format : 'F j Y')));
+    	$format = !empty($format) ? $format : (!$view->mini ? 'F j Y' : 'F j');
+      $title = t('Week of @date', array('@date' => date_format_date($view->min_date, 'custom', $format)));
     	$url = $view->url .'/'. $view->year .'-W'. date_pad($view->week);
     	break;
   }
   // TODO Update this.
-  //if (!empty($view->mini) || $link) {
-  //	// Month navigation titles are used as links in the mini view.
-  //	return l($title, $url, array(), calendar_url_append($view));
-  //}
-  //else {
+  if (!empty($view->mini) || $link) {
+  	// Month navigation titles are used as links in the mini view.
+  	return l($title, $view->url);
+  }
+  else {
     return $title;
-  //}  
+  }  
 }
 
 /**
