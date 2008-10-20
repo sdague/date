@@ -63,7 +63,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       '#title' => t('Date year range'),
       '#type' => 'textfield',
       '#default_value' => $this->options['year_range'],
-      '#description' => t("Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'.  When the argument is set to a date outside the range, the page will be treated as 'not found'."),
+      '#description' => t("Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'.  When the argument is set to a date outside the range, the page will be returned as 'Page not found (404)'."),
     );
     
     $fields = date_api_fields();
