@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #240156 Workaround conflict between Event and Date by using #process on timezone forms to override Event module handling.
 - Keep year out of mini navigation title, and make sure it is a link to the view.
 - #323265 Add year as well as month to Date browser & calendar titles.
 - #174580 Add min/max year setting to Date argument and set Page Not Found outside that range.
