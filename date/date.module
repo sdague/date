@@ -348,7 +348,7 @@ function date_formatter_process($element) {
         $dates[$processed]['local']['offset'] = date_offset_get($date);
       }
 
-      //format the date, special casing the 'interval' format which doesnt need to be processed
+      //format the date, special casing the 'interval' format which doesn't need to be processed
       $dates[$processed]['formatted'] = '';
       if (is_object($date)) {
         if ($format == 'format_interval') {

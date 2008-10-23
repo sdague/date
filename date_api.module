@@ -536,7 +536,8 @@ function date_format_interval($date, $granularity = 2) {
   $interval = time() - date_format($date, 'U');
   if($interval > 0 ) {
     return t('!time ago', array('!time' => format_interval($interval, $granularity)));
-  } else {
+  } 
+  else {
     return format_interval(abs($interval), $granularity);
   }
 }

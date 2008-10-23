@@ -149,14 +149,18 @@ function theme_date_format_interval($element) {
   }
 
   $dates = date_formatter_process($element);
+  return theme('date_time_ago', $dates['value']['local']['object'], $dates['value2']['local']['object']);
+}
+
+function theme_date_time_ago($start_date, $end_date) {
   // Time to compare dates to
   $now = date_format(date_make_date('now', date_default_timezone()), DATE_FORMAT_DATETIME);
-  $start = $dates['value']['local']['datetime'];
-  $end = $dates['value2']['local']['datetime'];
-
+  $start = date_format($start_date, DATE_FORMAT_DATETIME);
+  $end = date_format($start_date, DATE_FORMAT_DATETIME);
+  
   // 1) The date is entirely in the future
   if ($now < $start) {
-    return t('!time from now', array('!time' => $dates['value']['interval']));
+    return t('!time from now', array('!time' => date_format_interval($start, 2)));
   }
   // 2) Ongoing date
   elseif ($now > $start && $now <= $end) {
@@ -165,7 +169,7 @@ function theme_date_format_interval($element) {
   }
   // 3) Date is in the past (format_interval added 'ago' to the value).
   else {
-    return $dates['value']['interval'];
+    return date_format_interval($start, 2);
   }
 }
 
