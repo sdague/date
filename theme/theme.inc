@@ -91,17 +91,17 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
       $url = $view->url .'/'. $view->year;
       break;
     case 'month':
-      $format = !empty($format) ? $format : (!$view->mini ? 'F Y' : 'F');
+      $format = !empty($format) ? $format : (empty($view->mini) ? 'F Y' : 'F');
       $title = date_format_date($view->min_date, 'custom', $format);
       $url = $view->url .'/'. $view->year .'-'. date_pad($view->month);
       break;
     case 'day':
-      $format = !empty($format) ? $format : (!$view->mini ? 'l, F j Y' : 'l, F j');
+      $format = !empty($format) ? $format : (empty($view->mini) ? 'l, F j Y' : 'l, F j');
       $title = date_format_date($view->min_date, 'custom', $format);
       $url = $view->url .'/'. $view->year .'-'. date_pad($view->month) .'-'. date_pad($view->day);
       break;
     case 'week':
-    	$format = !empty($format) ? $format : (!$view->mini ? 'F j Y' : 'F j');
+    	$format = !empty($format) ? $format : (empty($view->mini) ? 'F j Y' : 'F j');
       $title = t('Week of @date', array('@date' => date_format_date($view->min_date, 'custom', $format)));
     	$url = $view->url .'/'. $view->year .'-W'. date_pad($view->week);
     	break;
