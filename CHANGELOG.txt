@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix Date Views argument handling of summary views, and switch to comparing formatted values instead of complete dates so year arguments will work better.
 - Make sure 'time ago' formats will work in calendar by adding more separation into the format_interval formatter.
 - #240156 Workaround conflict between Event and Date by using #process on timezone forms to override Event module handling.
 - Keep year out of mini navigation title, and make sure it is a link to the view.
