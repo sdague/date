@@ -370,12 +370,33 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->format = $date_handler->views_formats($granularity, 'sql');
     $value = date_format($date, $this->format);
     $range = $this->date_handler->arg_range($value);
+    switch ($operator) {
+      case '>':
+      case '>=':
+        $range[1] = date_make_date(date_pad(variable_get('date_max_year', 4000), 4) .'-12-31 23:59:59');  
+        if ($operator == '>') {
+          date_modify($range[0], '+1 second');
+        }
+        break;
+      case '<':
+      case '<=':
+        $range[0] = date_make_date(date_pad(variable_get('date_min_year', 1), 4) .'-01-01 00:00:00');
+        if ($operator == '<') {
+          date_modify($range[1], '-1 second');
+        }
+        break;
+    }
+    
     $min_date = $range[0];
     $max_date = $range[1];
-    
+        
     $this->min_date = $min_date;
     $this->max_date = $max_date;
-    
+    $this->year = date_format($min_date, 'Y');
+    $this->month = date_format($min_date, 'n');
+    $this->day = date_format($min_date, 'j');
+    $this->week = date_week(date_format($min_date, DATE_FORMAT_DATE));
+       
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       // Use set_where_group() with the selected date_method 
