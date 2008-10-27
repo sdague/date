@@ -137,6 +137,7 @@ function date_ical_parse($icaldatafolded = array()) {
   // Parse the iCal information
   $parents = array();
   $subgroups = array();
+  $vcal = '';
   foreach ($icaldata as $line) {
     $line = trim($line);
     $vcal .= $line ."\n";
