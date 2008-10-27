@@ -278,8 +278,10 @@ class date_api_argument_handler extends views_handler_argument_date {
   function query() {
     $block_identifier = date_block_identifier($this->view);
     if (!empty($this->view->block) || isset($_GET[$block_identifier])) {
-      $mini_args = explode('/', str_replace($this->view->get_path() .'/', '', $_GET[$block_identifier]));
-      $this->view->args = $mini_args;
+      if (!empty($_GET[$block_identifier])) {
+        $mini_args = explode('/', str_replace($this->view->get_path() .'/', '', $_GET[$block_identifier]));
+        $this->view->args = $mini_args;
+      }
       $i = 0;
       foreach ($this->view->argument as $argument) {
         if ($argument->field == 'date_argument') {
