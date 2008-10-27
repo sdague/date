@@ -38,28 +38,10 @@ function template_preprocess_date_navigation(&$vars) {
     $prev_path = '';
   }
   
-  $vars['next_url'] = $next_path;
-  $vars['prev_url'] = $prev_path;
-    
-  if (!empty($view->block)) {
-    $current = $_GET;
-    $current_query = '';
-    $block_identifier = isset($view->block_identifier) ? $view->block_identifier : 'mini';
-    unset($current['q']);
-    unset($current[$block_identifier]);
-    foreach($current as $key => $val) {
-      $current_query .= $key .'='. $val .'&';
-    }
-    $vars['next_url'] = $vars['prev_url'] = $_GET['q'];
-    $vars['next_options'] = array('query' => $current_query . $block_identifier .'='. $next_path);
-    $vars['prev_options'] = array('query' => $current_query . $block_identifier .'='. $prev_path);
-  }
-  else {
-    $vars['next_url'] = $next_path;
-    $vars['prev_url'] = $prev_path;
-    $vars['next_options'] = $vars['prev_options'] = array();
-  }
-
+  $vars['next_url'] = date_real_url($view, NULL, $next_arg);
+  $vars['prev_url'] = date_real_url($view, NULL, $prev_arg);
+  $vars['next_options'] = $vars['prev_options'] = array();
+  
   // Check whether navigation links would point to 
   // a date outside the allowed range.
   if (!empty($next_date) && !empty($vars['next_url']) && date_format($next_date, 'Y') > $view->date_max_year) {
