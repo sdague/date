@@ -303,6 +303,9 @@ function date_copy_import_event_form($form_state) {
     return array();
   }
 
+  if (empty($form_state['values']['step'])) {
+    $form_state['values']['step'] = 0;
+  }
   $step = intval($form_state['values']['step'] + 1);
   $form['step'] = array(
     '#type' => 'hidden',
