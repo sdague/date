@@ -36,6 +36,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function options(&$options) {
     parent::options($options);
     $options['date_fields'] = array();
+    $options['date_method'] = 'OR';
     $options['granularity'] = 'day';
     $options['form_type'] = 'date_select';
     $options['default_date'] = '';
@@ -94,6 +95,13 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       '#multiple' => FALSE,
       '#description' => t('Select date field(s) to filter with this argument.'),
     );
+    $form['date_method'] = array(
+      '#title' => t('Method'),
+      '#type' => 'radios',
+      '#options' => array('OR' => t('OR'), 'AND' => t('AND')),
+      '#default_value' => $this->options['date_method'],
+      '#description' => t('Method of handling multiple date fields in the same query. Return items that have any matching date field (date = field_1 OR field_2), or only those with matches in all selected date fields (date = field_1 AND field_2).'),
+      );
   }
 
   function extra_options_validate($form, &$form_state) {
@@ -401,7 +409,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($this->query_fields)) {
       // Use set_where_group() with the selected date_method 
       // of 'AND' or 'OR' to create the where clause.
-      //$this->query->set_where_group($this->options['date_method'], 'date');
+      $this->query->set_where_group($this->options['date_method'], 'date');
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
         $date_handler = $query_field['date_handler'];
@@ -420,7 +428,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         }
         $value = $prefix == 'max' ? date_format($max_date, $this->format) : date_format($min_date, $this->format);
         $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
-        $this->query->add_where($this->options['group'], $sql);
+        $this->query->add_where('date', $sql);
         continue;
       }
     }

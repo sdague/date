@@ -295,6 +295,7 @@ class date_api_argument_handler extends views_handler_argument_date {
         $i++;
       }
     }
+    
     $parts = $this->date_handler->arg_parts($this->argument);
     foreach ($parts[0]['date'] as $key => $part) {
       // The last part evaluated is the one that will 'stick'
@@ -315,7 +316,11 @@ class date_api_argument_handler extends views_handler_argument_date {
       break;
     }
     
-    $format = $this->date_handler->views_formats($this->options['granularity'], 'sql');
+    // The second option seems to work better in the block view if 
+    // set to something other than the original value. 
+    // Need to keep an eye on this to be sure nothing else breaks.
+    //$format = $this->date_handler->views_formats($this->options['granularity'], 'sql');
+    $format = $this->date_handler->views_formats($this->granularity, 'sql');
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       // Use set_where_group() with the selected date_method 
