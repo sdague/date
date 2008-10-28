@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Default the block_identifier to NULL, not 'mini'.
 - Make sure the date filter as well as the date argument can use both the OR and AND methods of combining dates.
 - Fix undefined index error for 'step' in date_copy.
 - Remove ical import from Date Copy and add instructions on how to do it using Feed API to Advanced help.

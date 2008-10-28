@@ -1665,5 +1665,5 @@ function date_querystring($view, $extra_params = array()) {
 }
 
 function date_block_identifier($view) {
-  return isset($view->block_identifier) ? $view->block_identifier : 'mini';
+  return isset($view->block_identifier) ? $view->block_identifier : NULL;
 }
