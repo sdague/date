@@ -112,26 +112,14 @@ function date_field_info() {
     'date' => array(
       'label' => 'Date',
       'description' => t('Store a date in the database as an ISO date, recommended for historical or partial dates.'),
-      'callbacks' => array(
-        'tables' => CONTENT_CALLBACK_DEFAULT,
-        'arguments' => CONTENT_CALLBACK_DEFAULT,
-        ),
       ),
     'datestamp' => array(
       'label' => 'Datestamp',
       'description' => t('Store a date in the database as a timestamp, deprecated format to suppport legacy data.'),
-      'callbacks' => array(
-        'tables' => CONTENT_CALLBACK_DEFAULT,
-        'arguments' => CONTENT_CALLBACK_DEFAULT,
-        ),
       ),
     'datetime' => array(
       'label' => 'Datetime',
       'description' => t('Store a date in the database as a datetime field, recommended for complete dates and times that may need timezone conversion.'),
-      'callbacks' => array(
-        'tables' => CONTENT_CALLBACK_DEFAULT,
-        'arguments' => CONTENT_CALLBACK_DEFAULT,
-        ),
       ),
   );
 }

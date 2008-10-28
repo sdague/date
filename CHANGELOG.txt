@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #326945 Remove callbacks in date_field hook() to match CCK.
 - Get the links in embedded views and blocks to work correctly using a helper function date_real_url().
 - Fix undefined variable in date_ical.inc.
 - Set view->date fields when using date filters as well as date arguments.
