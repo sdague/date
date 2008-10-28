@@ -1586,13 +1586,13 @@ function date_embed_view($name, $display_id = 'default', $settings = array(), $a
   if (!$view) {
     return;
   }
-  if (empty($settings)) {
-    $view->block_identifier = 'mini';
-  }
-  else {
+  if (!empty($settings)) {
     foreach ($settings as $key => $setting) {
       $view->$key = $setting;
     }
+  }
+  if (!isset($view->block_identifier)) {
+    $view->block_identifier = 'mini';
   }
   return $view->preview($display_id, $args);
 }
@@ -1634,7 +1634,7 @@ function date_real_url($view, $date_type = NULL, $date_arg = NULL) {
     $args = $view->args;
   }
   // Is this an embedded or a block view?
-  if (!empty($view->preview) || !empty($view->block)) {
+  if (!empty($view->preview) || !empty($view->block_identifier)) {
     $url = $view->get_url($args);
     return url($_GET['q'], array(
       'query' => date_querystring($view, array(date_block_identifier($view) => $url)), 

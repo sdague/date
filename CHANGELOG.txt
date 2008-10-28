@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Remove ical import from Date Copy and add instructions on how to do it using Feed API to Advanced help.
 - Add a date_embed_view() function to provide a way to embed views and have their navigation move either together or separately, and document it in Advanced help.
 - #326945 Remove callbacks in date_field hook() to match CCK.
 - Get the links in embedded views and blocks to work correctly using a helper function date_real_url().
