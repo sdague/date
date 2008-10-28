@@ -1551,6 +1551,53 @@ function date_api_views_clear() {
 }
 
 /**
+ * Embed a view using a PHP snippet.
+ *
+ * This function is meant to be called from PHP snippets, should one wish to
+ * embed a view in a node or something. It's meant to provide the simplest
+ * solution and doesn't really offer a lot of options, but breaking the function
+ * apart is pretty easy, and this provides a worthwhile guide to doing so.
+ *
+ * Note that this function does NOT display the title of the view. If you want
+ * to do that, you will need to do what this function does manually, by
+ * loading the view, getting the preview and then getting $view->get_title().
+ *
+ * @param $name
+ *   The name of the view to embed.
+ * 
+ * @param $display_id
+ *   'calendar_1' will display the calendar page, 
+ *   'calendar_block_1' will display the calendar block.
+ * 
+ * @param $settings
+ *   an array of view settings to use to override view default values;
+ * 
+ *   Include a setting for 'block_identifier, the identifier to use 
+ *   for this embedded view. All embedded views that use the same 
+ *   identifier will move together, or provide different identifiers 
+ *   to keep them independent. The identifier will be used in the url 
+ *   as a querystring, like: node/27?mini=calendar/2008-10.
+ * 
+ * @param ...
+ *   Any additional parameters will be passed as arguments.
+ */
+function date_embed_view($name, $display_id = 'default', $settings = array(), $args = array()) {
+  $view = views_get_view($name);
+  if (!$view) {
+    return;
+  }
+  if (empty($settings)) {
+    $view->block_identifier = 'mini';
+  }
+  else {
+    foreach ($settings as $key => $setting) {
+      $view->$key = $setting;
+    }
+  }
+  return $view->preview($display_id, $args);
+}
+
+/**
  * Figure out the URL of the date view we're currently looking at,
  * adapted to various date types or specific date arguments.
  * 

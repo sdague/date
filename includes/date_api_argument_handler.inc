@@ -26,9 +26,13 @@ class date_api_argument_handler extends views_handler_argument_date {
     $date_handler->granularity = $this->options['granularity'];
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
-    $range = $this->year_range();
-    $this->view->date_min_year = !empty($range) && is_array($range) ? $range[0] : variable_get('date_min_year', 100);
-    $this->view->date_max_year = !empty($range) && is_array($range) ? $range[1] : variable_get('date_max_year', 4000);
+    
+    // Set the view range, do this only if not already set in case there are multiple date arguments.
+    if (empty($this->view->date_min_year)) {
+      $range = $this->year_range();
+      $this->view->date_min_year = !empty($range) && is_array($range) ? $range[0] : variable_get('date_min_year', 100);
+      $this->view->date_max_year = !empty($range) && is_array($range) ? $range[1] : variable_get('date_max_year', 4000);
+    }
   }
 
   /**
