@@ -32,16 +32,18 @@ function template_preprocess_date_navigation(&$vars) {
     $prev_path = str_replace($view->date_arg, $prev_arg, $view->url);
     $next_args[$pos] = $next_arg;
     $prev_args[$pos] = $prev_arg;
+    $vars['next_url'] = date_real_url($view, NULL, $next_arg);
+    $vars['prev_url'] = date_real_url($view, NULL, $prev_arg);
+    $vars['next_options'] = $vars['prev_options'] = array();
   }
   else {
     $next_path = '';
     $prev_path = '';
+    $vars['next_url'] = '';
+    $vars['prev_url'] = '';
+    $vars['next_options'] = $vars['prev_options'] = array();
   }
-  
-  $vars['next_url'] = date_real_url($view, NULL, $next_arg);
-  $vars['prev_url'] = date_real_url($view, NULL, $prev_arg);
-  $vars['next_options'] = $vars['prev_options'] = array();
-  
+    
   // Check whether navigation links would point to 
   // a date outside the allowed range.
   if (!empty($next_date) && !empty($vars['next_url']) && date_format($next_date, 'Y') > $view->date_max_year) {
