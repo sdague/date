@@ -332,8 +332,15 @@ class date_api_argument_handler extends views_handler_argument_date {
       
         $from_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][0]);
         $to_field = str_replace($field['table_name'] .'_', $field['table_name'] .'.', $field['fromto'][1]);
-        $from = $date_handler->sql_where_format($format, $from_field, '<=', date_format($max_date, $format));
-        $to   = $date_handler->sql_where_format($format, $to_field, '>=', date_format($min_date, $format));
+        if ($this->granularity != 'week') {
+          $from = $date_handler->sql_where_format($format, $from_field, '<=', date_format($max_date, $format));
+          $to   = $date_handler->sql_where_format($format, $to_field, '>=', date_format($min_date, $format));
+        }
+        else {
+          $format = DATE_FORMAT_DATETIME;
+          $from = $date_handler->sql_where_date('DATE', $from_field, '<=', date_format($max_date, $format));
+          $to   = $date_handler->sql_where_date('DATE', $to_field, '>=', date_format($min_date, $format));          
+        }
         $sql = str_replace('***table***', $field['table_name'], "($from AND $to)");
         if ($sql) {
           $this->query->add_where('date', $sql);

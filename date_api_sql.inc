@@ -295,6 +295,7 @@ class date_sql_handler {
           'H' => '%H',
           'i' => '%i',
           's' => '%%s',
+          '\WW' => 'W%U',
           );
         $format = strtr($format, $replace);
         return "DATE_FORMAT($field, '$format')";
@@ -306,6 +307,7 @@ class date_sql_handler {
           'H' => 'HH24',
           'i' => 'MI',
           's' => 'SS',
+          //'\W' => // TODO, what should this be?
           );
         $format = strtr($format, $replace);
         return "TO_CHAR($field, '$format')";
