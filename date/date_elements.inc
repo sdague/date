@@ -166,6 +166,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
       '#type' => 'date_timezone',
       '#delta' => $delta,
       '#default_value' => $timezone,
+      //'#options' => date_timezone_names(),
       '#weight' => $field['widget']['weight'] + .2,
       );
   }
