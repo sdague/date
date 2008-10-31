@@ -322,7 +322,15 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       return t('Missing date fields!');
     }
     $handler = $this->date_handler;
-    $field = implode(', ', $this->options['date_fields']);
+    
+    $fields = date_api_fields();
+    if (!empty($this->options['date_fields'])) {
+      $output = array();
+      foreach ($this->options['date_fields'] as $field) {
+        $output[] = $fields['name'][$field]['label'];
+      }
+    }
+    $field = implode(' '. $this->options['date_method'] .' ', $output);
     $output = "$field ". check_plain($this->operator) . ' ';
     $parts = $handler->date_parts();
     

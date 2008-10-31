@@ -130,8 +130,13 @@ class date_api_argument_handler extends views_handler_argument_date {
   
   // Update the summary values to show selected granularity.
   function admin_summary() {
+    $fields = date_api_fields();
     if (!empty($this->options['date_fields'])) {
-      return ' ('. implode(', ', $this->options['date_fields']) .')';
+      $output = array();
+      foreach ($this->options['date_fields'] as $field) {
+        $output[] = $fields['name'][$field]['label'];
+      }
+      return implode(' '. $this->options['date_method'] .' ', $output);
     }
     else {
       return parent::admin_summary();
