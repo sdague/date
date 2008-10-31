@@ -30,9 +30,9 @@ function _date_content_generate($node, $field) {
     
   if ($field['tz_handling'] == 'date') {
     // Choose a random timezone.
-    $timezones = array_keys(date_timezone_names(TRUE, TRUE));
-    shuffle($timezones);
-    $timezone = $timezones[0];
+    $timezones = date_timezone_names(TRUE);
+    $key = mt_rand(0, count($timezones) - 1);
+    $timezone = $timezones[$key];
   }
     
   switch ($field['type']) {
