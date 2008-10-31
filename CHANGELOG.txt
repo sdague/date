@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix timezone caching -- it was resetting when it didn't need to, consuming resources.
 - Found a better way to generate random timezones using mt_rand() instead of rand() to avoid getting lots of duplicates.
 - Found some timezones that can't be used in PHP4 because we don't have offset information, so remove them from timezone lists.
 - Fix error in PHP4 dst switch date for North America.
