@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix error in PHP4 dst switch date for North America.
 - Get rid of date-clear-block class in case it is affecting the sporatic problems with popups.
 - Clean up admin summary names for the date argument and date filter.
 - #327506 Detect and trap bad timezones in ical import so they don't create errors.

@@ -712,7 +712,12 @@ function date_is_dst($timestamp, $timezone = NULL) {
         $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC")) + 7200;
       }
       // end of DST (where applicable) (last Sunday in October 2 am local time)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+      if ($year < 2007) {
+        $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+      }
+      else {
+        $dstend = strtotime("1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+      }
       break;
     case 16: // Cuba
       // start of DST  (April 1st)
