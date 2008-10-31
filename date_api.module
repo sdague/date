@@ -611,7 +611,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
   // Make sure some value is set for the date and timezone even if the
   // site timezone is not yet set up to avoid fatal installation
   // errors.
-  if (empty($timezone)) {
+  if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
   }
   if (!date_is_valid($date, $type) || empty($date)) {
@@ -636,6 +636,17 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
     }
   }
   return NULL;
+}
+
+function date_timezone_is_valid($timezone) {
+  static $timezone_names;
+  if (empty($timezone_names)) {
+    $timezone_names = array_keys(date_timezone_names(TRUE));
+  }
+  if (!in_array($timezone, $timezone_names)) {
+    return FALSE;
+  }
+  return TRUE;
 }
 
 /**

@@ -370,6 +370,10 @@ function date_ical_parse_date($field, $data) {
     $tz = $properties['TZID'];
     // Fix commonly used alternatives like US-Eastern which should be US/Eastern.
     $tz = str_replace('-', '/', $tz);
+    // Unset invalid timezone names.
+    if (!date_timezone_is_valid($tz)) {
+      $tz = '';
+    }
   }
   // If declared as UTC with terminating 'Z', use that timezone
   else if (strpos($data, 'Z') !== false) {
