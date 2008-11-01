@@ -52,23 +52,20 @@ function _date_content_generate($node, $field) {
       $format = DATE_FORMAT_DATETIME;
       break;
   }
-  $count = $field['multiple'] > 0 && $field['multiple'] < 99  ? rand(1, 6) : 1;
-  for($i = 0; $i < $count; $i++) {
-    $node_field[$i]['value'] = date_format($start, $format);
+  $node_field['value'] = date_format($start, $format);
+  if ($field['todate']) {
+    $node_field['value2'] = date_format($start2, $format);
+  }
+  if ($field['tz_handling'] == 'date') {
+    date_timezone_set($start, timezone_open($timezone));
+    $node_field['timezone'] = $timezone;
+    $node_field['offset'] = date_offset_get($start);
     if ($field['todate']) {
-      $node_field[$i]['value2'] = date_format($start2, $format);
-    }
-    if ($field['tz_handling'] == 'date') {
-      date_timezone_set($start, timezone_open($timezone));
-      $node_field[$i]['timezone'] = $timezone;
-      $node_field[$i]['offset'] = date_offset_get($start);
-      if ($field['todate']) {
-        date_timezone_set($start2, timezone_open($timezone));
-        $node_field[$i]['offset2'] = date_offset_get($start2);     	 	
-      }
+      date_timezone_set($start2, timezone_open($timezone));
+      $node_field['offset2'] = date_offset_get($start2);     	 	
     }
   }
-  if ($field['multiple'] == 99) {
+  if (!empty($field['repeat'])) {
     // TODO
     // Create a repeating date.
   }
