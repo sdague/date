@@ -183,6 +183,22 @@ function date_widget_info() {
   return $info;
 }
 
+function date_input_value($field, $element) {
+  switch ($field['widget']['type']) {
+    case 'date_text':
+    case 'date_text_repeat':
+      $function = 'date_text_input_value';
+      break;
+    case 'date_popup':
+    case 'date_popup_repeat':
+      $function = 'date_popup_input_value';
+      break;
+    default:
+      $function = 'date_select_input_value';
+  }
+  return $function($element);
+}
+
 /**
  * Implementation of hook_field_formatter_info().
  */
