@@ -149,7 +149,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
     if (!isset($items[$delta][$processed])) {
       $items[$delta][$processed] = '';
     }
-    $date = date_local_date($delta, $items[$delta], $timezone, $field, $processed);
+    $date = date_local_date($form, $form_state, $delta, $items[$delta], $timezone, $field, $processed);
     $items[$delta][$processed] = is_object($date) ? date_format($date, DATE_FORMAT_DATETIME) : '';
   }
 
@@ -186,8 +186,12 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
  * widget settings and item values, using field settings to
  * determine what to do with empty values.
  */
-function date_local_date($delta, $item, $timezone, $field, $part = 'value') {
-  if ($part == 'value') {
+function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $part = 'value') {
+  if (!empty($form['nid']['#value'])) {
+    $default_value = '';
+    $default_value_code = '';
+  }
+  elseif ($part == 'value') {
     $default_value = $field['widget']['default_value'];
     $default_value_code = $field['widget']['default_value_code'];
   }

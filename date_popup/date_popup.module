@@ -191,6 +191,7 @@ function date_popup_process($element, $edit, $form_state, $form) {
   else {
     $element['#element_validate'] = array('date_popup_validate');
   }
+  
   return $element;
 }
 
@@ -251,6 +252,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
     );
+   
   // TODO, figure out exactly when we want this description. In many places it is not desired.
   $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date($date_format, time())));
   return $sub_element;
