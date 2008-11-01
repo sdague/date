@@ -282,14 +282,14 @@ function date_copy_import_csv_form() {
  * iCal import form.
  */
 function date_copy_import_ical_form($form_state) {
-  $form['#prefix'] = t('Use Feed API to import ical data into nodes.');
+  $message = t('Use <a href="@link">Feed API</a> to import ical dates into nodes.', array('@link' => 'http://drupal.org/project/feedapi'));
   if (module_exists('advanced_help')) {
-    $form['#prefix'] .= ' '. t('See complete instructions on how to do it in the <a href="!link">Advanced help</a>.', array('!link' => url('help/date_api/ical-import')));
+    $message .= ' '. t('See complete instructions on how to do it in the <a href="!link">Advanced help</a>.', array('!link' => url('help/date_api/ical-import')));
   }
   else {
-    $form['#prefix'] .= ' '. t('Enable the <a href="http://drupal.org/project/advanced_help">Advanced help module</a> for more instructions.');    
+    $message .= ' '. t('Enable the <a href="http://drupal.org/project/advanced_help">Advanced help module</a> for more instructions.');    
   }
-  return $form;
+  drupal_set_message($message);
 }
 
 /**
