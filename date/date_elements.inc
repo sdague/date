@@ -166,7 +166,6 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
       '#type' => 'date_timezone',
       '#delta' => $delta,
       '#default_value' => $timezone,
-      //'#options' => date_timezone_names(),
       '#weight' => $field['widget']['weight'] + .2,
       );
   }
@@ -392,7 +391,7 @@ function date_combo_validate($element, &$form_state) {
           $merged_date['hour'] -= 12;
         }
       }
-      
+              
       // If all date values were empty and a date is required, throw 
       // an error on the first element. We don't want to create 
       // duplicate messages on every date part, so the error will 
@@ -406,8 +405,7 @@ function date_combo_validate($element, &$form_state) {
 
       // Call the right function to turn this altered user input into
       // a new value for the todate.
-      $function = str_replace('_repeat', '', $field['widget']['type']) .'_input_value';
-      $to_date = $function($element[$to_field]);
+      $to_date = date_input_value($field, $element[$to_field]);
       $item[$to_field] = $to_date;
     }
     else {
@@ -415,6 +413,9 @@ function date_combo_validate($element, &$form_state) {
     }
     if ($item[$from_field] > $item[$to_field]) {
       $error_field = implode('][', $element['#parents']) .'][value2]['. array_shift(array_keys($merged_date));
+      $element[$to_field]['#value'] = $merged_date;
+      $to_date = date_input_value($field, $element[$to_field]);
+      form_set_value($element[$to_field], $to_date, $form_state);
       form_set_error($error_field, t('The To date must be greater than the From date.'));
     }
     else {

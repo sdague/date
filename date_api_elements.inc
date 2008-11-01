@@ -89,7 +89,7 @@ function _date_api_elements() {
  *   the timezone form element
  */
 function date_timezone_process($element, $edit, $form_state, $form) {
-  //$element['#tree'] = TRUE;
+  $element['#tree'] = TRUE;
   $element['timezone'] = array(
     '#type' => 'select',
     '#title' => theme('date_part_label_timezone', 'select', $element),
@@ -97,7 +97,7 @@ function date_timezone_process($element, $edit, $form_state, $form) {
     '#options' => date_timezone_names($element['#required']),
     '#weight' => $element['#weight'],
     '#required' => $element['#required'],
-    '#attributes' => array('class' => 'date-timezone date-clear'),
+    '#attributes' => array('class' => 'date-timezone date-clear-block'),
     '#theme' => 'date_select_element',
   );
   if (isset($element['#element_validate'])) {

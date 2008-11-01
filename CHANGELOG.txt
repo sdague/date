@@ -8,7 +8,6 @@ Version 6.2-dev
 - Found a better way to generate random timezones using mt_rand() instead of rand() to avoid getting lots of duplicates.
 - Found some timezones that can't be used in PHP4 because we don't have offset information, so remove them from timezone lists.
 - Fix error in PHP4 dst switch date for North America.
-- Get rid of date-clear-block class in case it is affecting the sporatic problems with popups.
 - Clean up admin summary names for the date argument and date filter.
 - #327506 Detect and trap bad timezones in ical import so they don't create errors.
 - Fix broken SQL for week arguments and filters, we can't use DATE_FORMAT(), must look for week start and end.
