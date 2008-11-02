@@ -56,7 +56,15 @@ function theme_date_display_combination($element) {
   // on the node itself unless we're showing all dates.
   if (empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
     && module_exists('date_repeat') && !empty($field['repeat']) && $field['repeat'] == 1) {
-    $node->date_id = 'date:'. $node->nid .':'. $field_name .':'. $element['#delta'] .':0';
+    
+    // Different treatment for pseudo nodes created in Views, we can tell
+    // which is which because the full node will have a value for 'content'.
+    if (!empty($node->content)) {
+      $node->date_id = 'date:'. $node->nid .':'. $field_name .':0:0';
+    }
+    else {
+      $node->date_id = 'date:'. $node->nid .':'. $field_name .':'. $element['#item']['#delta'] .':0';
+    }
   }
   
   // If we're trying to display only a single date on a node, see if
