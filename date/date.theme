@@ -56,7 +56,7 @@ function theme_date_display_combination($element) {
   // on the node itself unless we're showing all dates.
   if (empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
     && module_exists('date_repeat') && !empty($field['repeat']) && $field['repeat'] == 1) {
-    $node->date_id = 'date:'. $node->nid .':'. $field_name .':0:0';
+    $node->date_id = 'date:'. $node->nid .':'. $field_name .':'. $element['#delta'] .':0';
   }
   
   // If we're trying to display only a single date on a node, see if
@@ -184,6 +184,7 @@ function theme_date_repeat_display($field, $item, $node = NULL, $dates) {
   // If $field['field_name'] isn't set, this isn't a node, and is
   // probably on a calendar view. The description is too expensive an
   // operation to run on every field in a view, so don't do it.
+  $output = '';
   if (isset($node->$field['field_name'])) {
     $output = date_repeat_rrule_description($item['rrule'], $dates['value']['local']['object']);
     $output = '<div>'. $output .'</div>';
