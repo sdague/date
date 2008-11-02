@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Set up hook_content_generate to creating random repeating dates as well as regular dates, useful to help debug repeat problems.
 - #322845 Repeating dates with deltas greater than zero were showing no date in Views.
 - #315009 Rework the generation of dates to work right now that the Content module handles repeats.
 - #317057 Make sure existing optional date with empty value doesn't get reset to current date.
