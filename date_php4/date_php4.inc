@@ -221,7 +221,7 @@ if (!function_exists('date_date_set')) {
   function date_date_set(&$date, $year, $month, $day) {
     $new_date = substr_replace($date->value, date_pad($year, 4), 0, 4);
     $new_date = substr_replace($new_date, date_pad($month), 5, 2);
-    $new_date = substr_replace($new_date, date_pad($day), 9, 2);
+    $new_date = substr_replace($new_date, date_pad($day), 8, 2);
     $date = date_create($new_date, $date->timezone);
     return $date;
   }
