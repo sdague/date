@@ -244,7 +244,6 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
 
     if (!empty($week_days) && in_array($rrule['FREQ'], array('MONTHLY', 'WEEKLY', 'YEARLY'))) {
       $finished = FALSE;
-
       $current_day = drupal_clone($start_date);
       $format = $rrule['FREQ'] == 'YEARLY' ? 'Y' : 'n';
       $current_period = date_format($current_day, $format);
@@ -440,6 +439,8 @@ function date_repeat_is_finished($current_day, $days, $count, $end_date) {
  */
 function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+') {
   if (is_object($date_in)) {
+    $current_month = date_format($date_in, 'n');
+    
     // Reset to the start of the month.
     // We should be able to do this with date_date_set(), but
     // for some reason the date occasionally gets confused if run
@@ -461,8 +462,13 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+')
       $day = 'days';
     }
     date_modify($date, $direction . $count .' '. $day);
+    
+    // If that takes us outside the current month, don't go there.
+    if (date_format($date, 'n') == $current_month) {
+      return $date;
+    }
   }
-  return $date;
+  return $date_in;
 }
 
 /**
@@ -476,6 +482,8 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+')
  */
 function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+') {
   if (is_object($date_in)) {
+    $current_year = date_format($date_in, 'Y');
+    
     // Reset to the start of the month.
     // See note above.
     $datetime = date_format($date_in, DATE_FORMAT_DATETIME);
@@ -494,6 +502,11 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+') 
       $day = 'days';
     }
     date_modify($date, $direction . $count .' '. $day);
+    
+    // If that takes us outside the current year, don't go there.
+    if (date_format($date, 'Y') == $current_year) {
+      return $date;
+    }
   }
-  return $date;
+  return $date_in;
 }
