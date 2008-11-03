@@ -252,7 +252,8 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
       // middle of the possible week days, needed so we don't prematurely
       // jump to the next week. The date_repeat_add_dates() function will
       // keep dates outside the range from getting added.
-      if (date_repeat_dow2day(date_format($current_day, 'w')) != $week_start_day) {
+      $dow_days = date_repeat_dow_day_options(FALSE);
+      if ($dow_days[date_repeat_dow2day(date_format($current_day, 'w'))] != $week_start_day) {
         date_modify($current_day, '-1 '. $week_start_day);
       }
       while (!$finished) {
@@ -264,9 +265,9 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
             // function is insufficient to test whether to include this date
             // if we are using a rule like 'every other month', so we must
             // explicitly test it here.
-            if (date_format($current_day, 'l') != $day) {
+            //if (date_format($current_day, 'l') != $day) {
               date_modify($current_day, '+1 '. $day);
-            }
+            //}
             if ($rrule['FREQ'] == 'WEEKLY' || date_format($current_day, $format) == $current_period) {
               date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
             }
@@ -276,8 +277,6 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
           // If this is a WEEKLY frequency, stop after each week,
           // otherwise, stop when we've moved outside the current period.
           // Jump to the end of the week, then test the period.
-          date_modify($current_day, '+1 '. $week_start_day);
-          date_modify($current_day, '-1 day');
           if ($finished || $rrule['FREQ'] == 'WEEKLY') {
             $period_finished = TRUE;
           }
