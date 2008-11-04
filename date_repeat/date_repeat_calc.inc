@@ -31,13 +31,13 @@
  *
  * Compute dates that match the requested rule, within a specified date range.
  */
-function _date_repeat_calc($rrule, $start, $end, $exceptions) {
+function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
-
-  // TODO, is this the right timezone to use? Generally date calculations
-  // work best if done in UTC, but need to verify it won't create problems.
-  $timezone = 'UTC';
   
+  if (empty($timezone)) {
+    $timezone = date_default_timezone_name();
+  }
+
   // Get the parsed array of rule values.
   $rrule = date_ical_parse_rrule('RRULE:', $rrule);
   
@@ -48,11 +48,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   // If the rule has an UNTIL, see if that is earlier than the end date.
   if (!empty($rrule['UNTIL'])) {
     $until_date = date_ical_date($rrule['UNTIL']);
+    date_timezone_set($until_date, timezone_open($timezone));
     if (date_format($until_date, 'U') < date_format($end_date, 'U')) {
       $end_date = $until_date;
     }
   }
-
+    
   // Get an integer value for the interval, if none given, '1' is implied.
   $interval = max(1, isset($rrule['INTERVAL']) ? $rrule['INTERVAL'] : 1);
   $count = isset($rrule['COUNT']) ? $rrule['COUNT'] : NULL;
@@ -98,7 +99,6 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   if (!empty($rrule['BYMONTHDAY'])) {
     $finished = FALSE;
     $current_day = drupal_clone($start_date);
-    $time = date_format($start_date, 'H:i:s');
     $direction_days = array();
     // Deconstruct the day in case it has a negative modifier.
     foreach ($rrule['BYMONTHDAY'] as $day) {

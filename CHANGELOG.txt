@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #296529 Update repeating date computations to properly adjust the UNTIL date to the right time and timezone so the end date gets picked up correctly.
 - #319452 Fix bug in PHP4 calculation of +/-1 week when using Monday as the first day of the week.
 - #319452 Make sure repeating date calculations like 'the 5th Sunday' don't prematurely jump to the following period.
 - Fix bug in PHP4 calculation of date_date_set() that was getting the day wrong.

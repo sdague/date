@@ -166,7 +166,11 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
   $second = intval(date_format($start, 's'));
   date_time_set($end, $hour, $minute, $second);
   $end_datetime = date_format($end, DATE_FORMAT_DATETIME);
-    
+  $values['UNTIL']['datetime'] = $end_datetime;
+  
+  // Rebuild the RRULE with the times.
+  $rrule = date_api_ical_build_rrule($values);
+
   // Split the RRULE into RRULE and EXDATE parts.
   $parts = date_repeat_split_rrule($rrule);
   $rule = explode("\n", $rrule);
@@ -176,8 +180,8 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
     $date = date_ical_date($exception);
     $exceptions[] = date_format($date, 'Y-m-d');
   }
-  
-  $dates = date_repeat_calc($rrule, $start_datetime, $end_datetime, $exceptions);
+
+  $dates = date_repeat_calc($rrule, $start_datetime, $end_datetime, $exceptions, $timezone);
   $value = array();
   foreach ($dates as $delta => $date) {
     // date_repeat_calc always returns DATE_DATETIME dates, which is
