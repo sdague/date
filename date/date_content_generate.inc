@@ -24,9 +24,11 @@ function _date_content_generate($node, $field) {
 	$seconds = mt_rand(0, ($max_days * 86400));
 	date_modify($start, "+$seconds seconds");
 
-	// Modify To date by 1 hour to 1 day.
+	// Modify To date by 1 hour to 3 days, shorter for repeating dates
+	// longer for others.
 	$start2 = drupal_clone($start);
-  date_modify($start2, '+'. mt_rand(60, 1440) .' minutes');  
+	$max = !empty($field['repeat']) ? 720 : 4320;
+  date_modify($start2, '+'. mt_rand(60, $max) .' minutes');  
     
   if ($field['tz_handling'] == 'date') {
     // Choose a random timezone.
