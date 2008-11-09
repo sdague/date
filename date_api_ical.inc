@@ -337,6 +337,9 @@ function date_ical_parse_date($field, $data) {
     }
   }
 
+  // Make this a little more whitespace independent
+  $data = trim($data);
+
   // Record if a time has been found
   $has_time = false;
 
@@ -598,8 +601,10 @@ function date_api_ical_build_rrule($form_values) {
   if (array_key_exists('BYMONTHDAY', $form_values) && $BYMONTHDAY = implode(",", $form_values['BYMONTHDAY'])) {
     $RRULE .= ';BYMONTHDAY='. $BYMONTHDAY;
   }
+  // The UNTIL date is supposed to always be expressed in UTC.
   if (array_key_exists('UNTIL', $form_values) && array_key_exists('datetime', $form_values['UNTIL'])) {
-    $RRULE .= ';UNTIL='. date_convert($form_values['UNTIL']['datetime'], DATE_DATETIME, DATE_ICAL);
+    $until = date_ical_date($form_values['UNTIL'], 'UTC');
+    $RRULE .= ';UNTIL='. date_format($until, DATE_FORMAT_ICAL) .'Z';
   }
 
   // iCal rules presume the week starts on Monday unless otherwise specified,
