@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add 'UNTIL' to the RRULE creation function so it can be used by the API and date_content_generate.
+- Update date_content_generate to find more matches in a more limited period.
 - Make sure repeating date UNTIL date is properly adjusted for timezone.
 - #296529 Update repeating date computations to properly adjust the UNTIL date to the right time and timezone so the end date gets picked up correctly.
 - #319452 Fix bug in PHP4 calculation of +/-1 week when using Monday as the first day of the week.
