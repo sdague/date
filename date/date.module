@@ -572,3 +572,13 @@ function date_formatter_format($formatter, $field_name) {
   }
   return date_limit_format($format, date_granularity($field));
 }
+
+/**
+ * Implementation of hook_views_api().
+ */
+function date_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'date'),
+  );
+}

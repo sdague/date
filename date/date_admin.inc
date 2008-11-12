@@ -274,6 +274,10 @@ function _date_field_settings($op, $field) {
       $data = content_views_field_views_data($field);
       $db_info = content_database_info($field);
       $table_alias = content_views_tablename($field);
+      
+      // Swap in the date multiple value handler for 
+      // CCK's regular multiple value handler.
+      $data[$table_alias][$field['field_name'] .'_value']['field']['handler'] = 'date_handler_field_multiple';
 
       // Unset the filter and argument handlers, dates can use the generic 
       // date argument and filter handlers created by the Date API.

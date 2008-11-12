@@ -191,7 +191,7 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
       'offset' => date_offset_get($date_start),
       'offset2' => date_offset_get($date_end),
       'timezone' => $timezone,
-      'rrule' => $delta == 0 ? $rrule : '',
+      'rrule' => $rrule,
       );
   }
   return $value;  
