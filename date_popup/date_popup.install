@@ -26,3 +26,51 @@ function date_popup_requirements($phase) {
   }
   return $requirements;
 }
+
+/**
+ * Implementation of hook_install().
+ */
+function date_popup_install() {
+  if (module_exists('content')) {
+    drupal_load('module', 'content');
+    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    content_clear_type_cache(TRUE);
+  }
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function date_popup_uninstall() {
+  if (module_exists('content')) {
+    drupal_load('module', 'content');
+    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    content_clear_type_cache(TRUE);
+  }
+}
+
+/**
+ * Implementation of hook_enable().
+ * Reset the calendar caches.
+ */
+function date_popup_enable() {
+  if (module_exists('content')) {
+    drupal_load('module', 'content');
+    drupal_load('module', 'content');
+    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    content_clear_type_cache(TRUE);
+  }
+}
+
+/**
+ * Implementation of hook_disable().
+ * Empty the date caches.
+ */
+function date_popup_disable() {
+  if (module_exists('content')) {
+    drupal_load('module', 'content');
+    drupal_load('module', 'content');
+    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    content_clear_type_cache(TRUE);
+  }
+}
