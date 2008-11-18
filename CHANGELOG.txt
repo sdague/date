@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #333831 Make sure Date Repeat widgets are not made available if the Date Repeat module is disabled, and add hooks to mark repeating widgets active and inactive when the module is enabled and disabled.
 - #332806 Make sure that Date Popup widgets are marked active when the module is enabled.
 - Adapt processing to make sure only selected dates display in nodes, views, and calendars.
 - Add Views field handler for date that can be smarter about grouping date values in views.

@@ -180,6 +180,13 @@ function date_widget_info() {
         ),
     );
   }
+  if (!module_exists('date_repeat')) {
+    unset($info['date_select_repeat']);
+    unset($info['date_text_repeat']);
+    if (isset($info['date_popup_repeat'])) {
+      unset($info['date_popup_repeat']);
+    }
+  }
   return $info;
 }
 

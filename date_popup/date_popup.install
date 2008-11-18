@@ -33,7 +33,15 @@ function date_popup_requirements($phase) {
 function date_popup_install() {
   if (module_exists('content')) {
     drupal_load('module', 'content');
-    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    if (!db_table_exists(content_instance_tablename())) {
+      return;
+    }
+    if (module_exists('date_repeat')) {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    }
+    else {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s'", 'date_popup');
+    }
     content_clear_type_cache(TRUE);
   }
 }
@@ -44,33 +52,53 @@ function date_popup_install() {
 function date_popup_uninstall() {
   if (module_exists('content')) {
     drupal_load('module', 'content');
-    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    if (!db_table_exists(content_instance_tablename())) {
+      return;
+    }
+    if (module_exists('date_repeat')) {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    }
+    else {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s'", 'date_popup');
+    }
     content_clear_type_cache(TRUE);
   }
 }
 
 /**
  * Implementation of hook_enable().
- * Reset the calendar caches.
  */
 function date_popup_enable() {
   if (module_exists('content')) {
     drupal_load('module', 'content');
-    drupal_load('module', 'content');
-    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    if (!db_table_exists(content_instance_tablename())) {
+      return;
+    }
+    if (module_exists('date_repeat')) {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    }
+    else {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=1 WHERE widget_type='%s'", 'date_popup');
+    }
     content_clear_type_cache(TRUE);
   }
 }
 
 /**
  * Implementation of hook_disable().
- * Empty the date caches.
  */
 function date_popup_disable() {
   if (module_exists('content')) {
     drupal_load('module', 'content');
-    drupal_load('module', 'content');
-    db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    if (!db_table_exists(content_instance_tablename())) {
+      return;
+    }
+    if (module_exists('date_repeat')) {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s' OR widget_type='%s'", 'date_popup', 'date_popup_repeat');
+    }
+    else {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_active=0 WHERE widget_type='%s'", 'date_popup');
+    }
     content_clear_type_cache(TRUE);
   }
 }
