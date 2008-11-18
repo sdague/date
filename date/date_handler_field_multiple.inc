@@ -9,117 +9,15 @@
  * field and formatter handling can extend this class.
  */
 class date_handler_field_multiple extends content_handler_field_multiple {
-  var $defer_query;
-
-  function init(&$view, $options) {
-    $field = $this->content_field;
-    parent::init($view, $options);
-
-    $this->defer_query = $options['multiple']['group'] && $field['multiple'];
-
-    if ($this->defer_query) {
-      // Grouped field: ditch the existing additional_fields (field columns + delta).
-      // In the main query we'll only need:
-      // - vid, which will be used to retrieve the actual values in pre_render,
-      // - node type, which wil be used to render the results.
-      $this->additional_fields = array(
-        'vid' => array('table' => 'node', 'field' => 'vid'),
-        'type' => array('table' => 'node', 'field' => 'type'),
-      );
-    }
-  }
-
-  function options(&$options) {
-    parent::options($options);
-    $options['multiple'] = array(
-      'group' => TRUE,
-      'multiple_number' => '',
-      'multiple_from' => '',
-      'multiple_reversed' => FALSE,
-    );
-  }
-
-  /**
-   * Provide 'group multiple values' option.
-   */
-  function options_form(&$form, &$form_state) {
-    parent::options_form($form, $form_state);
-
-    $field = $this->content_field;
-    $options = $this->options;
-
-    $form['multiple'] = array(
-      '#access' => $field['multiple'],
-      '#weight' => 1,
-    );
-    $form['multiple']['group'] = array(
-      '#title' => t('Group multiple values'),
-      '#type' => 'checkbox',
-      '#default_value' => $options['multiple']['group'],
-      '#description' => t('If unchecked, each item in the field will create a new row, which may appear to cause duplicates. This setting is not compatible with click-sorting in table displays.'),
-    );
-    // Make the string translatable by keeping it as a whole rather than
-    // translating prefix and suffix separately.
-    list($prefix, $suffix) = explode('@count', t('Show @count value(s)'));
-    $form['multiple']['multiple_number'] = array(
-      '#type' => 'textfield',
-      '#size' => 5,
-      '#field_prefix' => $prefix,
-      '#field_suffix' => $suffix,
-      '#default_value' => $options['multiple']['multiple_number'],
-      '#prefix' => '<div class="container-inline">',
-      '#process' => array('views_process_dependency'),
-      '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
-    );
-    list($prefix, $suffix) = explode('@count', t('starting from @count'));
-    $form['multiple']['multiple_from'] = array(
-      '#type' => 'textfield',
-      '#size' => 5,
-      '#field_prefix' => $prefix,
-      '#field_suffix' => $suffix,
-      '#default_value' => $options['multiple']['multiple_from'],
-      '#process' => array('views_process_dependency'),
-      '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
-    );
-    $form['multiple']['multiple_reversed'] = array(
-      '#title' => t('Reversed (start from last values)'),
-      '#type' => 'checkbox',
-      '#default_value' => $options['multiple']['multiple_reversed'],
-      '#suffix' => '</div>',
-      '#process' => array('views_process_dependency'),
-      '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
-    );
-  }
-
-  /**
-   * Determine if this field is click sortable.
-   */
-  function click_sortable() {
-    $field = $this->content_field;
-    $options = $this->options;
-
-    // Grouped fields are not click-sortable.
-    return !empty($this->definition['click sortable']) && !$this->defer_query;
-  }
-
-  function query() {
-    // If this is not a grouped field, use the generic query().
-    if (!$this->defer_query) {
-      return parent::query();
-    }
-
-    // Grouped field: do NOT call ensure_my_table, only add additional fields.
-    $this->add_additional_fields();
-    $this->field_alias = $this->aliases['vid'];
-  }
-
+  
   function pre_render($values) {
+    
     // If there are no values to render (displaying a summary, or query returned no results),
     // or if this is not a grouped field, do nothing specific.
     if (isset($this->view->build_info['summary']) || empty($values) || !$this->defer_query) {
       return parent::pre_render($values);
     }
-
+    
     $field = $this->content_field;
     $db_info = content_database_info($field);
     $options = $this->options;
@@ -176,6 +74,8 @@ class date_handler_field_multiple extends content_handler_field_multiple {
   }
 
   function render($values) {
+    $values->view = $this->view;    
+    
     // If this is not a grouped field, use content_handler_field::render().
     if (!$this->defer_query || empty($this->field_values)) {
       return parent::render($values);
@@ -248,19 +148,6 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     }
 
     return '';
-  }
-
-  function render_link($data, $values) {
-    if (!$this->defer_query || empty($this->field_values)) {
-      return parent::render_link($data, $values);
-    }
-
-    if (!empty($this->options['link_to_node'])) {
-      return l($data, "node/" . $values->nid, array('html' => TRUE));
-    }
-    else {
-      return $data;
-    }
   }
 
 }

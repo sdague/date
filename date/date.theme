@@ -47,39 +47,33 @@
  */
 function theme_date_display_combination($element) {
   $node = $element['#node'];
+  
+  // Prepare the node in case it is a view with multiple values 
+  // so it will display the right values.
+  date_prepare_node($node);
+    
   $field_name = $element['#field_name'];
   $fields = content_fields();
   $field = $fields[$field_name];
   $item = $element['#item'];
     
-  // Only display the start date for a repeating date
-  // on the node itself unless we're showing all dates.
-  if (empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
-    && module_exists('date_repeat') && !empty($field['repeat']) && $field['repeat'] == 1) {
-    
-    // Different treatment for pseudo nodes created in Views, we can tell
-    // which is which because the full node will have a value for 'content',
-    // and a full node display in a view will have a value for 'view'.
-    if (!empty($node->view)) {
-      date_set_view_fields($node, $element);
-    }
-    elseif (!empty($node->content)) {
-      $node->date_id = 'date:'. $node->nid .':'. $field_name .':0:0';
-    }
-    else {
-      $node->date_id = 'date:'. $node->nid .':'. $field_name .':'. $element['#item']['#delta'] .':0';
-    }
-  }
-  
-  // If we're trying to display only a single date on a node, see if
-  // this is the right one.
-  if (!empty($node->date_id) && !empty($item['#delta'])) {
-    list($module, $nid, $item_field_name, $delta, $other) = explode(':', $node->date_id);
-    if ($item_field_name != $field_name || $delta != $item['#delta']) {
+  // There could be more than one date field in a view or on a node.
+  // If date_id is set for this field and the delta doesn't match, don't display it.
+  foreach ($node->date_id as $key => $id) {
+    list($module, $nid, $field_name, $delta, $other) = explode(':', $id);
+    if ($field_name == $field['field_name'] && isset($item['#delta']) && $delta != $item['#delta']) {
       return;
     }
   }
   
+  // Special test for repeating dates with no date id set.
+  // Only display the start date unless we're showing all dates.
+  if (empty($node->date_id) && empty($node->date_repeat_show) && !empty($field['repeat']) 
+  && isset($item['#delta']) && $item['#delta'] != 0) {
+    return;
+  }
+  
+  // Call the right theme for this formatter.
   $dates = date_formatter_process($element);
   $date1 = $dates['value']['formatted'];
   if (isset($dates['value2'])) {
@@ -134,88 +128,6 @@ function theme_date_display_combination($element) {
     $output .= theme('date_repeat_display', $field, $item, $node, $dates);
   }
   return $output;
-}
-
-function date_set_view_fields(&$node, $element) {
-  $field_name = $element['#field_name'];
-  $fields = content_fields();
-  $field = $fields[$field_name];
-  $item = $element['#item'];
-  $view = $node->view;
-
-  foreach ($view->field as $field) {
-    if (substr($field['handler'], 0, '25') == 'date_views_field_handler_') {
-      $name = $field['field'];
-      $type = str_replace('date_views_field_handler_', '', $field['handler']);
-      if (substr($name, -7) == '_value2') {
-        $field_name = substr($name, 0, strlen($name) - 7);
-      }
-      elseif (substr($name, -6) == '_value') {
-        $field_name = substr($name, 0, strlen($name) - 6);
-      }
-      else {
-        $field_name = '';
-        $type = '';
-        continue; 
-      }
-      $delta_field = 'node_data_'. $field_name .'_delta';
-      break;
-    }
-  }
-  $fields = content_fields();
-    
-  foreach ($node->content as $field_name => $field) { 
-    if (!empty($field_name) && isset($node->$field_name)) {
-      switch ($type) {
-        case 'ungroup':
-          $delta = $n->$delta_field;
-          $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-          break;
-        case 'first':
-        case 'last':
-        case 'group':
-          if (!empty($view->date_handler) && !empty($view->min_date)) {
-            $field = $fields[$field_name];
-            $format = date_type_format($field['type']);
-            $timezone = date_get_timezone($field['tz_handling']);
-            $db_timezone = date_get_timezone_db($field['tz_handling']);
-            $min_date = $view->min_date;
-            $max_date = $view->max_date;
-            if ($db_timezone != date_default_timezone_name()) {
-              date_timezone_set($min_date, timezone_open($db_timezone));
-              date_timezone_set($max_date, timezone_open($db_timezone));
-            }
-            $min_date = date_format($min_date, $format);
-            $max_date = date_format($max_date, $format);
-            if (empty($item['value2'])) $item['value2'] = $item['value'];
-            $node_field = $node->$field_name;
-            foreach ($node_field as $delta => $item) {
-              if ($item['value'] < $min_date || $item['value2'] > $max_date) {
-                unset($node_field[$delta]);
-              }
-            }
-            $node->$field_name = $node_field;
-          }
-          switch ($type) {
-            case 'first':
-              $delta = min(array_keys($node->$field_name));
-              $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-              break;
-            case 'last':
-              $delta = max(array_keys($node->$field_name));
-              $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-              break;
-            case 'group':
-              $delta = min(array_keys($node->$field_name));
-              $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-              break;
-          }
-          $node->date_repeat_show = TRUE;
-          break;
-      }
-      $node->date_id = $id;
-    }
-  }
 }
 
 /**

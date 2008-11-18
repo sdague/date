@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Adapt processing to make sure only selected dates display in nodes, views, and calendars.
 - Add Views field handler for date that can be smarter about grouping date values in views.
 - Do a little more work on clarifying the repeat descriptions.
 - Fix PHP4 timezone problem that didn't save timezone changes correctly in rare cases when refreshing zones using devel.

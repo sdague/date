@@ -52,6 +52,7 @@ function _date_api_fields($base = 'node') {
       $timezone_field = '';
       $offset_field = '';
       $rrule_field = '';
+      $delta_field = '';
       $granularity = array('year', 'month', 'day', 'hour', 'minute');
        
       // Handling for content field dates
@@ -75,6 +76,11 @@ function _date_api_fields($base = 'node') {
           $related_fields = array_merge($related_fields, array($table_name .'.'. $db_info['columns']['rrule']['column']));
           $rrule_field = $table_name .'.'. $db_info['columns']['rrule']['column'];
         }
+      }
+      // Get the delta value into the query.
+      if (!empty($handler->content_field['multiple'])) {
+        array_push($related_fields, "$table_name.delta");
+        $delta_field = $table_name .'_delta';
       }
 
       // Handling for cck fromto dates
@@ -121,6 +127,7 @@ function _date_api_fields($base = 'node') {
         'timezone_field' => $timezone_field,
         'rrule_field' => $rrule_field,
         'related_fields' => $related_fields,
+        'delta_field' => $delta_field,
       );
       if (isset($handler->content_field)) {
         if (substr($field_name, -1) == '2') {
@@ -137,7 +144,6 @@ function _date_api_fields($base = 'node') {
       $fields['alias'][$alias] = $fields['name'][$name];
     }
   }
-  
-  //cache_set($cid, $fields, 'cache_views');
+  cache_set($cid, $fields, 'cache_views');
   return $fields;
 }

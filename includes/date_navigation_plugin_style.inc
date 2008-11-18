@@ -52,6 +52,10 @@ class date_navigation_plugin_style extends views_plugin_style {
         $this->view->week = isset($argument->week) ? $argument->week : NULL;
         $this->view->min_date = $argument->min_date;
         $this->view->max_date = $argument->max_date;
+        if (empty($this->view->date_fields)) {
+          $this->view->date_fields = array();
+        }
+        $this->view->date_fields = array_merge($this->view->date_fields, array_keys($argument->options['date_fields']));
         $this->view->url = $this->view->get_url();
       }
       $i++;
