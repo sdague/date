@@ -1310,7 +1310,7 @@ function date_limit_format($format, $granularity) {
         $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[Yy])';
         break;
       case 'day':
-        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[lDdj])';
+        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[l|D|d|dS|j|jS]{1,2})';
         break;
       case 'month':
         $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[FMmn])';
@@ -1636,10 +1636,12 @@ function date_embed_view($name, $display_id = 'default', $settings = array(), $a
  *  - if not empty, return the url of a specific date type.
  * @param $date_arg
  *  - if not empty, return the url for a view with a specific date argument.
+ * @param $force_view_url
+ *  - always use the view url, even if embedded.
  * @return 
  *   return the requested view url.
  */
-function date_real_url($view, $date_type = NULL, $date_arg = NULL) {
+function date_real_url($view, $date_type = NULL, $date_arg = NULL, $force_view_url = FALSE) {
   $args = $view->args;
   $pos = $view->date_arg_pos;
   if (!empty($date_type)) {
@@ -1665,7 +1667,7 @@ function date_real_url($view, $date_type = NULL, $date_arg = NULL) {
     $args = $view->args;
   }
   // Is this an embedded or a block view?
-  if (!empty($view->preview) || !empty($view->block_identifier)) {
+  if (!$force_view_url && (!empty($view->preview) || !empty($view->block_identifier))) {
     $url = $view->get_url($args);
     return url($_GET['q'], array(
       'query' => date_querystring($view, array(date_block_identifier($view) => $url)), 

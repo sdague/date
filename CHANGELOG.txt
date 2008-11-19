@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #336109 Add handling for ordinals to custom date formatting.
 - #265076, #324794 Revert attempt to use strtotime to 'guess' text input since it too often ends up silently turning into 'now'.
 - #303951 Relax requirements for text date input to allow single digit months and days.
 - #309617 Make DATE_REGEX_LOOSE a bit looser so the @ argument will work right for single digit months and days.
