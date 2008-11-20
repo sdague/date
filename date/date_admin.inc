@@ -113,9 +113,10 @@ function date_widget_settings_form($widget) {
   foreach ($formats as $f) {
     $options[$f] = date_format_date($now, 'custom', $f);
   }
+  $default_format = array_shift($formats);
   $form['input']['input_format'] = array(
     '#type' => 'select', '#title' => t('Input format'),
-    '#default_value' => $widget['input_format'],
+    '#default_value' => isset($widget['input_format']) ? $widget['input_format'] : $default_format,
     '#options' => $options,
     '#description' => t('Set the order and format for the date parts in the input form. The format will be adapted to remove values not in the granularity for this field.'),
   );
@@ -123,7 +124,7 @@ function date_widget_settings_form($widget) {
   if ($widget['type'] != 'date_popup') {
     $form['input']['format']['input_format_custom'] = array(
       '#type' => 'textfield',  '#title' => t('*Custom input format'),
-      '#default_value' => $widget['input_format_custom'] ? $widget['input_format_custom'] : '',
+      '#default_value' => isset($widget['input_format_custom']) ? $widget['input_format_custom'] : '',
       '#description' => t('The custom format, if provided, will override the input format selected above. See more about custom date formats below.'),
     );
   }
@@ -185,11 +186,12 @@ function date_widget_settings_form($widget) {
   $form['input']['advanced']['text_parts'] = array(
     '#theme' => $widget['type'] == 'date_select' ? 'date_text_parts' : '',
     );
+  $text_parts = isset($widget['text_parts']) ? (array) $widget['text_parts'] : array();
   foreach (date_granularity_names() as $key => $value) {
     if ($widget['type'] == 'date_select') {
       $form['input']['advanced']['text_parts'][$key] = array(
         '#type' => 'radios',
-        '#default_value' => in_array($key, (array) $widget['text_parts']) ? 1 : 0,
+        '#default_value' => in_array($key, $text_parts) ? 1 : 0,
         '#options' => array(0 => '', 1 => ''),
         );
     }
@@ -325,7 +327,14 @@ function date_columns($field) {
 
 function date_field_settings_form($field) {
   $form = array();
-  $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : (date_has_time($field['granularity']) ? 'site' : 'none');
+  // Make sure granularity is in the right format and has no empty values.
+  if (!empty($field['granularity']) && is_array($field['granularity'])) {
+    $granularity = array_filter($field['granularity']);  
+  }
+  else {
+    $granularity = array('year', 'month', 'day', 'hour', 'minute');
+  }
+  $tz_handling = isset($field['tz_handling']) ? $field['tz_handling'] : (date_has_time($granularity) ? 'site' : 'none');
 
   // If adding a repeat, override the Content module's handling of the multiple values option.
   if (module_exists('date_repeat') && date_is_repeat_field($field)) {
@@ -342,15 +351,8 @@ function date_field_settings_form($field) {
     '#type' => 'radios', '#title' => t('To Date'),
     '#options' => array('' => t('Never'), 'optional' => t('Optional'), 'required' => t('Required')),
     '#description' => $description,
-    '#default_value' => $field['todate'] ? $field['todate'] : '',
+    '#default_value' => isset($field['todate']) ? $field['todate'] : '',
     );
-  // Make sure granularity is in the right format and has no empty values.
-  if (!empty($field['granularity']) && is_array($field['granularity'])) {
-    $granularity = array_filter($field['granularity']);  
-  }
-  else {
-    $granularity = array('year', 'month', 'day', 'hour', 'minute');
-  }
   $form['input']['granularity'] = array(
     '#type' => 'select', '#title' => t('Granularity'),
     '#default_value' => $granularity,
@@ -439,13 +441,13 @@ function date_formatter_setup_form($field, $delta) {
 
   $form['output_format_date'. $append] = array(
     '#type' => 'select', '#title' => t('Date display'),
-    '#default_value' => $field['output_format_date'. $append] ? $field['output_format_date'. $append] : $default,
+    '#default_value' => isset($field['output_format_date'. $append]) ? $field['output_format_date'. $append] : $default,
     '#options' => date_format_options(),
     '#multiple' => false,
   );
   $form['output_format_custom'. $append] = array(
     '#type' => 'textfield', '#title' => t('*Custom display format'),
-    '#default_value' => $field['output_format_custom'. $append] ? $field['output_format_custom'. $append] : '',
+    '#default_value' => isset($field['output_format_custom'. $append]) ? $field['output_format_custom'. $append] : '',
   );
   return $form;
 }
