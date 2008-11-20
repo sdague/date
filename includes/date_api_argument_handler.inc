@@ -28,10 +28,10 @@ class date_api_argument_handler extends views_handler_argument_date {
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
     
     // Set the view range, do this only if not already set in case there are multiple date arguments.
-    if (empty($this->view->date_min_year)) {
+    if (empty($this->view->date_info->min_allowed_year)) {
       $range = $this->year_range();
-      $this->view->date_min_year = !empty($range) && is_array($range) ? $range[0] : variable_get('date_min_year', 100);
-      $this->view->date_max_year = !empty($range) && is_array($range) ? $range[1] : variable_get('date_max_year', 4000);
+      $this->view->date_info->min_allowed_year = !empty($range) && is_array($range) ? $range[0] : variable_get('min_allowed_year', 100);
+      $this->view->date_info->max_allowed_year = !empty($range) && is_array($range) ? $range[1] : variable_get('max_allowed_year', 4000);
     }
   }
 
@@ -316,7 +316,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $this->max_date = $max_date;
     
     // See if we're outside the allowed date range for our argument.
-    if (date_format($min_date, 'Y') < $this->view->date_min_year || date_format($max_date, 'Y') > $this->view->date_max_year) {
+    if (date_format($min_date, 'Y') < $this->view->date_info->min_allowed_year || date_format($max_date, 'Y') > $this->view->date_info->max_allowed_year) {
       drupal_not_found();
       break;
     }

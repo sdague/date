@@ -12,6 +12,11 @@ class date_handler_field_multiple extends content_handler_field_multiple {
   
   function pre_render($values) {
     
+    // Store a pre_rendered copy of the view that has no results.
+    // We use it in render(), but by that time the view includes
+    // results and the object is much larger.
+    $this->view_copy = $this->view;
+    
     // If there are no values to render (displaying a summary, or query returned no results),
     // or if this is not a grouped field, do nothing specific.
     if (isset($this->view->build_info['summary']) || empty($values) || !$this->defer_query) {
@@ -48,11 +53,11 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     // If the view has a minimum/maximum date, limited the grouped
     // values to the date range.
     $where = '';
-    if (!empty($this->view->date_handler) && !empty($this->view->min_date)) {
-      $date_handler = $this->view->date_handler;
+    if (!empty($this->view->date_info->date_handler) && !empty($this->view->date_info->min_date)) {
+      $date_handler = $this->view->date_info->date_handler;
       $sql_field = $field_data['fullname'];
-      $sql1 = $date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($this->view->min_date, DATE_FORMAT_DATETIME));
-      $sql2 = $date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($this->view->max_date, DATE_FORMAT_DATETIME));
+      $sql1 = $date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($this->view->date_info->min_date, DATE_FORMAT_DATETIME));
+      $sql2 = $date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($this->view->date_info->max_date, DATE_FORMAT_DATETIME));
       $where = $sql1 .' AND '. $sql2;
     }
     $query = 'SELECT '. implode(', ', $query_columns) .
@@ -74,8 +79,11 @@ class date_handler_field_multiple extends content_handler_field_multiple {
   }
 
   function render($values) {
-    $values->view = $this->view;    
-    
+       
+    // By this time $values is a pseudo node that will be passed
+    // to the theme. Add view information to it.
+    $values->view = $this->view_copy;
+     
     // If this is not a grouped field, use content_handler_field::render().
     if (!$this->defer_query || empty($this->field_values)) {
       return parent::render($values);

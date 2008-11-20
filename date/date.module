@@ -628,14 +628,14 @@ function date_prepare_node(&$node) {
         default:
           // If we're working with a grouped value of a field used
           // to limit the view's date range, limit the group to that range.
-          if (!empty($view->date_handler) && !empty($view->min_date) 
-          && in_array($field_name, $view->date_fields)) {
+          if (!empty($view->date_info->date_handler) && !empty($view->date_info->min_date) 
+          && in_array($field_name, $view->date_info->date_fields)) {
             $field = $fields[$field_name];
             $format = date_type_format($field['type']);
             $timezone = date_get_timezone($field['tz_handling']);
             $db_timezone = date_get_timezone_db($field['tz_handling']);
-            $min_date = $view->min_date;
-            $max_date = $view->max_date;
+            $min_date = $view->date_info->min_date;
+            $max_date = $view->date_info->max_date;
             if ($db_timezone != date_default_timezone_name()) {
               date_timezone_set($min_date, timezone_open($db_timezone));
               date_timezone_set($max_date, timezone_open($db_timezone));
@@ -678,6 +678,9 @@ function date_prepare_node(&$node) {
  */
 function date_handler_fields($view) {
   $field_names = array();
+  if (empty($view->date_info->date_fields)) {
+    $view->date_info->date_fields = array();
+  }
   foreach ($view->field as $field) {
     if ($field->definition['handler'] == 'date_handler_field_multiple') {
       $name = $field->field;
@@ -693,7 +696,7 @@ function date_handler_fields($view) {
         $group = array();
         continue; 
       }
-      foreach ($view->date_fields as $date_field) {
+      foreach ($view->date_info->date_fields as $date_field) {
         if (strstr($date_field, '.'. $field_name)) {
           $delta_field = 'node_data_'. $field_name .'_delta';
           $field_names[$field_name] = array('options' => $group, 'delta_field' => $delta_field, 'view_field' => $field);

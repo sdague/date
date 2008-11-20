@@ -56,7 +56,7 @@ class date_navigation_plugin_style extends views_plugin_style {
           $this->view->date_fields = array();
         }
         $this->view->date_fields = array_merge($this->view->date_fields, array_keys($argument->options['date_fields']));
-        $this->view->url = $this->view->get_url();
+        $this->view->date_info->url = $this->view->get_url();
       }
       $i++;
     }

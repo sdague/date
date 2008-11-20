@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Rename values added to views to avoid name clashes and keep all date values together.
 - #336109 Add handling for ordinals to custom date formatting.
 - #265076, #324794 Revert attempt to use strtotime to 'guess' text input since it too often ends up silently turning into 'now'.
 - #303951 Relax requirements for text date input to allow single digit months and days.

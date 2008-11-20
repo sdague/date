@@ -7,17 +7,17 @@ function template_preprocess_date_navigation(&$vars) {
   $view = $vars['view'];
   $next_args = $view->args;
   $prev_args = $view->args;
-  $pos = $view->date_arg_pos;
-  $min_date = is_object($view->min_date) ? $view->min_date : date_now();
-  $max_date = is_object($view->max_date) ? $view->max_date : date_now();
+  $pos = $view->date_info->date_arg_pos;
+  $min_date = is_object($view->date_info->min_date) ? $view->date_info->min_date : date_now();
+  $max_date = is_object($view->date_info->max_date) ? $view->date_info->max_date : date_now();
   
-  if (!isset($view->hide_nav)) {
+  if (!isset($view->date_info->hide_nav)) {
     $prev_date = drupal_clone($min_date);
-    date_modify($prev_date, '-1 '. $view->granularity);
+    date_modify($prev_date, '-1 '. $view->date_info->granularity);
     $next_date = drupal_clone($min_date);
-    date_modify($next_date, '+1 '. $view->granularity);
+    date_modify($next_date, '+1 '. $view->date_info->granularity);
     $format = array('year' => 'Y', 'month' => 'Y-m', 'day' => 'Y-m-d');
-    switch ($view->granularity) {
+    switch ($view->date_info->granularity) {
       case 'week':
         $next_week = date_week(date_format($next_date, 'Y-m-d'));
         $prev_week = date_week(date_format($prev_date, 'Y-m-d'));
@@ -25,11 +25,11 @@ function template_preprocess_date_navigation(&$vars) {
         $prev_arg = date_format($prev_date, 'Y-\W') . $prev_week;
         break;
       default:
-        $next_arg = date_format($next_date, $format[$view->granularity]);
-        $prev_arg = date_format($prev_date, $format[$view->granularity]);
+        $next_arg = date_format($next_date, $format[$view->date_info->granularity]);
+        $prev_arg = date_format($prev_date, $format[$view->date_info->granularity]);
     }
-    $next_path = str_replace($view->date_arg, $next_arg, $view->url);
-    $prev_path = str_replace($view->date_arg, $prev_arg, $view->url);
+    $next_path = str_replace($view->date_info->date_arg, $next_arg, $view->date_info->url);
+    $prev_path = str_replace($view->date_info->date_arg, $prev_arg, $view->date_info->url);
     $next_args[$pos] = $next_arg;
     $prev_args[$pos] = $prev_arg;
     $vars['next_url'] = date_real_url($view, NULL, $next_arg);
@@ -46,10 +46,10 @@ function template_preprocess_date_navigation(&$vars) {
     
   // Check whether navigation links would point to 
   // a date outside the allowed range.
-  if (!empty($next_date) && !empty($vars['next_url']) && date_format($next_date, 'Y') > $view->date_max_year) {
+  if (!empty($next_date) && !empty($vars['next_url']) && date_format($next_date, 'Y') > $view->date_info->max_allowed_year) {
     $vars['next_url'] = '';    
   }
-  if (!empty($prev_date) && !empty($vars['prev_url']) && date_format($prev_date, 'Y') < $view->date_min_year) {
+  if (!empty($prev_date) && !empty($vars['prev_url']) && date_format($prev_date, 'Y') < $view->date_info->min_allowed_year) {
     $vars['prev_url'] = '';    
   }
   
@@ -58,12 +58,12 @@ function template_preprocess_date_navigation(&$vars) {
   
   $link = FALSE;
   // Month navigation titles are used as links in the block view.
-	if (!empty($view->block) && $view->granularity == 'month') {
+	if (!empty($view->date_info->block) && $view->date_info->granularity == 'month') {
 	  $link = TRUE;
   }
-  $nav_title = theme('date_nav_title', $view->granularity, $view, $link);
+  $nav_title = theme('date_nav_title', $view->date_info->granularity, $view, $link);
   $vars['nav_title'] = $nav_title;
-  $vars['block'] = !empty($view->block);
+  $vars['block'] = !empty($view->date_info->block);
 }
 /**
  * Theme the calendar title
@@ -71,29 +71,29 @@ function template_preprocess_date_navigation(&$vars) {
 function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL) {
   switch ($granularity) {
     case 'year':
-      $title = $view->year;
-      $url = $view->url .'/'. $view->year;
+      $title = $view->date_info->year;
+      $url = $view->date_info->url .'/'. $view->date_info->year;
       break;
     case 'month':
-      $format = !empty($format) ? $format : (empty($view->mini) ? 'F Y' : 'F');
-      $title = date_format_date($view->min_date, 'custom', $format);
-      $url = $view->url .'/'. $view->year .'-'. date_pad($view->month);
+      $format = !empty($format) ? $format : (empty($view->date_info->mini) ? 'F Y' : 'F');
+      $title = date_format_date($view->date_info->min_date, 'custom', $format);
+      $url = $view->date_info->url .'/'. $view->date_info->year .'-'. date_pad($view->date_info->month);
       break;
     case 'day':
-      $format = !empty($format) ? $format : (empty($view->mini) ? 'l, F j Y' : 'l, F j');
-      $title = date_format_date($view->min_date, 'custom', $format);
-      $url = $view->url .'/'. $view->year .'-'. date_pad($view->month) .'-'. date_pad($view->day);
+      $format = !empty($format) ? $format : (empty($view->date_info->mini) ? 'l, F j Y' : 'l, F j');
+      $title = date_format_date($view->date_info->min_date, 'custom', $format);
+      $url = $view->date_info->url .'/'. $view->date_info->year .'-'. date_pad($view->date_info->month) .'-'. date_pad($view->date_info->day);
       break;
     case 'week':
-    	$format = !empty($format) ? $format : (empty($view->mini) ? 'F j Y' : 'F j');
-      $title = t('Week of @date', array('@date' => date_format_date($view->min_date, 'custom', $format)));
-    	$url = $view->url .'/'. $view->year .'-W'. date_pad($view->week);
+    	$format = !empty($format) ? $format : (empty($view->date_info->mini) ? 'F j Y' : 'F j');
+      $title = t('Week of @date', array('@date' => date_format_date($view->date_info->min_date, 'custom', $format)));
+    	$url = $view->date_info->url .'/'. $view->date_info->year .'-W'. date_pad($view->date_info->week);
     	break;
   }
   // TODO Update this.
-  if (!empty($view->mini) || $link) {
+  if (!empty($view->date_info->mini) || $link) {
   	// Month navigation titles are used as links in the mini view.
-  	return l($title, $view->url);
+  	return l($title, $view->date_info->url);
   }
   else {
     return $title;
