@@ -92,11 +92,11 @@ function _date_api_fields($base = 'node') {
             $db_info = content_database_info($handler->content_field);
             $fromto = array(
               $table_name .'_'. $db_info['columns']['value']['column'],
-              $table_name .'_'. ($handler->content_field['todate'] ? $db_info['columns']['value2']['column'] : $db_info['columns']['value']['column']),
+              $table_name .'_'. (!empty($handler->content_field['todate']) ? $db_info['columns']['value2']['column'] : $db_info['columns']['value']['column']),
               );
             break;
         }
-        $granularity = $handler->content_field['granularity'];
+        $granularity = !empty($handler->content_field['granularity']) ? $handler->content_field['granularity'] : array('year', 'month', 'day', 'hour', 'minute');
       }
       
       // CCK fields append a column name to the field, others do not
