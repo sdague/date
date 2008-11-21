@@ -4,6 +4,9 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+Version 6.2-rc5
+=================
+
 - #309155 Get rid of all translation during date_repeat calculations, it was causing timeouts with locale module.
 - Rename values added to views to avoid name clashes and keep all date values together.
 - #336109 Add handling for ordinals to custom date formatting.
