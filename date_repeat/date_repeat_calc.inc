@@ -175,7 +175,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
     // require that we interate through the whole time period checking each BYDAY.
 
     // Create helper array to pull day names out of iCal day strings.
-    $day_names = date_repeat_dow_day_options();
+    $day_names = date_repeat_dow_day_options(FALSE);
     $days_of_week = array_keys($day_names);
 
     // Parse out information about the BYDAYs and separate them
