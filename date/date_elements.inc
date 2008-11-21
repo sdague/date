@@ -119,7 +119,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
   
   // Be sure users that haven't run the update yet don't get
   // a badly broken value.
-  if ($field['repeat'] && !strstr($field['widget']['type'], '_repeat')) {
+  if (!empty($field['repeat']) && !strstr($field['widget']['type'], '_repeat')) {
     $field['multiple'] = 0;
     return;
   }
