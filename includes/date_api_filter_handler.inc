@@ -30,6 +30,13 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $handler = $this->date_handler;
     $handler->granularity = isset($options['granularity']) ? $options['granularity'] : 'day';
     $handler->adjustment_field = isset($options['adjustment_field']) ? $options['adjustment_field'] : 0;
+    
+    // Set the view range, do this only if not already set in case there are multiple date arguments.
+    if (empty($this->view->date_info->min_allowed_year)) {
+      $range = $this->year_range();
+      $this->view->date_info->min_allowed_year = !empty($range) && is_array($range) ? $range[0] : variable_get('min_allowed_year', 100);
+      $this->view->date_info->max_allowed_year = !empty($range) && is_array($range) ? $range[1] : variable_get('max_allowed_year', 4000);
+    }
   }
 
   // Set default values for the date filter.
@@ -41,6 +48,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $options['form_type'] = 'date_select';
     $options['default_date'] = '';
     $options['default_to_date'] = '';
+    $options['year_range'] = '-3:+3';    
   }
   
   function option_definition() {
@@ -69,6 +77,16 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     //}  
     return $options;
   }
+
+  function year_range() {
+    $year_range = explode(':', $this->options['year_range']);
+    if (substr($this->options['year_range'], 0, 1) == '-' || $year_range[0] < 0) {
+      $this_year = date_format(date_now(), 'Y');
+      $year_range[0] = $this_year + $year_range[0];
+      $year_range[1] = $this_year + $year_range[1];
+    }
+    return $year_range;
+  }
    
   function extra_options_form(&$form, &$form_state) {
     $form['form_type'] = array(
@@ -82,6 +100,13 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
     $form['granularity']['#description'] = '<p>'. t("Select a granularity for the date filter. For instance, selecting 'day' will create a filter where users can select the year, month, and day.") .'</p>';
     
+    $form['year_range'] = array(
+      '#title' => t('Date year range'),
+      '#type' => 'textfield',
+      '#default_value' => $this->options['year_range'],
+      '#description' => t("Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'.  When the argument is set to a date outside the range, the page will be returned as 'Page not found (404)'."),
+    );
+
     $fields = date_api_fields();
     $options = array();
     foreach ($fields['name'] as $name => $field) {
@@ -108,6 +133,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $check_fields = array_filter($form_state['values']['options']['date_fields']);
     if (empty($check_fields)) {
       form_error($form['date_fields'], t('You must select at least one date field for this filter.'));
+    }
+    if (!preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $form_state['values']['options']['year_range']) 
+      && !preg_match('@[0-9]{4}:[0-9]{4}@', $form_state['values']['options']['year_range'])) {
+      form_error($form['year_range'], t('Date year range must be in the format -9:+9 or 2005:2010.'));
     }
   }
   
@@ -386,17 +415,18 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->format = $date_handler->views_formats($granularity, 'sql');
     $value = date_format($date, $this->format);
     $range = $this->date_handler->arg_range($value);
+    $year_range = $this->year_range();
     switch ($operator) {
       case '>':
       case '>=':
-        $range[1] = date_make_date(date_pad(variable_get('date_max_year', 4000), 4) .'-12-31 23:59:59');  
+        $range[1] = date_make_date(date_pad($year_range[1], 4) .'-12-31 23:59:59');  
         if ($operator == '>') {
           date_modify($range[0], '+1 second');
         }
         break;
       case '<':
       case '<=':
-        $range[0] = date_make_date(date_pad(variable_get('date_min_year', 1), 4) .'-01-01 00:00:00');
+        $range[0] = date_make_date(date_pad($year_range[0], 4) .'-01-01 00:00:00');
         if ($operator == '<') {
           date_modify($range[1], '-1 second');
         }
@@ -408,10 +438,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         
     $this->min_date = $min_date;
     $this->max_date = $max_date;
-    $this->year = date_format($min_date, 'Y');
-    $this->month = date_format($min_date, 'n');
-    $this->day = date_format($min_date, 'j');
-    $this->week = date_week(date_format($min_date, DATE_FORMAT_DATE));
+    $this->year = date_format($date, 'Y');
+    $this->month = date_format($date, 'n');
+    $this->day = date_format($date, 'j');
+    $this->week = date_week(date_format($date, DATE_FORMAT_DATE));
        
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
@@ -434,7 +464,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
             $this->query->add_field($field['table_name'], $bits[1]);
           }
         }
-        if ($this->granularity != 'week') {
+        if ($this->date_handler->granularity != 'week') {
           $value = $prefix == 'max' ? date_format($max_date, $this->format) : date_format($min_date, $this->format);
           $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
         }
