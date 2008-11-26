@@ -359,7 +359,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $output[] = $fields['name'][$field]['label'];
       }
     }
-    $field = implode(' '. $this->options['date_method'] .' ', $output);
+    $field = implode('<br />'. $this->options['date_method'] .' ', $output);
     $output = "$field ". check_plain($this->operator) . ' ';
     $parts = $handler->date_parts();
     

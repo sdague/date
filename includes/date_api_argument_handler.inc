@@ -136,7 +136,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       foreach ($this->options['date_fields'] as $field) {
         $output[] = $fields['name'][$field]['label'];
       }
-      return implode(' '. $this->options['date_method'] .' ', $output);
+      return implode('<br />'. $this->options['date_method'] .' ', $output);
     }
     else {
       return parent::admin_summary();

@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add better separation to multiple date fields in the view admin summaries for date arguments and filters.
 - #337764 Date filter wasn't correctly setting view date info, and also needs a year limit.
 - #337301 Add hook_schema_alter to record addition of timezone_name to users table.
 - #336255 Add new helper functions to make work of other modules, like Signup, easier. One helper to create a date handler for a field and another to do make date math easier.
