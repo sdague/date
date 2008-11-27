@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add a helper function date_field_default_values() that can be used to create new date fields in profiles and custom code.
 - Add better separation to multiple date fields in the view admin summaries for date arguments and filters.
 - #337764 Date filter wasn't correctly setting view date info, and also needs a year limit.
 - #337301 Add hook_schema_alter to record addition of timezone_name to users table.

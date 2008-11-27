@@ -484,3 +484,126 @@ function date_example_date() {
   }
   return $now;
 }
+
+/**
+ * Helper function to create a field array with default values for a date 
+ * $field, based on field type, widget type, and timezone handling.
+ * 
+ * This function can be used to make it easier to create new date fields
+ * in profiles or custom code.
+ * 
+ * @param $field_type
+ *   Can be 'date', 'datestamp', or 'datetime'.
+ * @param $widget_type
+ *   Can be 'date_text', 'date_text_repeat', 'date_select', 
+ *   'date_select_repeat', 'date_popup', 'date_popup_repeat'.
+ * @param $tz_handling
+ *   Can be 'site', 'date', 'utc', 'none', or 'user'.
+ * @param $overrides
+ *   An optional array of field/widget values that should 
+ *   override the normal defaults.
+ */
+function date_field_default_values($field_type, $widget_type, $tz_handling, $overrides = array()) {
+  module_load_include('inc', 'content', 'includes/content.crud');
+  $repeat_widgets = array('date_select_repeat', 'date_text_repeat', 'date_popup_repeat');
+  
+  $base_field_values = array (
+    'field_name' => '',
+    'type_name' => '',
+    'multiple' => in_array($widget_type, $repeat_widgets) ? 1 : 0,
+    'module' => 'date',
+    'granularity' => array (
+      'year' => 'year',
+      'month' => 'month',
+      'day' => 'day',
+      'hour' => 'hour',
+      'minute' => 'minute',
+      ),
+    'timezone_db' => $tz_handling == 'none' ? date_default_timezone_name() : 'UTC',
+    'tz_handling' => $tz_handling,
+    'todate' => 'optional',
+    'repeat' => in_array($widget_type, $repeat_widgets) ? 1 : 0,
+    'repeat_collapsed' => 0, 
+    'output_format_date' => variable_get('date_format_short', 'm/d/Y - H:i'),
+    'output_format_custom' => '', 
+    'output_format_date_long' => variable_get('date_format_long',  'l, F j, Y - H:i'),
+    'output_format_custom_long' => '', 
+    'output_format_date_medium' => variable_get('date_format_medium',  'D, m/d/Y - H:i'),
+    'output_format_custom_medium' => '', 
+    'output_format_date_short' => variable_get('date_format_short', 'm/d/Y - H:i'),
+    'output_format_custom_short' => '',
+    );
+  $base_widget_values = array (
+    'label' => '',
+    'default_value' => 'now',
+    'default_value_code' => '', 
+    'default_value2' => 'same',
+    'default_value_code2' => '', 
+    'input_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
+    'input_format_custom' => '', 
+    'increment' => 1,
+    'text_parts' => array (),
+    'year_range' => '-3:+3',
+    'label_position' => 'above',
+    'weight' => 0,
+    'description' => '',
+    'module' => 'date',
+  );
+  $field_values['date'] = $base_field_values;
+  $field_values['date']['type'] = 'date';
+  
+  $field_values['datestamp'] = $base_field_values;
+  $field_values['datestamp']['type'] = 'datestamp';
+
+  $field_values['datetime'] = $base_field_values;
+  $field_values['datetime']['type'] = 'datetime';
+
+  $widget_values['date_select'] = $base_widget_values;
+  $widget_values['date_select']['type'] = 'date_select';
+  
+  $widget_values['date_text'] = $base_widget_values;
+  $widget_values['date_text']['type'] = 'date_text';
+  
+  $widget_values['date_popup'] = $base_widget_values;
+  $widget_values['date_popup']['type'] = 'date_popup';
+  $widget_values['date_popup']['module'] = 'date_popup';
+    
+  $widget_values['date_select_repeat'] = $base_widget_values;
+  $widget_values['date_select_repeat']['type'] = 'date_select_repeat';
+  
+  $widget_values['date_text_repeat'] = $base_widget_values;
+  $widget_values['date_text_repeat']['type'] = 'date_text_repeat';
+  
+  $widget_values['date_popup_repeat'] = $base_widget_values;
+  $widget_values['date_popup_repeat']['type'] = 'date_popup_repeat';
+  
+  // Get the basic field array with content module default values.
+  $field = content_field_default_values($field_type);
+  
+  // Update it with default values for this date field and widget type.
+  foreach ($field_values[$field_type] as $key => $value) {
+    $field[$key] = $value;
+  }
+  foreach ($widget_values[$widget_type] as $key => $value) {
+    $field['widget'][$key] = $value;
+  }
+  
+  // Allow overrides of specific default values. 
+  foreach ($overrides as $key => $value) {
+    if ($key != 'widget') {
+      $field[$key] = $value;
+    }
+    else {
+      foreach ($value as $widget_key => $widget_value) {
+        $field['widget'][$widget_key] = $widget_value;
+      }
+    }
+  }
+  
+  // Reset columns and db_storage, which may need to be 
+  // adjusted to the new values.
+  $field['columns'] = date_columns($field);
+  $field['db_storage'] = content_storage_type($field);
+  
+  return $field;
+}
