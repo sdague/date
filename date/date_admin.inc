@@ -386,7 +386,7 @@ function date_field_settings_form($field) {
   // but allow it to be a variable if needed.
   $form['timezone']['timezone_db'] = array(
     '#type' => 'hidden',
-    '#value' => 'UTC',
+    '#value' => date_get_timezone_db($tz_handling),
     );
 
   if (module_exists('date_repeat') && date_is_repeat_field($field)) {
@@ -519,7 +519,7 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
       'hour' => 'hour',
       'minute' => 'minute',
       ),
-    'timezone_db' => $tz_handling == 'none' ? date_default_timezone_name() : 'UTC',
+    'timezone_db' => date_get_timezone_db($tz_handling),
     'tz_handling' => $tz_handling,
     'todate' => 'optional',
     'repeat' => in_array($widget_type, $repeat_widgets) ? 1 : 0,

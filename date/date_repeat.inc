@@ -134,25 +134,17 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
   // adjusted back to UTC, but we want localtime dates to do
   // things like '+1 Tuesday', so adjust back to localtime.
   $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
-  if (date_timezone_convert($field, $item)) {
-    $start = date_make_date($item['value'], 'UTC', $field['type']);
+  $timezone_db = date_get_timezone_db($field['tz_handling']);
+  $start = date_make_date($item['value'], $timezone_db, $field['type']);
+  if ($timezone != $timezone_db){
     date_timezone_set($start, timezone_open($timezone));
-    if (!empty($item['value2']) && $item['value2'] != $item['value']) {
-      $end = date_make_date($item['value2'], 'UTC', $field['type']);
-      date_timezone_set($end, timezone_open($timezone));
-    }
-    else {
-      $end = $start;
-    }
+  }
+  if (!empty($item['value2']) && $item['value2'] != $item['value']) {
+    $end = date_make_date($item['value2'], date_get_timezone_db($field['tz_handling']), $field['type']);
+    date_timezone_set($end, timezone_open($timezone));
   }
   else {
-    $start = date_make_date($item['value'], $timezone, $field['type']);
-    if (!empty($item['value2']) && $item['value2'] != $item['value']) {
-      $end = date_make_date($item['value2'], $timezone, $field['type']);
-    }
-    else {
-      $end = $start;
-    }
+    $end = $start;
   }
 
   $duration = date_difference($start, $end);
@@ -178,11 +170,9 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
   foreach ($dates as $delta => $date) {
     // date_repeat_calc always returns DATE_DATETIME dates, which is
     // not necessarily $field['type'] dates.
-    // Convert returned dates back to UTC before storing.
+    // Convert returned dates back to db timezone before storing.
     $date_start = date_make_date($date, $timezone, DATE_DATETIME);  
-    if (date_timezone_convert($field, $item)) {
-      date_timezone_set($date_start, timezone_open('UTC'));    
-    }
+    date_timezone_set($date_start, timezone_open($timezone_db));    
     $date_end = drupal_clone($date_start);
     date_modify($date_end, '+'. $duration .' seconds');
     $value[$delta] = array(

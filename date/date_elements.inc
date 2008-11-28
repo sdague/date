@@ -229,10 +229,8 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
     else {
       $value = date_convert($value, $field['type'], DATE_DATETIME);
     }
-    $date = date_make_date($value, 'UTC');
-    if (date_timezone_convert($field, $item)) {
-      date_timezone_set($date, timezone_open($timezone));
-    }
+    $date = date_make_date($value, date_get_timezone_db($field['tz_handling']));
+    date_timezone_set($date, timezone_open($timezone));
   }
   if (is_object($date) && empty($item[$part]) && $default_value == 'strtotime' && !empty($default_value_code)) {
     date_modify($date, $default_value_code);
@@ -425,22 +423,17 @@ function date_combo_validate($element, &$form_state) {
     else {
       // Convert input dates back to their UTC values and re-format to ISO
       // or UNIX instead of the DATETIME format used in element processing.
-      if (date_timezone_convert($field, $item)) {
-        $timezone = !empty($item[$tz_field]) ? $item[$tz_field] : $element['#date_timezone'];
-        $item[$tz_field] = $timezone;
-        $from_date = date_make_date($item[$from_field], $timezone);
-        $item[$offset_field] = date_offset_get($from_date);
-        $to_date = date_make_date($item[$to_field], $timezone);
-        $item[$offset_field2] = date_offset_get($to_date);
-        date_timezone_set($from_date, timezone_open('UTC'));
-        date_timezone_set($to_date, timezone_open('UTC'));
-        $item[$from_field] = date_format($from_date, date_type_format($field['type']));
-        $item[$to_field] = date_format($to_date, date_type_format($field['type']));
-      }
-      else {
-        $item[$from_field] = date_convert($item[$from_field], DATE_DATETIME, $field['type']);
-        $item[$to_field] = date_convert($item[$to_field], DATE_DATETIME, $field['type']);
-      }
+      $timezone = !empty($item[$tz_field]) ? $item[$tz_field] : $element['#date_timezone'];
+      $timezone_db = date_get_timezone_db($field['tz_handling']);
+      $item[$tz_field] = $timezone;
+      $from_date = date_make_date($item[$from_field], $timezone);
+      $item[$offset_field] = date_offset_get($from_date);
+      $to_date = date_make_date($item[$to_field], $timezone);
+      $item[$offset_field2] = date_offset_get($to_date);
+      date_timezone_set($from_date, timezone_open($timezone_db));
+      date_timezone_set($to_date, timezone_open($timezone_db));
+      $item[$from_field] = date_format($from_date, date_type_format($field['type']));
+      $item[$to_field] = date_format($to_date, date_type_format($field['type']));
       
       if (isset($form_values[$field_name]['rrule'])) {
         $item['rrule'] = $form_values[$field['field_name']]['rrule'];
