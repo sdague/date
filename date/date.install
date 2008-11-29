@@ -365,6 +365,13 @@ function date_update_5209() {
 }
 
 /**
+ * Duplicate of update_6004.
+ */
+function date_update_5210() {
+  $ret = array();
+  return $ret;
+}
+/**
  * Granularity options were not saved correctly by CCK if created using checkboxes.
  * Checkboxes have been changed back to a select and we need to fix the values
  * stored in the settings.
@@ -488,6 +495,28 @@ function date_update_6003() {
   }
   return $ret;    
 }
+
+/**
+ * Empty the stored db for timezones that use timezone 'none'.
+ */
+function date_update_6004() {
+  $ret = array();
+  drupal_load('module', 'content');
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (strstr($field['type'], 'date') && !empty($field['tz_handling']) && $field['tz_handling'] == 'none') {
+      $row = db_result(db_query("SELECT global_settings FROM {". content_field_tablename() ."} WHERE field_name='". $field['field_name'] ."'"));
+      $settings = unserialize($row);
+      $settings['timezone_db'] = '';
+      $settings = serialize($settings);
+      db_query("UPDATE {". content_field_tablename() ."} SET global_settings='%s' WHERE field_name='%s'", $settings, $field['field_name']);
+    }    
+  }
+  drupal_set_message(t("The database has been updated to correct the stored timezone for fields using timezone 'none'."));
+  content_clear_type_cache();
+  return $ret;    
+}
+
 
 function date_db_integrity($name) {
   $ret = array();

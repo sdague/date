@@ -326,7 +326,9 @@ function date_columns($field) {
 }
 
 function date_field_settings_form($field) {
-  $form = array();
+  $form = array(
+    '#element_validate' => array('date_field_settings_validate'),
+    );
   // Make sure granularity is in the right format and has no empty values.
   if (!empty($field['granularity']) && is_array($field['granularity'])) {
     $granularity = array_filter($field['granularity']);  
@@ -335,7 +337,7 @@ function date_field_settings_form($field) {
     $granularity = array('year', 'month', 'day', 'hour', 'minute');
   }
   $tz_handling = isset($field['tz_handling']) ? $field['tz_handling'] : (date_has_time($granularity) ? 'site' : 'none');
-
+  
   // If adding a repeat, override the Content module's handling of the multiple values option.
   if (module_exists('date_repeat') && date_is_repeat_field($field)) {
     $form['multiple'] = array('#type' => 'hidden', '#value' => 1);
@@ -375,7 +377,7 @@ function date_field_settings_form($field) {
   }
   $description = t('Select the timezone handling method to be used for this date field.');
   $description .= date_data_loss_warning('Time zone handling');
-  $form['timezone']['tz_handling'] = array(
+  $form['tz_handling'] = array(
     '#type' => 'select',
     '#title' => t('Time zone handling'),
     '#default_value' => $tz_handling,
@@ -384,11 +386,11 @@ function date_field_settings_form($field) {
   );
   // Force this value to hidden because we don't want to allow it to be changed right now,
   // but allow it to be a variable if needed.
-  $form['timezone']['timezone_db'] = array(
+  $form['timezone_db'] = array(
     '#type' => 'hidden',
     '#value' => date_get_timezone_db($tz_handling),
     );
-
+  
   if (module_exists('date_repeat') && date_is_repeat_field($field)) {
     $form['repeat_collapsed'] = array(
       '#type' => 'radios',
@@ -402,6 +404,21 @@ function date_field_settings_form($field) {
   $form['#suffix'] = '<div class="form-item"><div class="description">'. t("* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see !link for more details).", array('!link' => l('http://php.net/date', 'http://php.net/date'))) .'</div></div>';
 
   return $form;
+}
+
+/**
+ * Custom field settings manipulation.
+ *
+ * CCK field settings can't use form_set_value(),
+ * so do it in a custom function.
+ */
+function date_field_settings_validate(&$form, &$form_state) {
+  if ($form_state['values']['tz_handling'] == 'none') {
+    form_set_value($form['timezone_db'], '', $form_state);
+  }
+  else {
+    form_set_value($form['timezone_db'], date_get_timezone_db($form_state['values']['tz_handling']), $form_state);
+  }
 }
 
 function date_data_loss_warning($name) {
