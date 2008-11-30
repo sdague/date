@@ -227,7 +227,8 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
       $value = date_fuzzy_datetime($value);
     }
     else {
-      $value = date_convert($value, $field['type'], DATE_DATETIME, $timezone);
+      $db_timezone = date_get_timezone_db($field['tz_handling']);
+      $value = date_convert($value, $field['type'], DATE_DATETIME, $db_timezone);
     }
     $date = date_make_date($value, date_get_timezone_db($field['tz_handling']));
     date_timezone_set($date, timezone_open($timezone));

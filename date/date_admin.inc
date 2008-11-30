@@ -328,7 +328,7 @@ function date_columns($field) {
 function date_field_settings_form($field) {
   $form = array(
     '#element_validate' => array('date_field_settings_validate'),
-    );
+  );
   // Make sure granularity is in the right format and has no empty values.
   if (!empty($field['granularity']) && is_array($field['granularity'])) {
     $granularity = array_filter($field['granularity']);  
