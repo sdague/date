@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #340394 Fix four-digit year format for PostgreSQL.
 - Fix bug in new date_field_get_sql_handler() helper function to pick up the right timezones for the handler.
 - #338277 Make some improvements to datepicker css.
 - #326722 Update the datepicker js to the latest version to fix bugs in current version.

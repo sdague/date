@@ -338,7 +338,7 @@ class date_sql_handler {
         return "DATE_FORMAT($field, '$format')";
       case 'pgsql':
         $replace = array(
-          'Y' => 'YY', 'y' => 'Y',
+          'Y' => 'YYYY', 'y' => 'Y',
           'm' => 'MM', 'n' => 'M',
           'd' => 'DD', 'j' => 'D',
           'H' => 'HH24',
