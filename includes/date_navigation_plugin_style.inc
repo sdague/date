@@ -43,19 +43,19 @@ class date_navigation_plugin_style extends views_plugin_style {
     $i = 0;    
     foreach ($this->view->argument as $id => $argument) {
       if ($id == 'date_argument') {
-        $this->view->granularity = $argument->granularity;
-        $this->view->date_arg = $argument->argument;
-        $this->view->date_arg_pos = $i;
-        $this->view->year = isset($argument->year) ? $argument->year : NULL;
-        $this->view->month = isset($argument->month) ? $argument->month: NULL;
-        $this->view->day = isset($argument->day) ? $argument->day : NULL;
-        $this->view->week = isset($argument->week) ? $argument->week : NULL;
-        $this->view->min_date = $argument->min_date;
-        $this->view->max_date = $argument->max_date;
-        if (empty($this->view->date_fields)) {
-          $this->view->date_fields = array();
+        $this->view->date_info->granularity = $argument->granularity;
+        $this->view->date_info->date_arg = $argument->argument;
+        $this->view->date_info->date_arg_pos = $i;
+        $this->view->date_info->year = isset($argument->year) ? $argument->year : NULL;
+        $this->view->date_info->month = isset($argument->month) ? $argument->month: NULL;
+        $this->view->date_info->day = isset($argument->day) ? $argument->day : NULL;
+        $this->view->date_info->week = isset($argument->week) ? $argument->week : NULL;
+        $this->view->date_info->min_date = $argument->min_date;
+        $this->view->date_info->max_date = $argument->max_date;
+        if (empty($this->view->date_info->date_fields)) {
+          $this->view->date_info->date_fields = array();
         }
-        $this->view->date_fields = array_merge($this->view->date_fields, array_keys($argument->options['date_fields']));
+        $this->view->date_info->date_fields = array_merge($this->view->date_info->date_fields, array_keys($argument->options['date_fields']));
         $this->view->date_info->url = $this->view->get_url();
       }
       $i++;
