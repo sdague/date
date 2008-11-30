@@ -381,8 +381,14 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
  
   function op_between($field) {
-    $this->date_filter('min', $field, '>=');
-    $this->date_filter('max', $field, '<=');
+    if ($this->operator == 'between') {
+      $this->date_filter('min', $field, '>=');
+      $this->date_filter('max', $field, '<=');
+    }
+    else {
+      $this->date_filter('max', $field, '>', TRUE);
+      $this->date_filter('min', $field, '<', TRUE);      
+    }
     return;
   }
 
@@ -391,7 +397,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     return;
   }
 
-  function date_filter($prefix, $field, $operator) {
+  function date_filter($prefix, $field, $operator, $not_between = FALSE) {
     // If no value is supplied from an exposed filter use the default value.
     if (empty($this->options['exposed']) && empty($this->value[$prefix])) {
       $default = $this->default_value($prefix);
@@ -416,21 +422,24 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $value = date_format($date, $this->format);
     $range = $this->date_handler->arg_range($value);
     $year_range = $this->year_range();
-    switch ($operator) {
-      case '>':
-      case '>=':
-        $range[1] = date_make_date(date_pad($year_range[1], 4) .'-12-31 23:59:59');  
-        if ($operator == '>') {
-          date_modify($range[0], '+1 second');
-        }
-        break;
-      case '<':
-      case '<=':
-        $range[0] = date_make_date(date_pad($year_range[0], 4) .'-01-01 00:00:00');
-        if ($operator == '<') {
-          date_modify($range[1], '-1 second');
-        }
-        break;
+    
+    if (!$not_between) {
+      switch ($operator) {
+        case '>':
+        case '>=':
+          $range[1] = date_make_date(date_pad($year_range[1], 4) .'-12-31 23:59:59');  
+          if ($operator == '>') {
+            date_modify($range[0], '+1 second');
+          }
+          break;
+        case '<':
+        case '<=':
+          $range[0] = date_make_date(date_pad($year_range[0], 4) .'-01-01 00:00:00');
+          if ($operator == '<') {
+            date_modify($range[1], '-1 second');
+          }
+          break;
+      }      
     }
     
     $min_date = $range[0];
