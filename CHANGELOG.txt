@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #337075 Change background-color:none to background-color:transparent.
 - #324756 Bypass validation for empty, non-required dates.
 - Fix broken Date API test broken by change in API.
 - #340394 Fix four-digit year format for PostgreSQL.
