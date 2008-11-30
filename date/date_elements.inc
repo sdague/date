@@ -356,6 +356,11 @@ function date_combo_validate($element, &$form_state) {
   $field_name = $element['#field_name'];
   $delta = $element['#delta'];
   
+  // If the whole field is empty and that's OK, stop now.
+  if (empty($element['#post'][$field_name]) && !$element['#required']) {
+    return;
+  }
+  
   // Repeating dates have a different form structure, so get the
   // right item values.
   $item = isset($form_values[$field_name]['rrule']) ? $form_values[$field_name] : $form_values[$field_name][$delta];

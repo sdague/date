@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #324756 Bypass validation for empty, non-required dates.
 - Fix broken Date API test broken by change in API.
 - #340394 Fix four-digit year format for PostgreSQL.
 - Fix bug in new date_field_get_sql_handler() helper function to pick up the right timezones for the handler.
