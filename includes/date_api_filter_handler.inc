@@ -464,13 +464,24 @@ class date_api_filter_handler extends views_handler_filter_numeric {
             $this->query->add_field($field['table_name'], $bits[1]);
           }
         }
+        if ($this->date_handler->granularity == 'week') {
+          $format = DATE_FORMAT_DATETIME;
+        }
+        switch ($prefix) {
+          case 'min':
+            $value = date_format($min_date, $this->format);
+            break;
+          case 'max':
+            $value = date_format($max_date, $this->format);
+            break;
+          default:
+            $value = date_format($date, $this->format);
+            break;
+        }
         if ($this->date_handler->granularity != 'week') {
-          $value = $prefix == 'max' ? date_format($max_date, $this->format) : date_format($min_date, $this->format);
           $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
         }
         else {
-          $format = DATE_FORMAT_DATETIME;
-          $value = $prefix == 'max' ? date_format($max_date, $format) : date_format($min_date, $format);
           $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value);
         }
         $this->query->add_where('date', $sql);
