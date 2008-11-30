@@ -180,7 +180,7 @@ function date_views_set_timezone(&$date_handler, &$view, $field) {
     case 'date' :
       $date_handler->db_timezone = 'UTC';
       $date_handler->local_timezone_field = $field['timezone_field'];
-      $date_handler->local_offset_field = $field['offset_field'];
+      $date_handler->offset_field = $field['offset_field'];
       break;
     case 'none':
       $date_handler->db_timezone = date_default_timezone_name();

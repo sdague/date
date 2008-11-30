@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #338237 Replace 'local_offset_field' with 'offset_field' in date handler.
 - #338237 Fix broken date browser which never got updated to move date field info to $view->date_info.
 - Make sure node edit form uses the right timezone for the database and field type.
 - Fix logic error in date_convert when using timestamp with timezone other than UTC.
