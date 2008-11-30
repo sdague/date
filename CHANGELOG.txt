@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Date picker can't handle some year ranges that work in Date API, so adjust it as needed.
 - #324150 Fix broken 'not between' date filter handling.
 - #337784 Fix broken date filter to work correctly with the new year range values.
 - #338237 Replace 'local_offset_field' with 'offset_field' in date handler.
