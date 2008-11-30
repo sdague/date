@@ -265,7 +265,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     if (!empty($this->view->args)) {
       $argument = $this->view->args[$this->position];
       $parts = $this->date_handler->arg_parts($argument);
-      if (empty($parts['date']) && empty($parts['period'])) {
+      if (empty($parts[0]['date']) && empty($parts[0]['period'])) {
         unset($this->view->args[$this->position]); 
       }
     }
