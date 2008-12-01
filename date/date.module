@@ -223,6 +223,12 @@ function date_field_formatter_info() {
     'short' => array('label' => t('Short'),
       'field types' => array('date', 'datestamp', 'datetime'),
       'multiple values' => CONTENT_HANDLE_CORE),
+    'time' => array('label' => t('Time'),
+      'field types' => array('date', 'datestamp', 'datetime'),
+      'multiple values' => CONTENT_HANDLE_CORE),
+    'time_timezone' => array('label' => t('Time with timezone'),
+      'field types' => array('date', 'datestamp', 'datetime'),
+      'multiple values' => CONTENT_HANDLE_CORE),
     'iso' => array('label' => t('ISO'),
       'field types' => array('date', 'datestamp', 'datetime'),
       'multiple values' => CONTENT_HANDLE_CORE),
@@ -280,6 +286,12 @@ function date_theme() {
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
     'date_formatter_feed' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_time' => array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_display_combination'),
+    'date_formatter_time_timezone' => array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
     'date_formatter_format_interval' => array(
@@ -519,8 +531,13 @@ function date_formatter_format($formatter, $field_name) {
   $field = $fields[$field_name];
   // Any date might have a timezone format.
   $field['granularity'][] = 'timezone';
-
+  $format = variable_get('date_format_short', 'm/d/Y - H:i'); 
+  
   switch ($formatter) {
+    case 'time':
+      return date_limit_format($format, array('hour', 'minute', 'second'));
+    case 'time_timezone':
+      return date_limit_format($format .' e', array('hour', 'minute', 'second', 'timezone'));
     case 'ical':
       return 'Ymd\THis';
     case 'timestamp':
