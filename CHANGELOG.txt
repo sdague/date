@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #341202, #339457, #337952, #329128, #337787, #341203, Fix repeating and multiple date displays. 
 - #273093 Add time formatter option to use in calendar views.
 - #324063 Unset invalid values in the date argument position of the url to avoid various errors in the date argument handling.
 - #301279 Remove README.txt for Date Popup, it's out of date and I'm moving documentation into the d.o handbook and Advanced Help.

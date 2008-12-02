@@ -33,6 +33,10 @@ class date_api_argument_handler extends views_handler_argument_date {
       $this->view->date_info->min_allowed_year = !empty($range) && is_array($range) ? $range[0] : variable_get('min_allowed_year', 100);
       $this->view->date_info->max_allowed_year = !empty($range) && is_array($range) ? $range[1] : variable_get('max_allowed_year', 4000);
     }
+    if (empty($this->view->date_info->date_fields)) {
+      $this->view->date_info->date_fields = array();
+    }
+    $this->view->date_info->date_fields = array_merge($this->view->date_info->date_fields, $this->options['date_fields']);
   }
 
   /**

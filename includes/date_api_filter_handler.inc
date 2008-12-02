@@ -37,6 +37,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $this->view->date_info->min_allowed_year = !empty($range) && is_array($range) ? $range[0] : variable_get('min_allowed_year', 100);
       $this->view->date_info->max_allowed_year = !empty($range) && is_array($range) ? $range[1] : variable_get('max_allowed_year', 4000);
     }
+    if (empty($this->view->date_info->date_fields)) {
+      $this->view->date_info->date_fields = array();
+    }
+    $this->view->date_info->date_fields = array_merge($this->view->date_info->date_fields, $this->options['date_fields']);
   }
 
   // Set default values for the date filter.
@@ -445,13 +449,14 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $min_date = $range[0];
     $max_date = $range[1];
         
-    $this->min_date = $min_date;
-    $this->max_date = $max_date;
-    $this->year = date_format($date, 'Y');
-    $this->month = date_format($date, 'n');
-    $this->day = date_format($date, 'j');
-    $this->week = date_week(date_format($date, DATE_FORMAT_DATE));
-       
+    $this->view->date_info->min_date = $min_date;
+    $this->view->date_info->max_date = $max_date;
+    $this->view->date_info->year = date_format($date, 'Y');
+    $this->view->date_info->month = date_format($date, 'n');
+    $this->view->date_info->day = date_format($date, 'j');
+    $this->view->date_info->week = date_week(date_format($date, DATE_FORMAT_DATE));
+    $this->view->date_info->date_handler = $date_handler;
+    
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       // Use set_where_group() with the selected date_method 
