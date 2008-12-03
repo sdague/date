@@ -66,7 +66,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
 
   $element['#type'] = 'fieldset';
   $element['#title'] = t('Repeat');
-  $element['#description'] = t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
+  $element['#description'] = theme('advanced_help_topic', 'date_api', 'date-repeat-form') . t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
   $element['#collapsible'] = TRUE;
   $element['#collapsed'] = !empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0;
   
@@ -192,13 +192,6 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
       'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
       );
   }
-  $element['help'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Help'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#description' => t("<p>Dates will match any selection within the same box [January OR June]. When more than one box has criteria selected, all of them are combined to create repeats [[January OR June] AND [Day 1 OR Day 15]]. Positive numbers count from the beginning of the period. Negative numbers count from the end of the period, i.e. -1 is the last, -2 is the next to last, etc.</p><ul><li>If you select 'Every Year' above, and 'March' from 'Month' and '1' and '15' from 'Day of Month' in the Advanced options you will be selecting the 1st and 15th days of March of every year.</li><li>If you select 'Every other Month' above, and 'Second Tuesday' in the Advanced options you will be selecting the second Tuesday of every other month.</li><li>If you select 'Every Year' above, and 'Second Tuesday' in the Advanced options you will be selecting the second Tuesday of every year.</li><li>If you select 'Every Month' above, and 'January' and 'June' and 'First Saturday' in the Advanced options, you will be selecting the first Saturday in January or June.</li><li>If you select 'Every Month' above, and '-1' from 'Day of Month' in the Advanced options you will be selecting the last day of every month.</li></ul>"),
-    );
   return $element;
 }
 
@@ -212,11 +205,9 @@ function date_repeat_merge($form_values, $element) {
   if (array_key_exists('advanced', $form_values) || array_key_exists('exceptions', $form_values)) {
     if (!array_key_exists('advanced', $form_values)) $form_values['advanced'] = array();
     if (!array_key_exists('exceptions', $form_values)) $form_values['exceptions'] = array();
-    if (!array_key_exists('help', $form_values)) $form_values['help'] = array();
     $form_values = array_merge($form_values, (array) $form_values['advanced'], (array) $form_values['exceptions']);
     unset($form_values['advanced']);
     unset($form_values['exceptions']);
-    unset($form_values['help']);
   }
   if (array_key_exists('BYDAY', $form_values)) unset($form_values['BYDAY']['']);
   if (array_key_exists('BYMONTH', $form_values)) unset($form_values['BYMONTH']['']);

@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Move Date repeat form help to Advanced Help instead of using collapsed fieldset.
+
 Version 6.2-rc6
 =================
 
