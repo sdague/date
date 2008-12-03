@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #324063 Remove unneeded break.
 - #320596 Add hook to date_api_fields() so custom modules can add date fields to the Date argument and filter.
 - #341964 Get missing back/next links back in year.
 - Add date_increment_round() to date_content_generate to make sure generated dates match increment settings.
