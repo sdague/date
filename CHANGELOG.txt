@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #341203 Make sure there is no SQL error if there are no fields.
 - Add ability to analyze a period to period argument, like P1M--P1Y.
 - Adapt Date Argument/Date Browser code to work correctly if only a period is used.
 - #324063 Remove unneeded break.
