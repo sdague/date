@@ -10,7 +10,7 @@ $view->view_php = '';
 $view->base_table = 'node';
 $view->is_cacheable = FALSE;
 $view->api_version = 2;
-$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+$view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
 $handler = $view->new_display('default', 'Defaults', 'default');
 $handler->override_option('arguments', array(
   'date_argument' => array(
@@ -83,7 +83,7 @@ $handler->override_option('row_plugin', 'fields');
 $handler->override_option('row_options', array());
 $handler->override_option('attachment_position', 'before');
 $handler->override_option('inherit_arguments', TRUE);
-$handler->override_option('inherit_exposed_filters', FALSE);
+$handler->override_option('inherit_exposed_filters', TRUE);
 $handler->override_option('displays', array(
   'page' => 'page',
   'default' => 0,
