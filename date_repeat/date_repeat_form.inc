@@ -164,7 +164,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   $element['exceptions'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
-    '#collapased' => empty($exceptions) ? TRUE : FALSE,
+    '#collapsed' => empty($exceptions) ? TRUE : FALSE,
     '#title' => t('Except'),
     '#description' => t('Dates to omit from the list of repeating dates.'),
     '#prefix' => '<div class="date-repeat">',
