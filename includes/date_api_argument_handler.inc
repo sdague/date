@@ -335,6 +335,8 @@ class date_api_argument_handler extends views_handler_argument_date {
     $max_date = $range[1];
     $this->min_date = $min_date;
     $this->max_date = $max_date;
+    dsm(date_format($min_date, 'l r'));
+    dsm(date_format($max_date, 'l r'));
     
     // See if we're outside the allowed date range for our argument.
     if (date_format($min_date, 'Y') < $this->view->date_info->min_allowed_year || date_format($max_date, 'Y') > $this->view->date_info->max_allowed_year) {
