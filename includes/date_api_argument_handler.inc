@@ -317,12 +317,19 @@ class date_api_argument_handler extends views_handler_argument_date {
     
     $parts = $this->date_handler->arg_parts($this->argument);
     
-    foreach ($parts[0]['date'] as $key => $part) {
-      // The last part evaluated is the one that will 'stick'
-      // as the date type.
-      $this->granularity = $key;
-      $this->$key = $part;
+    foreach ($parts as $type) {
+      foreach ($type as $part) {
+        foreach ($part as $key => $value) {
+          if (!empty($value)) {
+            // The last part evaluated is the one that will 'stick'
+            // as the date type.
+            $this->granularity = $key;
+            $this->$key = $part;
+          }
+        }
+      }
     }
+    
     $range = $this->date_handler->arg_range($this->argument);
     $min_date = $range[0];
     $max_date = $range[1];
