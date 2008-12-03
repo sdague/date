@@ -32,6 +32,7 @@ function _date_content_generate($node, $field) {
 	// longer for others.
 	$start2 = drupal_clone($start);
 	$max = !empty($field['repeat']) ? 720 : 4320;
+	$max = 240;
   date_modify($start2, '+'. mt_rand(60, $max) .' minutes');  
   date_increment_round($start2, $increment);
       

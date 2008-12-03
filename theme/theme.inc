@@ -11,7 +11,7 @@ function template_preprocess_date_navigation(&$vars) {
   $min_date = is_object($view->date_info->min_date) ? $view->date_info->min_date : date_now();
   $max_date = is_object($view->date_info->max_date) ? $view->date_info->max_date : date_now();
   
-  if (!isset($view->date_info->hide_nav)) {
+  if (empty($view->date_info->hide_nav)) {
     $prev_date = drupal_clone($min_date);
     date_modify($prev_date, '-1 '. $view->date_info->granularity);
     $next_date = drupal_clone($min_date);
