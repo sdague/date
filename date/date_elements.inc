@@ -432,7 +432,12 @@ function date_combo_validate($element, &$form_state) {
       $timezone = !empty($item[$tz_field]) ? $item[$tz_field] : $element['#date_timezone'];
       $timezone_db = date_get_timezone_db($field['tz_handling']);
       $item[$tz_field] = $timezone;
-      $from_date = date_make_date($item[$from_field], $timezone);
+
+      // Use fuzzy_datetime before conversion to get proper value
+      // when granularity is 'year' or 'year' and 'month' only.
+      // Without this, we'd end up defaulting to 'now'.
+      $from_date = date_fuzzy_datetime($item[$from_field]);
+      $from_date = date_make_date($from_date, $timezone);
       $item[$offset_field] = date_offset_get($from_date);
       $to_date = date_make_date($item[$to_field], $timezone);
       $item[$offset_field2] = date_offset_get($to_date);
