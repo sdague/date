@@ -583,8 +583,12 @@ function date_ical_escape_text($text) {
  *
  */
 function date_api_ical_build_rrule($form_values) {
+  $RRULE = '';
+  if (empty($form_values) || !is_array($form_values)) {
+    return $RRULE;
+  }
   //grab the RRULE data and put them into iCal RRULE format
-  $RRULE = 'RRULE:FREQ='. (!array_key_exists('FREQ', $form_values) ? 'DAILY' : $form_values['FREQ']);
+  $RRULE .= 'RRULE:FREQ='. (!array_key_exists('FREQ', $form_values) ? 'DAILY' : $form_values['FREQ']);
   $RRULE .= ';INTERVAL='. (!array_key_exists('INTERVAL', $form_values) ? 1 : $form_values['INTERVAL']);
 
   // Unset the empty 'All' values.
