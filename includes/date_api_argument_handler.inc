@@ -324,7 +324,7 @@ class date_api_argument_handler extends views_handler_argument_date {
             // The last part evaluated is the one that will 'stick'
             // as the date type.
             $this->granularity = $key;
-            $this->$key = $part;
+            $this->$key = $value;
           }
         }
       }
