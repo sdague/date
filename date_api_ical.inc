@@ -226,8 +226,8 @@ function date_ical_parse($icaldatafolded = array()) {
       preg_match('/([^;:]+)(?:;([^:]*))?:(.+)/', $line, $matches);
       
       $name = !empty($matches[1]) ? strtoupper(trim($matches[1])) : '';
-      $field = !empty($matches[1]) ? $matches[2] : '';
-      $data = !empty($matches[1]) ? $matches[3] : '';
+      $field = !empty($matches[2]) ? $matches[2] : '';
+      $data = !empty($matches[3]) ? $matches[3] : '';
       $parse_result = '';
       switch ($name) {
         // Keep blank lines out of the results.
