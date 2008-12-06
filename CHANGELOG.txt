@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add some protection against empty or missing info in ical parser.
 - #343126 Fix date argument handler type assignment.
 - #343190 Add validity testing to date_api_ical_build_rrule().
 - #307166 Make sure timestamps with missing granularity parts in select widgets get defaulted to empty values and saved correctly.
