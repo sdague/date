@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #282521 Do more work on LOCATION to split out UID and handle odd upcoming.org location identifiers.
 - Add more error trapping to ical parser.
 - Add handling to ical parser for odd upcoming.org location format.
 - #341705 Fix broken iCal DURATION parsing.
