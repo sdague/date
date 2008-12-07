@@ -4,6 +4,9 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add more error trapping to ical parser.
+- Add handling to ical parser for odd upcoming.org location format.
+- #341705 Fix broken iCal DURATION parsing.
 - Add some protection against empty or missing info in ical parser.
 - #343126 Fix date argument handler type assignment.
 - #343190 Add validity testing to date_api_ical_build_rrule().

@@ -96,6 +96,11 @@ function date_ical_import($filename) {
       return false;
     }
   }
+  // Verify this is iCal data
+  if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
+    watchdog('date ical', 'Invalid calendar file: !filename', array('!filename' => $filename));
+    return false;
+  }
   return date_ical_parse($icaldatafolded);
 }
 
@@ -111,10 +116,10 @@ function date_ical_import($filename) {
  */
 function date_ical_parse($icaldatafolded = array()) {
   $items = array();
-  
+    
   // Verify this is iCal data
   if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
-    watchdog('date ical', 'Invalid calendar file: !filename', array('!filename' => $filename));
+    watchdog('date ical', 'Invalid calendar file.');
     return false;
   }
 
@@ -192,8 +197,8 @@ function date_ical_parse($icaldatafolded = array()) {
             }
             // Check for all-day events setting the 'all_day' property under
             // the component instead of DTSTART/DTEND subcomponents
-            if ((isset($subgroup['DTSTART']) && !isset($subgroup['DTEND'])) ||
-            ($subgroup['DTSTART']['all_day'] && $subgroup['DTEND']['all_day'])) {
+            if ((isset($subgroup['DTSTART']) && !isset($subgroup['DTEND'])) || 
+            (isset($subgroup['DTSTART']) && $subgroup['DTSTART']['all_day'])) {
               $subgroup['all_day'] = true;
               if (!isset($subgroup['DTEND'])) {
                 $subgroup['DTEND'] = $subgroup['DTSTART'];
@@ -224,7 +229,6 @@ function date_ical_parse($icaldatafolded = array()) {
       // Split up the line into nice pieces for PROPERTYNAME,
       // PROPERTYATTRIBUTES, and PROPERTYVALUE
       preg_match('/([^;:]+)(?:;([^:]*))?:(.+)/', $line, $matches);
-      
       $name = !empty($matches[1]) ? strtoupper(trim($matches[1])) : '';
       $field = !empty($matches[2]) ? $matches[2] : '';
       $data = !empty($matches[3]) ? $matches[3] : '';
@@ -255,7 +259,7 @@ function date_ical_parse($icaldatafolded = array()) {
         case 'DURATION':
           // Can't be sure whether DTSTART is before or after DURATION in
           // the VEVENT, so store the data and parse it at the end.
-          $subgroup['DURATION'] = array('DATA' => $data);
+          $parse_result = array('DATA' => $data);
           break;
 
         case 'RRULE':
@@ -265,8 +269,11 @@ function date_ical_parse($icaldatafolded = array()) {
 
         case 'SUMMARY':
         case 'DESCRIPTION':
-        case 'LOCATION':
           $parse_result = date_ical_parse_text($field, $data);
+          break;
+
+        case 'LOCATION':
+          $parse_result = date_ical_parse_location($field, $data);
           break;
 
           // For all other properties, just store the property and the value.
@@ -492,6 +499,24 @@ function date_ical_parse_duration(&$subgroup) {
 function date_ical_parse_text($field, $data) {
   if (strstr($field, 'QUOTED-PRINTABLE')) {
     $data = quoted_printable_decode($data);
+  }
+  // Strip line breaks within element
+  $data = str_replace(array("\r\n ", "\n ", "\r "), '', $data);
+  // Put in line breaks where encoded
+  $data = str_replace(array("\\n", "\\N"), "\n", $data);
+  // Remove other escaping
+  $data = stripslashes($data);
+  return $data;
+}
+
+/**
+ * Parse location elements.
+ */
+function date_ical_parse_location($field, $data) {
+  // Catch situations like the upcoming.org feed that uses
+  // LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/104/":111 First Street
+  if (preg_match('/UID="(.+)":(.+)/', $field .':'. $data, $matches)) {
+    $data = $matches[1];  
   }
   // Strip line breaks within element
   $data = str_replace(array("\r\n ", "\n ", "\r "), '', $data);
