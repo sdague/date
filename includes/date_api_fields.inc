@@ -19,9 +19,11 @@ function _date_api_fields($base = 'node') {
     $table_name = $tmp[0];
     $alias = str_replace('.', '_', $name);
       
-    $handler = views_get_handler($table_name, $field_name, 'field');
-    $handler_name = $handler->definition['handler'];
+    if (!$handler = views_get_handler($table_name, $field_name, 'field')) {
+      continue; 
+    }
     
+    $handler_name = $handler->definition['handler'];
     $type = '';
     
     // For cck fields, get the date type.
