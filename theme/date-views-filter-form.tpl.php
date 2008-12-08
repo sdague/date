@@ -27,7 +27,7 @@
  * $description
  */
 ?>
-<div>
+<div class="date-views-filter-wrapper">
 <div class="container-inline-date date-clear">
 <?php if (!empty($date) || !empty($adjustment)) : ?> 
   <div class="date-clear"> 

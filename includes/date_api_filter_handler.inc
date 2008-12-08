@@ -210,6 +210,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $form['value']['default_to_date']['#type'] = 'hidden';
       $form['value']['default_to_date']['#value'] = $form['value']['default_to_date']['#default_value'];
       unset($form['value']['default_date']['#prefix']);
+      unset($form['value']['value']['#prefix']);
     }
     
     $form['value']['#theme'] = 'date_views_filter_form';  
