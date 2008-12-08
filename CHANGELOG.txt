@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix handling for fixed date default value in date filter.
 - Get rid of DURATION time part details in iCal array, we only need the DATA and DURATION.
 - #282521 Do more work on LOCATION to split out UID and handle odd upcoming.org location identifiers.
 - Add more error trapping to ical parser.

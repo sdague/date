@@ -277,6 +277,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (empty($options)) {
       $options = $this->options;
     }
+    // This is a date that needs to be constructed from options like 'now'.
     $default_option = $prefix == 'max' ? $options['default_to_date'] : $options['default_date'];
     if (!empty($default_option)) {
       $date = date_now();
@@ -284,6 +285,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         date_modify($date, $add);
       }
       $default_date = date_format($date, DATE_FORMAT_DATETIME);
+    }
+    // This a fixed date.
+    else {
+      $default_date = $options['value'][$prefix];
     }
     return $default_date;
   }
@@ -314,9 +319,11 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * Be sure that default values get set properly when there is no input.
    */
   function accept_exposed_input($input) {
+    
     if (empty($this->options['exposed'])) {
       return TRUE;
     }
+    
     if (!empty($this->options['expose']['use_operator']) && !empty($this->options['expose']['operator']) && isset($input[$this->options['expose']['operator']])) {
       $this->operator = $input[$this->options['expose']['operator']];
     }
