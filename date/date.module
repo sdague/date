@@ -605,7 +605,7 @@ function date_prepare_node(&$node) {
     return;
   }
   if (isset($node->view)) {
-    if (empty($node->date_info)) {
+    if (empty($node->date_info) && !empty($node->view->date_info)) {
       $node->date_info = $node->view->date_info;
     }
     // If this is a node view that never passed through the 
@@ -616,7 +616,10 @@ function date_prepare_node(&$node) {
     }
     unset($node->view);
   }
-  
+  if (empty($node->date_info)) {
+    return;
+  }
+
   // Identify the delta value the theme should display 
   // if we have information about it.
   $fields = content_fields();
