@@ -97,34 +97,36 @@ function date_widget_settings_form($widget) {
     );
   $form['input']['default']['default_value_code2'] = array(
     '#type' => 'textfield', '#title' => t('Custom value for To date'),
-    '#default_value' => isset($widget['default_value_code2']) ? $widget['default_value_code2'] : '',
+    '#default_value' => !empty($widget['default_value_code2']) ? $widget['default_value_code2'] : '',
     );
 
   $options = array();
   if ($widget['type'] == 'date_popup' && module_exists('date_popup')) {
     $formats = date_popup_formats();
+    $default_format = array_shift($formats);
   }
   else {
     // example input formats must show all possible date parts, so add seconds.
     $formats = str_replace('i', 'i:s', date_short_formats());
     $formats = drupal_map_assoc($formats);
+    $default_format = str_replace('i', 'i:s', variable_get('date_format_short', 'm/d/Y - H:i'));
   }
   $now = date_example_date();
   foreach ($formats as $f) {
     $options[$f] = date_format_date($now, 'custom', $f);
   }
-  $default_format = array_shift($formats);
   $form['input']['input_format'] = array(
     '#type' => 'select', '#title' => t('Input format'),
-    '#default_value' => isset($widget['input_format']) ? $widget['input_format'] : $default_format,
+    '#default_value' => !empty($widget['input_format']) ? $widget['input_format'] : $default_format,
     '#options' => $options,
     '#description' => t('Set the order and format for the date parts in the input form. The format will be adapted to remove values not in the granularity for this field.'),
   );
+  
   // Only a limited set of formats is available for the Date Popup module
   if ($widget['type'] != 'date_popup') {
     $form['input']['format']['input_format_custom'] = array(
       '#type' => 'textfield',  '#title' => t('*Custom input format'),
-      '#default_value' => isset($widget['input_format_custom']) ? $widget['input_format_custom'] : '',
+      '#default_value' => !empty($widget['input_format_custom']) ? $widget['input_format_custom'] : '',
       '#description' => t('The custom format, if provided, will override the input format selected above. See more about custom date formats below.'),
     );
   }
@@ -458,13 +460,13 @@ function date_formatter_setup_form($field, $delta) {
 
   $form['output_format_date'. $append] = array(
     '#type' => 'select', '#title' => t('Date display'),
-    '#default_value' => isset($field['output_format_date'. $append]) ? $field['output_format_date'. $append] : $default,
+    '#default_value' => !empty($field['output_format_date'. $append]) ? $field['output_format_date'. $append] : $default,
     '#options' => date_format_options(),
     '#multiple' => false,
   );
   $form['output_format_custom'. $append] = array(
     '#type' => 'textfield', '#title' => t('*Custom display format'),
-    '#default_value' => isset($field['output_format_custom'. $append]) ? $field['output_format_custom'. $append] : '',
+    '#default_value' => !empty($field['output_format_custom'. $append]) ? $field['output_format_custom'. $append] : '',
   );
   return $form;
 }
