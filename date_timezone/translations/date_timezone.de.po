@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-09-06 16:21-0500\n"
-"PO-Revision-Date: 2008-12-14 23:22+0100\n"
+"PO-Revision-Date: 2008-12-15 00:36+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,7 @@ msgstr "date_timezone"
 
 #: date_timezone.install:220
 msgid "Africa/Algiers"
-msgstr ""
+msgstr "Afrika/Algier"
 
 #: date_timezone.install:221
 msgid "Africa/Asmera"
@@ -97,7 +97,7 @@ msgstr ""
 
 #: date_timezone.install:229
 msgid "Africa/Djibouti"
-msgstr ""
+msgstr "Afrika/Djibouti"
 
 #: date_timezone.install:230
 msgid "Africa/Douala"
@@ -113,7 +113,7 @@ msgstr ""
 
 #: date_timezone.install:233
 msgid "Africa/Johannesburg"
-msgstr ""
+msgstr "Afrika/Johannesburg"
 
 #: date_timezone.install:234
 msgid "Africa/Kampala"
@@ -133,7 +133,7 @@ msgstr ""
 
 #: date_timezone.install:238
 msgid "Africa/Lagos"
-msgstr ""
+msgstr "Afrika/Lagos"
 
 #: date_timezone.install:239
 msgid "Africa/Libreville"
@@ -1185,7 +1185,7 @@ msgstr ""
 
 #: date_timezone.install:501
 msgid "Europe/Belgrade"
-msgstr ""
+msgstr "Europa/Belgrad"
 
 #: date_timezone.install:502
 msgid "Europe/Berlin"
@@ -1193,7 +1193,7 @@ msgstr "Europa/Berlin"
 
 #: date_timezone.install:503
 msgid "Europe/Bratislava"
-msgstr ""
+msgstr "Europa/Bratislava"
 
 #: date_timezone.install:504
 msgid "Europe/Brussels"
@@ -1201,11 +1201,11 @@ msgstr "Europa/Brüssel"
 
 #: date_timezone.install:505
 msgid "Europe/Bucharest"
-msgstr ""
+msgstr "Europa/Bukarest"
 
 #: date_timezone.install:506
 msgid "Europe/Budapest"
-msgstr ""
+msgstr "Europa/Budapest"
 
 #: date_timezone.install:507
 msgid "Europe/Chisinau"
@@ -1217,7 +1217,7 @@ msgstr "Europa/Kopenhagen"
 
 #: date_timezone.install:509
 msgid "Europe/Dublin"
-msgstr ""
+msgstr "Europa/Dublin"
 
 #: date_timezone.install:510
 msgid "Europe/Gibraltar"
@@ -1225,11 +1225,11 @@ msgstr ""
 
 #: date_timezone.install:511
 msgid "Europe/Helsinki"
-msgstr ""
+msgstr "Europa/Helsinki"
 
 #: date_timezone.install:512
 msgid "Europe/Istanbul"
-msgstr ""
+msgstr "Europa/Istanbul"
 
 #: date_timezone.install:513
 msgid "Europe/Kaliningrad"
@@ -1237,15 +1237,15 @@ msgstr ""
 
 #: date_timezone.install:514
 msgid "Europe/Kiev"
-msgstr ""
+msgstr "Europa/Kiew"
 
 #: date_timezone.install:515
 msgid "Europe/Lisbon"
-msgstr ""
+msgstr "Europa/Lissabon"
 
 #: date_timezone.install:516
 msgid "Europe/Ljubljana"
-msgstr ""
+msgstr "Europa/Ljubljana"
 
 #: date_timezone.install:517
 msgid "Europe/London"
@@ -1253,7 +1253,7 @@ msgstr "Europa/London"
 
 #: date_timezone.install:518
 msgid "Europe/Luxembourg"
-msgstr ""
+msgstr "Europa/Luxemburg"
 
 #: date_timezone.install:519
 msgid "Europe/Madrid"
@@ -1265,7 +1265,7 @@ msgstr "Europa/Malta"
 
 #: date_timezone.install:521
 msgid "Europe/Minsk"
-msgstr ""
+msgstr "Europa/Minsk"
 
 #: date_timezone.install:522
 msgid "Europe/Monaco"
@@ -1277,7 +1277,7 @@ msgstr "Europa/Moskau"
 
 #: date_timezone.install:524
 msgid "Europe/Nicosia"
-msgstr ""
+msgstr "Europa/Nikosia"
 
 #: date_timezone.install:525
 msgid "Europe/Oslo"
@@ -1289,7 +1289,7 @@ msgstr "Europa/Paris"
 
 #: date_timezone.install:527
 msgid "Europe/Prague"
-msgstr ""
+msgstr "Europa/Prag"
 
 #: date_timezone.install:528
 msgid "Europe/Riga"
@@ -1309,7 +1309,7 @@ msgstr ""
 
 #: date_timezone.install:532
 msgid "Europe/Sarajevo"
-msgstr ""
+msgstr "Europa/Sarajevo"
 
 #: date_timezone.install:533
 msgid "Europe/Simferopol"
@@ -1317,7 +1317,7 @@ msgstr ""
 
 #: date_timezone.install:534
 msgid "Europe/Skopje"
-msgstr ""
+msgstr "Europa/Skopje"
 
 #: date_timezone.install:535
 msgid "Europe/Sofia"
@@ -1329,7 +1329,7 @@ msgstr "Europa/Stockholm"
 
 #: date_timezone.install:537
 msgid "Europe/Tallinn"
-msgstr ""
+msgstr "Europa/Tallinn"
 
 #: date_timezone.install:538
 msgid "Europe/Tirane"
@@ -1349,15 +1349,15 @@ msgstr ""
 
 #: date_timezone.install:542
 msgid "Europe/Vatican"
-msgstr ""
+msgstr "Europa/Vatikan"
 
 #: date_timezone.install:543
 msgid "Europe/Vienna"
-msgstr ""
+msgstr "Europa/Wien"
 
 #: date_timezone.install:544
 msgid "Europe/Vilnius"
-msgstr ""
+msgstr "Europa/Vilnius"
 
 #: date_timezone.install:545
 msgid "Europe/Warsaw"
@@ -1365,7 +1365,7 @@ msgstr "Europa/Warschau"
 
 #: date_timezone.install:546
 msgid "Europe/Zagreb"
-msgstr ""
+msgstr "Europa/Zagreb"
 
 #: date_timezone.install:547
 msgid "Europe/Zaporozhye"
@@ -1401,11 +1401,11 @@ msgstr ""
 
 #: date_timezone.install:555
 msgid "Indian/Mahe"
-msgstr ""
+msgstr "Indien/Mahe"
 
 #: date_timezone.install:556
 msgid "Indian/Maldives"
-msgstr ""
+msgstr "Indien/Malediven"
 
 #: date_timezone.install:557
 msgid "Indian/Mauritius"
