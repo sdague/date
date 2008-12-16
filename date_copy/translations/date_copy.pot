@@ -1,16 +1,16 @@
 # $Id$
 #
-# LANGUAGE translation of Drupal (general)
+# LANGUAGE translation of Drupal (date_copy)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  date_copy.module,v 1.16.2.1.2.3 2008/09/02 20:10:17 karens
+#  date_copy.module,v 1.16.2.1.2.10 2008/11/01 13:06:26 karens
 #  date_copy.info,v 1.2 2008/02/18 19:32:28 karens
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-09-06 16:20-0500\n"
+"POT-Creation-Date: 2008-12-16 22:14+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -19,283 +19,263 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: date_copy.module:87;149
+#: date_copy/date_copy.module:87;149
 msgid "There are no date fields in this database to import the data into. Please add a date field to the desired node types and be sure to indicate it uses both a \"from\" and a \"to\" date."
 msgstr ""
 
-#: date_copy.module:91
+#: date_copy/date_copy.module:91
 msgid "Target type"
 msgstr ""
 
-#: date_copy.module:91;478
+#: date_copy/date_copy.module:91;331
 msgid "Source type"
 msgstr ""
 
-#: date_copy.module:96
+#: date_copy/date_copy.module:96
 msgid "Only content types with date fields appear in this list as possible target types."
 msgstr ""
 
-#: date_copy.module:104
+#: date_copy/date_copy.module:104
 msgid "Add"
 msgstr ""
 
-#: date_copy.module:105
+#: date_copy/date_copy.module:105
 msgid "If your desired target type does not already have a date field, follow this link and select a content type to add a date field to that type."
 msgstr ""
 
-#: date_copy.module:111
+#: date_copy/date_copy.module:111
 msgid "Add new date field"
 msgstr ""
 
-#: date_copy.module:147
+#: date_copy/date_copy.module:147
 msgid "body"
 msgstr ""
 
-#: date_copy.module:155
+#: date_copy/date_copy.module:155
 msgid "Date field"
 msgstr ""
 
-#: date_copy.module:157
+#: date_copy/date_copy.module:157
 msgid "The field which will contain the source dates in target content type."
 msgstr ""
 
-#: date_copy.module:162
+#: date_copy/date_copy.module:162
 msgid "Description field"
 msgstr ""
 
-#: date_copy.module:164
+#: date_copy/date_copy.module:164
 msgid "The text or body field which will contain the source description in the target content type."
 msgstr ""
 
-#: date_copy.module:170
+#: date_copy/date_copy.module:170
 msgid "Url field"
 msgstr ""
 
-#: date_copy.module:172
+#: date_copy/date_copy.module:172
 msgid "The text or link field which will contain the source url in the target content type."
 msgstr ""
 
-#: date_copy.module:177
+#: date_copy/date_copy.module:177
 msgid "Location field"
 msgstr ""
 
-#: date_copy.module:179
+#: date_copy/date_copy.module:179
 msgid "The text field which will contain the source location text in the target content type."
 msgstr ""
 
-#: date_copy.module:184
+#: date_copy/date_copy.module:184
 msgid "Uid field"
 msgstr ""
 
-#: date_copy.module:186
+#: date_copy/date_copy.module:186
 msgid "The text field which will contain the source uid in the target content type."
 msgstr ""
 
-#: date_copy.module:213
+#: date_copy/date_copy.module:213
 msgid "Categories"
 msgstr ""
 
-#: date_copy.module:214
+#: date_copy/date_copy.module:214
 msgid "Select the categories that should be used for the imported nodes."
 msgstr ""
 
-#: date_copy.module:223
+#: date_copy/date_copy.module:223
 msgid "Authored by"
 msgstr ""
 
-#: date_copy.module:226
+#: date_copy/date_copy.module:226
 msgid "Leave blank for %anonymous."
 msgstr ""
 
-#: date_copy.module:227
+#: date_copy/date_copy.module:227
 msgid "Anonymous"
 msgstr ""
 
-#: date_copy.module:229
+#: date_copy/date_copy.module:229
 msgid "Published"
 msgstr ""
 
-#: date_copy.module:232
+#: date_copy/date_copy.module:232
 msgid "Promoted to front page"
 msgstr ""
 
-#: date_copy.module:235
+#: date_copy/date_copy.module:235
 msgid "Sticky at top of lists"
 msgstr ""
 
-#: date_copy.module:238
+#: date_copy/date_copy.module:238
 msgid "Create new revision"
 msgstr ""
 
-#: date_copy.module:268
+#: date_copy/date_copy.module:268
 msgid "Import dates into CCK from various sources."
 msgstr ""
 
-#: date_copy.module:273
+#: date_copy/date_copy.module:273
 msgid "This feature is not yet functional."
 msgstr ""
 
-#: date_copy.module:278
-msgid "Importing dates into CCK from a comma separated file can be done using the !link."
+#: date_copy/date_copy.module:278
+msgid "Importing dates into CCK from a comma separated file can be done using the <a href=\"@link\">Node Import module</a>."
 msgstr ""
 
-#: date_copy.module:300
-msgid "<p>Create a new CCK content type to import your events into. Make sure it has a date field that can allows a To date so it can accept the From date and To date of the iCal feed. If you are importing dates that have their own timezones, make sure you set the timezone handling of the date to 'date'. Test the new type by trying to create a node manually and make sure all the right options are available in the form before attempting an import.</p><p><strong>The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!</strong></p>"
+#: date_copy/date_copy.module:285
+msgid "Use <a href=\"@link\">Feed API</a> to import ical dates into nodes."
 msgstr ""
 
-#: date_copy.module:303
-msgid "Source file"
+#: date_copy/date_copy.module:287
+msgid "See complete instructions on how to do it in the <a href=\"!link\">Advanced help</a>."
 msgstr ""
 
-#: date_copy.module:307;328;482;505
-msgid "Submit"
+#: date_copy/date_copy.module:290
+msgid "Enable the <a href=\"http://drupal.org/project/advanced_help\">Advanced help module</a> for more instructions."
 msgstr ""
 
-#: date_copy.module:323;498
-msgid "!type Fields"
-msgstr ""
-
-#: date_copy.module:342
-msgid "This is an invalid file."
-msgstr ""
-
-#: date_copy.module:414;672
-msgid "!type: created %title."
-msgstr ""
-
-#: date_copy.module:418;676;686
-msgid "view"
-msgstr ""
-
-#: date_copy.module:434
-msgid "%limit ical events have been added."
-msgstr ""
-
-#: date_copy.module:435;546
-msgid "Title"
-msgstr ""
-
-#: date_copy.module:435
-msgid "Id"
-msgstr ""
-
-#: date_copy.module:435;546
-msgid "Start"
-msgstr ""
-
-#: date_copy.module:435;546
-msgid "End"
-msgstr ""
-
-#: date_copy.module:438
-msgid "No ical events have been added."
-msgstr ""
-
-#: date_copy.module:450
+#: date_copy/date_copy.module:302
 msgid "There is no event table in this database. No event import options are available."
 msgstr ""
 
-#: date_copy.module:465
+#: date_copy/date_copy.module:318
 msgid "<p>Create a new CCK content type to import your events into, or, if you do not want to create new nodes for your events, add a date field to the existing event type. Make sure the target content type has a date field that has an optional or required To date so it can accept the From date and To date of the event. If your source event has its own timezone field, make sure you set the target date timezone handling to 'date'. Test the target type by trying to create a node manually and make sure all the right options are available in the form before attempting an import. </p><p><strong>The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!</strong></p>"
 msgstr ""
 
-#: date_copy.module:472
+#: date_copy/date_copy.module:325
 msgid "There are no event nodes in this database. No event import options are available."
 msgstr ""
 
-#: date_copy.module:502
+#: date_copy/date_copy.module:335;358
+msgid "Submit"
+msgstr ""
+
+#: date_copy/date_copy.module:351
+msgid "!type Fields"
+msgstr ""
+
+#: date_copy/date_copy.module:355
 msgid "Yes"
 msgstr ""
 
-#: date_copy.module:502
+#: date_copy/date_copy.module:355
 msgid "No"
 msgstr ""
 
-#: date_copy.module:502
+#: date_copy/date_copy.module:355
 msgid "Delete original event?"
 msgstr ""
 
-#: date_copy.module:502
+#: date_copy/date_copy.module:355
 msgid "Should the original entry be deleted once it has been copied to the new content type? If so, be sure to back up your database first."
 msgstr ""
 
-#: date_copy.module:503
+#: date_copy/date_copy.module:356
 msgid "Limit"
 msgstr ""
 
-#: date_copy.module:503
+#: date_copy/date_copy.module:356
 msgid "The maximum number of nodes to convert in this pass."
 msgstr ""
 
-#: date_copy.module:504
+#: date_copy/date_copy.module:357
 msgid "Starting nid"
 msgstr ""
 
-#: date_copy.module:504
+#: date_copy/date_copy.module:357
 msgid "Convert nodes with nids greater than or equal to this number."
 msgstr ""
 
-#: date_copy.module:545
+#: date_copy/date_copy.module:399
 msgid "%limit events have been converted."
 msgstr ""
 
-#: date_copy.module:546
+#: date_copy/date_copy.module:400
+msgid "Title"
+msgstr ""
+
+#: date_copy/date_copy.module:400
 msgid "Source Id"
 msgstr ""
 
-#: date_copy.module:546
+#: date_copy/date_copy.module:400
 msgid "Target Id"
 msgstr ""
 
-#: date_copy.module:549
+#: date_copy/date_copy.module:400
+msgid "Start"
+msgstr ""
+
+#: date_copy/date_copy.module:400
+msgid "End"
+msgstr ""
+
+#: date_copy/date_copy.module:403
 msgid "No events have been converted."
 msgstr ""
 
-#: date_copy.module:682
-msgid "!type: updated %title."
+#: date_copy/date_copy.module:530;540
+msgid "view"
 msgstr ""
 
-#: date_copy.module:20
-msgid "Date Import/Export"
-msgstr ""
-
-#: date_copy.module:21
-msgid "Import and export date data."
-msgstr ""
-
-#: date_copy.module:28
-msgid "Import"
-msgstr ""
-
-#: date_copy.module:36
-msgid "Export"
-msgstr ""
-
-#: date_copy.module:44
-msgid "iCal"
-msgstr ""
-
-#: date_copy.module:52
-msgid "Events"
-msgstr ""
-
-#: date_copy.module:60
-msgid "CSV"
-msgstr ""
-
-#: date_copy.module:0
+#: date_copy/date_copy.module:526;536;0
 msgid "date_copy"
 msgstr ""
 
-#: date_copy.info:0
+#: date_copy/date_copy.module:526
+msgid "!type: created %title."
+msgstr ""
+
+#: date_copy/date_copy.module:536
+msgid "!type: updated %title."
+msgstr ""
+
+#: date_copy/date_copy.module:20
+msgid "Date Import/Export"
+msgstr ""
+
+#: date_copy/date_copy.module:21
+msgid "Import and export date data."
+msgstr ""
+
+#: date_copy/date_copy.module:28
+msgid "Import"
+msgstr ""
+
+#: date_copy/date_copy.module:36
+msgid "Export"
+msgstr ""
+
+#: date_copy/date_copy.module:52
+msgid "Events"
+msgstr ""
+
+#: date_copy/date_copy.module:60
+msgid "CSV"
+msgstr ""
+
+#: date_copy/date_copy.info:0
 msgid "Date Copy"
 msgstr ""
 
-#: date_copy.info:0
+#: date_copy/date_copy.info:0
 msgid "Import and export CCK date data."
-msgstr ""
-
-#: date_copy.info:0
-msgid "Date/Time"
 msgstr ""
 
