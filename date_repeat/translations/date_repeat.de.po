@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-17 01:09+0100\n"
+"PO-Revision-Date: 2008-12-17 01:47+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Wiederholung"
 
 #: date_repeat/date_repeat_form.inc:69
 msgid "Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat."
-msgstr "Eine Frequenz und Zeitspanne für die Terminserie. Sollte nichts ausgewählt werden, wird sich der Termin nicht wiederholen."
+msgstr "Eine Frequenz und Zeitspanne für diese Terminserie. Sollte nichts ausgewählt werden, wird sich der Termin nicht wiederholen."
 
 #: date_repeat/date_repeat_form.inc:101
 msgid "Until"
@@ -35,7 +35,7 @@ msgstr "Bis"
 
 #: date_repeat/date_repeat_form.inc:102
 msgid "Date to stop repeating this item."
-msgstr "Datum zu dem die Serie dieses Eintrages beendet wird."
+msgstr "Datum an dem die Serie dieses Eintrages endet."
 
 #: date_repeat/date_repeat_form.inc:122
 msgid "Advanced"
@@ -51,11 +51,11 @@ msgstr "-- Jeder"
 
 #: date_repeat/date_repeat_form.inc:143
 msgid "Day of Month"
-msgstr "Tag des Monats"
+msgstr "Monatstag"
 
 #: date_repeat/date_repeat_form.inc:154
 msgid "Day of Week"
-msgstr "Tag der Woche"
+msgstr "Wochentag"
 
 #: date_repeat/date_repeat_form.inc:168
 msgid "Except"
@@ -63,7 +63,7 @@ msgstr "Ausgenommen"
 
 #: date_repeat/date_repeat_form.inc:169
 msgid "Dates to omit from the list of repeating dates."
-msgstr "Die in der Liste der Serientermine auszulassenden Termine."
+msgstr "Auszulassende Termine in der Liste der Serientermine."
 
 #: date_repeat/date_repeat_form.inc:258
 msgid "Delete"
@@ -97,17 +97,13 @@ msgstr "Jahr(e)"
 msgid "-- Frequency"
 msgstr "-- Frequenz"
 
-# Alle?
 #: date_repeat/date_repeat.module:52;95
-#, fuzzy
 msgid "Every"
-msgstr "Jeden"
+msgstr "Alle"
 
-# alle?
 #: date_repeat/date_repeat.module:55
-#, fuzzy
 msgid "Every @number"
-msgstr "Jeden @number"
+msgstr "Alle @number"
 
 #: date_repeat/date_repeat.module:96
 msgid "First"
