@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-16 22:28+0100\n"
+"PO-Revision-Date: 2008-12-17 01:09+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Wiederholung"
 
 #: date_repeat/date_repeat_form.inc:69
 msgid "Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat."
-msgstr "Eine Frequenz und Zeitspanne für die Wiederholung dieses Datums. Sollte nichts ausgewählt werden, wird sich das Datum nicht wiederholen."
+msgstr "Eine Frequenz und Zeitspanne für die Terminserie. Sollte nichts ausgewählt werden, wird sich der Termin nicht wiederholen."
 
 #: date_repeat/date_repeat_form.inc:101
 msgid "Until"
@@ -35,7 +35,7 @@ msgstr "Bis"
 
 #: date_repeat/date_repeat_form.inc:102
 msgid "Date to stop repeating this item."
-msgstr "Datum zu dem die Wiederholung dieses Eintrages beendet wird."
+msgstr "Datum zu dem die Serie dieses Eintrages beendet wird."
 
 #: date_repeat/date_repeat_form.inc:122
 msgid "Advanced"
@@ -63,7 +63,7 @@ msgstr "Ausgenommen"
 
 #: date_repeat/date_repeat_form.inc:169
 msgid "Dates to omit from the list of repeating dates."
-msgstr "Die aus der Liste der sich wiederholenden Termine auszulassenden Termine."
+msgstr "Die in der Liste der Serientermine auszulassenden Termine."
 
 #: date_repeat/date_repeat_form.inc:258
 msgid "Delete"
@@ -213,11 +213,11 @@ msgstr "date_repeat"
 
 #: date_repeat/date_repeat.info:0
 msgid "Date Repeat API"
-msgstr "Datumwiederholungs-API"
+msgstr "Terminserien-API"
 
 #: date_repeat/date_repeat.info:0
 msgid "A Date Repeat API to calculate repeating dates and times from iCal rules."
-msgstr "Ein Datumwiederholungs-API zur Berechnung von sich wiederholenden Terminen und Zeiten aus iCal-Regeln."
+msgstr "Ein Terminserien-API zur Berechnung von sich wiederholenden Terminen und Zeiten aus iCal-Regeln."
 
 #~ msgid ""
 #~ "Date to stop repeating this item. The 'Until' date will NOT be included "

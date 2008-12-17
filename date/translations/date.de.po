@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-16 22:19+0100\n"
+"PO-Revision-Date: 2008-12-17 01:06+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,7 @@ msgstr "Zusammengeklappt"
 
 #: date/date_admin.inc:401
 msgid "Repeat display"
-msgstr "Wiederholungsanzeige"
+msgstr "Terminserienanzeige"
 
 #: date/date_admin.inc:402
 msgid "Should the repeat options form start out expanded or collapsed? Set to 'Collapsed' to make those options less obtrusive."
@@ -407,15 +407,15 @@ msgstr "Textfeld mit benutzerdefiniertem Eingabeformat"
 
 #: date/date.module:157
 msgid "Text Field with Repeat options"
-msgstr "Textfeld mit Wiederholungsoptionen"
+msgstr "Textfeld mit Terminserien"
 
 #: date/date.module:167
 msgid "Text Field with Date Pop-up calendar"
-msgstr "Textfeld mit Datumspopup-Kalender"
+msgstr "Textfeld mit Kalender"
 
 #: date/date.module:175
 msgid "Text Field with Date Pop-up and Repeat options"
-msgstr "Textfeld mit Datumspopup-Kalender und Wiederholungsoptionen"
+msgstr "Textfeld mit Kalender & Terminserienoptionen"
 
 #: date/date.module:226
 msgid "Time"
