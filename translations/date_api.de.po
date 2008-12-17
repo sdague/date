@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-17 00:36+0100\n"
+"PO-Revision-Date: 2008-12-17 21:54+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -85,13 +85,15 @@ msgstr "Ungültige Kalenderdatei: !filename"
 msgid "Invalid calendar file."
 msgstr "Ungültige Kalenderdatei."
 
+# Translation not possible, used in context sensitive string
 #: date_api.module:354
 msgid "am"
-msgstr " vormittags"
+msgstr ""
 
+# Translation not possible, used in context sensitive string
 #: date_api.module:354
 msgid "pm"
-msgstr "nachmittags"
+msgstr ""
 
 #: date_api.module:494
 msgid "!timezone"
