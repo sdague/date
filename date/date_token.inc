@@ -69,7 +69,7 @@ function date_token_values($type, $object = NULL) {
       }
 
       $tokens['to-value']          = $item['value2'];
-      $tokens['to-view']           = $item['view2'];
+      $tokens['to-view']           = $item['view'];
       $tokens['to-timestamp']      = date_format_date($date, 'custom', 'U');
       $tokens['to-yyyy']           = date_format_date($date, 'custom', 'Y');
       $tokens['to-yy']             = date_format_date($date, 'custom', 'y');

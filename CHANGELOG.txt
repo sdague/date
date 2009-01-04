@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #327897 Fix To-view token in date_token.inc
 - #345862 Fix missing close comment tag in datepicker css.
 - Date input and display formats were not properly defaulting to the site default values.
 - Improve the template and css for the exposed date filter to keep date parts lined up next to each other.
