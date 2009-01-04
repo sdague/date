@@ -39,7 +39,7 @@ function date_token_values($type, $object = NULL) {
     $item_type = isset($item['date_type']) ? $item['date_type'] : (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone_name();
     $timezone_db = !empty($item['timezone_db']) ? $item['timezone_db'] : 'UTC';
-    $date = date_make_date($item['value2'], $timezone_db, $item_type);
+    $date = date_make_date($item['value'], $timezone_db, $item_type);
     if ($timezone_db != $timezone) {
       date_timezone_set($date, timezone_open($timezone));
     }
