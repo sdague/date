@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #313704 Make sure date db timezone does not get removed before token handling.
 - #313704 Fix token 'From date' value that was using 'To date' value.
 - #327897 Fix To-view token in date_token.inc
 - #345862 Fix missing close comment tag in datepicker css.

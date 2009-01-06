@@ -19,7 +19,7 @@ function date_token_list($type = 'all') {
     $tokens['date']['mm']             = t("Date month (two digit, zero padded)");
     $tokens['date']['m']              = t("Date month (one or two digit)");
     $tokens['date']['ww']             = t("Date week (two digit)");
-    $tokens['date']['date']           = t("Date date (day of month)");
+    $tokens['date']['date']           = t("Date date (YYYY-MM-DD)");
     $tokens['date']['day']            = t("Date day (full word)");
     $tokens['date']['ddd']            = t("Date day (abbreviation)");
     $tokens['date']['dd']             = t("Date day (two digit, zero-padded)");
@@ -34,7 +34,6 @@ function date_token_list($type = 'all') {
 function date_token_values($type, $object = NULL) {
   if ($type == 'field') {
     $item = $object[0];
-
     $item['value'] = trim($item['value']);
     $item_type = isset($item['date_type']) ? $item['date_type'] : (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone_name();
@@ -43,7 +42,7 @@ function date_token_values($type, $object = NULL) {
     if ($timezone_db != $timezone) {
       date_timezone_set($date, timezone_open($timezone));
     }
-
+        
     $tokens['value']          = $item['value'];
     $tokens['view']           = $item['view'];
     $tokens['timestamp']      = date_format_date($date, 'custom', 'U');
@@ -54,7 +53,7 @@ function date_token_values($type, $object = NULL) {
     $tokens['mm']             = date_format_date($date, 'custom', 'm');
     $tokens['m']              = date_format_date($date, 'custom', 'n');
     $tokens['ww']             = date_format_date($date, 'custom', 'W');
-    $tokens['date']           = date_format_date($date, 'custom', 'N');
+    $tokens['date']           = date_format_date($date, 'custom', DATE_FORMAT_DATE);
     $tokens['day']            = date_format_date($date, 'custom', 'l');
     $tokens['ddd']            = date_format_date($date, 'custom', 'D');
     $tokens['dd']             = date_format_date($date, 'custom', 'd');
@@ -78,7 +77,7 @@ function date_token_values($type, $object = NULL) {
       $tokens['to-mm']             = date_format_date($date, 'custom', 'm');
       $tokens['to-m']              = date_format_date($date, 'custom', 'n');
       $tokens['to-ww']             = date_format_date($date, 'custom', 'W');
-      $tokens['to-date']           = date_format_date($date, 'custom', 'N');
+      $tokens['to-date']           = date_format_date($date, 'custom', DATE_FORMAT_DATE);
       $tokens['to-day']            = date_format_date($date, 'custom', 'l');
       $tokens['to-ddd']            = date_format_date($date, 'custom', 'D');
       $tokens['to-dd']             = date_format_date($date, 'custom', 'd');

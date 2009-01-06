@@ -44,6 +44,7 @@ function _date_repeat_widget(&$element, $field, $items, $delta) {
     '#date_repeat_widget' => str_replace('_repeat', '', $field['widget']['type']),
     '#date_repeat_collapsed' => $field['repeat_collapsed'],
     );
+
   return $element;
 }
 /**
