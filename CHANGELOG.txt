@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add new module 'Date tools' with date wizard to easily create a simple date content type with an auto-configured related calendar.
 - #313704 Make sure date db timezone does not get removed before token handling.
 - #313704 Fix token 'From date' value that was using 'To date' value.
 - #327897 Fix To-view token in date_token.inc

@@ -63,12 +63,12 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     date_timezone_set($until_date, timezone_open($timezone));
     $UNTIL = date_format($until_date, DATE_FORMAT_DATETIME);
   }
-
+  $parent_collapsed = !empty($rrule['INTERVAL']) || !empty($rrule['FREQ']) ? 0 : (!empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0);
   $element['#type'] = 'fieldset';
   $element['#title'] = t('Repeat');
   $element['#description'] = theme('advanced_help_topic', 'date_api', 'date-repeat-form') . t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
   $element['#collapsible'] = TRUE;
-  $element['#collapsed'] = !empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0;
+  $element['#collapsed'] = $parent_collapsed;
   
   // Make sure we don't get floating parts where we don't want them.
   $element['#prefix'] = '<div class="date-clear">';

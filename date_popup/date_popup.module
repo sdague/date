@@ -308,7 +308,7 @@ function date_popup_validate($element, &$form_state) {
   // If the field is empty and not required, set it to empty and return.
   // If the field is empty and required, set error message and return.
   $error_field = implode('][', $element['#parents']);
-  if (empty($element['#value']['date']) && empty($element['#value']['time'])) {
+  if (empty($element['#value']['date'])) {
     if ($element['#required']) {
       // Set message on both date and time to get them highlighted properly.
       $message = t('%field is required.', array('%field' => $element['#title']));
