@@ -83,7 +83,7 @@ function date_ical_import($filename) {
     $icaldatafetch = drupal_http_request($filename);
     // Check the return result
     if ($icaldatafetch->error) {
-      watchdog('date ical', 'Request Error importing !filename: !error', array('!filename' => $filename, '!error' => $icaldatafetch->error));
+      watchdog('date ical', 'HTTP Request Error importing %filename: @error', array('%filename' => $filename, '@error' => $icaldatafetch->error));
       return false;
     }
     // Break the return result into one array entry per lines
@@ -92,13 +92,13 @@ function date_ical_import($filename) {
   else {
     $icaldatafolded = @file($filename, FILE_IGNORE_NEW_LINES);
     if ($icaldatafolded === FALSE) {
-      watchdog('date ical', 'Failed to open file: !filename', array('!filename' => $filename));
+      watchdog('date ical', 'Failed to open file: %filename', array('%filename' => $filename));
       return false;
     }
   }
   // Verify this is iCal data
   if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
-    watchdog('date ical', 'Invalid calendar file: !filename', array('!filename' => $filename));
+    watchdog('date ical', 'Invalid calendar file: %filename', array('%filename' => $filename));
     return false;
   }
   return date_ical_parse($icaldatafolded);

@@ -25,13 +25,13 @@ function _date_field_validate($op, &$node, $field, &$items, $teaser, $page) {
         if ($processed == 'value' && $field['todate']
           && !date_is_valid($item['value'], $field['type'])
           && (date_is_valid($item['value2'], $field['type']))) {
-          form_set_error($error_field, t("A 'From date' date is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
+          form_set_error($error_field, t("A 'From date' date is required for field %field %delta.", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
         }
         if ($processed == 'value2'
           && $field['todate'] == 'required' && ($field['required']
           && date_is_valid($item['value'], $field['type'])
           && !date_is_valid($item['value2'], $field['type']))) {
-          form_set_error($error_field, t("A 'To date' is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
+          form_set_error($error_field, t("A 'To date' is required for field %field %delta.", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
         }
       }
     }

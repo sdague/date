@@ -80,7 +80,7 @@ function date_widget_settings_form($widget) {
   $form['input']['default'] = array(
     '#type' => 'fieldset',
     '#title' => t('Customize Default Value'),
-    '#description' => t("<p>The custom value for a Relative default should be something that describes a time by reference to the current day using strtotime, like '+90 days' (90 days from the day the field is created) or '+1 Saturday' (the next Saturday). See !strtotime for more details.</p>", array('!strtotime' => l(t('strtotime'), 'http://www.php.net/manual/en/function.strtotime.php'))),
+    '#description' => '<p>' . t("The custom value for a Relative default should be something that describes a time by reference to the current day using strtotime, like '+90 days' (90 days from the day the field is created) or '+1 Saturday' (the next Saturday). See !strtotime for more details.", array('!strtotime' => l(t('strtotime'), 'http://www.php.net/manual/en/function.strtotime.php'))) . '</p>',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     );
@@ -403,7 +403,7 @@ function date_field_settings_form($field) {
       );
   }
 
-  $form['#suffix'] = '<div class="form-item"><div class="description">'. t("* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see !link for more details).", array('!link' => l('http://php.net/date', 'http://php.net/date'))) .'</div></div>';
+  $form['#suffix'] = '<div class="form-item"><div class="description">'. t("* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date<a> for more details).", array('@link' => 'http://php.net/date')) .'</div></div>';
 
   return $form;
 }
@@ -424,7 +424,7 @@ function date_field_settings_validate(&$form, &$form_state) {
 }
 
 function date_data_loss_warning($name) {
-  return t('<p class="error">Changing the %name setting after data has been created could result in the loss of data!</p>', array('%name' => $name));
+  return '<p class="error">' . t('Changing the %name setting after data has been created could result in the loss of data!', array('%name' => $name)) . '</p>';
 }
 
 /**
@@ -459,13 +459,15 @@ function date_formatter_setup_form($field, $delta) {
     );
 
   $form['output_format_date'. $append] = array(
-    '#type' => 'select', '#title' => t('Date display'),
+    '#type' => 'select',
+    '#title' => t('Date display'),
     '#default_value' => !empty($field['output_format_date'. $append]) ? $field['output_format_date'. $append] : $default,
     '#options' => date_format_options(),
     '#multiple' => false,
   );
   $form['output_format_custom'. $append] = array(
-    '#type' => 'textfield', '#title' => t('*Custom display format'),
+    '#type' => 'textfield',
+    '#title' => t('*Custom display format'),
     '#default_value' => !empty($field['output_format_custom'. $append]) ? $field['output_format_custom'. $append] : '',
   );
   return $form;

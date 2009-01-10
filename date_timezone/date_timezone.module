@@ -16,7 +16,7 @@ function date_timezone_init() {
   $tz_name = variable_get('date_default_timezone_name', NULL);
   drupal_add_js(drupal_get_path('module', 'date_timezone') .'/date_timezone.js');
   if (!empty($user->uid) && $_GET['q'] != 'admin/settings/date-time' && empty($tz_name)) {
-    drupal_set_message(t('The Date Timezone module requires you to !link.', array('!link' => l(t('set the site timezone name'), 'admin/settings/date-time'))), 'error');
+    drupal_set_message(t('The Date Timezone module requires you to <a href="@link">set the site timezone name</a>.', array('@link' => url('admin/settings/date-time'))), 'error');
   }
 }
 
@@ -115,7 +115,7 @@ function date_timezone_user_form(&$form) {
     '#title' => t('Default time zone'),
     '#default_value' => $timezone,
     '#options' => date_timezone_names(),
-    '#description' => t('Select your current local time.  If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time. Dates and times throughout this site will be displayed using this time zone.'),
+    '#description' => t('Select your current local time. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time. Dates and times throughout this site will be displayed using this time zone.'),
   );
   // Add the JavaScript callback to automatically set the timezone.
   if (empty($timezone)) {

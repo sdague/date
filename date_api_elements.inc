@@ -458,7 +458,7 @@ function date_select_validate($element, &$form_state) {
     $errors[] = t('A valid value is required.');
   }
   if (!empty($errors)) {
-    array_unshift($errors, t('%field has errors.', array('%field' => $element['#title'])));
+    array_unshift($errors, t('Field %field has errors.', array('%field' => $element['#title'])));
     form_set_error($error_field, implode(' ', $errors));
   }
   

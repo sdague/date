@@ -884,7 +884,7 @@ function date_tools_copy_import_csv_form() {
 function date_tools_copy_import_ical_form($form_state) {
   $message = t('Use <a href="@link">Feed API</a> to import ical dates into nodes.', array('@link' => 'http://drupal.org/project/feedapi'));
   if (module_exists('advanced_help')) {
-    $message .= ' '. t('See complete instructions on how to do it in the <a href="!link">Advanced help</a>.', array('!link' => url('help/date_api/ical-import')));
+    $message .= ' '. t('See complete instructions on how to do it in the <a href="@link">Advanced help</a>.', array('@link' => url('help/date_api/ical-import')));
   }
   else {
     $message .= ' '. t('Enable the <a href="http://drupal.org/project/advanced_help">Advanced help module</a> for more instructions.');    
@@ -915,7 +915,7 @@ function date_tools_copy_import_event_form($form_state) {
   switch ($step) {
     case 1: // Select a content type to import into.
       $node_types = node_get_types('names');
-      $form['#prefix'] = t("<p>Create a new CCK content type to import your events into, or, if you do not want to create new nodes for your events, add a date field to the existing event type. Make sure the target content type has a date field that has an optional or required To date so it can accept the From date and To date of the event. If your source event has its own timezone field, make sure you set the target date timezone handling to 'date'. Test the target type by trying to create a node manually and make sure all the right options are available in the form before attempting an import. </p><p><strong>The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!</strong></p>");
+      $form['#prefix'] = '<p>' . t("Create a new CCK content type to import your events into, or, if you do not want to create new nodes for your events, add a date field to the existing event type. Make sure the target content type has a date field that has an optional or required To date so it can accept the From date and To date of the event. If your source event has its own timezone field, make sure you set the target date timezone handling to 'date'. Test the target type by trying to create a node manually and make sure all the right options are available in the form before attempting an import.") . '</p><p><strong>' . t('The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!') . '</strong></p>';
       $source_type_options = array();
       $result = db_query("SELECT DISTINCT n.type FROM {event} e INNER JOIN {node} n ON e.nid=n.nid");
       while ($arr = db_fetch_array($result)) {
@@ -932,7 +932,7 @@ function date_tools_copy_import_event_form($form_state) {
         '#default_value' => '',
       );
       $form += date_tools_copy_type_form(TRUE);
-      $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+      $form['submit'] = array('#type' => 'submit', '#value' => t('Import'));
 
       return $form;
 
@@ -955,7 +955,7 @@ function date_tools_copy_import_event_form($form_state) {
       $form['delete_old'] = array('#type' => 'select', '#options' => array(1 => t('Yes'), 0 => t('No')), '#title' => t('Delete original event?'), '#description' => t('Should the original entry be deleted once it has been copied to the new content type? If so, be sure to back up your database first.'));
       $form['max'] = array('#type' => 'textfield', '#title' => t('Limit'), '#description' => t('The maximum number of nodes to convert in this pass.'), '#required' => TRUE);
       $form['start_nid'] = array('#type' => 'textfield', '#title' => t('Starting nid'), '#default_value' => 0, '#description' => t('Convert nodes with nids greater than or equal to this number.'));
-      $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+      $form['submit'] = array('#type' => 'submit', '#value' => t('Import'));
       return $form;
   }
 }
@@ -996,7 +996,7 @@ function date_tools_copy_import_event_form_submit($form, &$form_state) {
   //$_SESSION['messages'] = $messages;
 
   if (!empty($rows)) {
-    drupal_set_message(t('%limit events have been converted.', array('%limit' => sizeof($rows))));
+    drupal_set_message(format_plural(sizeof($rows), '1 event has been converted.', '@count events have been converted.'));
     drupal_set_message(theme('table', array(t('Title'), t('Source Id'), t('Target Id'), t('Start'), t('End')), $rows));
   }
   else {
@@ -1123,7 +1123,7 @@ function date_tools_copy_convert_events( $source_type, $target_type, $date_field
     node_save($target_node);
 
     if ($target_type != $source_type) {
-      watchdog('date_tools', '!type: created %title.', array(
+      watchdog('date_tools', '!type: %title has been created.', array(
         '!type' => t($target_type),
         '%title' => $target_node->title),
         WATCHDOG_NOTICE,
@@ -1133,7 +1133,7 @@ function date_tools_copy_convert_events( $source_type, $target_type, $date_field
       }
     }
     else {
-      watchdog('date_tools', '!type: updated %title.', array(
+      watchdog('date_tools', '!type: %title has been updated.', array(
         '!type' => t($target_type),
         '%title' => $target_node->title),
         WATCHDOG_NOTICE,

@@ -460,7 +460,7 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
         // compatibility reasons and should not be used, the list is 
         // filtered by a regular expression.
         if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $zone)) {
-          $zonenames[$zone] = $zone;
+          $zonenames[$zone] = t($zone);
         }      
       }
       // If using PHP4, filter the list down to only the timezones

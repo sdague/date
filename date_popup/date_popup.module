@@ -311,7 +311,7 @@ function date_popup_validate($element, &$form_state) {
   if (empty($element['#value']['date'])) {
     if ($element['#required']) {
       // Set message on both date and time to get them highlighted properly.
-      $message = t('%field is required.', array('%field' => $element['#title']));
+      $message = t('Field %field is required.', array('%field' => $element['#title']));
       if (!empty($date_granularity)) {
         form_set_error($error_field .'][date', $message);  
         $message = ' ';
@@ -335,7 +335,7 @@ function date_popup_validate($element, &$form_state) {
   }
   else {
     // Set message on both date and time to get them highlighted properly.
-    $message = t('%field is invalid.', array('%field' => $element['#title']));
+    $message = t('Field %field is invalid.', array('%field' => $element['#title']));
     if (!empty($date_granularity)) {
       form_set_error($error_field .'][date', $message);  
       $message = ' ';

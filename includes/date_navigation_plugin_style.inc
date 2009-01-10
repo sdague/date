@@ -21,17 +21,17 @@ class date_navigation_plugin_style extends views_plugin_style {
     foreach ($arguments as $id => $argument) {
       if ($argument['field'] == 'date_argument') {
         if ($count > 0) {
-          $errors[] = t('The @style cannot use more than one Date: Date argument.', array('@style' => $this->definition['title']));          
+          $errors[] = t('The %style cannot use more than one Date: Date argument.', array('%style' => $this->definition['title']));          
         }
         elseif ($argument['default_argument_type'] != 'date') {
-          $errors[] = t('The @style requires the Date: Date argument be set to default to the current date.', array('@style' => $this->definition['title']));      
+          $errors[] = t('The %style requires the Date: Date argument be set to default to the current date.', array('%style' => $this->definition['title']));      
         }
         $count++;
         $found = TRUE;
       }
     }
     if (!$found) {
-      $errors[] = t('The @style requires the Date: Date argument.', array('@style' => $this->definition['title']));      
+      $errors[] = t('The %style requires the Date: Date argument.', array('%style' => $this->definition['title']));      
     }
     return $errors;
   }
