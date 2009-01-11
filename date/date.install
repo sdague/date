@@ -57,6 +57,7 @@ function date_update_last_removed() {
  * Prepare for Version 5.2 updates, make changes to field and widget settings.
  */
 function date_update_5100() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -161,6 +162,7 @@ function date_update_5100() {
  * Superceded by update 5103().
  */
 function date_update_5101() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -172,6 +174,7 @@ function date_update_5101() {
  * Make sure date module loads after date_api.
  */
 function date_update_5102() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -186,6 +189,7 @@ function date_update_5102() {
  * significant change.
  */
 function date_update_5103() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -198,6 +202,7 @@ function date_update_5103() {
  * automatically whenever views_invalidate_cache() is called.
  */
 function date_update_5104() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -210,6 +215,7 @@ function date_update_5104() {
  * Version 5.2 updates.
  */
 function date_update_5200() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -248,6 +254,7 @@ function date_update_5200() {
  * @return unknown
  */
 function date_update_5201() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -259,6 +266,7 @@ function date_update_5201() {
  * Database integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5202() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -269,6 +277,7 @@ function date_update_5202() {
  * Data integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5203() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -281,6 +290,7 @@ function date_update_5203() {
  * Get rid of deprecated timezone names.
  */
 function date_update_5204() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -307,6 +317,7 @@ function date_update_5204() {
 }
 
 function date_update_5205() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -328,6 +339,7 @@ function date_update_5205() {
 }
 
 function date_update_5206() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -337,6 +349,7 @@ function date_update_5206() {
 }
 
 function date_update_5207() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -398,6 +411,7 @@ function date_update_5210() {
  * @return unknown
  */
 function date_update_6000() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -420,6 +434,7 @@ function date_update_6000() {
  * Originally update_5201, but that was broken.
  */
 function date_update_6001() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }
@@ -442,6 +457,7 @@ function date_update_6001() {
  * can use standard Content module multiple values handling.
  */
 function date_update_6002() {
+  include_once(drupal_get_path('module', 'content') .'/content.install');
   if ($abort = content_check_update('date')) {
     return $abort;
   }

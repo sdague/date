@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #345953 Fix report of update failure from missing content_check_update() function. 
 - #348157 Beautiful new datepicker popup themes and images from hass. Thanks!
 - #357226 Don't translate menu items.
 - #357094 Remove extra parenthesis.
