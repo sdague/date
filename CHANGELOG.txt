@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #357226 Don't translate menu items.
 - #357094 Remove extra parenthesis.
 - #346752 Add RTL css code.
 - #324290 Don't validate when $items is empty.

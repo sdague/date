@@ -38,8 +38,8 @@ function date_tools_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
   $items['admin/content/date/tools/about'] = array(
-    'title' => t('About'),
-    'description' => t('Tools to import and auto-create dates and calendars.'),
+    'title' => 'About',
+    'description' => 'Tools to import and auto-create dates and calendars.',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -5,
     'priority' => 1,
@@ -47,8 +47,8 @@ function date_tools_menu() {
     'access arguments' => array('use date tools'),
     );
   $items['admin/content/date/tools/date_wizard'] = array(
-    'title' => t('Date wizard'),
-    'description' => t('Easy creation of date content types and calendars.'),
+    'title' => 'Date wizard',
+    'description' => 'Easy creation of date content types and calendars.',
     'type' => MENU_LOCAL_TASK,
     'weight' => 1,
     'priority' => 1,
