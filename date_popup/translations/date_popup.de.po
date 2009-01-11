@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-16 22:24+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
+"PO-Revision-Date: 2009-01-11 11:50+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -60,19 +60,20 @@ msgid "Decrement"
 msgstr "Herunterzählen"
 
 #: date_popup/date_popup.module:314
-msgid "%field is required."
-msgstr "%field muss ausgefüllt werden."
+msgid "Field %field is required."
+msgstr "Das Feld %field muss ausgefüllt werden."
 
+# not literally
 #: date_popup/date_popup.module:338
-msgid "%field is invalid."
-msgstr "%field ist ungültig."
+msgid "Field %field is invalid."
+msgstr "Das Feld %field enthält einen ungültigen Wert."
 
 #: date_popup/date_popup.module:0
 msgid "date_popup"
 msgstr "date_popup"
 
-#: date_popup/date_popup.install:14
-msgid "<p>Download jquery.timeentry.pack.js and jquery.timeentry.css from the jquery-timeentry home page at !link and install them in the /lib/ folder of the Date Popup module.</p>"
+#: (duplicate) date_popup/date_popup.install:14
+msgid "Download jquery.timeentry.pack.js and jquery.timeentry.css from the jquery-timeentry home page at <a href=\"@link\">http://home.iprimus.com.au/kbwood/jquery/timeEntry.html</a> and install them in the /lib/ folder of the Date Popup module."
 msgstr ""
 
 #: (duplicate) date_popup/date_popup.install:18
@@ -80,6 +81,7 @@ msgid "Date Popup requirements"
 msgstr ""
 
 #: date_popup/date_popup.info:0
+#: date_tools/date_tools.module:405
 msgid "Date Popup"
 msgstr "Datumspopup"
 

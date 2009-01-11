@@ -20,12 +20,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-16 22:32+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
+"PO-Revision-Date: 2009-01-11 11:55+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Poedit-Language: German\n"
@@ -76,6 +76,7 @@ msgstr "Sekunde"
 
 #: date_api_sql.inc:695
 #: date/date_admin.inc:361
+#: date_tools/date_tools.module:153
 #: includes/date_api_argument_handler.inc:62
 msgid "Granularity"
 msgstr "Granularität"
@@ -120,23 +121,26 @@ msgstr "Samstag"
 msgid "Now"
 msgstr "Jetzt"
 
-#: date/date_elements.inc:329
+#: date/date_elements.inc:335
 #: includes/date_api_filter_handler.inc:240
 msgid "From date"
 msgstr "„Von“-Datum"
 
-#: date/date_elements.inc:331
+#: date/date_elements.inc:337
 #: includes/date_api_filter_handler.inc:243
 msgid "To date"
 msgstr "„Bis“-Datum"
-
-#: date/date.module:241
-#: date_copy/date_copy.module:44
-msgid "iCal"
-msgstr "iCal"
 
 #: date/date.module:26
 #: date_repeat/date_repeat.module:171
 msgid "Repeats"
 msgstr "Wiederholungen"
+
+#: date_php4/date_php4.module:54
+#: date_tools/date_tools.module:193
+msgid "Save"
+msgstr "Speichern"
+
+#~ msgid "iCal"
+#~ msgstr "iCal"
 

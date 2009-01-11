@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-17 01:47+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
+"PO-Revision-Date: 2009-01-11 11:50+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -70,7 +70,7 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: date_repeat/date_repeat_form.inc:258
-msgid "Current Exceptions"
+msgid "Current exceptions"
 msgstr "Derzeitige Ausnahmen"
 
 #: date_repeat/date_repeat.module:41

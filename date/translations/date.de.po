@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-17 01:39+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
+"PO-Revision-Date: 2009-01-11 11:43+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgid "Customize Default Value"
 msgstr "Standardmäßigen Wert anpassen"
 
 #: date/date_admin.inc:83
-msgid "<p>The custom value for a Relative default should be something that describes a time by reference to the current day using strtotime, like '+90 days' (90 days from the day the field is created) or '+1 Saturday' (the next Saturday). See !strtotime for more details.</p>"
+msgid "The custom value for a Relative default should be something that describes a time by reference to the current day using strtotime, like '+90 days' (90 days from the day the field is created) or '+1 Saturday' (the next Saturday). See !strtotime for more details."
 msgstr ""
 
 #: date/date_admin.inc:83
@@ -241,11 +241,11 @@ msgid "Should the repeat options form start out expanded or collapsed? Set to 'C
 msgstr ""
 
 #: date/date_admin.inc:406
-msgid "* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see !link for more details)."
+msgid "* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date<a> for more details)."
 msgstr ""
 
 #: date/date_admin.inc:427
-msgid "<p class=\"error\">Changing the %name setting after data has been created could result in the loss of data!</p>"
+msgid "Changing the %name setting after data has been created could result in the loss of data!"
 msgstr ""
 
 #: date/date_admin.inc:438
@@ -268,52 +268,52 @@ msgstr "Kurz"
 msgid "Default"
 msgstr "Standard"
 
-#: date/date_admin.inc:462
+#: date/date_admin.inc:463
 msgid "Date display"
 msgstr "Datumsanzeige"
 
-#: date/date_admin.inc:468
+#: date/date_admin.inc:470
 msgid "*Custom display format"
 msgstr "* Benutzerdefiniertes Anzeigeformat"
 
-#: date/date_admin.inc:484
+#: date/date_admin.inc:486
 msgid "Site's time zone"
 msgstr "Zeitzone der Website"
 
 # What the heck is this?
-#: date/date_admin.inc:485
+#: date/date_admin.inc:487
 msgid "Date's time zone"
 msgstr "Zeitzone des Datums"
 
-#: date/date_admin.inc:486
+#: date/date_admin.inc:488
 msgid "User's time zone"
 msgstr "Zeitzone des Benutzers"
 
-#: date/date_admin.inc:488
+#: date/date_admin.inc:490
 msgid "No time zone conversion"
 msgstr "Keine Umstellung der Zeitzone"
 
 #: date/date_elements.inc:28
-msgid "A 'From date' date is required for %field %delta"
-msgstr "Ein „Von“-Datum ist für %field %delta erforderlich"
+msgid "A 'From date' date is required for field %field %delta."
+msgstr "Ein „Von“-Datum ist für %field %delta erforderlich."
 
 #: date/date_elements.inc:34
-msgid "A 'To date' is required for %field %delta"
-msgstr "Ein „Bis“-Datum ist für %field %delta erforderlich"
+msgid "A 'To date' is required for field %field %delta."
+msgstr "Ein „Bis“-Datum ist für %field %delta erforderlich."
 
-#: date/date_elements.inc:336
+#: date/date_elements.inc:342
 msgid "Empty 'To date' values will use the 'From date' values."
 msgstr "Ein leerer „Bis“-Datumswert wird den „Von“-Datumswert verwenden."
 
-#: date/date_elements.inc:409
+#: date/date_elements.inc:415
 msgid "Some value must be entered in the To date."
 msgstr ""
 
-#: date/date_elements.inc:427
+#: date/date_elements.inc:433
 msgid "The To date must be greater than the From date."
 msgstr ""
 
-#: date/date_repeat.inc:76
+#: date/date_repeat.inc:77
 msgid "The UNTIL value is required for repeating dates."
 msgstr ""
 
@@ -358,8 +358,8 @@ msgid "Date week (two digit)"
 msgstr "Datum: Woche (zweistellig)"
 
 #: date/date_token.inc:22
-msgid "Date date (day of month)"
-msgstr "Datum: Monatstag (Tag des Monats)"
+msgid "Date date (YYYY-MM-DD)"
+msgstr ""
 
 #: date/date_token.inc:23
 msgid "Date day (full word)"
@@ -437,12 +437,16 @@ msgstr "Zeitstempel"
 msgid "Feed"
 msgstr "Newsfeed"
 
+#: date/date.module:241
+msgid "iCal"
+msgstr "iCal"
+
 #: date/date.module:244
 msgid "As Time Ago"
 msgstr ""
 
 #: date/date.module:428
-msgid "<p>Complete documentation for the Date and Date API modules is available at !link.</p>"
+msgid "Complete documentation for the Date and Date API modules is available at <a href=\"@link\">http://drupal.org/node/92460</a>."
 msgstr ""
 
 #: date/date.module:0
@@ -479,6 +483,7 @@ msgid "All nodes with date fields have been checked."
 msgstr ""
 
 #: date/date.info:0
+#: date_tools/date_tools.module:114;133;398
 #: includes/date_api.views.inc:127;128;137;138
 msgid "Date"
 msgstr "Datum"

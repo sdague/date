@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
-"PO-Revision-Date: 2008-12-16 22:28+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
+"PO-Revision-Date: 2009-01-11 11:52+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,8 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: (duplicate) date_timezone/date_timezone.module:19
-#: date_timezone/date_timezone.install:45
-msgid "The Date Timezone module requires you to !link."
-msgstr ""
-
-#: (duplicate) date_timezone/date_timezone.module:19
-#: date_timezone/date_timezone.install:45
-msgid "set the site timezone name"
+#: date_timezone/date_timezone.module:19
+msgid "The Date Timezone module requires you to <a href=\"@link\">set the site timezone name</a>."
 msgstr ""
 
 #: date_timezone/date_timezone.module:63;115
@@ -40,7 +34,7 @@ msgid "Select the default site time zone. If in doubt, choose the timezone that 
 msgstr ""
 
 #: date_timezone/date_timezone.module:118
-msgid "Select your current local time.  If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time. Dates and times throughout this site will be displayed using this time zone."
+msgid "Select your current local time. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time. Dates and times throughout this site will be displayed using this time zone."
 msgstr ""
 
 #: date_timezone/date_timezone.module:256
@@ -1595,6 +1589,14 @@ msgstr "Pazifik/Französisch-Polynesien-Marquesasinseln"
 msgid "UTC"
 msgstr "UTC"
 
+#: (duplicate) date_timezone/date_timezone.install:45
+msgid "The Date Timezone module requires you to !link."
+msgstr ""
+
+#: (duplicate) date_timezone/date_timezone.install:45
+msgid "set the site timezone name"
+msgstr ""
+
 #: (duplicate) date_timezone/date_timezone.install:51
 msgid "The !link may not be correct."
 msgstr ""
@@ -1608,13 +1610,11 @@ msgid "Date Timezone requirements"
 msgstr ""
 
 #: date_timezone/date_timezone.info:0
+#: date_tools/date_tools.module:400
 msgid "Date Timezone"
 msgstr ""
 
 #: date_timezone/date_timezone.info:0
 msgid "Needed when using Date API. Overrides site and user timezone handling to set timezone names instead of offsets."
 msgstr ""
-
-#~ msgid "Date/Time"
-#~ msgstr "Datum/Zeit"
 
