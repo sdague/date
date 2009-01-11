@@ -188,7 +188,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $form['value'] += $this->date_parts_form($form_state, 'max', $source, $which, $this->operator_values(2));
     }
     
-    $form['value']['value']['#prefix'] = '<div class="form-item"><label>' . t('Absolute value') . '</label></div>');
+    $form['value']['value']['#prefix'] = '<div class="form-item"><label>' . t('Absolute value') . '</label></div>';
     $form['value']['default_date'] = array(
       '#type' => 'textfield',
       '#title' => t('Date default'),
