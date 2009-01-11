@@ -3,7 +3,7 @@
 # LANGUAGE translation of Drupal (date_repeat)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  date_repeat_form.inc,v 1.15.4.10 2008/12/03 14:35:42 karens
+#  date_repeat_form.inc,v 1.15.4.12 2009/01/10 22:38:51 karens
 #  date_repeat.module,v 1.30.4.7 2008/11/21 16:27:35 karens
 #  date_repeat.info,v 1.5 2008/02/18 19:32:29 karens
 #
@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -69,7 +69,7 @@ msgid "Delete"
 msgstr ""
 
 #: date_repeat/date_repeat_form.inc:258
-msgid "Current Exceptions"
+msgid "Current exceptions"
 msgstr ""
 
 #: date_repeat/date_repeat.module:41

@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -37,10 +37,6 @@ msgstr ""
 
 #: date_php4/date_php4.module:50
 msgid "Getting date computations working correctly in PHP versions earlier than PHP 5.2 involves extra computations that add a lot of overhead. These computations are needed because the timezone PHP uses on date computations may not match the site or user timezone or other date-specific timezones. We can speed processing up if we assume that PHP is using the correct timezone, but need to do more time-intensive processing if it is not. If timezone adjustments do not seem to be working correctly in your setup, you can set this option to FALSE to force the system to use the more accurate, but slower, timezone computations."
-msgstr ""
-
-#: date_php4/date_php4.module:54
-msgid "Save"
 msgstr ""
 
 #: date_php4/date_php4.module:20

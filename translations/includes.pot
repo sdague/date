@@ -4,15 +4,15 @@
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
 #  date_api.views.inc,v 1.1.2.6 2008/11/30 13:58:27 karens
-#  date_api_argument_handler.inc,v 1.1.2.28 2008/12/06 12:39:14 karens
-#  date_api_filter_handler.inc,v 1.1.2.14 2008/12/08 12:15:57 karens
-#  date_navigation_plugin_style.inc,v 1.1.2.7 2008/12/02 17:32:35 karens
+#  date_api_argument_handler.inc,v 1.1.2.29 2009/01/10 22:38:52 karens
+#  date_api_filter_handler.inc,v 1.1.2.16 2009/01/11 00:24:26 karens
+#  date_navigation_plugin_style.inc,v 1.1.2.8 2009/01/10 22:38:52 karens
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-12-16 22:14+0100\n"
+"POT-Creation-Date: 2009-01-11 11:03+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -62,7 +62,7 @@ msgid "Date year range"
 msgstr ""
 
 #: includes/date_api_argument_handler.inc:74 includes/date_api_filter_handler.inc:111
-msgid "Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'.  When the argument is set to a date outside the range, the page will be returned as 'Page not found (404)'."
+msgid "Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'. When the argument is set to a date outside the range, the page will be returned as 'Page not found (404)'."
 msgstr ""
 
 #: includes/date_api_argument_handler.inc:83 includes/date_api_filter_handler.inc:120
@@ -122,7 +122,7 @@ msgid "You must select at least one date field for this filter."
 msgstr ""
 
 #: includes/date_api_filter_handler.inc:191
-msgid "<div class=\"form-item\"><label>Absolute value</label></div>"
+msgid "Absolute value"
 msgstr ""
 
 #: includes/date_api_filter_handler.inc:194
@@ -130,7 +130,15 @@ msgid "Date default"
 msgstr ""
 
 #: includes/date_api_filter_handler.inc:196
-msgid "<label>Relative value</label><p>Relative values will be used if no date is set above. Use 'now' to default to the current date at runtime or add modifiers like 'now +1 day'. The To date default value is used when the operator is set to 'between' or 'not between'. </p><p>If the filter is exposed, these values will be used to set the inital value of the exposed filter. Leave both date and default values blank to start with no value in the exposed filter. </p>"
+msgid "Relative value"
+msgstr ""
+
+#: includes/date_api_filter_handler.inc:196
+msgid "Relative values will be used if no date is set above. Use 'now' to default to the current date at runtime or add modifiers like 'now +1 day'. The To date default value is used when the operator is set to 'between' or 'not between'."
+msgstr ""
+
+#: includes/date_api_filter_handler.inc:196
+msgid "If the filter is exposed, these values will be used to set the inital value of the exposed filter. Leave both date and default values blank to start with no value in the exposed filter."
 msgstr ""
 
 #: includes/date_api_filter_handler.inc:200
@@ -154,14 +162,14 @@ msgid "@min and @max"
 msgstr ""
 
 #: includes/date_navigation_plugin_style.inc:24
-msgid "The @style cannot use more than one Date: Date argument."
+msgid "The %style cannot use more than one Date: Date argument."
 msgstr ""
 
 #: includes/date_navigation_plugin_style.inc:27
-msgid "The @style requires the Date: Date argument be set to default to the current date."
+msgid "The %style requires the Date: Date argument be set to default to the current date."
 msgstr ""
 
 #: includes/date_navigation_plugin_style.inc:34
-msgid "The @style requires the Date: Date argument."
+msgid "The %style requires the Date: Date argument."
 msgstr ""
 
