@@ -33,9 +33,13 @@ function date_menu() {
   return $items;  
 }
 
+function date_perm() {
+  return array('view date repeats');
+}
+
 function date_repeat_node($node) {
   if (date_repeat_type($node->type)) {
-    return user_access('access content');
+    return user_access('view date repeats');
   }
   return FALSE;
 }
