@@ -58,14 +58,11 @@ function date_popup_init() {
  * requiring a duplicate copy of the settings/code for every element
  * that uses them, but is much faster.  We could combine the logic by
  * putting the ids for each unique function/settings combo into
- * Drupal.settings and searching for each listed id but I don't feel
- * like writing that code right now.
+ * Drupal.settings and searching for each listed id.
  *
  * @param $pfx
  *   The CSS class prefix to search the DOM for.
  *   TODO : unused ?
- * @param $id
- *   The id of the enclosing form element.
  * @param $func
  *   The jQuery function to invoke on each DOM element containing the
  * returned CSS class.
@@ -75,7 +72,7 @@ function date_popup_init() {
  *   The CSS id to assign to the element that should have
  * $func($settings) invoked on it.
  */
-function date_popup_js_settings_id($pfx, $id, $func, $settings) {
+function date_popup_js_settings_id($id, $func, $settings) {
   static $js_added = FALSE;
   static $id_count = array();
 
@@ -243,7 +240,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     );    
   
   // Create a unique id for each set of custom settings.
-  $id = date_popup_js_settings_id('jquery-calendar', $element['#id'], 'datepicker', $settings);
+  $id = date_popup_js_settings_id($element['#id'], 'datepicker', $settings);
   $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => (!empty($element['#value']['date']) || !empty($edit['date'])) && is_object($date) ? date_format($date, $date_format) : '',
@@ -276,7 +273,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
     );
 
   // Create a unique id for each set of custom settings.
-  $id = date_popup_js_settings_id('jquery-timeentry', $element['#id'], 'timeEntry', $settings);
+  $id = date_popup_js_settings_id($element['#id'], 'timeEntry', $settings);
   $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => (!empty($element['#value']['time']) || !empty($edit['time'])) && is_object($date) ? date_format($date, $time_format) : '',
