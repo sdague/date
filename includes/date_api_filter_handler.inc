@@ -392,24 +392,42 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     return $output;
   }
  
-  function op_between($field) {
-    if ($this->operator == 'between') {
-      $this->date_filter('min', $field, '>=');
-      $this->date_filter('max', $field, '<=');
+  /**
+   * Custom implementation of query() so we can get the
+   * AND and OR methods in the right places.
+   */
+  function query() {
+    $this->ensure_my_table();
+        
+    $this->get_query_fields();
+    if (!empty($this->query_fields)) {
+      
+      // Use set_where_group() with the selected date_method 
+      // of 'AND' or 'OR' to combine the field WHERE clauses.
+      $this->query->set_where_group($this->options['date_method'], 'date');
+      foreach ((array) $this->query_fields as $query_field) {
+        switch ($this->operator) {
+          case 'between':
+            $min = $this->date_filter('min', $query_field, '>=');
+            $max = $this->date_filter('max', $query_field, '<=');
+            $sql = "($min AND $max)";
+            break;
+          case 'not between':
+            $min = $this->date_filter('min', $query_field, '<');
+            $max = $this->date_filter('max', $query_field, '>');
+            $sql = "($min OR $max)";
+            break;
+          default:
+            $sql = $this->date_filter('value', $query_field, $this->operator);
+            break;
+        }
+        $this->query->add_where('date', $sql);
+      }
     }
-    else {
-      $this->date_filter('max', $field, '>', TRUE);
-      $this->date_filter('min', $field, '<', TRUE);      
-    }
-    return;
   }
 
-  function op_simple($field) {
-    $this->date_filter('value', $field, $this->operator);
-    return;
-  }
-
-  function date_filter($prefix, $field, $operator, $not_between = FALSE) {
+  function date_filter($prefix, $query_field, $operator) {
+    
     // If no value is supplied from an exposed filter use the default value.
     if (empty($this->options['exposed']) && empty($this->value[$prefix])) {
       $default = $this->default_value($prefix);
@@ -424,18 +442,19 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (empty($this->value[$prefix])) {
       return;
     }
-    $date_handler = $this->date_handler;
+
     $granularity = $this->options['granularity'];
-    //$selected = $date_handler->arg_parts($this->value[$prefix]);
-    //$complete_date = $date_handler->complete_date($selected[0]['date']);
+    $field = $query_field['field'];
+    $date_handler = $query_field['date_handler'];
+    $this->format = $date_handler->views_formats($granularity, 'sql');
     $complete_date = $this->value[$prefix];
     $date = date_make_date($complete_date);
-    $this->format = $date_handler->views_formats($granularity, 'sql');
     $value = date_format($date, $this->format);
+    
     $range = $this->date_handler->arg_range($value);
     $year_range = $this->year_range();
     
-    if (!$not_between) {
+    if ($this->operator != 'not between') {
       switch ($operator) {
         case '>':
         case '>=':
@@ -464,53 +483,41 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->view->date_info->day = date_format($date, 'j');
     $this->view->date_info->week = date_week(date_format($date, DATE_FORMAT_DATE));
     $this->view->date_info->date_handler = $date_handler;
-    
-    $this->get_query_fields();
-    if (!empty($this->query_fields)) {
-      // Use set_where_group() with the selected date_method 
-      // of 'AND' or 'OR' to create the where clause.
-      $this->query->set_where_group($this->options['date_method'], 'date');
-      foreach ((array) $this->query_fields as $query_field) {
-        $field = $query_field['field'];
-        $date_handler = $query_field['date_handler'];
-        $parts = $date_handler->date_parts();
-    
-        // Explicitly add this table using add_table so Views does not
-        // remove it if it is a duplicate, since that will break the query.
-        $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
-        // Make sure the real field is added to the query.
-        $this->query->add_field($field['table_name'], $field['field_name']);
-        foreach ($field['related_fields'] as $related) {
-          $bits = explode('.', $related);
-          if ($bits[1] != $field['field_name']) {
-            $this->query->add_field($field['table_name'], $bits[1]);
-          }
-        }
-        if ($this->date_handler->granularity == 'week') {
-          $format = DATE_FORMAT_DATETIME;
-        }
-        switch ($prefix) {
-          case 'min':
-            $value = date_format($min_date, $this->format);
-            break;
-          case 'max':
-            $value = date_format($max_date, $this->format);
-            break;
-          default:
-            $value = date_format($date, $this->format);
-            break;
-        }
-        if ($this->date_handler->granularity != 'week') {
-          $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
-        }
-        else {
-          $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value);
-        }
-        $this->query->add_where('date', $sql);
-        continue;
+        
+    // Explicitly add this table using add_table so Views does not
+    // remove it if it is a duplicate, since that will break the query.
+    $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
+    // Make sure the real field is added to the query.
+    $this->query->add_field($field['table_name'], $field['field_name']);
+    foreach ($field['related_fields'] as $related) {
+      $bits = explode('.', $related);
+      if ($bits[1] != $field['field_name']) {
+        $this->query->add_field($field['table_name'], $bits[1]);
       }
     }
+    if ($this->date_handler->granularity == 'week') {
+      $format = DATE_FORMAT_DATETIME;
+    }
+    switch ($prefix) {
+      case 'min':
+        $value = date_format($this->view->date_info->min_date, $this->format);
+        break;
+      case 'max':
+        $value = date_format($this->view->date_info->max_date, $this->format);
+        break;
+      default:
+        $value = date_format($date, $this->format);
+        break;
+    }
+    if ($this->date_handler->granularity != 'week') {
+      $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
+    }
+    else {
+      $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value);
+    }
+    return $sql;
   }
+    
   
   function get_query_fields() {
     $fields = date_api_fields();

@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #356305 Date filters needed a rewrite to properly handle between with more than one date field.
 - #350656 Fix broken handling for 'time ago'.
 - #307578 Add permissions for viewing date repeats tab.
 - Clean out unused part of Date Popup jQuery code for easier maintenance.
