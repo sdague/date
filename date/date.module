@@ -264,6 +264,8 @@ function date_theme() {
         'format' => NULL, 'node' => NULL, 'view' => NULL)),
     'date_all_day_label' => array(
       'arguments' => array()),
+    'date_time_ago' => array(
+      'arguments' => array('start_date' => NULL, 'end_date' => NULL)),  
     'date_text_parts' => array(
       'arguments' => array('element' => NULL)),
     'date' => array(
