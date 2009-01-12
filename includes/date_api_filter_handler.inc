@@ -41,6 +41,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       $this->view->date_info->date_fields = array();
     }
     $this->view->date_info->date_fields = array_merge($this->view->date_info->date_fields, $this->options['date_fields']);
+    $this->definition['allow empty'] = TRUE;
   }
 
   // Set default values for the date filter.
@@ -402,49 +403,66 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       
-      // Use set_where_group() with the selected date_method 
-      // of 'AND' or 'OR' to combine the field WHERE clauses.
-      $this->query->set_where_group($this->options['date_method'], 'date');
       foreach ((array) $this->query_fields as $query_field) {
+        $field = $query_field['field'];
+        $sql = '';
         switch ($this->operator) {
           case 'between':
             $min = $this->date_filter('min', $query_field, '>=');
             $max = $this->date_filter('max', $query_field, '<=');
-            $sql = "($min AND $max)";
+            $sql = !empty($min) && !empty($max) ? "($min AND $max)" : '';
             break;
           case 'not between':
             $min = $this->date_filter('min', $query_field, '<');
             $max = $this->date_filter('max', $query_field, '>');
-            $sql = "($min OR $max)";
+            $sql = !empty($min) && !empty($max) ? "($min OR $max)" : '';
             break;
           default:
             $sql = $this->date_filter('value', $query_field, $this->operator);
             break;
         }
-        $this->query->add_where('date', $sql);
+        if (!empty($sql)) {
+          // Use set_where_group() with the selected date_method 
+          // of 'AND' or 'OR' to combine the field WHERE clauses.
+          $this->query->set_where_group($this->options['date_method'], 'date');
+          $this->query->add_where('date', $sql);
+        }
       }
     }
   }
 
   function date_filter($prefix, $query_field, $operator) {
+    $field = $query_field['field'];
     
+    // Handle the simple operators first.
+    if ($operator == 'empty') {
+      $this->add_date_field($field);
+      return $field['fullname'] .' IS NULL';
+    }
+    elseif ($operator == 'not empty') {
+      $this->add_date_field($field);
+      return $field['fullname'] .' IS NOT NULL';
+    }
+
     // If no value is supplied from an exposed filter use the default value.
     if (empty($this->options['exposed']) && empty($this->value[$prefix])) {
       $default = $this->default_value($prefix);
       if (empty($default)) {
-        return;
+        return '';
       }
       else {
         $this->value[$prefix] = $default;
       }
     }
+    
     // If there is no value, do no filtering.
     if (empty($this->value[$prefix])) {
-      return;
+      return '';
     }
+    
+    $this->add_date_field($field);
 
     $granularity = $this->options['granularity'];
-    $field = $query_field['field'];
     $date_handler = $query_field['date_handler'];
     $this->format = $date_handler->views_formats($granularity, 'sql');
     $complete_date = $this->value[$prefix];
@@ -484,17 +502,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->view->date_info->week = date_week(date_format($date, DATE_FORMAT_DATE));
     $this->view->date_info->date_handler = $date_handler;
         
-    // Explicitly add this table using add_table so Views does not
-    // remove it if it is a duplicate, since that will break the query.
-    $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
-    // Make sure the real field is added to the query.
-    $this->query->add_field($field['table_name'], $field['field_name']);
-    foreach ($field['related_fields'] as $related) {
-      $bits = explode('.', $related);
-      if ($bits[1] != $field['field_name']) {
-        $this->query->add_field($field['table_name'], $bits[1]);
-      }
-    }
     if ($this->date_handler->granularity == 'week') {
       $format = DATE_FORMAT_DATETIME;
     }
@@ -517,7 +524,20 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
     return $sql;
   }
-    
+
+  function add_date_field($field) {
+    // Explicitly add this table using add_table so Views does not
+    // remove it if it is a duplicate, since that will break the query.
+    $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
+    // Make sure the real field is added to the query, since this is a psuedo field.
+    $this->query->add_field($field['table_name'], $field['field_name']);
+    foreach ($field['related_fields'] as $related) {
+      $bits = explode('.', $related);
+      if ($bits[1] != $field['field_name']) {
+        $this->query->add_field($field['table_name'], $bits[1]);
+      }
+    }
+  }
   
   function get_query_fields() {
     $fields = date_api_fields();
