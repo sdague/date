@@ -166,7 +166,7 @@ function date_timezone_update_site($element, &$form_state) {
   }
   
   // Reset the original form to the expected value.
-  if (module_exists('event')) {
+  if (module_exists('event') && db_table_exists('event_timezones')) {
     $event_zone = date_event_zonelist_by_name(str_replace('_', ' ', $timezone));
     // The event module will update the timezone and zone id, using this value.
     form_set_value($element['date_default_timezone'], $event_zone['timezone'] .'|'. $offset, $form_state);
@@ -188,7 +188,7 @@ function date_timezone_update_user($element, &$form_state) {
   }
   
   // Reset the original form to the expected value.
-  if (module_exists('event')) {
+  if (module_exists('event') && db_table_exists('event_timezones')) {
     $event_zone = date_event_zonelist_by_name(str_replace('_', ' ', $timezone));
     // The event module will update the timezone and zone id using this value.
     form_set_value($element['timezone'], $event_zone['timezone'] .'|'. $offset, $form_state);
@@ -269,7 +269,7 @@ function date_timezone_replacement($old) {
  * Helper function to update Event module timezone information.
  */
 function date_event_zonelist_by_name($name) {
-  if (!module_exists('event')) {
+  if (!module_exists('event') || !db_table_exists('event_timezones')) {
     return array();
   }
   static $zone_names = array();

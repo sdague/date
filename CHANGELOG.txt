@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #353327 Check for Event 2 timezone table before trying to use it.
 - #310633 Rework 'all day' logic to correctly handle increments.
 - #345953 Fix report of update failure from missing content_check_update() function. 
 - #348157 Beautiful new datepicker popup themes and images from hass. Thanks!
