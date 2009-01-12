@@ -755,7 +755,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
   // Have to use reverse logic in southern hemisphere.
   $southern = array(9, 10, 11, 12, 17, 18, 19, 20);
   if (in_array($region, $southern)) {
-    return !($timestamp >= $dststart && $dstend <= $timestamp);
+    return ($timestamp >= $dststart && $dstend <= $timestamp);
   }
   else {
     return ($dststart <= $timestamp && $timestamp <= $dstend);
