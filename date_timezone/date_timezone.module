@@ -14,7 +14,6 @@
  */
 function date_timezone_init() {
   $tz_name = variable_get('date_default_timezone_name', NULL);
-  drupal_add_js(drupal_get_path('module', 'date_timezone') .'/date_timezone.js');
   if (!empty($user->uid) && $_GET['q'] != 'admin/settings/date-time' && empty($tz_name)) {
     drupal_set_message(t('The Date Timezone module requires you to <a href="@link">set the site timezone name</a>.', array('@link' => url('admin/settings/date-time'))), 'error');
   }
@@ -55,6 +54,7 @@ function date_timezone_form_alter(&$form, &$form_state, $form_id) {
  * Display a list of timezone names instead of offsets.
  */
 function date_timezone_site_form(&$form) {
+  drupal_add_js(drupal_get_path('module', 'date_timezone') .'/date_timezone.js');
   $form['locale']['#element_validate'] = array('date_timezone_update_site');
 
   $timezone = variable_get('date_default_timezone_name', NULL);
@@ -88,6 +88,7 @@ if (Drupal.jsEnabled) {
  * after the Date module.
  */
 function date_timezone_site_form_after_build(&$form) {
+  
   // Set the value, and make sure it's a legal value.
   $value = $form['locale']['date_default_timezone']['#default_value'];
   $options = $form['locale']['date_default_timezone']['#options'];
@@ -105,6 +106,8 @@ function date_timezone_site_form_after_build(&$form) {
  * Display a list of timezone names instead of offsets.
  */
 function date_timezone_user_form(&$form) {
+  drupal_add_js(drupal_get_path('module', 'date_timezone') .'/date_timezone.js');
+  
   $account = $form['_account']['#value'];
   $form['timezone']['#uid'] = $account->uid;
   $form['timezone']['#element_validate'] = array('date_timezone_update_user');
