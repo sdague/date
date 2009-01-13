@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #217153 Remove asterisks from custom format now that they are explained in advanced help.
 - #292942 Only load timezone js file in timezone forms.
 - #313427 Don't add the date field to the view, it may be enough to join the table in.
 - #356564 Add Date popup option for exposed date filters.

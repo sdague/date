@@ -120,9 +120,9 @@ function date_widget_settings_form($widget) {
   // Only a limited set of formats is available for the Date Popup module
   if ($widget['type'] != 'date_popup') {
     $form['input']['format']['input_format_custom'] = array(
-      '#type' => 'textfield',  '#title' => t('*Custom input format'),
+      '#type' => 'textfield',  '#title' => t('Custom input format'),
       '#default_value' => !empty($widget['input_format_custom']) ? $widget['input_format_custom'] : '',
-      '#description' => t('The custom format, if provided, will override the input format selected above. See more about custom date formats below.'),
+      '#description' => t("The custom format, if provided, will override the input format selected above. The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date<a> for more details).", array('@link' => 'http://php.net/date')),
     );
   }
   else {
@@ -398,8 +398,6 @@ function date_field_settings_form($field) {
       );
   }
 
-  $form['#suffix'] = '<div class="form-item"><div class="description">'. t("* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date<a> for more details).", array('@link' => 'http://php.net/date')) .'</div></div>';
-
   return $form;
 }
 
@@ -462,7 +460,7 @@ function date_formatter_setup_form($field, $delta) {
   );
   $form['output_format_custom'. $append] = array(
     '#type' => 'textfield',
-    '#title' => t('*Custom display format'),
+    '#title' => t('Custom display format'),
     '#default_value' => !empty($field['output_format_custom'. $append]) ? $field['output_format_custom'. $append] : '',
   );
   return $form;
