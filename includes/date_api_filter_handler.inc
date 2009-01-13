@@ -74,12 +74,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function widget_options() {
     $options = array(
       'date_select' => t('Select'), 
-      //'date_text' => t('Text'), 
-      //'date_popup' => t('Popup'),
+      'date_text' => t('Text'), 
+      'date_popup' => t('Popup'),
       );
-    //if (!module_exists('date_popup')) {
-    //  unset($options['date_popup']);
-    //}  
+    if (!module_exists('date_popup')) {
+      unset($options['date_popup']);
+    }  
     return $options;
   }
 
@@ -99,7 +99,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       '#title' => t('Date form type'),
       '#default_value' => $this->options['form_type'],
       '#options' => $this->widget_options(),
-      '#description' => t('Choose the form element to use for date selection (more options will be available later).'),
+      '#description' => t('Choose the form element to use for date selection.'),
       );
    
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);

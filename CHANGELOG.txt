@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #356564 Add Date popup option for exposed date filters.
 - #349306 Incorporate year range into date filter year option.
 - #312403 Add NULL/NOT NULL handling to date filter.
 - #356305 Date filters needed a rewrite to properly handle between with more than one date field.
