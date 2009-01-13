@@ -167,6 +167,7 @@ function date_popup_process($element, $edit, $form_state, $form) {
 
   $date = NULL;
   $granularity = date_format_order($element['#date_format']);
+  
   if (!empty($edit)) {
     $input = $edit['date'] . (!empty($edit['time']) ? ' '. $edit['time'] : '');
     $datetime = date_convert_from_custom($input, $element['#date_format']);
@@ -175,7 +176,7 @@ function date_popup_process($element, $edit, $form_state, $form) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
-
+  
   date_increment_round($date, $element['#date_increment']);
   $granularity = date_format_order($element['#date_format']);
   $element['#tree'] = TRUE;
@@ -249,7 +250,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
     );
-   
+    
   // TODO, figure out exactly when we want this description. In many places it is not desired.
   $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date($date_format, time())));
   return $sub_element;

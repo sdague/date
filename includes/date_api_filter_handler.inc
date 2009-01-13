@@ -153,6 +153,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * Add the selectors to the value form using the date handler.
    */
   function value_form(&$form, &$form_state) {
+    if (!isset($_GET[$this->options['expose']['identifier']])) {
+      $form_state['method'] = 'post';
+    }
     // We use different values than the parent form, so we must
     // construct our own form element.
     $form['value'] = array();
@@ -247,6 +250,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $name = '';
         break;
     }
+    
     $type = $this->options['form_type'];
     $format = $this->date_handler->views_formats($this->options['granularity'], 'sql');
     $granularity = array_keys($this->date_handler->date_parts($this->options['granularity']));
@@ -275,7 +279,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     return $form;
   }
 
-   function default_value($prefix, $options = NULL) {
+  function default_value($prefix, $options = NULL) {
     $default_date = '';
     if (empty($options)) {
       $options = $this->options;
@@ -322,11 +326,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * Be sure that default values get set properly when there is no input.
    */
   function accept_exposed_input($input) {
-    
     if (empty($this->options['exposed'])) {
       return TRUE;
     }
-    
     if (!empty($this->options['expose']['use_operator']) && !empty($this->options['expose']['operator']) && isset($input[$this->options['expose']['operator']])) {
       $this->operator = $input[$this->options['expose']['operator']];
     }

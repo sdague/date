@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Overcome Views form handling to make sure text and Date popup exposed filters will default to the right values.
 - #348276 Remove class date-clear-block from timezone element.
 - #217153 Remove asterisks from custom format now that they are explained in advanced help.
 - #292942 Only load timezone js file in timezone forms.
