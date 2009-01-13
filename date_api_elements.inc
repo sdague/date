@@ -97,7 +97,7 @@ function date_timezone_process($element, $edit, $form_state, $form) {
     '#options' => date_timezone_names($element['#required']),
     '#weight' => $element['#weight'],
     '#required' => $element['#required'],
-    '#attributes' => array('class' => 'date-timezone date-clear-block'),
+    '#attributes' => array('class' => 'date-timezone clear-block'),
     '#theme' => 'date_select_element',
   );
   if (isset($element['#element_validate'])) {
