@@ -136,12 +136,12 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
   // things like '+1 Tuesday', so adjust back to localtime.
   $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
   $timezone_db = date_get_timezone_db($field['tz_handling']);
-  $start = date_make_date($item['value'], $timezone_db, $field['type']);
+  $start = date_make_date($item['value'], $timezone_db, $field['type'], $field['granularity']);
   if ($timezone != $timezone_db){
     date_timezone_set($start, timezone_open($timezone));
   }
   if (!empty($item['value2']) && $item['value2'] != $item['value']) {
-    $end = date_make_date($item['value2'], date_get_timezone_db($field['tz_handling']), $field['type']);
+    $end = date_make_date($item['value2'], date_get_timezone_db($field['tz_handling']), $field['type'], $field['granularity']);
     date_timezone_set($end, timezone_open($timezone));
   }
   else {
@@ -172,7 +172,7 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
     // date_repeat_calc always returns DATE_DATETIME dates, which is
     // not necessarily $field['type'] dates.
     // Convert returned dates back to db timezone before storing.
-    $date_start = date_make_date($date, $timezone, DATE_DATETIME);  
+    $date_start = date_make_date($date, $timezone, DATE_DATETIME, $field['granularity']);  
     date_timezone_set($date_start, timezone_open($timezone_db));    
     $date_end = drupal_clone($date_start);
     date_modify($date_end, '+'. $duration .' seconds');

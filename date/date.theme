@@ -159,7 +159,7 @@ function theme_date_format_interval($element) {
 
 function theme_date_time_ago($start_date, $end_date) {
   // Time to compare dates to
-  $now = date_format(date_make_date('now', date_default_timezone()), DATE_FORMAT_DATETIME);
+  $now = date_format(date_now(), DATE_FORMAT_DATETIME);
   $start = date_format($start_date, DATE_FORMAT_DATETIME);
   $end = date_format($start_date, DATE_FORMAT_DATETIME);
   

@@ -140,7 +140,7 @@ class date_sql_handler {
   function get_offset() {
     if (!empty($this->db_timezone) && !empty($this->local_timezone)) {
       if ($this->db_timezone != $this->local_timezone) {
-        $date = date_make_date('now', $this->db_timezone);
+        $date = date_now($this->db_timezone);
         date_timezone_set($date, timezone_open($this->local_timezone));
         return date_offset_get($date);
       }

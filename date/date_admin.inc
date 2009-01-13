@@ -45,17 +45,12 @@ function _date_widget_settings($op, &$field) {
  * so do it in a custom function.
  */
 function date_widget_settings_validate(&$form, &$form_state) {
+  // TODO Not sure there is any limitation any more in this version. Need to check.  
   if ($form_state['values']['widget_type'] == 'date_popup') {
     // Only a limited set of formats is available for the Date Popup module
     if (!empty($form_state['values']['input_format_custom']) || !in_array($form_state['values']['input_format'], date_popup_formats())) {
       form_set_value($form['input_format_custom'], NULL, $form_state);
       form_set_value($form['input_format'], DATE_FORMAT_DATETIME, $form_state);
-    }
-    // The jQuery calendar requires year, month, and day or it won't work.
-    $date_parts = array('year', 'month', 'day');
-    $intersection = array_intersect($date_parts, $form_state['values']['granularity']);
-    if ($intersection != $date_parts) {
-      form_set_error('granularity', t('The Date Popup widget will not work unless granularity includes year, month, and day.'));
     }
   }
   if (isset($form_state['values']['advanced']['label_position'])) {

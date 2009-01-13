@@ -129,12 +129,13 @@ function date_timezone_process($element, $edit, $form_state, $form) {
  */
 function date_text_process($element, $edit, $form_state, $form) {
   $date = NULL;
+  $granularity = date_format_order($element['#date_format']);
   if (!empty($edit)) {
     $datetime = date_convert_from_custom($edit['date'], $element['#date_format']);
-    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
+    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
 
   $element['#tree'] = TRUE;
@@ -180,11 +181,12 @@ function date_text_process($element, $edit, $form_state, $form) {
  */
 function date_select_process($element, $edit, $form_state, $form) {
   $date = NULL;
+  $granularity = date_format_order($element['#date_format']);
   if (!empty($edit)) {
-    $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY);
+    $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
@@ -475,7 +477,8 @@ function date_select_validate($element, &$form_state) {
  * Helper function for extracting a date value out of user input.
  */
 function date_select_input_value($element) {
-  if (date_is_valid($element['#value'], DATE_ARRAY)) {
+  $granularity = date_format_order($element['#date_format']);
+  if (date_is_valid($element['#value'], DATE_ARRAY, $granularity)) {
     return date_convert($element['#value'], DATE_ARRAY, DATE_DATETIME);
   }
   return NULL;
@@ -513,21 +516,14 @@ function date_text_validate($element, &$form_state) {
  */
 function date_text_input_value($element) {
   $form_values = $element['#value'];
+  $granularity = date_format_order($element['#date_format']);
   $input = $form_values['date'];
   if (!$element['#required'] && trim($input) == '') return NULL;
 
-  $value = date_convert_from_custom($input, $element['#date_format']);
-
-  // Check for special case when using partial dates, like year only.
-  // We have to create a valid date out of the results to test validity.
-  $granularity = date_format_order($element['#date_format']);
-  $non_granularity = date_nongranularity($granularity);
-  if (array_intersect($non_granularity, array('year', 'month', 'day'))) {
-    $value = date_fuzzy_datetime(str_replace(' ', 'T', $value));
-  }
+  $value = date_limit_value(date_convert_from_custom($input, $element['#date_format']), $granularity);
 
   // If it creates a valid date, use it.
-  if (date_is_valid($value)) {
+  if (date_is_valid($value, DATE_DATETIME, $granularity)) {
     return $value;
   }
   // TODO come back and try to find a way to use strtotime to guess
