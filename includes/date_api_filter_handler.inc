@@ -153,7 +153,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * Add the selectors to the value form using the date handler.
    */
   function value_form(&$form, &$form_state) {
-    if (!isset($_GET[$this->options['expose']['identifier']])) {
+    if (isset($this->options['expose']['identifier']) && !isset($_GET[$this->options['expose']['identifier']])) {
       $form_state['method'] = 'post';
     }
     // We use different values than the parent form, so we must
