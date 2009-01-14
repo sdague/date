@@ -255,6 +255,13 @@ function date_field_formatter_info() {
  * Implementation of hook_theme().
  */
 function date_theme() {
+  $path = drupal_get_path('module', 'date');
+  require_once "./$path/date.theme";
+
+  $base = array(
+    'file' => 'date.theme',
+    'path' => "$path",
+  );
   return array(
     'date_combo' => array(
       'arguments' => array('element' => NULL)),
@@ -270,40 +277,40 @@ function date_theme() {
       'arguments' => array('element' => NULL)),
     'date' => array(
       'arguments' => array('element' => NULL)),
-    'date_formatter_default' => array(
+    'date_formatter_default' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_long' => array(
+    'date_formatter_long' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_medium' => array(
+    'date_formatter_medium' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_short' => array(
+    'date_formatter_short' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_timestamp' => array(
+    'date_formatter_timestamp' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_iso' => array(
+    'date_formatter_iso' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_ical' => array(
+    'date_formatter_ical' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_feed' => array(
+    'date_formatter_feed' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_time' => array(
+    'date_formatter_time' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_time_timezone' => array(
+    'date_formatter_time_timezone' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_display_combination'),
-    'date_formatter_format_interval' => array(
+    'date_formatter_format_interval' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_format_interval'),
-    'date_repeat_display' => array(
+    'date_repeat_display' => $base + array(
       'arguments' => array('field' => NULL, 
       'item' => NULL, 'node' => NULL, 'dates' => NULL),
       'function' => 'theme_date_repeat_display',
