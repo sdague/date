@@ -264,9 +264,8 @@ class date_api_argument_handler extends views_handler_argument_date {
    * is the wildcard, since query() is skipped when the wildcard is used.
    */
   function pre_query() { 
-    
     // Unset invalid date values before the query runs.
-    if (!empty($this->view->args)) {
+    if (!empty($this->view->args) && count($this->view->args) > $this->position) {
       $argument = $this->view->args[$this->position];
       $parts = $this->date_handler->arg_parts($argument);
       if (empty($parts[0]['date']) && empty($parts[0]['period'])) {

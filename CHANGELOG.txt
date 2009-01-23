@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Don't try to set date argument when another argument precedes it.
 - Make sure theme functions can be discovered even when called from unexpected places, like embedded views.
 - Make the PHP4 code forgiving enough to accept '+ 1 month' instead of '+1 month'.
 - Overcome Views form handling to make sure text and Date popup exposed filters will default to the right values.
