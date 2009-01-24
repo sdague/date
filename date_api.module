@@ -1705,6 +1705,19 @@ function date_embed_view($name, $display_id = 'default', $settings = array(), $a
 function date_real_url($view, $date_type = NULL, $date_arg = NULL, $force_view_url = FALSE) {
   $args = $view->args;
   $pos = $view->date_info->date_arg_pos;
+  
+  // If there are empty arguments before the date argument, 
+  // pad them with the wildcard so the date argument will be in 
+  // the right position.
+  if (count($args) < $pos) {
+    foreach ($view->argument as $name => $argument) {
+      if ($argument->position == $pos) {
+        break;
+      }
+      $args[] = $argument->options['wildcard'];
+    }
+  }
+  
   if (!empty($date_type)) {
     switch ($date_type) {
       case 'year':

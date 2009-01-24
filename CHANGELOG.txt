@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Make sure prev/next links point to the right path when another argument precedes the date argument and is empty.
 - Don't try to set date argument when another argument precedes it.
 - Make sure theme functions can be discovered even when called from unexpected places, like embedded views.
 - Make the PHP4 code forgiving enough to accept '+ 1 month' instead of '+1 month'.

@@ -44,7 +44,7 @@ class date_navigation_plugin_style extends views_plugin_style {
     foreach ($this->view->argument as $id => $argument) {
       if ($id == 'date_argument') {
         $this->view->date_info->granularity = $argument->granularity;
-        $this->view->date_info->date_arg = $argument->argument;
+        $this->view->date_info->date_arg = !empty($this->view->args) && count($this->view->args) > $argument->position ? $this->view->args[$argument->position] : '';
         $this->view->date_info->date_arg_pos = $i;
         $this->view->date_info->year = isset($argument->year) ? $argument->year : NULL;
         $this->view->date_info->month = isset($argument->month) ? $argument->month: NULL;
