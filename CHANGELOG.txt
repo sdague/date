@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- by stella, nedjo, grugnog2, and catch: #318008 Create new system for handling flexible date formats that can be adapted by locale.
 - Make sure prev/next links point to the right path when another argument precedes the date argument and is empty.
 - Don't try to set date argument when another argument precedes it.
 - Make sure theme functions can be discovered even when called from unexpected places, like embedded views.

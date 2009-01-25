@@ -102,7 +102,7 @@ function date_widget_settings_form($widget) {
   }
   else {
     // example input formats must show all possible date parts, so add seconds.
-    $formats = str_replace('i', 'i:s', date_short_formats());
+    $formats = str_replace('i', 'i:s', array_keys(date_get_formats('short')));
     $formats = drupal_map_assoc($formats);
     $default_format = str_replace('i', 'i:s', variable_get('date_format_short', 'm/d/Y - H:i'));
   }
@@ -245,25 +245,7 @@ function _date_field_settings($op, $field) {
 
     case 'save':
 
-      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat', 'repeat_collapsed');
-      for ($i = 0; $i <= 3; $i++) {
-        switch ($i) {
-        case(1):
-          $name = 'long';
-          break;
-        case(2):
-          $name = 'medium';
-          break;
-        case(3):
-          $name = 'short';
-          break;
-        default:
-          $name = 'default';
-        }
-        $append = ($i > 0 ? '_'. $name : '');
-        $options[] = 'output_format_date'. $append;
-        $options[] = 'output_format_custom'. $append;
-      }
+      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat', 'repeat_collapsed', 'default_format');
       return $options;
 
     case 'database columns':
@@ -359,19 +341,18 @@ function date_field_settings_form($field) {
     '#multiple' => TRUE,
     '#description' => t('Set the date elements to be stored (at least a year is required).'),
     );
-  $form['output']['simple'] = date_formatter_setup_form($field, 0);
-  $form['output']['simple']['#title'] = t('Default Display');
-  $form['output']['simple']['#description'] = theme('advanced_help_topic', 'date_api', 'date-display') . t('Set up formatting for the date display.');
-
-  $form['output']['advanced'] = array(
-    '#type' => 'fieldset', '#title' => t('Additional Display Settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#description' => t('Options other than the default are made available to views and themes. Possible formats are default, long, medium, and short.'),
-  );
-  for ($i = 1; $i <= 3; $i++) {
-    $form['output']['advanced'][$i] = date_formatter_setup_form($field, $i);
+  $format_types = array();  
+  foreach (date_get_format_types('', TRUE) as $name => $info) {
+    $format_types[$name] = $info['title'];
   }
+  $form['default_format'] = array(
+    '#type' => 'select', 
+    '#title' => t('Default Display'),
+    '#default_value' => !empty($field['default_format']) ? $field['default_format'] : 'medium',
+    '#options' => $format_types,
+    '#description' => t('Select a default format type to be used for the date display. Visit the <a href="@date-time-page">Date and time date format page</a> to add and edit format types.', array('@date-time-page' => base_path() .'admin/settings/date-time/formats')),
+    );
+
   $description = t('Select the timezone handling method to be used for this date field.');
   $description .= date_data_loss_warning('Time zone handling');
   $form['tz_handling'] = array(
@@ -418,52 +399,6 @@ function date_field_settings_validate(&$form, &$form_state) {
 
 function date_data_loss_warning($name) {
   return '<p class="error">' . t('Changing the %name setting after data has been created could result in the loss of data!', array('%name' => $name)) . '</p>';
-}
-
-/**
- *  A form to create a date formatter option
- */
-function date_formatter_setup_form($field, $delta) {
-
-  switch ($delta) {
-  case(1):
-    $name = 'long';
-    $label = t('Long');
-    $default = variable_get('date_format_long',  'l, F j, Y - H:i');
-    break;
-  case(2):
-    $name = 'medium';
-    $label = t('Medium');
-    $default = variable_get('date_format_medium',  'D, m/d/Y - H:i');
-    break;
-  case(3):
-    $name = 'short';
-    $label = t('Short');
-    $default = variable_get('date_format_short', 'm/d/Y - H:i');
-    break;
-  default:
-    $name = 'default';
-    $label = t('Default');
-    $default = variable_get('date_format_short', 'm/d/Y - H:i');
-  }
-  $append = ($delta > 0 ? '_'. $name : '');
-  $form = array(
-    '#type' => 'fieldset', '#title' => $label,
-    );
-
-  $form['output_format_date'. $append] = array(
-    '#type' => 'select',
-    '#title' => t('Date display'),
-    '#default_value' => !empty($field['output_format_date'. $append]) ? $field['output_format_date'. $append] : $default,
-    '#options' => date_format_options(),
-    '#multiple' => false,
-  );
-  $form['output_format_custom'. $append] = array(
-    '#type' => 'textfield',
-    '#title' => t('Custom display format'),
-    '#default_value' => !empty($field['output_format_custom'. $append]) ? $field['output_format_custom'. $append] : '',
-  );
-  return $form;
 }
 
 /**
@@ -538,14 +473,7 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
     'todate' => 'optional',
     'repeat' => in_array($widget_type, $repeat_widgets) ? 1 : 0,
     'repeat_collapsed' => 0, 
-    'output_format_date' => variable_get('date_format_short', 'm/d/Y - H:i'),
-    'output_format_custom' => '', 
-    'output_format_date_long' => variable_get('date_format_long',  'l, F j, Y - H:i'),
-    'output_format_custom_long' => '', 
-    'output_format_date_medium' => variable_get('date_format_medium',  'D, m/d/Y - H:i'),
-    'output_format_custom_medium' => '', 
-    'output_format_date_short' => variable_get('date_format_short', 'm/d/Y - H:i'),
-    'output_format_custom_short' => '',
+    'default_format' => 'medium',
     );
   $base_widget_values = array (
     'label' => '',

@@ -151,3 +151,18 @@ span.date-display-separator {
    display: block; 	 
  } 	 
  /* End hide from IE-mac */
+
+.date-container .date-format-delete {
+  margin-top: 1.8em;
+  margin-left: 1.5em;
+  float: left;
+}
+.date-container .date-format-name {
+  float: left;
+}
+.date-container .date-format-type {
+  float: left;
+  padding-left: 10px;
+}
+
+

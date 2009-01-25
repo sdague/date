@@ -540,11 +540,8 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
     'multiple' => 1, 
     
     // Set a display format that will show complete date information, 
-    // including the timezone, to help test that values are correct.
-    'output_format' => variable_get('date_format_long',  'l, F j, Y - H:i') .' e',
-    'output_format_long' => variable_get('date_format_long',  'l, F j, Y - H:i'),
-    'output_format_medium' => variable_get('date_format_medium',  'D, m/d/Y - H:i'),
-    'output_format_short' => variable_get('date_format_short', 'm/d/Y - H:i'),
+    // to help test that values are correct.
+    'default_format' => 'long',
     
     // Set the date granularity.
     'granularity' => array (
