@@ -682,6 +682,7 @@ function date_update_6005() {
     }
     
     // See if any views stored in the database need date formats updated.
+    /*
     $result2 = db_query("SELECT * FROM {views_display}");
     while ($row = db_fetch_array($result2)) {
       $updated = FALSE;
@@ -701,6 +702,7 @@ function date_update_6005() {
         }
       }
     }
+    */
     
   }
   // Clear any caches that may have old formats in them.
