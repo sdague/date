@@ -408,7 +408,7 @@ if (!function_exists('date_modify')) {
       preg_match('/([+|-])\s?([0-9]{1,32})\s?([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
       $direction = $results[1];
       $count = $results[2];
-      $item = $results[4];
+      $item = $results[3];
       if (empty($results) || empty($item)) {
         return;
       }
