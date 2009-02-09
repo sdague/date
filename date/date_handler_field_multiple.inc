@@ -17,7 +17,6 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     if (isset($this->view->build_info['summary']) || empty($values) || !$this->defer_query) {
       return parent::pre_render($values);
     }
-    
     $field = $this->content_field;
     $db_info = content_database_info($field);
     $options = $this->options;
@@ -81,7 +80,7 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     
     // By this time $values is a pseudo node that will be passed
     // to the theme. Add view information to it.
-    $values->date_info = !empty($this->view->date_info) ? $this->view->date_info : array();
+    $values->date_info = !empty($this->view->date_info) ? $this->view->date_info : new StdClass();
     $values->date_info->date_handler_fields = date_handler_fields($this->view);
     return parent::render($values);
   }
