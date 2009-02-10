@@ -37,7 +37,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
   if (empty($timezone)) {
     $timezone = date_default_timezone_name();
   }
-
+  
+  // Make sure the 'EXCEPTIONS' string isn't appended to the rule.
+  $parts = split("\n", $rrule);
+  if (count($parts)) {
+    $rrule = $parts[0];
+  }
   // Get the parsed array of rule values.
   $rrule = date_ical_parse_rrule('RRULE:', $rrule);
   

@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #313369 Repeating date with exceptions created error when exceptions data is appended.
 - #363424 Empty value should be object, not array.
 - Fix bad PHP4 regex that caused endless looping in calendar and broken logic elsewhere.
 - by stella, nedjo, grugnog2, and catch: #318008 Create new system for handling flexible date formats that can be adapted by locale.
