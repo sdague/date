@@ -707,6 +707,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
   $max_granularity = array_pop($granularity);
   if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
     $date = date_fuzzy_datetime($date);
+    $type = DATE_DATETIME;
   }
   
   // Make sure some value is set for the date and timezone even if the
@@ -2275,7 +2276,7 @@ function date_range_years($string, $date = NULL) {
   $this_year = date_format(date_now(), 'Y');
   list($min_year, $max_year) = explode(':', $string);
   
-  // Valid patterns would be -5:+5, 0:+1, 2008:2010, 0:+3.
+  // Valid patterns would be -5:+5, 0:+1, 2008:2010.
   $plus_pattern = '@[\+|\-][0-9]{1,4}@';
   $year_pattern = '@[0-9]{4}@';
   if (!preg_match($year_pattern, $min_year, $matches)) {

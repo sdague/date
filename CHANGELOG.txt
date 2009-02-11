@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix bug that caused date_select to end up as current date.
 - #364919 Fix typo in html link for date format information.
 - #360670 Rework date_range to better handle absolute as well as relative years in argument and filter.
 - #367970 Fix date filter bugs, better handling for partial dates and force date popup to use the right default value.
