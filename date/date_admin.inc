@@ -122,7 +122,7 @@ function date_widget_settings_form($widget) {
     $form['input']['format']['input_format_custom'] = array(
       '#type' => 'textfield',  '#title' => t('Custom input format'),
       '#default_value' => !empty($widget['input_format_custom']) ? $widget['input_format_custom'] : '',
-      '#description' => t("The custom format, if provided, will override the input format selected above. The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date<a> for more details).", array('@link' => 'http://php.net/date')),
+      '#description' => t("The custom format, if provided, will override the input format selected above. The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see <a href=\"@link\">http://php.net/date</a> for more details).", array('@link' => 'http://php.net/date')),
     );
   }
   else {
