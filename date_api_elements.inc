@@ -156,6 +156,9 @@ function date_text_process($element, $edit, $form_state, $form) {
   else {
     $element['#element_validate'] = array('date_text_validate');
   }
+  if (!empty($element['#force_value'])) {
+    $element['date']['#value'] = $element['date']['#default_value'];
+  }
   return $element;
 }
 
