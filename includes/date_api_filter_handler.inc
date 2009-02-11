@@ -153,8 +153,13 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * Add the selectors to the value form using the date handler.
    */
   function value_form(&$form, &$form_state) {
+    
+    // If no value has been submitted on an exposed filter it is treated as
+    // a submitted value. Send a flag to the date widget processors so they 
+    // know to set '#value' instead of '#default_value' in that case.
+    $force_value = FALSE;
     if (isset($this->options['expose']['identifier']) && !isset($_GET[$this->options['expose']['identifier']])) {
-      $form_state['method'] = 'post';
+      $force_value = TRUE;
     }
     // We use different values than the parent form, so we must
     // construct our own form element.
@@ -185,11 +190,18 @@ class date_api_filter_handler extends views_handler_filter_numeric {
        
     if ($which == 'all' || $which == 'value') {
       $form['value'] += $this->date_parts_form($form_state, 'value', $source, $which, $this->operator_values(1));
+      if ($force_value) {
+        $form['value']['value']['#force_value'] = TRUE;
+      }
     }
 
     if ($which == 'all' || $which == 'minmax') {
       $form['value'] += $this->date_parts_form($form_state, 'min', $source, $which, $this->operator_values(2));
       $form['value'] += $this->date_parts_form($form_state, 'max', $source, $which, $this->operator_values(2));
+      if ($force_value) {
+        $form['value']['min']['#force_value'] = TRUE;
+        $form['value']['max']['#force_value'] = TRUE;
+      }
     }
     
     $form['value']['value']['#prefix'] = '<div class="form-item"><label>' . t('Absolute value') . '</label></div>';
@@ -209,9 +221,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // We'll save it as an option rather than a value to store it for use
     // in the exposed filter.
     if (!empty($form_state['exposed'])) {
-      $form['value']['default_date']['#type'] = 'hidden';
+      $form['value']['default_date']['#type'] = 'value';
       $form['value']['default_date']['#value'] = $form['value']['default_date']['#default_value'];
-      $form['value']['default_to_date']['#type'] = 'hidden';
+      $form['value']['default_to_date']['#type'] = 'value';
       $form['value']['default_to_date']['#value'] = $form['value']['default_to_date']['#default_value'];
       unset($form['value']['default_date']['#prefix']);
       unset($form['value']['value']['#prefix']);
@@ -322,44 +334,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     parent::value_validate($form, $form_state);
   }
 
-  /**
-   * Be sure that default values get set properly when there is no input.
-   */
-  function accept_exposed_input($input) {
-    if (empty($this->options['exposed'])) {
-      return TRUE;
-    }
-    if (!empty($this->options['expose']['use_operator']) && !empty($this->options['expose']['operator']) && isset($input[$this->options['expose']['operator']])) {
-      $this->operator = $input[$this->options['expose']['operator']];
-    }
-    if (!empty($this->options['expose']['identifier'])) {
-      $value = $input[$this->options['expose']['identifier']];
-      if (!isset($_GET[$this->options['expose']['identifier']])) {
-        $value['min'] = $this->default_value('min');
-        $value['max'] = $this->default_value('max');
-        $value['value'] = $this->default_value('value');
-      }
-      
-      // Various ways to check for the absence of optional input.
-      if (!empty($this->options['expose']['optional'])) {
-        if ($value == 'All' || $value === array()) {
-          return FALSE;
-        }
-        if (!empty($this->no_single) && $value === '') {
-          return FALSE;
-        }
-      }
-
-      if (isset($value)) {
-        $this->value = $value;
-      }
-      else {
-        return FALSE;
-      }
-    }
-    return TRUE;
-  }
-  
   // Update the summary values to provide
   // meaningful information for each option.
   function admin_summary() {
@@ -402,7 +376,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    */
   function query() {
     $this->ensure_my_table();
-        
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
       
@@ -447,17 +420,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       return $field['fullname'] .' IS NOT NULL';
     }
 
-    // If no value is supplied from an exposed filter use the default value.
-    if (empty($this->options['exposed']) && empty($this->value[$prefix])) {
-      $default = $this->default_value($prefix);
-      if (empty($default)) {
-        return '';
-      }
-      else {
-        $this->value[$prefix] = $default;
-      }
-    }
-    
     // If there is no value, do no filtering.
     if (empty($this->value[$prefix])) {
       return '';
@@ -468,7 +430,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $granularity = $this->options['granularity'];
     $date_handler = $query_field['date_handler'];
     $this->format = $date_handler->views_formats($granularity, 'sql');
-    $complete_date = $this->value[$prefix];
+    $complete_date = date_fuzzy_datetime($this->value[$prefix]);
     $date = date_make_date($complete_date);
     $value = date_format($date, $this->format);
     
