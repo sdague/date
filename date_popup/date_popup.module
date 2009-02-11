@@ -203,20 +203,17 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $date_format = (date_limit_format($element['#date_format'], $date_granularity));
 
   if (empty($date_granularity)) return array();
-
-  // Center the range around the current year, but expand it far
-  // enough so it will pick up the year value in the field in case
-  // the value in the field is outside the initial range.
+  
   // The datepicker can't handle zero or negative values like 0:+1
   // even though the Date API can handle them, so rework the value
   // we pass to the datepicker to use defaults it can accept.
   $this_year = date_format(date_now(), 'Y');
-  $value_year = is_object($date) ? date_format($date, 'Y') : $this_year;
-  $range = explode(':', $element['#date_year_range']);
-  $min_year = min($value_year, $this_year + $range[0]);
-  $max_year = max($value_year, $this_year + $range[1]);
-  $year_range = sprintf('%+d', $min_year - $this_year) .':'. sprintf('%+d', $max_year - $this_year);
-  
+  $range = date_range_years($element['#date_year_range'], $date);
+  if ($range[0] > $this_year) {
+    $range[0] = $this_year;
+  }
+  $year_range = date_range_string($years);
+
   $settings = array(
     'prevText' => '&lt;'. t('Prev'),
     'nextText' => t('Next') .'&gt;',

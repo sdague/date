@@ -2262,3 +2262,53 @@ function date_api_date_time_lookup() {
   echo drupal_to_js($result);
   exit;
 }
+
+/**
+ * Split a string like -3:+3 or 2001:2010 into 
+ * an array of min and max years.
+ * 
+ * Center the range around the current year, if any, but expand it far
+ * enough so it will pick up the year value in the field in case
+ * the value in the field is outside the initial range.
+ */
+function date_range_years($string, $date = NULL) {
+  $this_year = date_format(date_now(), 'Y');
+  $value_year = is_object($date) ? date_format($date, 'Y') : '';
+  $range = explode(':', $string);
+  if (preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $string)) {
+    $min_year = $this_year + $range[0];
+    $max_year = $this_year + $range[1];
+  }
+  elseif (preg_match('@[0-9]{4}:[0-9]{4}@', $string)) {
+    $min_year = $range[0];
+    $max_year = $range[1];
+  }
+  if (!empty($value_year)) {
+    $min_year = min($value_year, $min_year);
+    $max_year = max($value_year, $max_year);
+  }
+  return array($min_year, $max_year);
+}
+
+/**
+ * Convert a min and max year into a string like '-3:+1'.
+ *
+ * @param unknown_type $years
+ * @return unknown
+ */
+function date_range_string($years) {
+  $this_year = date_format(date_now(), 'Y');
+  if ($years[0] < $this_year) {
+    $min = '-'. ($this_year - $years[0]);
+  }
+  else {
+    $min = '+'. ($years[0] - $this_year);
+  }
+  if ($years[1] < $this_year) {
+    $max = '-'. ($this_year - $years[1]);
+  }
+  else {
+    $max = '+'. ($years[1] - $this_year);
+  }
+  return $min .':'. $max;
+}

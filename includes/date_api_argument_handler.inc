@@ -29,7 +29,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     
     // Set the view range, do this only if not already set in case there are multiple date arguments.
     if (empty($this->view->date_info->min_allowed_year)) {
-      $range = $this->year_range();
+      $range = date_range_years($this->options['year_range']);
       $this->view->date_info->min_allowed_year = !empty($range) && is_array($range) ? $range[0] : variable_get('min_allowed_year', 100);
       $this->view->date_info->max_allowed_year = !empty($range) && is_array($range) ? $range[1] : variable_get('max_allowed_year', 4000);
     }
@@ -120,16 +120,6 @@ class date_api_argument_handler extends views_handler_argument_date {
     if ($form_state['values']['form_id'] == 'views_ui_config_item_form') {
       $form_state['values']['options']['date_fields'] = array_filter($form_state['values']['options']['date_fields']);
     }
-  }
-  
-  function year_range() {
-    $year_range = explode(':', $this->options['year_range']);
-    if (substr($this->options['year_range'], 0, 1) == '-' || $year_range[0] < 0) {
-      $this_year = date_format(date_now(), 'Y');
-      $year_range[0] = $this_year + $year_range[0];
-      $year_range[1] = $this_year + $year_range[1];
-    }
-    return $year_range;
   }
   
   // Update the summary values to show selected granularity.

@@ -33,7 +33,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     
     // Set the view range, do this only if not already set in case there are multiple date arguments.
     if (empty($this->view->date_info->min_allowed_year)) {
-      $range = $this->year_range();
+      $range = date_range_years($this->options['year_range']);
       $this->view->date_info->min_allowed_year = !empty($range) && is_array($range) ? $range[0] : variable_get('min_allowed_year', 100);
       $this->view->date_info->max_allowed_year = !empty($range) && is_array($range) ? $range[1] : variable_get('max_allowed_year', 4000);
     }
@@ -435,8 +435,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $value = date_format($date, $this->format);
     
     $range = $this->date_handler->arg_range($value);
-    $year_range = $this->year_range();
-    
+    $year_range = date_range_years($this->options['year_range']);
     if ($this->operator != 'not between') {
       switch ($operator) {
         case '>':
