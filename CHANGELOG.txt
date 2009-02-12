@@ -3,7 +3,7 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
-
+- Make sure un-exposed filter checks for defaults to find values like 'now'.
 - Fix bug that caused date_select to end up as current date.
 - #364919 Fix typo in html link for date format information.
 - #360670 Rework date_range to better handle absolute as well as relative years in argument and filter.

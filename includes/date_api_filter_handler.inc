@@ -378,7 +378,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->ensure_my_table();
     $this->get_query_fields();
     if (!empty($this->query_fields)) {
-      
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
         $sql = '';
@@ -409,7 +408,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
   function date_filter($prefix, $query_field, $operator) {
     $field = $query_field['field'];
-    
     // Handle the simple operators first.
     if ($operator == 'empty') {
       $this->add_date_field($field);
@@ -422,7 +420,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
     // If there is no value, do no filtering.
     if (empty($this->value[$prefix])) {
-      return '';
+      if (empty($form_state['exposed'])) {
+        $this->value[$prefix] = $this->default_value($prefix);
+      }
+      else {
+        return '';
+      }
     }
     
     $this->add_date_field($field);
