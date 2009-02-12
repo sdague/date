@@ -3,6 +3,8 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
+
+- #347090 Fix southern hemisphere timezone adjustment for PHP4.
 - Make sure un-exposed filter checks for defaults to find values like 'now'.
 - Fix bug that caused date_select to end up as current date.
 - #364919 Fix typo in html link for date format information.
