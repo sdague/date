@@ -97,7 +97,6 @@ function date_timezone_process($element, $edit, $form_state, $form) {
     '#options' => date_timezone_names($element['#required']),
     '#weight' => $element['#weight'],
     '#required' => $element['#required'],
-    '#attributes' => array('class' => 'date-timezone clear-block'),
     '#theme' => 'date_select_element',
   );
   if (isset($element['#element_validate'])) {
@@ -106,6 +105,8 @@ function date_timezone_process($element, $edit, $form_state, $form) {
   else {
     $element['#element_validate'] = array('date_timezone_validate');
   }
+  // TODO This sometimes causes problems, do we need it?
+  //$element['#attributes'] = array('class' => 'date-timezone clear-block');
   return $element;
 }
 
