@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #348241 Don't unset view copy on node because it interferes with template suggestions. Need to watch this for possible performance problems.
 - #364770 Add new date link needs to convert underscore to hyphen.
 - Can't use date-clear attribute on timezone list.
 - #370092 Add all-day checkbox to date field and use it in calendar.

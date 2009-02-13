@@ -571,7 +571,9 @@ function date_prepare_node(&$node) {
     if (empty($node->date_info->date_handler_fields)) {
       $node->date_info->date_handler_fields = date_handler_fields($node->view);
     }
-    unset($node->view);
+    // TODO Keep an eye on this and see if there are performance problems.
+    // Unsetting it interferes with node template suggestions.
+    //unset($node->view);
   }
   if (empty($node->date_info)) {
     return;
