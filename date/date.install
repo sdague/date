@@ -750,7 +750,7 @@ function date_db_integrity($name) {
       // alter the start column values to invalid or empty
       // values to force the new columns to be reset.
       $columns_start['value']['length'] = 90;
-      if ($field['todate']) {
+      if (!empty($field['todate'])) {
         if (!db_column_exists($table, $columns_start['value2']['column'])) {
           unset($columns_start['value2']);
         }
@@ -780,7 +780,7 @@ function date_db_integrity($name) {
           }
         }
       }
-      if ($field['repeat'] == 1) {
+      if (!empty($field['repeat'])) {
         if (!db_column_exists($table, $columns_start['rrule']['column'])) {
           unset($columns_start['rrule']);
         }
