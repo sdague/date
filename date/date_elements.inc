@@ -73,16 +73,9 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
       }
     }
 
-    if ($item['all_day'] == TRUE) {
-      $granularity = array_intersect(date_granularity($field), array('year', 'month', 'day'));
-      $items[$delta]['value'] = date_limit_value($items[$delta]['value'], $granularity, $field['type']);
-      if ($field['todate']) {
-        $items[$delta]['value2'] = date_limit_value($items[$delta]['value2'], $granularity, $field['type']);
-      }
-    }
     // Special case for ISO dates which may have been given artificial values for
     // some date parts to make them into valid dates.
-    elseif ($field['type'] == DATE_ISO) {
+    if ($field['type'] == DATE_ISO) {
       $items[$delta]['value'] = date_limit_value($items[$delta]['value'], date_granularity($field), $field['type']);
       if ($field['todate']) {
         $items[$delta]['value2'] = date_limit_value($items[$delta]['value2'], date_granularity($field), $field['type']);
@@ -190,15 +183,6 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
     _date_repeat_widget($element, $field, $items, $delta);
     $element['rrule']['#weight'] = $field['widget']['weight'] + .4;
   }
-  if ($field['all_day'] == TRUE) {
-    $element['all_day'] = array(
-      '#title' => t('All-day'),
-      '#type' => 'checkbox',
-      '#delta' => $delta,
-      '#default_value' => !empty($items[$delta]['all_day']),
-      '#description' => t('Turn on if the date is all-day.'),
-      );
-  }
   return $element;
 }
 
@@ -245,6 +229,7 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
   }
   else {
     $value = $item[$part];
+      
     // Special case for ISO dates to create a valid date object for formatting.
     if ($field['type'] == DATE_ISO) {
       $value = date_fuzzy_datetime($value);
