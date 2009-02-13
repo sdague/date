@@ -368,11 +368,6 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   // does not get the values in $form.
   $form_state['#field_info'][$field['field_name']] = $field;
   
-  
-  $path = drupal_get_path('module', 'date_api');
-  drupal_add_js($path .'/date_all_day.js');
-  
-  
   return $element;
 }
 
