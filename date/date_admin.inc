@@ -245,7 +245,7 @@ function _date_field_settings($op, $field) {
 
     case 'save':
 
-      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat', 'repeat_collapsed', 'default_format');
+      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat', 'repeat_collapsed', 'default_format', 'all_day');
       return $options;
 
     case 'database columns':
@@ -298,6 +298,9 @@ function date_columns($field) {
     $db_columns['offset'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
     if (!empty($field['todate'])) $db_columns['offset2'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
   }
+  if (isset($field['all_day']) && $field['all_day'] == TRUE) {
+    $db_columns['all_day'] = array('type' => 'int', 'length' => 1, 'not null' => FALSE, 'sortable' => FALSE);
+  }
   if (isset($field['repeat']) && $field['repeat'] == 1) {
     $db_columns['rrule'] = array('type' => 'text', 'not null' => FALSE, 'sortable' => FALSE);
   }
@@ -316,6 +319,7 @@ function date_field_settings_form($field) {
     $granularity = array('year', 'month', 'day', 'hour', 'minute');
   }
   $tz_handling = isset($field['tz_handling']) ? $field['tz_handling'] : (date_has_time($granularity) ? 'site' : 'none');
+  $all_day = isset($field['all_day']) ? $field['all_day'] : FALSE;
   
   // If adding a repeat, override the Content module's handling of the multiple values option.
   if (module_exists('date_repeat') && date_is_repeat_field($field)) {
@@ -361,6 +365,12 @@ function date_field_settings_form($field) {
     '#default_value' => $tz_handling,
     '#options' => date_timezone_handling_options(),
     '#description' => $description,
+  );
+  $form['all_day'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('All-day checkbox'),
+    '#default_value' => $all_day,
+    '#description' => t('If turned on, all-day property of the dates can be handled.'),
   );
   // Force this value to hidden because we don't want to allow it to be changed right now,
   // but allow it to be a variable if needed.

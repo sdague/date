@@ -72,9 +72,17 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
         }
       }
     }
+
+    if ($item['all_day'] == TRUE) {
+      $granularity = array_intersect(date_granularity($field), array('year', 'month', 'day'));
+      $items[$delta]['value'] = date_limit_value($items[$delta]['value'], $granularity, $field['type']);
+      if ($field['todate']) {
+        $items[$delta]['value2'] = date_limit_value($items[$delta]['value2'], $granularity, $field['type']);
+      }
+    }
     // Special case for ISO dates which may have been given artificial values for
     // some date parts to make them into valid dates.
-    if ($field['type'] == DATE_ISO) {
+    elseif ($field['type'] == DATE_ISO) {
       $items[$delta]['value'] = date_limit_value($items[$delta]['value'], date_granularity($field), $field['type']);
       if ($field['todate']) {
         $items[$delta]['value2'] = date_limit_value($items[$delta]['value2'], date_granularity($field), $field['type']);
@@ -181,6 +189,15 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
     require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
     _date_repeat_widget($element, $field, $items, $delta);
     $element['rrule']['#weight'] = $field['widget']['weight'] + .4;
+  }
+  if ($field['all_day'] == TRUE) {
+    $element['all_day'] = array(
+      '#title' => t('All-day'),
+      '#type' => 'checkbox',
+      '#delta' => $delta,
+      '#default_value' => $items[$delta]['all_day'],
+      '#description' => t('Turn on if the date is all-day.'),
+      );
   }
   return $element;
 }
@@ -350,6 +367,12 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   // Make sure field info will be available to the validator which
   // does not get the values in $form.
   $form_state['#field_info'][$field['field_name']] = $field;
+  
+  
+  $path = drupal_get_path('module', 'date_api');
+  drupal_add_js($path .'/date_all_day.js');
+  
+  
   return $element;
 }
 
