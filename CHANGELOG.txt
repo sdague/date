@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #364770 Add new date link needs to convert underscore to hyphen.
 - Can't use date-clear attribute on timezone list.
 - #370092 Add all-day checkbox to date field and use it in calendar.
 - #347090 Fix southern hemisphere timezone adjustment for PHP4.

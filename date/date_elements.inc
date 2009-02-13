@@ -174,7 +174,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
       '#delta' => $delta,
       '#default_value' => $timezone,
       '#weight' => $field['widget']['weight'] + .2,
-      );
+      );  
   }
   
   // Add a date repeat form element, if needed.
@@ -352,7 +352,6 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   // Make sure field info will be available to the validator which
   // does not get the values in $form.
   $form_state['#field_info'][$field['field_name']] = $field;
-  
   return $element;
 }
 
