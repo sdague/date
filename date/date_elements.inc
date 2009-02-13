@@ -195,7 +195,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
       '#title' => t('All-day'),
       '#type' => 'checkbox',
       '#delta' => $delta,
-      '#default_value' => $items[$delta]['all_day'],
+      '#default_value' => !empty($items[$delta]['all_day']),
       '#description' => t('Turn on if the date is all-day.'),
       );
   }
