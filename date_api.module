@@ -2242,9 +2242,21 @@ function date_api_system_modules_submit($form, &$form_state) {
  *
  * Remove the 'date_formats' section from the 'admin/settings/date-time' page.
  * This form section is now part of the form at 'admin/settings/date-time/formats'.
+ * We add the formats as values to the form to avoid errors on submission
+ * of the form when expected values are missing in system_date_time_settings_submit().
  */
 function date_api_form_system_date_time_settings_alter(&$form, $form_state, $form_id = 'system_date_time_settings') {
-  $form['date_formats'] = NULL;
+  include_once(drupal_get_path('module', 'date_api') .'/date_api.admin.inc');
+  $formats_form = date_api_date_formats_form($form_state);
+  $form['date_formats'] = $formats_form['date_formats'];
+  foreach ($form['date_formats'] as $key => $value) {
+    if (substr($key, 0, 1) != '#') {
+      $form['date_formats'][$key]['#type'] = 'value';
+    }
+    else {
+      unset($form['date_formats'][$key]);
+    }
+  }
 }
 
 /**
