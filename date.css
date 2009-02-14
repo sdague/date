@@ -165,4 +165,8 @@ span.date-display-separator {
   padding-left: 10px;
 }
 
+.date-container .select-container {
+  clear: left;
+  float: left;
+}
 
