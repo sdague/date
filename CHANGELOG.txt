@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #370961 Date format update was not PostgreSQL-safe.
 - #337301 Move hook_schema_alter from date_api.module to date_api.install.
 - #367688 Fix date format css to display remove link better.
 - Add our custom date formats as values on the core locale form so we don't get errors on submission if they are missing.

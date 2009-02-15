@@ -281,7 +281,6 @@ function date_update_5203() {
   if ($abort = content_check_update('date')) {
     return $abort;
   }
-  //return date_data_integrity('5203');
   $ret = array();
   return $ret;
 }
@@ -722,9 +721,9 @@ function date_install_create_format($field, $title, $name, $format) {
     $title = $field['widget']['label'] .' '. $type;  
   }
   variable_set('date_format_'. $name, $format);
-  db_query("INSERT INTO {date_format_types} VALUES('%s', '%s', 0)", $name, $title);
+  db_query("INSERT INTO {date_format_types} (type, title, locked) VALUES('%s', '%s', 0)", $name, $title);
   if (!db_result(db_query("SELECT dfid FROM {date_format} WHERE format='%s'", $format))) {
-    db_query("INSERT INTO {date_format} VALUES(NULL, '%s', '%s', 0)", $format, 'custom');
+    db_query("INSERT INTO {date_format} (format, type, locked) VALUES('%s', '%s', 0)", $format, 'custom');
   }
 }
 
@@ -799,146 +798,4 @@ function date_db_integrity($name) {
   }
   content_clear_type_cache();
   return $ret;
-}
-
-/**
- *  Progressive update of date information, integrity checking of all date values.
- *
- * @param name - name of the update
- */
-function date_data_integrity($name, $force_recalc = FALSE) {
-  $ret = array();
-  if (!module_exists('content') || !module_exists('date_api')) {
-    return $ret;
-  }
-  drupal_load('module', 'content');
-  require_once('./'. drupal_get_path('module', 'content') .'/includes/content.admin.inc');
-  // Use this to turn extra debugging on or off.
-  $debug = TRUE;
-
-  $update_name = 'date_update_'. $name;
-  // See if being called for the first time
-  if (!isset($_SESSION[$update_name]) || empty($_SESSION[$update_name]['search'])) {
-    // Find all nids that have date fields and store them in an array.
-    $tables = array();
-    $_SESSION[$update_name]['search'] = array();
-    $_SESSION[$update_name]['fields'] = array();
-    $fields = content_fields();
-    foreach ($fields as $field) {
-      if ($field['type'] == 'date' || $field['type'] == 'datestamp') {
-        $_SESSION[$update_name]['fields'][$field['field_name']] = $field;
-        $db_info = content_database_info($field);
-        $tables[] =  $db_info['table'];
-      }
-    }
-    // keep track of progress
-    $_SESSION[$update_name]['counted'] = 0;
-    $tables = array_unique($tables);
-    foreach ($tables as $table) {
-      $result = db_query("SELECT nid, vid FROM {". $table ."} ORDER BY nid, vid");
-      while ($row = db_fetch_array($result)) {
-        $_SESSION[$update_name]['search'][] = $row['nid'] .':'.  $row['vid'];
-      }
-    }
-    sort($_SESSION[$update_name]['search']);
-    $_SESSION[$update_name]['search_all'] = $_SESSION[$update_name]['search'];
-    $_SESSION[$update_name]['count_total'] = count($_SESSION[$update_name]['search']);
-    $_SESSION[$update_name]['counted'] = 0;
-  }
-  $_SESSION[$update_name]['changed'] = array();
-  $_SESSION[$update_name]['unchanged'] = array();
-  // Do 5 updates in each pass.
-  for($i = 0; $i <= 5; $i++) {
-    $update = !empty($_SESSION[$update_name]['search']) ? array_shift($_SESSION[$update_name]['search']) : array();
-    if (!empty($update)) {
-      $ids = explode(':', $update);
-      $node = node_load($ids[0], $ids[1]);
-      // Iterate through all the date fields in this node and re-compute
-      // values to make sure they are correct.
-      $needs_fix = FALSE;
-      foreach ($_SESSION[$update_name]['fields'] as $field_name => $field) {
-        $items = (array) $node->$field_name;
-        $add = array();
-        foreach ($items as $delta => $item) {
-          // Check for non-required fields that still have the old default values and make them NULL.
-          if ($field['type'] == 'date' && !$field['required'] && (substr($item['value'], 0, 10) == '0000-00-00' || substr($item['value'], 0, 10) == '0001-00-00')) {
-            $item['value'] = NULL;
-            $needs_fix = TRUE;
-          }
-          if ($field['type'] == 'datestamp' && !$field['required'] && empty($item['value'])) {
-            $item['value'] = NULL;
-            $needs_fix = TRUE;
-          }
-          $add[$delta]['value'] = $item['value'];
-          // Check for missing todates.
-          if ($field['todate']) {
-            if ((empty($item['value2']) && !empty($item['value'])) || $force_recalc) $needs_fix = TRUE;
-            $add[$delta]['value2']   = !empty($item['value2']) ? $item['value2'] : $item['value'];
-          }
-          // Check for missing timezone and offset information.
-          if ($field['tz_handling'] == 'date') {
-            if (empty($item['offset']) || empty($item['timezone']) || $force_recalc) {
-              $needs_fix = TRUE;
-              $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
-              $date = date_make_date($item['value'], 'GMT', $field['type']);
-              if (!empty($date) && !empty($timezone)) {
-                date_timezone_set($date, timezone_open($timezone));
-                $add[$delta]['timezone'] = $field['required'] || $item['value'] ? $timezone : NULL;
-                $add[$delta]['offset']   = $field['required'] || $item['value'] ? date_offset_get($date) : NULL;
-              }
-              $date = date_make_date($item['value2'], 'GMT', $field['type']);
-              if (!empty($date) && !empty($timezone)) {
-                date_timezone_set($date, timezone_open($timezone));
-                $add[$delta]['offset2']   = $field['required'] || $item['value'] ? date_offset_get($date) : NULL;
-              }
-            }
-          }
-        }
-        if (!empty($add)) {
-          $node->$field_name = $add;
-        }
-      }
-      $_SESSION[$update_name]['counted'] ++;
-
-      if ($needs_fix) {
-        //node_submit($node);
-        node_save($node);
-        $_SESSION[$update_name]['changed'][] = $node->nid . ($node->vid != $node->nid ? ':'. $node->vid : '');
-      }
-      else {
-        $_SESSION[$update_name]['unchanged'][] = $node->nid . ($node->vid != $node->nid ? ':'. $node->vid : '');
-      }
-    }
-  }
-  // See if we are done
-  if ($_SESSION[$update_name]['counted']
-  && $_SESSION[$update_name]['count_total']
-  && $_SESSION[$update_name]['counted'] < $_SESSION[$update_name]['count_total']) {
-    // Not done yet. Return the progress and a progress debug message.
-    $progress = floatval($_SESSION[$update_name]['counted'] / $_SESSION[$update_name]['count_total']);
-    if ($debug) {
-      $message = 'Date data integrity check. Total nodes checked: '. $_SESSION[$update_name]['counted'] .
-        '<br />Updated nodes: '. implode(', ', $_SESSION[$update_name]['changed']) .
-        '<br />Unchanged nodes: '. implode(', ', $_SESSION[$update_name]['unchanged']);
-    }
-    if ($debug) {
-      return array('#finished' => $progress, array('success' => TRUE, 'query' => $message));
-    }
-    else {
-      return array('#finished' => $progress);
-    }
-  }
-  else {
-    // Done. Clean up and indicate we're finished.
-    drupal_set_message(t('All nodes with date fields have been checked.'));
-    $message = 'Date data integrity check. Total nodes checked: '. $_SESSION[$update_name]['counted'];
-    if ($debug) {
-      $message .= '<br />Updated nodes: '. implode(', ', $_SESSION[$update_name]['changed']) .
-        '<br />Unchanged nodes: '. implode(', ', $_SESSION[$update_name]['unchanged']);
-    }
-    unset($_SESSION[$update_name]);
-    content_clear_type_cache();
-    db_query('DELETE FROM {cache_content}');
-    return array('#finished' => 1, array('success' => TRUE, 'query' => $message));
-  }
 }
