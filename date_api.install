@@ -137,6 +137,23 @@ function date_api_schema() {
 }
 
 /**
+ * Implementation of hook_schema_alter(). We alter $schema by reference.
+ *
+ * @param $schema
+ * The system-wide schema collected by drupal_get_schema().
+ */
+function date_api_schema_alter(&$schema) {
+  // Add field to existing schema.
+  $schema['users']['fields']['timezone_name'] = array(
+    'type' => 'varchar',
+    'length' => 50,
+    'not null' => TRUE,
+    'default' => '',
+    'description' => t('Per-user timezone name.'),
+  );
+}
+
+/**
  * Implementation of hook_install().
  */
 function date_api_install() {

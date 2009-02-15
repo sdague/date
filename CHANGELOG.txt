@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #337301 Move hook_schema_alter from date_api.module to date_api.install.
 - #367688 Fix date format css to display remove link better.
 - Add our custom date formats as values on the core locale form so we don't get errors on submission if they are missing.
 - #348241 Don't unset view copy on node because it interferes with template suggestions. Need to watch this for possible performance problems.
