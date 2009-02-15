@@ -280,6 +280,14 @@ function date_api_update_5201() {
  */
 function date_api_update_6000() {
   $ret = array();
+  // don't attempt to upgrade if views is not yet upgraded.
+  if (drupal_get_installed_schema_version('views', TRUE) < 6000) {
+    $ret = array();
+    drupal_set_message(t('date module cannot be updated until after Views has been updated. Please return to <a href="@update-php">update.php</a> and run the remaining updates.', array('@update-php' => base_path() .'update.php?op=selection')), 'warning', FALSE);
+    $ret['#abort'] = array('success' => FALSE, 'query' => t('date.module has updates, but cannot be updated until views.module is updated first.'));
+    
+    return $ret;
+  }
   date_api_set_variables();
   return $ret;
 }
@@ -290,6 +298,14 @@ function date_api_update_6000() {
  */
 function date_api_update_6001() {
   $ret = array();
+  // don't attempt to upgrade if views is not yet upgraded.
+  if (drupal_get_installed_schema_version('views', TRUE) < 6000) {
+    $ret = array();
+    drupal_set_message(t('date module cannot be updated until after Views has been updated. Please return to <a href="@update-php">update.php</a> and run the remaining updates.', array('@update-php' => base_path() .'update.php?op=selection')), 'warning', FALSE);
+    $ret['#abort'] = array('success' => FALSE, 'query' => t('date.module has updates, but cannot be updated until views.module is updated first.'));
+    
+    return $ret;
+  }
   if (db_table_exists('cache_content')) {
     db_query('DELETE FROM {cache_content}');
   }
@@ -308,6 +324,14 @@ function date_api_update_6001() {
  */
 function date_api_update_6002() {
   $ret = array();
+  // don't attempt to upgrade if views is not yet upgraded.
+  if (drupal_get_installed_schema_version('views', TRUE) < 6000) {
+    $ret = array();
+    drupal_set_message(t('date module cannot be updated until after Views has been updated. Please return to <a href="@update-php">update.php</a> and run the remaining updates.', array('@update-php' => base_path() .'update.php?op=selection')), 'warning', FALSE);
+    $ret['#abort'] = array('success' => FALSE, 'query' => t('date.module has updates, but cannot be updated until views.module is updated first.'));
+    
+    return $ret;
+  }
 
   $schema['date_format_types'] = array(
     'fields' => array(
