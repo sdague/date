@@ -129,7 +129,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
 
   $element['advanced']['BYMONTH'] = array(
     '#type' => 'select',
-    '#title' => t('Month'),
+    '#title' => date_t('Month', 'datetime'),
     '#default_value' => !empty($rrule['BYMONTH']) ? $rrule['BYMONTH'] : '',
     '#options' => array('' => t('-- Any')) + date_month_names(TRUE),
     '#multiple' => TRUE,

@@ -57,7 +57,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     parent::options_form($form, $form_state);
     $options = $this->date_handler->date_parts();
     unset($options['second'], $options['minute']);
-    $options += array('week' => t('Week'));
+    $options += array('week' => date_t('Week', 'datetime'));
     $form['granularity'] = array(
       '#title' => t('Granularity'),
       '#type' => 'radios',

@@ -411,4 +411,3 @@ function date_api_update_6002() {
 
   return $ret;
 }
-

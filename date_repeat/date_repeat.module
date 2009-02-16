@@ -39,17 +39,17 @@ function date_repeat_theme() {
 function FREQ_options() {
   return array(
     'NONE' => t('-- Period'),
-    'DAILY' => t('Day(s)'),
-    'WEEKLY' => t('Week(s)'),
-    'MONTHLY' => t('Month(s)'),
-    'YEARLY' => t('Year(s)'),
+    'DAILY' => date_t('Days', 'datetime_plural'),
+    'WEEKLY' => date_t('Weeks', 'datetime_plural'),
+    'MONTHLY' => date_t('Months', 'datetime_plural'),
+    'YEARLY' => date_t('Years', 'datetime_plural'),
   );
 }
 
 function INTERVAL_options() {
   $options = array(
     0 => t('-- Frequency'),
-    1 => t('Every'),
+    1 => date_t('Every', 'date_order'),
   );
   for ($i = 2; $i < 367; $i++) {
     $options[$i] = t('Every @number', array('@number' => $i));
@@ -66,13 +66,13 @@ function INTERVAL_options() {
  */
 function date_repeat_dow_day_options($translated = TRUE) {
   return array(
-    'SU' => $translated ? t('Sunday') : 'Sunday',
-    'MO' => $translated ? t('Monday') : 'Monday',
-    'TU' => $translated ? t('Tuesday') : 'Tuesday',
-    'WE' => $translated ? t('Wednesday') : 'Wednesday',
-    'TH' => $translated ? t('Thursday') : 'Thursday',
-    'FR' => $translated ? t('Friday') : 'Friday',
-    'SA' => $translated ? t('Saturday') : 'Saturday',
+    'SU' => $translated ? date_t('Sunday', 'day_name') : 'Sunday',
+    'MO' => $translated ? date_t('Monday', 'day_name') : 'Monday',
+    'TU' => $translated ? date_t('Tuesday', 'day_name') : 'Tuesday',
+    'WE' => $translated ? date_t('Wednesday', 'day_name') : 'Wednesday',
+    'TH' => $translated ? date_t('Thursday', 'day_name') : 'Thursday',
+    'FR' => $translated ? date_t('Friday', 'day_name') : 'Friday',
+    'SA' => $translated ? date_t('Saturday', 'day_name') : 'Saturday',
   );
 }
 
@@ -92,17 +92,17 @@ function date_repeat_dow_day_options_ordered($week_start) {
  */
 function date_repeat_dow_count_options() {
   return array(
-    '' => t('Every'),
-    '1' => t('First'),
-    '2' => t('Second'),
-    '3' => t('Third'),
-    '4' => t('Fourth'),
-    '5' => t('Fifth'),
-    '-1' => t('Last'),
-    '-2' => t('Next to last'),
-    '-3' => t('Second from last'),
-    '-4' => t('Third from last'),
-    '-5' => t('Fourth from last')
+    '' => date_t('Every', 'date_order'),
+    '1' => date_t('First', 'date_order'),
+    '2' => date_t('Second', 'date_order'),
+    '3' => date_t('Third', 'date_order'),
+    '4' => date_t('Fourth', 'date_order'),
+    '5' => date_t('Fifth', 'date_order'),
+    '-1' => date_t('Last', 'date_order_reverse'),
+    '-2' => date_t('Next to last', 'date_order_reverse'),
+    '-3' => date_t('Second from last', 'date_order_reverse'),
+    '-4' => date_t('Third from last', 'date_order_reverse'),
+    '-5' => date_t('Fourth from last', 'date_order_reverse')
   );
 }
 

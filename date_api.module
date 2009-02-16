@@ -167,39 +167,15 @@ function date_month_names_untranslated() {
 /**
  * A translated array of month names
  *
- * Needed for css, translation functions, strtotime(), and other places
- * that use the English versions of these words.
- *
- * @return
- *   an array of month names
- */
-function date_month_names_translated() {
-  static $month_names;
-  if (empty($month_names)) {
-    // See format_date() for an explanation of why !long-month-name is necessary
-    $month_names = date_month_names_untranslated();
-    foreach ($month_names as $delta => $english) {
-      $month_names[$delta] = trim(t('!long-month-name '. $english, array('!long-month-name' => '')));
-    }
-  }
-  return $month_names;
-}
-
-/**
- * A translated array of month names
- *
  * @param $required
  *   If not required, will include a blank value at the beginning of the list.
  * @return
  *   an array of month names
  */
 function date_month_names($required = FALSE) {
-  static $month_names;
-  if (empty($month_names)) {
-    $month_names = array();
-    foreach (date_month_names_translated() as $key => $month) {
-      $month_names[$key] = $month;
-    }
+  $month_names = array();
+  foreach (month_names_untranslated() as $key => $day) {
+    $month_names[$key] = date_t($day, 'month_name');
   }
   $none = array('' => '');
   return !$required ? $none + $month_names : $month_names;
@@ -214,12 +190,9 @@ function date_month_names($required = FALSE) {
  *   an array of month abbreviations
  */
 function date_month_names_abbr($required = FALSE) {
-  static $month_names;
-  if (empty($month_names)) {
-    $month_names = array();
-    foreach (date_month_names_translated() as $key => $month) {
-      $month_names[$key] = drupal_substr($month, 0, 3);
-    }
+  $month_names = array();
+  foreach (month_names_untranslated() as $key => $day) {
+    $month_names[$key] = date_t($day, 'month_abbr');
   }
   $none = array('' => '');
   return !$required ? $none + $month_names : $month_names;
@@ -247,37 +220,15 @@ function date_week_days_untranslated($refresh = TRUE) {
 /**
  * A translated array of week days
  *
- * Needed for css, translation functions, strtotime(), and other places
- * that use the English versions of these words.
- *
- * @return
- *   an array of week day names
- */
-function date_week_days_translated($refresh = TRUE) {
-  static $weekdays;
-  if ($refresh || empty($weekdays)) {
-    $weekdays = array(0 => t('Sunday'), 1 => t('Monday'), 2 => t('Tuesday'),
-      3 => t('Wednesday'), 4 => t('Thursday'), 5 => t('Friday'),
-      6 => t('Saturday'));
-  }
-  return $weekdays;
-}
-
-/**
- * A translated array of week days
- *
  * @param $required
  *   If not required, will include a blank value at the beginning of the array.
  * @return
  *   an array of week day names
  */
 function date_week_days($required = FALSE, $refresh = TRUE) {
-  static $weekdays;
-  if ($refresh || empty($weekdays)) {
-    $weekdays = array();
-    foreach (date_week_days_translated($refresh) as $key => $day) {
-      $weekdays[$key] = $day;
-    }
+  $weekdays = array();
+  foreach (date_week_days_untranslated() as $key => $day) {
+    $weekdays[$key] = date_t($day, 'day_name');
   }
   $none = array('' => '');
   return !$required ? $none + $weekdays : $weekdays;
@@ -292,11 +243,20 @@ function date_week_days($required = FALSE, $refresh = TRUE) {
  *   an array of week day abbreviations
  */
 function date_week_days_abbr($required = FALSE, $refresh = TRUE, $length = 3) {
-  if ($refresh || empty($weekdays)) {
-    $weekdays = array();
-    foreach (date_week_days($refresh) as $key => $day) {
-      $weekdays[$key] = drupal_substr($day, 0, $length);
-    }
+  $weekdays = array();
+  switch ($length) {
+    case 1:
+      $context = 'day_abbr1';
+      break;
+    case 2:
+      $context = 'day_abbr2';
+      break;
+    default:
+      $context = 'day_abbr';
+      break; 
+  }
+  foreach (date_week_days_untranslated() as $key => $day) {
+    $weekdays[$key] = date_t($day, $context);
   }
   $none = array('' => '');
   return !$required ? $none + $weekdays : $weekdays;
@@ -435,7 +395,7 @@ function date_seconds($format = 's', $required = FALSE, $increment = 1) {
  */
 function date_ampm($required = FALSE) {
   $none = array('' => '');
-  $ampm = array('am' => t('am'), 'pm' => t('pm'));
+  $ampm = array('am' => date_t('am', 'ampm'), 'pm' => date_t('pm', 'ampm'));
   return !$required ? $none + $ampm : $ampm;
 }
 
@@ -499,8 +459,13 @@ function date_format_patterns($strict = FALSE) {
  * @return array
  */
 function date_granularity_names() {
-  return array('year' => t('Year'), 'month' => t('Month'), 'day' => t('Day'),
-    'hour' => t('Hour'), 'minute' => t('Minute'), 'second' => t('Second'),
+  return array(
+    'year' => date_t('Year', 'datetime'), 
+    'month' => date_t('Month', 'datetime'), 
+    'day' => date_t('Day', 'datetime'),
+    'hour' => date_t('Hour', 'datetime'), 
+    'minute' => date_t('Minute', 'datetime'), 
+    'second' => date_t('Second', 'datetime'),
     );
 }
 
@@ -588,48 +553,79 @@ function date_timezone_abbr($refresh = FALSE) {
 }
 
 /**
- * A version of the t() function for date parts that need translation.
- *
- * Run this over results of functions which do no translation of
- * month and day names, like date() and date_format().
- *
+ * A function to translate ambiguous short date strings.
+ * 
+ * Example: Pass in 'Monday', 'day_abbr' and get the translated 
+ * abbreviation for Monday.
+ * 
  * @param string $string
+ * @param string $context
+ * @param int $langcode
  * @return translated value of the string
  */
-function date_t($string) {
-  static $replace;
-  if (empty($replace)) {
-    $replace = array();
-    // Translate the whole name first, then look for abbreviations.
-    $untranslated = date_month_names_untranslated();
-    foreach (date_month_names_translated() as $delta => $month) {
-      $replace[$untranslated[$delta]] = $month;
-      $replace[drupal_substr($untranslated[$delta], 0, 3)] = drupal_substr($month, 0, 3);
-    }
-    $untranslated = date_week_days_untranslated();
-    foreach (date_week_days_translated() as $delta => $day) {
-      $replace[$untranslated[$delta]] = $day;
-      $replace[drupal_substr($untranslated[$delta], 0, 3)] = drupal_substr($day, 0, 3);
-    }
+function date_t($string, $context, $langcode = NULL) {
+  //static $replace = array();
+  
+  if (empty($replace[$langcode])) {
+    // The function to create the date string arrays is kept separate
+    // so those arrays can be directly accessed by other functions.
+    date_t_strings($replace, $langcode);
   }
-  return strtr($string, $replace);
+  switch ($context) {
+    case 'day_name':
+    case 'day_abbr':
+    case 'day_abbr1':
+    case 'day_abbr2':  
+      $untranslated = array_flip(date_week_days_untranslated());
+      break;
+    case 'month_name':
+    case 'month_abbr':
+      $untranslated = array_flip(date_month_names_untranslated());
+      break;  
+    case 'ampm':
+      $untranslated = array_flip(array('am', 'pm', 'AM', 'PM'));  
+      break;
+    case 'datetime':
+      $untranslated = array_flip(array('Year', 'Month', 'Day', 'Week', 'Hour', 'Minute', 'Second', 'All Day'));  
+      break;
+    case 'datetime_plural':
+      $untranslated = array_flip(array('Years', 'Months', 'Days', 'Weeks', 'Hours', 'Minutes', 'Seconds'));  
+      break;
+    case 'date_order':
+      $untranslated = array_flip(array('Every', 'First', 'Second', 'Third', 'Fourth', 'Fifth'));  
+      break;
+    case 'date_order_reverse':
+      $untranslated = array_flip(array('', 'Last', 'Second from last', 'Third from last', 'Fourth from last', 'Fifth from last'));  
+      break;
+    case 'date_nav':
+      $untranslated = array_flip(array('Prev', 'Next', 'Today'));  
+      break;
+  }
+  $pos = $untranslated[$string];
+  return $replace[$langcode][$context][$pos];
 }
 
 /**
- * An override for interval formatting that adds past and future context
- *
- * @param DateTime $date
- * @param integer $granularity
- * @return formatted string
+ * Construct translation arrays from pipe-delimited strings.
+ * 
+ * Combining these strings into a single t() gives them the context needed
+ * for better translation.
  */
-function date_format_interval($date, $granularity = 2) {
-  $interval = time() - date_format($date, 'U');
-  if($interval > 0 ) {
-    return t('!time ago', array('!time' => format_interval($interval, $granularity)));
-  } 
-  else {
-    return format_interval(abs($interval), $granularity);
-  }
+function date_t_strings(&$replace, $langcode) {
+  $replace[$langcode]['day_name'] = explode('|', trim(t('!day-name Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday', array('!day-name' => ''), $langcode)));
+  $replace[$langcode]['day_abbr'] = explode('|', trim(t('!day-abbreviation Sun|Mon|Tue|Wed|Thu|Fri|Sat', array('!day-abbreviation' => ''), $langcode)));
+  $replace[$langcode]['day_abbr1'] = explode('|', trim(t('!day-abbreviation S|M|T|W|T|F|S', array('!day-abbreviation' => ''), $langcode)));
+  $replace[$langcode]['day_abbr2'] = explode('|', trim(t('!day-abbreviation SU|MO|TU|WE|TH|FR|SA', array('!day-abbreviation' => ''), $langcode)));
+  $replace[$langcode]['ampm'] = explode('|', trim(t('!ampm-abbreviation am|pm|AM|PM', array('!ampm-abbreviation' => ''), $langcode)));
+  $replace[$langcode]['datetime'] = explode('|', trim(t('!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day', array('!datetime' => ''), $langcode)));
+  $replace[$langcode]['datetime_plural'] = explode('|', trim(t('!datetime_plural Years|Months|Days|Weeks|Hours|Minutes|Seconds', array('!datetime_plural' => ''), $langcode)));
+  $replace[$langcode]['date_order'] = explode('|', trim(t('!date_order Every|First|Second|Third|Fourth|Fifth', array('!date_order' => ''), $langcode)));
+  $replace[$langcode]['date_order_reverse'] = explode('|', trim(t('!date_order |Last|Second to last|Third from last|Fourth from last|Fifth from last', array('!date_order' => ''), $langcode)));
+  $replace[$langcode]['date_nav'] = explode('|', trim(t('!date_nav Prev|Next|Today', array('!date_nav' => ''), $langcode)));
+  
+  // These start with a pipe so the January value will be in position 1 instead of position 0.
+  $replace[$langcode]['month_name'] = explode('|', trim(t('!month-name |January|February|March|April|May|June|July|August|September|October|November|December', array('!month-name' => ''), $langcode)));
+  $replace[$langcode]['month_abbr'] = explode('|', trim(t('!month-abbreviation |Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec', array('!month-abbreviation' => ''), $langcode)));
 }
 
 /**
@@ -650,8 +646,8 @@ function date_format_interval($date, $granularity = 2) {
  * @return
  *   A translated date string in the requested format.
  */
-function date_format_date($object, $type = 'medium', $format = '') {
-  if (empty($object)) {
+function date_format_date($date, $type = 'medium', $format = '', $langcode = NULL) {
+  if (empty($date)) {
     return '';
   }
   switch ($type) {
@@ -670,7 +666,77 @@ function date_format_date($object, $type = 'medium', $format = '') {
     default:
       $format = variable_get('date_format_medium', 'D, m/d/Y - H:i');
   }
-  return date_t(date_format($object, $format));
+  $max = strlen($format);
+  $datestring = '';
+  for ($i = 0; $i < $max; $i++) {
+    $c = $format[$i];
+    switch ($c) {
+      // Use date_t() for ambiguous short strings that need translation.
+      // We send long day and month names to date_t(), along with context.
+      case 'l':
+        $datestring .= date_t(date_format($object, 'l'), 'day_name', $langcode);
+        break;
+      case 'D':
+        $datestring .= date_t(date_format($object, 'l'), 'day_abbr', $langcode);
+        break;
+      case 'F':
+        $datestring .= date_t(date_format($date, 'F'), 'month_name', $langcode);
+        break;  
+      case 'M':
+        $datestring .= date_t(date_format($date, 'F'), 'month_abbr', $langcode);
+        break;  
+      case 'A':
+      case 'a':
+        $datestring .= date_t(date_format($date, $c), 'ampm', $langcode);
+        break;  
+      // The timezone name translations can use t().  
+      case 'e':
+      case 'T':
+        $datestring .= t($c);
+        break;
+      // Remaining date parts need no translation.
+      case 'O':
+        $datestring .= sprintf('%s%02d%02d', (date_offset_get($date) < 0 ? '-' : '+'), abs(date_offset_get($date) / 3600), abs(date_offset_get($date) % 3600) / 60);
+        break;
+      case 'P':
+        $datestring .= sprintf('%s%02d:%02d', (date_offset_get($date) < 0 ? '-' : '+'), abs(date_offset_get($date) / 3600), abs(date_offset_get($date) % 3600) / 60);
+        break;
+      case 'Z':
+        $datestring .= date_offset_get($date);
+        break;              
+      case '\\':
+        $date .= $format[++$i];
+        break;
+      default:
+        if (strpos('BdgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
+          $datestring .= date_format($date, $c);
+        }
+        else if ($c == 'r') {
+          $datestring .= format_date($date, 'custom', 'D, d M Y H:i:s O', $langcode);
+        }
+        else {
+          $datestring .= $c;
+        }
+    }
+  }
+  return $datestring;
+}
+
+/**
+ * An override for interval formatting that adds past and future context
+ *
+ * @param DateTime $date
+ * @param integer $granularity
+ * @return formatted string
+ */
+function date_format_interval($date, $granularity = 2) {
+  $interval = time() - date_format($date, 'U');
+  if($interval > 0 ) {
+    return t('!time ago', array('!time' => format_interval($interval, $granularity)));
+  } 
+  else {
+    return format_interval(abs($interval), $granularity);
+  }
 }
 
 /**

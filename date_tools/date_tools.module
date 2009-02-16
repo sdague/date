@@ -994,7 +994,7 @@ function date_tools_copy_import_event_form_submit($form, &$form_state) {
 
   if (!empty($rows)) {
     drupal_set_message(format_plural(sizeof($rows), '1 event has been converted.', '@count events have been converted.'));
-    drupal_set_message(theme('table', array(t('Title'), t('Source Id'), t('Target Id'), t('Start'), t('End')), $rows));
+    drupal_set_message(theme('table', array(t('Node Title'), t('Original Node ID'), t('New Node ID'), t('Start date'), t('End date')), $rows));
   }
   else {
     drupal_set_message(t('No events have been converted.'));

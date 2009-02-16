@@ -511,8 +511,8 @@ class date_sql_handler {
    */
   function date_parts($limit = NULL) {
     $parts =  array(
-      'year' => t('Year'), 'month' => t('Month'), 'day' => t('Day'),
-      'hour' => t('Hour'), 'minute' => t('Minute'), 'second' => t('Second'),
+      'year' => date_t('Year', 'datetime'), 'month' => date_t('Month', 'datetime'), 'day' => date_t('Day', 'datetime'),
+      'hour' => date_t('Hour', 'datetime'), 'minute' => date_t('Minute', 'datetime'), 'second' => date_t('Second', 'datetime'),
       );
     if (!empty($limit)) {
       $last = FALSE;

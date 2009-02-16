@@ -262,6 +262,6 @@ function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $vie
  * Theme the way an 'all day' label will look.
  */
 function theme_date_all_day_label() {
-  return t('(All day)');
+  return '('. date_t('All day', 'datetime') .')';
 }
 /** @} End of addtogroup themeable */

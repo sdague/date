@@ -215,9 +215,9 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $year_range = date_range_string($range);
 
   $settings = array(
-    'prevText' => '&lt;'. t('Prev'),
-    'nextText' => t('Next') .'&gt;',
-    'currentText' => t('Today'),
+    'prevText' => '&lt;'. date_t('Prev', 'date_nav'),
+    'nextText' => date_t('Next', 'date_nav') .'&gt;',
+    'currentText' => date_t('Today', 'date_nav'),
     'clearText' => t('Clear'),
     'closeText' => t('Close'),
     'firstDay' => intval(variable_get('date_first_day', 0)),

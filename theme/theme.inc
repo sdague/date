@@ -302,25 +302,25 @@ function theme_date_part_minsec_prefix($element) {
  *   Properties used: title, value, options, description, required and attributes.
  */
 function theme_date_part_label_year($part_type, $element) {
-  return t('Year');
+  return date_t('Year', 'datetime');
 }
 function theme_date_part_label_month($part_type, $element) {
-  return t('Month');
+  return date_t('Month', 'datetime');
 }
 function theme_date_part_label_day($part_type, $element) {
-  return t('Day');
+  return date_t('Day', 'datetime');
 }
 function theme_date_part_label_hour($part_type, $element) {
-  return t('Hour');
+  return date_t('Hour', 'datetime');
 }
 function theme_date_part_label_minute($part_type, $element) {
-  return t('Minute');
+  return date_t('Minute', 'datetime');
 }
 function theme_date_part_label_second($part_type, $element) {
-  return t('Second');
+  return date_t('Second', 'datetime');
 }
 function theme_date_part_label_ampm($part_type, $element) {
-  return t('am/pm');
+  return date_t('am/pm', 'ampm');
 }
 function theme_date_part_label_timezone($part_type, $element) {
   return t('Timezone');
