@@ -264,12 +264,21 @@ function _date_field_settings($op, $field) {
       // date argument and filter handlers created by the Date API.
       unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
       unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
-  
+      
       // Add in another set of fields for the To date.
       if (!empty($field['todate'])) {
+        $data[$table_alias][$field['field_name'] .'_value']['title'] .= ' - value';
+        $data[$table_alias][$field['field_name'] .'_value']['title short'] .= ' - value';
+        $data[$table_alias][$field['field_name'] .'_value']['field']['title'] .= ' - value';
+        $data[$table_alias][$field['field_name'] .'_value']['field']['title short'] .= ' - value';
+        
         $data[$table_alias][$field['field_name'] .'_value2'] = $data[$table_alias][$field['field_name'] .'_value'];
-        $data[$table_alias][$field['field_name'] .'_value']['title'] = t('!label (!field value)', array('!label' => t($field['widget']['label']), '!field' => $field['field_name']));
-        $data[$table_alias][$field['field_name'] .'_value2']['title'] = t('!label (!field value2)', array('!label' => t($field['widget']['label']), '!field' => $field['field_name']));
+        $data[$table_alias][$field['field_name'] .'_value2']['title'] .= '2';
+        $data[$table_alias][$field['field_name'] .'_value2']['title short'] .= '2';
+        $data[$table_alias][$field['field_name'] .'_value2']['field']['title'] .= '2';
+        $data[$table_alias][$field['field_name'] .'_value2']['field']['title short'] .= '2';
+        $data[$table_alias][$field['field_name'] .'_value2']['field']['field'] .= '2';
+        $data[$table_alias][$field['field_name'] .'_value2']['sort']['field'] .= '2';
       }
       return $data;
   }
@@ -280,26 +289,30 @@ function _date_field_settings($op, $field) {
  */
 function date_columns($field) {
   if ($field['type'] == 'date') {
-    $db_columns['value'] = array('type' => 'varchar', 'length' => 20, 'not null' => FALSE, 'sortable' => TRUE);
+    $db_columns['value'] = array('type' => 'varchar', 'length' => 20, 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
   }
   elseif ($field['type'] == 'datestamp') {
-    $db_columns['value'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
+    $db_columns['value'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
   }
   elseif ($field['type'] == 'datetime') {
-    $db_columns['value'] = array('type' => 'datetime', 'not null' => FALSE, 'sortable' => TRUE);
+    $db_columns['value'] = array('type' => 'datetime', 'not null' => FALSE, 'sortable' => TRUE, 'views' => TRUE);
   }
   // If a second date is needed for 'To date', just make a copy of the first one.
   if (!empty($field['todate'])) {
     $db_columns['value2'] = $db_columns['value'];
+    
+    // We don't want CCK to create additional columns, just the first.
+    // We modify them our own way in views data.
+    $db_columns['value2']['views'] = FALSE;
   }
   // timezone and offset columns are used only if date-specific dates are chosen.
   if (isset($field['tz_handling']) && $field['tz_handling'] == 'date') {
-    $db_columns['timezone'] = array('type' => 'varchar', 'length' => 50, 'not null' => FALSE, 'sortable' => TRUE);
-    $db_columns['offset'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
-    if (!empty($field['todate'])) $db_columns['offset2'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE);
+    $db_columns['timezone'] = array('type' => 'varchar', 'length' => 50, 'not null' => FALSE, 'sortable' => TRUE, 'views' => FALSE);
+    $db_columns['offset'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE, 'views' => FALSE);
+    if (!empty($field['todate'])) $db_columns['offset2'] = array('type' => 'int', 'not null' => FALSE, 'sortable' => TRUE, 'views' => FALSE);
   }
   if (isset($field['repeat']) && $field['repeat'] == 1) {
-    $db_columns['rrule'] = array('type' => 'text', 'not null' => FALSE, 'sortable' => FALSE);
+    $db_columns['rrule'] = array('type' => 'text', 'not null' => FALSE, 'sortable' => FALSE, 'views' => FALSE);
   }
   return $db_columns;
 }
