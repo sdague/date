@@ -461,23 +461,23 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $min_date = $range[0];
     $max_date = $range[1];
         
-    $this->view->date_info->min_date = $min_date;
-    $this->view->date_info->max_date = $max_date;
-    $this->view->date_info->year = date_format($date, 'Y');
-    $this->view->date_info->month = date_format($date, 'n');
-    $this->view->date_info->day = date_format($date, 'j');
-    $this->view->date_info->week = date_week(date_format($date, DATE_FORMAT_DATE));
-    $this->view->date_info->date_handler = $date_handler;
+    $this->min_date = $min_date;
+    $this->max_date = $max_date;
+    $this->year = date_format($date, 'Y');
+    $this->month = date_format($date, 'n');
+    $this->day = date_format($date, 'j');
+    $this->week = date_week(date_format($date, DATE_FORMAT_DATE));
+    $this->date_handler = $date_handler;
         
     if ($this->date_handler->granularity == 'week') {
       $format = DATE_FORMAT_DATETIME;
     }
     switch ($prefix) {
       case 'min':
-        $value = date_format($this->view->date_info->min_date, $this->format);
+        $value = date_format($min_date, $this->format);
         break;
       case 'max':
-        $value = date_format($this->view->date_info->max_date, $this->format);
+        $value = date_format($max_date, $this->format);
         break;
       default:
         $value = date_format($date, $this->format);
@@ -514,10 +514,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function get_query_fields() {
     $fields = date_api_fields();
     $fields = $fields['name'];
-    $min_date = isset($this->min_date) ? $this->min_date : NULL;
-    $min_utc = isset($this->min_utc) ? $this->min_utc : NULL;
-    $max_date = isset($this->max_date) ? $this->max_date : NULL;
-    $max_utc = isset($this->max_utc) ? $this->max_utc : NULL;
     $this->query_fields = array();
     foreach ((array) $this->options['date_fields'] as $delta => $name) {
       if (array_key_exists($name, $fields) && $field = $fields[$name]) {
