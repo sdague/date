@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #345077 Make sure duplicate copies of the date field each get to theme the raw, unaltered, data.
 - #375551 Fix fatal typo in reworked date_format_date() function.
 - #338253 Re-work the Date repeat description to provide more context for translations.
 - #338253 Re-work date_t() to create a more robust method of handling translations of abbreviations and other short strings.

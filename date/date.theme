@@ -46,17 +46,15 @@
  *   $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($element) {
-  $node = $element['#node'];
-  
-  // Prepare the node in case it is a view with multiple values 
-  // so it will display the right values.
-  date_prepare_node($node);
     
+  $node = $element['#node'];
   $field_name = $element['#field_name'];
   $fields = content_fields();
   $field = $fields[$field_name];
   $item = $element['#item'];
-    
+
+  date_prepare_node($node);
+
   // There could be more than one date field in a view or on a node.
   // If date_id is set for this field and the delta doesn't match, don't display it.
   foreach ($node->date_id as $key => $id) {
