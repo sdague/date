@@ -67,9 +67,15 @@ function date_widget_settings_form($widget) {
     '#element_validate' => array('date_widget_settings_validate'),
     );
   $form['input']['default_value'] = array(
-    '#type' => 'radios', '#title' => t('Default value'),
+    '#type' => 'select', '#title' => t('Default value'),
     '#default_value' => !empty($widget['default_value']) ? $widget['default_value'] : 'blank',
     '#options' => array('blank' => t('Blank'), 'now' => t('Now'), 'strtotime' => t('Relative')),
+    '#description' => t("A default value to use for this field. If you select 'Relative', add details below."),
+    );
+  $form['input']['default_value2'] = array(
+    '#type' => 'select', '#title' => t('Default value for To date'),
+    '#default_value' => !empty($widget['default_value2']) ? $widget['default_value2'] : 'same',
+    '#options' => array('same' => t('Same as From date'), 'blank' => t('Blank'), 'now' => t('Now'), 'strtotime' => t('Relative')),
     '#description' => t("A default value to use for this field. If you select 'Relative', add details below."),
     );
   $form['input']['default'] = array(
@@ -84,12 +90,6 @@ function date_widget_settings_form($widget) {
     '#default_value' => isset($widget['default_value_code']) ? $widget['default_value_code'] : '',
     );
 
-  $form['input']['default']['default_value2'] = array(
-    '#type' => 'radios', '#title' => t('Default value for To date'),
-    '#default_value' => !empty($widget['default_value2']) ? $widget['default_value2'] : 'same',
-    '#options' => array('same' => t('Same as From date'), 'blank' => t('Blank'), 'now' => t('Now'), 'strtotime' => t('Relative')),
-    '#description' => t("A default value to use for this field. If you select 'Relative', add details below."),
-    );
   $form['input']['default']['default_value_code2'] = array(
     '#type' => 'textfield', '#title' => t('Custom value for To date'),
     '#default_value' => !empty($widget['default_value_code2']) ? $widget['default_value_code2'] : '',
