@@ -61,6 +61,7 @@ function template_preprocess_date_navigation(&$vars) {
 	if (!empty($view->date_info->block) && $view->date_info->granularity == 'month') {
 	  $link = TRUE;
   }
+  
   $nav_title = theme('date_nav_title', $view->date_info->granularity, $view, $link);
   $vars['nav_title'] = $nav_title;
   $vars['block'] = !empty($view->date_info->block);

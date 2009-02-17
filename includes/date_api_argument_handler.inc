@@ -216,15 +216,9 @@ class date_api_argument_handler extends views_handler_argument_date {
     $format = $date_handler->views_formats($this->options['granularity'], 'sql');
     $this->formula = $date_handler->sql_format($format, $date_handler->sql_field($field['fullname']));
     
-    $this->ensure_my_table();
-    
-    // Make sure this field is added to the query so we have all necessary tables.
-    $this->query->add_field($field['table_name'], $field['field_name']);
-      
     // Add the computed field.
     $this->base_alias = $this->name_alias = $this->query->add_field(NULL, $this->formula, $field['query_name']);
-    $this->query->set_count_field(NULL, $this->formula, $field['query_name']);    
-
+       
     return $this->summary_basics(FALSE);
   }
 
