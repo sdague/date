@@ -174,7 +174,7 @@ function date_month_names_untranslated() {
  */
 function date_month_names($required = FALSE) {
   $month_names = array();
-  foreach (month_names_untranslated() as $key => $day) {
+  foreach (date_month_names_untranslated() as $key => $day) {
     $month_names[$key] = date_t($day, 'month_name');
   }
   $none = array('' => '');
