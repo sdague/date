@@ -621,7 +621,7 @@ function date_tools_wizard_create_calendar($name, $type_name, $date_field, $loca
     'name' => 'calendar_'. $type_name,
     'description' => 'An event calendar for '. $date_field['widget']['label'],
     'path' => $path,
-    'types' => array($type_name),
+    'types' => array($type_name => $name),
     'date_fields' => array($date_name),
     'display_fields' => !empty($location_name) ? array('title' => array(), $date_name => array(), $location_name => array()) : array('title' => array(), $date_name => array()),
   );

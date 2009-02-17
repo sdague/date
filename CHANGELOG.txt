@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix broken date link in calendar created by Date Tools.
 - Make the default value for the 'To date' easier to see in the field settings.
 - Update date argument summary for recent changes in Views.
 - #345077 Make sure duplicate copies of the date field each get to theme the raw, unaltered, data.
