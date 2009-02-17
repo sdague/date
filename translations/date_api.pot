@@ -3,7 +3,7 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  date_api.module,v 1.64.2.5.2.68 2009/02/17 02:13:29 karens
+#  date_api.module,v 1.64.2.5.2.69 2009/02/17 11:31:53 karens
 #  date_api.install,v 1.16.2.1.2.14 2009/02/16 23:46:08 karens
 #  date_api.info,v 1.6 2008/02/18 19:32:28 karens
 #
@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2009-02-17 04:48-0600\n"
+"POT-Creation-Date: 2009-02-17 06:19-0600\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -57,7 +57,7 @@ msgid "!ampm-abbreviation am|pm|AM|PM"
 msgstr ""
 
 #: date_api.module:620
-msgid "!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day"
+msgid "!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day|All day"
 msgstr ""
 
 #: date_api.module:621

@@ -320,7 +320,7 @@ function theme_date_part_label_second($part_type, $element) {
   return date_t('Second', 'datetime');
 }
 function theme_date_part_label_ampm($part_type, $element) {
-  return date_t('am/pm', 'ampm');
+  return ' ';
 }
 function theme_date_part_label_timezone($part_type, $element) {
   return t('Timezone');

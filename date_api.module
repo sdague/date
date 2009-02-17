@@ -191,7 +191,7 @@ function date_month_names($required = FALSE) {
  */
 function date_month_names_abbr($required = FALSE) {
   $month_names = array();
-  foreach (month_names_untranslated() as $key => $day) {
+  foreach (date_month_names_untranslated() as $key => $day) {
     $month_names[$key] = date_t($day, 'month_abbr');
   }
   $none = array('' => '');
@@ -586,7 +586,7 @@ function date_t($string, $context, $langcode = NULL) {
       $untranslated = array_flip(array('am', 'pm', 'AM', 'PM'));  
       break;
     case 'datetime':
-      $untranslated = array_flip(array('Year', 'Month', 'Day', 'Week', 'Hour', 'Minute', 'Second', 'All Day'));  
+      $untranslated = array_flip(array('Year', 'Month', 'Day', 'Week', 'Hour', 'Minute', 'Second', 'All Day', 'All day'));  
       break;
     case 'datetime_plural':
       $untranslated = array_flip(array('Years', 'Months', 'Days', 'Weeks', 'Hours', 'Minutes', 'Seconds'));  
@@ -617,7 +617,7 @@ function date_t_strings(&$replace, $langcode) {
   $replace[$langcode]['day_abbr1'] = explode('|', trim(t('!day-abbreviation S|M|T|W|T|F|S', array('!day-abbreviation' => ''), $langcode)));
   $replace[$langcode]['day_abbr2'] = explode('|', trim(t('!day-abbreviation SU|MO|TU|WE|TH|FR|SA', array('!day-abbreviation' => ''), $langcode)));
   $replace[$langcode]['ampm'] = explode('|', trim(t('!ampm-abbreviation am|pm|AM|PM', array('!ampm-abbreviation' => ''), $langcode)));
-  $replace[$langcode]['datetime'] = explode('|', trim(t('!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day', array('!datetime' => ''), $langcode)));
+  $replace[$langcode]['datetime'] = explode('|', trim(t('!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day|All day', array('!datetime' => ''), $langcode)));
   $replace[$langcode]['datetime_plural'] = explode('|', trim(t('!datetime_plural Years|Months|Days|Weeks|Hours|Minutes|Seconds', array('!datetime_plural' => ''), $langcode)));
   $replace[$langcode]['date_order'] = explode('|', trim(t('!date_order Every|First|Second|Third|Fourth|Fifth', array('!date_order' => ''), $langcode)));
   $replace[$langcode]['date_order_reverse'] = explode('|', trim(t('!date_order |Last|Next to last|Third from last|Fourth from last|Fifth from last', array('!date_order' => ''), $langcode)));
