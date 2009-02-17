@@ -705,7 +705,7 @@ function date_format_date($date, $type = 'medium', $format = '', $langcode = NUL
         $datestring .= date_offset_get($date);
         break;              
       case '\\':
-        $date .= $format[++$i];
+        $datestring .= $format[++$i];
         break;
       default:
         if (strpos('BdgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
