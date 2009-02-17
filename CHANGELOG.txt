@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #338253 Re-work the Date repeat description to provide more context for translations.
 - #338253 Re-work date_t() to create a more robust method of handling translations of abbreviations and other short strings.
 - The date filter should not be setting the view dates, the style should do that.
 - Add 'value' and 'value2' hints to views fields and use new CCK views data.

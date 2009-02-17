@@ -595,7 +595,7 @@ function date_t($string, $context, $langcode = NULL) {
       $untranslated = array_flip(array('Every', 'First', 'Second', 'Third', 'Fourth', 'Fifth'));  
       break;
     case 'date_order_reverse':
-      $untranslated = array_flip(array('', 'Last', 'Second from last', 'Third from last', 'Fourth from last', 'Fifth from last'));  
+      $untranslated = array_flip(array('', 'Last', 'Next to last', 'Third from last', 'Fourth from last', 'Fifth from last'));  
       break;
     case 'date_nav':
       $untranslated = array_flip(array('Prev', 'Next', 'Today'));  
@@ -620,7 +620,7 @@ function date_t_strings(&$replace, $langcode) {
   $replace[$langcode]['datetime'] = explode('|', trim(t('!datetime Year|Month|Day|Week|Hour|Minute|Second|All Day', array('!datetime' => ''), $langcode)));
   $replace[$langcode]['datetime_plural'] = explode('|', trim(t('!datetime_plural Years|Months|Days|Weeks|Hours|Minutes|Seconds', array('!datetime_plural' => ''), $langcode)));
   $replace[$langcode]['date_order'] = explode('|', trim(t('!date_order Every|First|Second|Third|Fourth|Fifth', array('!date_order' => ''), $langcode)));
-  $replace[$langcode]['date_order_reverse'] = explode('|', trim(t('!date_order |Last|Second to last|Third from last|Fourth from last|Fifth from last', array('!date_order' => ''), $langcode)));
+  $replace[$langcode]['date_order_reverse'] = explode('|', trim(t('!date_order |Last|Next to last|Third from last|Fourth from last|Fifth from last', array('!date_order' => ''), $langcode)));
   $replace[$langcode]['date_nav'] = explode('|', trim(t('!date_nav Prev|Next|Today', array('!date_nav' => ''), $langcode)));
   
   // These start with a pipe so the January value will be in position 1 instead of position 0.
@@ -674,10 +674,10 @@ function date_format_date($date, $type = 'medium', $format = '', $langcode = NUL
       // Use date_t() for ambiguous short strings that need translation.
       // We send long day and month names to date_t(), along with context.
       case 'l':
-        $datestring .= date_t(date_format($object, 'l'), 'day_name', $langcode);
+        $datestring .= date_t(date_format($date, 'l'), 'day_name', $langcode);
         break;
       case 'D':
-        $datestring .= date_t(date_format($object, 'l'), 'day_abbr', $langcode);
+        $datestring .= date_t(date_format($date, 'l'), 'day_abbr', $langcode);
         break;
       case 'F':
         $datestring .= date_t(date_format($date, 'F'), 'month_name', $langcode);
