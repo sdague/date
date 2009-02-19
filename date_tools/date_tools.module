@@ -195,6 +195,17 @@ function date_tools_wizard_form() {
   return $form;
 }
 
+function date_tools_wizard_form_validate(&$form, &$form_state) {
+  $type_name = $form_state['values']['type_name'];
+  $field_name = 'field_'. $form_state['values']['field_name'];
+  if (db_result(db_query("SELECT type FROM {node_type} WHERE type='%s'", $type_name))) {
+    form_set_error('type_name', t('This content type name already exists.'));
+  }
+  if (db_result(db_query("SELECT field_name FROM {content_node_field_instance} WHERE field_name='%s' AND type_name='%s'", $field_name, $type_name))) {
+    form_set_error('field_name', t('This field name already exists.'));
+  }
+}
+
 function date_tools_wizard_form_submit(&$form, &$form_state) {
   $view_name = date_tools_wizard_build($form_state['values']);
   menu_rebuild();
@@ -560,8 +571,8 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
    // Widget overrides:
    $widget_overrides = array(
 
-    // Move the date above the node body.
-    'weight' => -2,
+    // Move the date right below the title.
+    'weight' => -4,
 
     // Set default values to 'blank', 'now', or 'relative'. To dates can also use 'same'.
     'default_value' => 'now',
@@ -649,31 +660,42 @@ function date_tools_wizard_create_calendar($name, $type_name, $date_field, $loca
 function date_tools_wizard_create_blocks($type_name) {
   // Add calendar blocks to the default theme.
   $current_theme = variable_get('theme_default', 'garland');
-  date_tools_wizard_add_block('calendar', 0, $current_theme, 1, 1, 'left'); // Legend
-  date_tools_wizard_add_block('views', 'calendar_'. $type_name .'-calendar_block_1', $current_theme, 1, 1, 'left'); // Mini calendar block
-  date_tools_wizard_add_block('views', 'calendar_'. $type_name .'-block_1', $current_theme, 1, 1, 'left'); // Upcoming events
   
+  // Legend block.
+  $block = new stdClass();
+  $block->theme = $current_theme;
+  $block->status = 1;
+  $block->weight = -1;
+  $block->region = 'left';
+  $block->title = '';
+  $block->module = 'calendar';
+  $block->delta = 0;
+  date_tools_wizard_add_block($block);
+  
+  // Mini calendar block. 
+  $block->module = 'views';
+  $block->delta = 'calendar_'. $type_name .'-calendar_block_1';
+  date_tools_wizard_add_block($block); 
+  
+  // Upcoming events block.
+  $block->module = 'views';
+  $block->delta = 'calendar_'. $type_name .'-block_1';
+  date_tools_wizard_add_block($block);
   return;      
 }
 
 /**
- * Add a new plain block provided by block module.
- * 
- * Copied from the install_profile_api so we don't have to 
- * make that a dependency for this one item.
+ * Add a block.
  */
-function date_tools_wizard_add_block($module, $delta, $theme, $status, $weight = 0, $region = '', $visibility = 0, $pages = '', $custom = 0, $throttle = 0, $title = '') {
-  if ($status) {
-    db_query("INSERT INTO {blocks} (module, delta, theme, status, weight, region, visibility, pages, custom, throttle, title) 
-       VALUES ('%s', '%s', '%s', %d, %d, '%s', %d, '%s', %d, %d, '%s')", 
-       $module, $delta, $theme, $status, $weight, $region, $visibility, $pages, $custom, $throttle, $title);
-    if ($module == 'block') {
-      $box = db_fetch_object(db_query('SELECT * FROM {boxes} WHERE bid=%d', $delta));
-      db_query("INSERT INTO {boxes} (bid, body, info, format) VALUES (%d, '%s', '%s', '%s')", $box->bid, $box->body, $box->info, $box->format);
-    }
+function date_tools_wizard_add_block($block) {
+  $bid = db_result(db_query("SELECT bid FROM {blocks} WHERE module='%s' AND delta='%s' AND theme='%s'", $block->module, $block->delta, $block->theme));
+  if (empty($bid)) {
+    $block->bid = NULL;
+    drupal_write_record('blocks', $block);
   }
   else {
-    db_query("UPDATE {blocks} SET status = 0 WHERE module = '%s' AND delta = '%s' AND theme = '%s'", $module, $delta, $theme); 
+    $block->bid = $bid;
+    drupal_write_record('blocks', $block, array($block->bid));
   }
 }
 
