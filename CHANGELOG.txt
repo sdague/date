@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix to iCal array: leave 'all day' notice in the individual date components as well
+  as the top level so it is available in each portion of the VEVENT array, needed for FeedAPI parsing.
 - Fix broken date link in calendar created by Date Tools.
 - Make the default value for the 'To date' easier to see in the field settings.
 - Update date argument summary for recent changes in Views.

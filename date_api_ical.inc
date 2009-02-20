@@ -199,12 +199,14 @@ function date_ical_parse($icaldatafolded = array()) {
             // the component instead of DTSTART/DTEND subcomponents
             if ((isset($subgroup['DTSTART']) && !isset($subgroup['DTEND'])) || 
             (isset($subgroup['DTSTART']) && $subgroup['DTSTART']['all_day'])) {
+              // Add a top-level indication for the 'All day' condition.
+              // Leave it in the individual date components, too, so it
+              // is always available even when you are working with only
+              // a portion of the VEVENT array, like in Feed API parsers.
               $subgroup['all_day'] = true;
               if (!isset($subgroup['DTEND'])) {
                 $subgroup['DTEND'] = $subgroup['DTSTART'];
               }
-              unset($subgroup['DTSTART']['all_day']);
-              unset($subgroup['DTEND']['all_day']);
             }
           // Add this element to the parent as an array under the
           // component name
