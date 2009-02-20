@@ -204,9 +204,10 @@ function date_ical_parse($icaldatafolded = array()) {
               // is always available even when you are working with only
               // a portion of the VEVENT array, like in Feed API parsers.
               $subgroup['all_day'] = true;
-              if (!isset($subgroup['DTEND'])) {
-                $subgroup['DTEND'] = $subgroup['DTSTART'];
-              }
+              // Many programs output DTEND for an all day event as the
+              // the following day, reset this to the same day for our
+              // internal use.
+              $subgroup['DTEND'] = $subgroup['DTSTART'];
             }
           // Add this element to the parent as an array under the
           // component name
