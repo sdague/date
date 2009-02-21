@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add test files to import RRULEs in .ics, all day dates in .ics, and date info in .csv formats used by Yahoo Calendar and Outlook.
 - iCal TRIGGER can either be a date or a duration.
 - Fix to iCal: alter the end date of all day events to match the to date.
   The ical practice of setting the End date as the next day won't work for our interal use of this value.
