@@ -182,7 +182,7 @@ function date_tools_wizard_form() {
     '#title' => t('Location field name'),
     );  
   $form['signup'] = array(
-    '#type' => 'value',
+    '#type' => 'select',
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#default_value' => module_exists('signup'),
     '#title' => t('Turn on signup'),
@@ -531,7 +531,7 @@ function date_tools_wizard_create_content_type($name, $type_name, $description, 
 
 
 function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_handling, $overrides = array()) {
-  
+  dsm($overrides);
   date_tools_wizard_include();
   
   $field_name = $overrides['field_name'];
@@ -545,10 +545,9 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
     'field_name' => $field_name,
     'type_name' => $type_name,
     
-    // Make date fields multiple value so multiple values can be tested.
     // Can be set to 0 (none), 1 (unlimited or repeating), 
     // or 2-9 for a fixed number of values.
-    'multiple' => 1, 
+    'multiple' => 0, 
     
     // Set a display format that will show complete date information, 
     // to help test that values are correct.
