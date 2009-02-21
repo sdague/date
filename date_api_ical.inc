@@ -195,18 +195,16 @@ function date_ical_parse($icaldatafolded = array()) {
             if (isset($subgroup['DURATION'])) {
               date_ical_parse_duration($subgroup, 'DURATION');
             }
-            // Check for all-day events setting the 'all_day' property under
-            // the component instead of DTSTART/DTEND subcomponents
-            if ((isset($subgroup['DTSTART']) && !isset($subgroup['DTEND'])) || 
-            (isset($subgroup['DTSTART']) && $subgroup['DTSTART']['all_day'])) {
-              // Add a top-level indication for the 'All day' condition.
-              // Leave it in the individual date components, too, so it
-              // is always available even when you are working with only
-              // a portion of the VEVENT array, like in Feed API parsers.
-              $subgroup['all_day'] = true;
+            // Add a top-level indication for the 'All day' condition.
+            // Leave it in the individual date components, too, so it
+            // is always available even when you are working with only
+            // a portion of the VEVENT array, like in Feed API parsers.
+            $subgroup['all_day'] = FALSE;
+            if (!empty($subgroup['DTSTART']) && (!empty($subgroup['DTSTART']['all_day']) || 
+            (empty($subgroup['DTEND']) && empty($subgroup['RRULE']) && empty($subgroup['RRULE']['COUNT'])))) {
               // Many programs output DTEND for an all day event as the
-              // the following day, reset this to the same day for our
-              // internal use.
+              // following day, reset this to the same day for internal use.
+              $subgroup['all_day'] = TRUE;
               $subgroup['DTEND'] = $subgroup['DTSTART'];
             }
           // Add this element to the parent as an array under the

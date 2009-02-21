@@ -49,7 +49,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
   // Create a date object for the start and end dates.
   $start_date = date_make_date($start, $timezone);
   $end_date = date_make_date($end, $timezone);
-
+  
   // If the rule has an UNTIL, see if that is earlier than the end date.
   if (!empty($rrule['UNTIL'])) {
     $until_date = date_ical_date($rrule['UNTIL']);
