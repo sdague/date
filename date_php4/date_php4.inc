@@ -94,10 +94,6 @@ if (!function_exists('date_create')) {
     $date->value = $date_out;
     $date->timestamp = date_datetime2timestamp($date->value, $timezone);
     $date->timezone = $timezone;
-    if (!date_is_valid($date, DATE_OBJECT)) {
-      // Must be a value we can't interpret. Throw an error.
-      return NULL;
-    }
     return $date;
   }
 }
