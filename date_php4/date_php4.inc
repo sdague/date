@@ -338,7 +338,7 @@ if (!function_exists('timezone_offset_get')) {
     }
     $timestamp = $date->timestamp;
     if ($offsets[$timezone]['dst'] == 1) {
-      if (date_is_dst($timestamp, $timezone)) {
+      if (date_is_dst($timestamp, $timezone, $offsets[$timezone]['dst'])) {
         return $offsets[$timezone]['dst_offset'];
       }
     }
@@ -604,7 +604,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
     include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
   }
   $region = array_key_exists($timezone, $timezone_map) ? $timezone_map[$timezone]['dst_region'] : 0;
-      
+           
   // This should really be done with date_date() to get the right timezone
   // adjustment for the year, but that leads to circular code that won't
   // work, so we're stuck with date(), which hopefully will create the right
@@ -690,31 +690,31 @@ function date_is_dst($timestamp, $timezone = NULL) {
       break;
     case 13: // EU and other European countries
       // start of DST (last Sunday in March 1 am UTC)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC")) + 3600;
+      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
       // end of DST in Europe (last Sunday in October 1 am UTC)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 3600;
+      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 14: // Russian Federation
       // start of DST (last Sunday in March 2 am local time)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC")) + 7200;
+      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
       // end of DST (last Sunday in October 2 am local time)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 15: // Northern America (where applicable)
       // start of DST  (where applicable) (first Sunday in April before 2007,
       // after that second Sunday in March, 2 am local time)
       if ($year < 2007) {
-        $dststart = strtotime("1 week sunday UTC", strtotime("1 april $year UTC")) + 7200;
+        $dststart = strtotime("1 week sunday UTC", strtotime("1 april $year UTC"));
       }
       else {
-        $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC")) + 7200;
+        $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC"));
       }
       // end of DST (where applicable) (last Sunday in October 2 am local time)
       if ($year < 2007) {
-        $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+        $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
       }
       else {
-        $dstend = strtotime("1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+        $dstend = strtotime("1 week sunday UTC", strtotime("1 november $year UTC"));
       }
       break;
     case 16: // Cuba

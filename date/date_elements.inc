@@ -447,13 +447,13 @@ function date_combo_validate($element, &$form_state) {
       $from_date = date_fuzzy_datetime($item[$from_field]);
       $from_date = date_make_date($from_date, $timezone);
       $item[$offset_field] = date_offset_get($from_date);
+      
       $to_date = date_make_date($item[$to_field], $timezone);
       $item[$offset_field2] = date_offset_get($to_date);
       date_timezone_set($from_date, timezone_open($timezone_db));
       date_timezone_set($to_date, timezone_open($timezone_db));
       $item[$from_field] = date_format($from_date, date_type_format($field['type']));
       $item[$to_field] = date_format($to_date, date_type_format($field['type']));
-      
       if (isset($form_values[$field_name]['rrule'])) {
         $item['rrule'] = $form_values[$field['field_name']]['rrule'];
       }

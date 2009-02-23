@@ -162,21 +162,9 @@ function _date_getdate($timestamp = false, $timezone = false) {
     $hour = floor($timestamp/$_hour_power);
   }
   else {
-    // Check yesterday's and tomorrow's offset in case dst happens this day.
+    
     if ($timezone != 'UTC') {
-      $today_offset = date_get_gmt_diff_ts($timestamp, $timezone);
-      $yesterday_offset = date_get_gmt_diff_ts($timestamp - 86400, $timezone);
-      $tomorrow_offset = date_get_gmt_diff_ts($timestamp + 86400, $timezone);
-      if ($yesterday_offset != $tomorrow_offset && $yesterday_offset < 0) {
-        $adj = $yesterday_offset;
-      }
-      elseif ($yesterday_offset != $tomorrow_offset && $tomorrow_offset > 0) {
-        $adj = $tomorrow_offset;
-      }
-      else {
-        $adj = $today_offset;
-      }
-      $timestamp =  $timestamp + $adj;
+      $timestamp += date_get_gmt_diff_ts($timestamp, $timezone);
     }
     
     for ($a = 1970 ;; $a++) {

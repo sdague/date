@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Date PHP4: fix inconsistency in offset computation for first two hours of the day dst changes.
 - Date PHP4: eliminate some needless cycles to improve performance.
 - Add test files to import RRULEs in .ics, all day dates in .ics, and date info in .csv formats used by Yahoo Calendar and Outlook.
 - iCal TRIGGER can either be a date or a duration.

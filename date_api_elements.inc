@@ -494,7 +494,7 @@ function date_text_validate($element, &$form_state) {
   }
   $parents = $element['#parents'];
   $value = date_text_input_value($element);
-
+  
   if (!$element['#required'] && empty($value)) {
     form_set_value($element, NULL, $form_state);
   }
