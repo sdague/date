@@ -256,7 +256,7 @@ function _date_date($format, $timestamp = false, $timezone = false) {
       if ($min < 10) $dates .= ':0'. $min; else $dates .= ':'. $min;
       if ($secs < 10) $dates .= ':0'. $secs; else $dates .= ':'. $secs;
       $gmt = date_get_gmt_diff_ts($timestamp, $timezone);
-      $dates .= sprintf(' %s%04d', ($gmt < 0) ? '+' : '-', abs($gmt) / 36); break;
+      $dates .= sprintf(' %s%04d', ($gmt >= 0) ? '+' : '-', abs($gmt) / 36); break;
     case 'Y': $dates .= date_pad($year, 4); break;
     case 'y': $dates .= substr($year, strlen($year)-2, 2); break;
     // MONTH
