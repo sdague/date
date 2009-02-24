@@ -304,6 +304,7 @@ function date_popup_validate($element, &$form_state) {
   $granularity = $element['#granularity'];
   $date_granularity = array_intersect($granularity, array('month', 'day', 'year'));
   $time_granularity = array_intersect($granularity, array('hour', 'minute', 'second'));
+  $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
   
   // If the field is empty and not required, set it to empty and return.
   // If the field is empty and required, set error message and return.
@@ -311,7 +312,7 @@ function date_popup_validate($element, &$form_state) {
   if (empty($element['#value']['date'])) {
     if ($element['#required']) {
       // Set message on both date and time to get them highlighted properly.
-      $message = t('Field %field is required.', array('%field' => $element['#title']));
+      $message = t('Field %field is required.', array('%field' => $label));
       if (!empty($date_granularity)) {
         form_set_error($error_field .'][date', $message);  
         $message = ' ';
@@ -335,7 +336,7 @@ function date_popup_validate($element, &$form_state) {
   }
   else {
     // Set message on both date and time to get them highlighted properly.
-    $message = t('Field %field is invalid.', array('%field' => $element['#title']));
+    $message = t('Field %field is invalid.', array('%field' => $label));
     if (!empty($date_granularity)) {
       form_set_error($error_field .'][date', $message);  
       $message = ' ';

@@ -397,6 +397,7 @@ function date_select_validate($element, &$form_state) {
  
   $error_field = implode('][', $element['#parents']);
   $errors = array();
+  $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
   
   if (in_array('year', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['year']))) {
     if ($element['#value']['year'] < variable_get('date_min_year', 1) || $element['#value']['year'] > variable_get('date_max_year', 4000)) {
@@ -456,7 +457,7 @@ function date_select_validate($element, &$form_state) {
     $errors[] = t('A valid value is required.');
   }
   if (!empty($errors)) {
-    array_unshift($errors, t('Field %field has errors.', array('%field' => $element['#title'])));
+    array_unshift($errors, t('Field %field has errors.', array('%field' => $label)));
     form_set_error($error_field, implode(' ', $errors));
   }
   
@@ -493,17 +494,17 @@ function date_text_validate($element, &$form_state) {
     return;
   }
   $parents = $element['#parents'];
+  $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
   $value = date_text_input_value($element);
   
-  if (!$element['#required'] && empty($value)) {
-    form_set_value($element, NULL, $form_state);
+  if (empty($value) && !empty($element['#required'])) {
+    form_error($element, t('A valid date is required for %title.', array('%title' => $label))); 
+  }
+  elseif (empty($value) && !empty($element['#value']['date'])) {
+    form_error($element, t('%title is invalid.', array('%title' => $label))); 
   }
   elseif (!empty($value)) {
     form_set_value($element, $value, $form_state);
-  }
-  else {
-    $error_field = implode('][', $element['#parents']);
-    form_set_error($error_field, t('A valid date is required for %title.', array('%title' => $element['#title']))); 
   }
 }
 
