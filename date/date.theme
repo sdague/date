@@ -159,7 +159,7 @@ function theme_date_time_ago($start_date, $end_date) {
   // Time to compare dates to
   $now = date_format(date_now(), DATE_FORMAT_DATETIME);
   $start = date_format($start_date, DATE_FORMAT_DATETIME);
-  $end = date_format($start_date, DATE_FORMAT_DATETIME);
+  $end = date_format($end_date, DATE_FORMAT_DATETIME);
   
   // 1) The date is entirely in the future
   if ($now < $start) {
@@ -208,8 +208,8 @@ function theme_date_repeat_display($field, $item, $node = NULL, $dates) {
  * @return formatted date.
  */
 function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $view = NULL) {
-  if (empty($date1) || !is_object($date1)) {
-    return '';
+  if (empty($date1) || !is_object($date1) || $format == 'format_interval') {
+    return;
   }
   if (empty($date2)) {
     $date2 = $date1;
