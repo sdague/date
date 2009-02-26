@@ -10,6 +10,35 @@
  */
 class date_handler_field_multiple extends content_handler_field_multiple {
   
+  function options(&$options) {
+    parent::options($options);
+    $options['repeat'] = array(
+      'show_repeat_rule' => '',
+      );
+    $options['multiple']['multiple_to'] = '';  
+  }
+  
+  /**
+   * Provide 'group multiple values' option,
+   * adapted to the needs of the Date module.
+   */
+  function options_form(&$form, &$form_state) {
+    parent::options_form($form, $form_state);
+    unset($form['multiple']);
+    
+    $field = $this->content_field;
+    $options = $this->options;
+
+    $form += date_formatter_settings($form_state, $field, $options, TRUE);
+    $form['multiple']['#weight']  = 1;   
+    $form['multiple']['group'] = array(
+      '#title' => t('Group multiple values'),
+      '#type' => 'checkbox',
+      '#default_value' => $options['multiple']['group'],
+      '#description' => t('If unchecked, each item in the field will create a new row, which may appear to cause duplicates. This setting is not compatible with click-sorting in table displays.'),
+    );
+  }
+    
   function pre_render($values) {
     
     // If there are no values to render (displaying a summary, or query returned no results),
@@ -46,23 +75,15 @@ class date_handler_field_multiple extends content_handler_field_multiple {
       $query_columns[] = "$alias.$attributes[column] AS $column";
       $query_fields[] = "$alias.$attributes[column]";
     }
-    // If the view has a minimum/maximum date, limited the grouped
-    // values to the date range.
+    // Retrieve all values, we limit them in date_prepare_node(),
+    // a function that is used both by the handler and by the 
+    // node theme to take advantage of formatter settings.
     $where = array('1');
-    if (!empty($this->view->date_info->min_date)) {
-      $date_handler = date_field_get_sql_handler($field);
-      foreach ($this->view->date_info->date_handler_fields as $key => $value) {
-        $sql_field = $query_fields[0];
-        $sql1 = $date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($this->view->date_info->min_date, DATE_FORMAT_DATETIME));
-        $sql2 = $date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($this->view->date_info->max_date, DATE_FORMAT_DATETIME));
-        $where[] = $sql1 .' AND '. $sql2;
-      }
-    }
     $query = 'SELECT '. implode(', ', $query_columns) .
              ' FROM {'. $db_info['table'] ."} $alias".
              " LEFT JOIN {node} node ON node.vid = $alias.vid".
              " WHERE node.vid IN (". implode(',', $vids) .') AND '. implode(' OR ', $where) .
-             " ORDER BY node.nid ASC, $alias.delta ". ($options['multiple']['multiple_reversed'] ? 'DESC' : 'ASC');
+             " ORDER BY node.nid ASC, $alias.delta ASC";
     $result = db_query($query);
 
     while ($item = db_fetch_array($result)) {
@@ -82,7 +103,83 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     // to the theme. Add view information to it.
     $values->date_info = !empty($this->view->date_info) ? $this->view->date_info : new StdClass();
     $values->date_info->date_handler_fields = date_handler_fields($this->view);
-    return parent::render($values);
+    
+    // Add the formatter settings to the pseudo node.
+    $values->date_info->formatter_settings = $this->options;
+    $values->date_info->aliases = $this->aliases;
+    
+    // If this is not a grouped field, use content_handler_field::render().
+    if (!$this->defer_query) {
+      return parent::render($values);
+    }
+
+    $field = $this->content_field;
+    $options = $this->options;
+
+    $vid = $values->{$this->field_alias};
+    if (isset($this->field_values[$vid])) {
+      // Gather items, respecting the 'Display n values starting from m' settings.
+      $count_skipped = 0;
+      $items = array();
+      foreach ($this->field_values[$vid] as $item) {
+        if (empty($options['multiple']['multiple_from']) || ($count_skipped >= $options['multiple']['multiple_from'])) {
+          if (empty($options['multiple']['multiple_number']) || (count($items) < $options['multiple']['multiple_number'])) {
+            // Grab the nid - needed for render_link().
+            $nid = $item['_nid'];
+            unset($item['_nid']);
+            $items[] = $item;
+          }
+          else {
+            break;
+          }
+        }
+        $count_skipped++;
+      }
+
+      // Build a pseudo-node from the retrieved values.
+      $node = drupal_clone($values);
+      // content_format and formatters will need a 'type'.
+      $node->type = $values->{$this->aliases['type']};
+      $node->nid = $values->{$this->aliases['nid']};
+      $node->vid = $values->{$this->aliases['vid']};
+
+      // Some formatters need to behave differently depending on the build_mode
+      // (for instance: preview), so we provide one.
+      $node->build_mode = NODE_BUILD_NORMAL;
+
+      // Render items.
+      $formatter_name = $options['format'];
+      if ($items && ($formatter = _content_get_formatter($formatter_name, $field['type']))) {
+        $rendered = array();
+        if (content_handle('formatter', 'multiple values', $formatter) == CONTENT_HANDLE_CORE) {
+          // Single-value formatter.
+          foreach ($items as $item) {
+            $output = content_format($field, $item, $formatter_name, $node);
+            if (!empty($output)) {
+              $rendered[] = $this->render_link($output, (object) array('nid' => $nid));
+            }
+          }
+        }
+        else {
+          // Multiple values formatter.
+          $output = content_format($field, $items, $formatter_name, $values);
+          if (!empty($output)) {
+            $rendered[] = $this->render_link($output, (object) array('nid' => $nid));
+          }
+        }
+
+        if (count($rendered) > 1) {
+          // TODO: could we use generic field display ?
+          return theme('content_view_multiple_field', $rendered, $field, $values);
+        }
+        elseif ($rendered) {
+          return $rendered[0];
+        }
+      }
+    }
+
+    return '';    
+    
   }
 
 }

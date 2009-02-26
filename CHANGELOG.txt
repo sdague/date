@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Add formatter settings for node and view to control which multiple value to display when.
 - Improve interpretation of argument date ranges.
 - Improve handling of translation for Date repeat rules.
 - #347645 Mark 'To date' required if it is.

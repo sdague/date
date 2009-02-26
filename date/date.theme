@@ -46,39 +46,75 @@
  *   $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($element) {
-    
+  static $repeating_ids = array();
+  
   $node = $element['#node'];
   $field_name = $element['#field_name'];
+  $context = !empty($node->content) ? $node->content[$field_name]['#context'] : '';
+  $type_name = $element['#type_name'];
   $fields = content_fields();
   $field = $fields[$field_name];
   $item = $element['#item'];
-
-  date_prepare_node($node);
-
-  // There could be more than one date field in a view or on a node.
+    
+  // Get the formatter settings, either the default settings for this node
+  // type or the View settings stored in $node->date_info.
+  $options = date_formatter_get_settings($field_name, $type_name, $context);
+  if (!empty($node->date_info) && !empty($node->date_info->formatter_settings)) {
+    $options = $node->date_info->formatter_settings;
+  }
+  
   // If date_id is set for this field and the delta doesn't match, don't display it.
-  foreach ($node->date_id as $key => $id) {
-    list($module, $nid, $field_name, $delta, $other) = explode(':', $id);
-    if ($field_name == $field['field_name'] && isset($item['#delta']) && $delta != $item['#delta']) {
-      return;
+  if (!empty($node->date_id)) {
+    foreach ((array) $node->date_id as $key => $id) {
+      list($module, $nid, $field_name, $delta, $other) = explode(':', $id);
+      if ($field_name == $field['field_name'] && isset($item['#delta']) && $delta != $item['#delta']) {
+        return;
+      }
     }
   }
-  
-  // Special test for repeating dates with no date id set.
-  // Only display the start date unless we're showing all dates.
-  if (empty($node->date_id) && empty($node->date_repeat_show) && !empty($field['repeat']) 
-  && isset($item['#delta']) && $item['#delta'] != 0) {
-    return;
+   
+  // If this is not coming from Views, it is the full node.
+  // If we aren't retrieving a specific value, adjust the node values 
+  // to match the formatter settings, removing values we should not see.
+  if (!empty($node->content) && empty($node->date_id)) {
+    $node = date_prepare_node($node, $field, $type_name, $context, $options);
+    // Did the current value get removed by formatter settings?
+    if (empty($node->{$field_name}[$item['#delta']])) {
+      return;
+    }
+    // Adjust the $element values to match the changes.
+    $element['#node'] = $node;
   }
-  
+    
+  $output = '';
+    
   // Call the right theme for this formatter.
+  // Update the element with values that might have been altered by 
+  // date_prepare_node() and figure out which values to display.
   $dates = date_formatter_process($element);
-  $date1 = $dates['value']['formatted'];
-  if (isset($dates['value2'])) {
-    $date2 = $dates['value2']['formatted'];
+
+  // Check the formatter settings to see if the repeat rule should be
+  // displayed. Show it only with the first multiple value date.
+  if (!in_array($node->nid, $repeating_ids) && module_exists('date_repeat') 
+  && !empty($item['rrule']) && $options['repeat']['show_repeat_rule'] == 'show') {
+    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
+    $output .= theme('date_repeat_display', $field, $item, $node, $dates);
+    $repeating_ids[] = $node->nid;
   }
-  else {
-    $date2 = $date1;
+  
+  switch ($options['fromto']['fromto']) {
+    case 'value':
+      $date1 = $dates['value']['formatted'];
+      $date2 = $date1;
+      break;    
+    case 'value2':
+      $date2 = $dates['value2']['formatted'];
+      $date1 = $date2;
+      break;
+    default:
+      $date1 = $dates['value']['formatted'];
+      $date2 = $dates['value2']['formatted'];  
+      break;
   }
   
   // Pull the timezone, if any, out of the formatted result and tack it
@@ -87,12 +123,10 @@ function theme_date_display_combination($element) {
   if ($timezone) {
     $timezone = ' ' . $timezone;
   }
-
   $date1 = str_replace($timezone, '', $date1);
   $date2 = str_replace($timezone, '', $date2);
     
   // No date values, display nothing.
-  $output = '';
   if (empty($date1) && empty($date2)) {
     $output .= '';
   }
@@ -121,10 +155,7 @@ function theme_date_display_combination($element) {
       '<span class="date-display-separator"> - </span>'.
       '<span class="date-display-end">'. $date2 . $timezone. '</span>';
   }
-  if (module_exists('date_repeat') && !empty($item['rrule'])) {
-    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
-    $output .= theme('date_repeat_display', $field, $item, $node, $dates);
-  }
+  
   return $output;
 }
 
@@ -141,15 +172,42 @@ function theme_date_display_combination($element) {
  */
 function theme_date_format_interval($element) {
   $node = $element['#node'];
-  // If we're trying to display only a single date on a node, see if
-  // this is the right one.
-  if (isset($node->date_id)) {
-    list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
-    $id_field = $node->{$field_name};
-    $id_date = $id_field[$delta];
-    if ($id_date != $element['#item']) {
+  $field_name = $element['#field_name'];
+  $context = !empty($node->content) ? $node->content[$field_name]['#context'] : '';
+  $type_name = $element['#type_name'];
+  $fields = content_fields();
+  $field = $fields[$field_name];
+  $item = $element['#item'];
+    
+  // Get the formatter settings, either the default settings for this node
+  // type or the View settings stored in $node->date_info.
+  $options = date_formatter_get_settings($field_name, $type_name, $context);
+  if (!empty($node->date_info) && !empty($node->date_info->formatter_settings)) {
+    $options = $node->date_info->formatter_settings;
+  }
+  
+  // If date_id is set for this field and the delta doesn't match, don't display it.
+  if (!empty($node->date_id)) {
+    foreach ((array) $node->date_id as $key => $id) {
+      list($module, $nid, $field_name, $delta, $other) = explode(':', $id);
+      if ($field_name == $field['field_name'] && isset($item['#delta']) && $delta != $item['#delta']) {
+        return;
+      }
+    }
+  }
+   
+  // If this is not coming from Views, it is the full node.
+  // If we aren't retrieving a specific value, adjust the node values 
+  // to match the formatter settings, removing values we should not see.
+  if (!empty($node->content) && empty($node->date_id)) {
+    $node = date_prepare_node($node, $field, $type_name, $context, $options);
+    
+    // Did the current value get removed by formatter settings?
+    if (empty($node->{$field_name}[$item['#delta']])) {
       return;
     }
+    // Adjust the $element values to match the changes.
+    $element['#node'] = $node;
   }
   $dates = date_formatter_process($element);
   return theme('date_time_ago', $dates['value']['local']['object'], $dates['value2']['local']['object']);
@@ -184,11 +242,8 @@ function theme_date_time_ago($start_date, $end_date) {
  * over and over and find a way to allow description to be shown or hidden.
  */
 function theme_date_repeat_display($field, $item, $node = NULL, $dates) {
-  // If $field['field_name'] isn't set, this isn't a node, and is
-  // probably on a calendar view. The description is too expensive an
-  // operation to run on every field in a view, so don't do it.
   $output = '';
-  if (isset($node->$field['field_name']) && ($item['#delta'] == 0 || !empty($item['#show_rrule']))) {
+  if (!empty($item['rrule'])) {
     $output = date_repeat_rrule_description($item['rrule'], $dates['value']['local']['object']);
     $output = '<div>'. $output .'</div>';
   }
