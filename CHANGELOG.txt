@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Improve interpretation of argument date ranges.
+- Improve handling of translation for Date repeat rules.
 - #347645 Mark 'To date' required if it is.
 - #345215, #309921 Rework the way multiple 'From date' and 'To date' fields are identified in validation errors.
 - #375551 The 'All day' formatting should not be applied to format_interval formats.
