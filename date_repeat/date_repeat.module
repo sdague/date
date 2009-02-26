@@ -218,10 +218,10 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
         $results[] = $months[$month];
       }
       if (!empty($rrule['BYMONTHDAY'])) {
-        $description['!bymonth'] = trim(array('!repeats_every_interval on the !month_days of !month_names', array('!repeats_every_interval ' => '', '!month_days' => implode(', ', $rrule['BYMONTHDAY']), '!month_names' => implode(', ', $results))));
+        $description['!bymonth'] = trim(t('!repeats_every_interval on the !month_days of !month_names', array('!repeats_every_interval ' => '', '!month_days' => implode(', ', $rrule['BYMONTHDAY']), '!month_names' => implode(', ', $results))));
       }
       else {
-        $description['!bymonth'] = trim(array('!repeats_every_interval on !month_names', array('!repeats_every_interval ' => '', '!month_names' => implode(', ', $results))));
+        $description['!bymonth'] = trim(t('!repeats_every_interval on !month_names', array('!repeats_every_interval ' => '', '!month_names' => implode(', ', $results))));
       }
     }
   }
@@ -229,7 +229,7 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
     $rrule['INTERVAL'] = 1;
   }
   if (!empty($rrule['COUNT'])) {
-    $description['!count'] = trim(array('!repeats_every_interval !count times' => array('!repeats_every_interval ' => '', '!count' => $rrule['COUNT'])));
+    $description['!count'] = trim(t('!repeats_every_interval !count times', array('!repeats_every_interval ' => '', '!count' => $rrule['COUNT'])));
   }
   if (!empty($rrule['UNTIL'])) {
     $until = date_ical_date($rrule['UNTIL']);
