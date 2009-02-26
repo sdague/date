@@ -497,18 +497,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // remove it if it is a duplicate, since that will break the query.
     $this->query->add_table($field['table_name'], NULL, NULL, $field['table_name']);
     return;
-    
-    // TODO Keep an eye on this. We may be able to avoid adding the 
-    // field so long as the table gets added. Adding the field creates other problems.
-    
-    // Make sure the real field is added to the query, since this is a psuedo field.
-    $this->query->add_field($field['table_name'], $field['field_name']);
-    foreach ($field['related_fields'] as $related) {
-      $bits = explode('.', $related);
-      if ($bits[1] != $field['field_name']) {
-        $this->query->add_field($field['table_name'], $bits[1]);
-      }
-    }
   }
   
   function get_query_fields() {
