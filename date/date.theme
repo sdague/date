@@ -73,10 +73,9 @@ function theme_date_display_combination($element) {
     }
   }
    
-  // If this is not coming from Views, it is the full node.
-  // If we aren't retrieving a specific value, adjust the node values 
-  // to match the formatter settings, removing values we should not see.
-  if (!empty($node->content) && empty($node->date_id)) {
+  // If this is a full node or a pseudo node created by grouping
+  // multiple values, see exactly which values are supposed to be visible.
+  if (isset($node->$field_name)) {
     $node = date_prepare_node($node, $field, $type_name, $context, $options);
     // Did the current value get removed by formatter settings?
     if (empty($node->{$field_name}[$item['#delta']])) {
