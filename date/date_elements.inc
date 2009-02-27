@@ -59,19 +59,6 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
       unset($items[$delta]);
       continue;
     }
-    // For convenience, we process all possible columns in the element,
-    // but now we need to remove columns not used by this field.
-    // This unsets values needed by token handling, can't do it.
-    // TODO remove this or find another way? It may not hurt anything
-    // to leave these values here.
-    if (is_array($item)) {
-      $keys = array_keys($item);
-      foreach ($keys as $column => $value) {
-        if (!in_array($column, $columns)) {
-          //unset($items[$delta][$column]);
-        }
-      }
-    }
 
     // Special case for ISO dates which may have been given artificial values for
     // some date parts to make them into valid dates.
