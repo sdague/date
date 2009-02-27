@@ -419,17 +419,20 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
 
     // If there is no value, do no filtering.
-    if (empty($this->value[$prefix])) {
-      if (empty($form_state['exposed'])) {
-        $this->value[$prefix] = $this->default_value($prefix);
-      }
-      else {
-        return '';
+    $value_parts = (array) $this->value[$prefix];
+    foreach ($value_parts as $part) {
+      if (empty($part)) {
+        if (empty($this->options['exposed'])) {
+          $this->value[$prefix] = $this->default_value($prefix);
+        }
+        else {
+          return '';
+        }
       }
     }
     
     $this->add_date_field($field);
-
+    
     $granularity = $this->options['granularity'];
     $date_handler = $query_field['date_handler'];
     $this->format = $date_handler->views_formats($granularity, 'sql');

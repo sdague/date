@@ -119,7 +119,6 @@ class date_handler_field_multiple extends content_handler_field_multiple {
 
     $vid = $values->{$this->field_alias};
     if (isset($this->field_values[$vid])) {
-      
       // Build a pseudo-node from the retrieved values.
       $node = drupal_clone($values);
       // content_format and formatters will need a 'type'.
