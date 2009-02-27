@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #376880 Move back/next symbols back into link.
 - Exposed filter was not testing empty values correctly.
 - Add Advanced help for new formatter settings.
 - Add formatter settings for node and view to control which multiple value to display when.
