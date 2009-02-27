@@ -15,7 +15,8 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     $options['repeat'] = array(
       'show_repeat_rule' => '',
       );
-    $options['multiple']['multiple_to'] = '';  
+    $options['multiple']['multiple_to'] = ''; 
+    $options['fromto']['fromto'] = 'both'; 
   }
   
   /**
