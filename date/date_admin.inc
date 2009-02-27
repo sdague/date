@@ -564,3 +564,147 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
   
   return $field;
 }
+
+/**
+ * Formatter settings.
+ * 
+ * Form element used both in the date_handler_field_multiple Views handler
+ * and on the CCK Display fields page.
+ */
+function _date_formatter_settings($form_state = NULL, $field, $options = array(), $views_form = FALSE) {
+  $field_name = $field['field_name'];
+  $type_name = isset($options['type_name']) ? $options['type_name'] : NULL;
+  $context = isset($options['context']) ? $options['context'] : NULL;
+  if (empty($options['fromto'])) {
+    $options = date_formatter_get_settings($field_name, $type_name, $context);
+  }
+  
+  $form = array();
+  $form['fromto'] = array(
+    '#access' => $field['todate'],
+    '#weight' => 5,
+    );
+  if (isset($options['fromto']) && isset($options['fromto']['fromto'])) {
+    $default = $options['fromto']['fromto'];
+  }
+  else {
+    $default = 'both';
+  }
+  $form['fromto']['fromto'] = array(
+    '#type' => 'select',
+    '#options' => array(
+      'both' => t('Display From and To dates'), 
+      'value' => t('Display From date only'), 
+      'value2' => t('Display To date only'),
+      ),
+    '#default_value' => $default,
+    '#weight' => 1,
+  );  
+
+  $form['multiple'] = array(
+    '#access' => $field['multiple'],
+    '#weight' => 6,
+  );
+
+  // Make the string translatable by keeping it as a whole rather than
+  // translating prefix and suffix separately.
+  if (isset($options['multiple']) && isset($options['multiple']['multiple_number'])) {
+    $default = $options['multiple']['multiple_number'];    
+  }
+  else {
+    $default = '';
+  }
+  list($prefix, $suffix) = explode('@count', t('Show @count value(s)'));
+  $form['multiple']['multiple_number'] = array(
+    '#type' => 'textfield',
+    '#size' => 5,
+    '#field_prefix' => theme('advanced_help_topic', 'date_api', 'date-display') . $prefix,
+    '#field_suffix' => $suffix,
+    '#default_value' => $default,
+    '#weight' => 1,
+  );
+  if ($views_form) {
+    $form['multiple']['multiple_number'] += array(
+      '#process' => array('views_process_dependency'),
+      '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
+    );
+  }
+  
+  if (isset($options['multiple']) && isset($options['multiple']['multiple_from'])) {
+    $default = $options['multiple']['multiple_from'];    
+  }
+  else {
+    $default = '';
+  }
+  list($prefix, $suffix) = explode('@count', t('starting from @count'));
+  $form['multiple']['multiple_from'] = array(
+    '#type' => 'textfield',
+    '#size' => 15,
+    '#field_prefix' => $prefix,
+    '#field_suffix' => $suffix,
+    '#default_value' => $default,
+    '#weight' => 2,
+  );
+  if ($views_form) {
+    $form['multiple']['multiple_from'] += array(
+      '#process' => array('views_process_dependency'),
+      '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
+    );
+  }
+
+  if (isset($options['multiple']) && isset($options['multiple']['multiple_to'])) {
+    $default = $options['multiple']['multiple_to'];    
+  }
+  else {
+    $default = '';
+  }
+  list($prefix, $suffix) = explode('@count', t('ending on @count'));
+  $form['multiple']['multiple_to'] = array(
+    '#type' => 'textfield',
+    '#size' => 15,
+    '#field_prefix' => $prefix,
+    '#field_suffix' => $suffix,
+    '#default_value' => $default,
+    '#weight' => 3,
+  );
+  if ($views_form) {
+    $form['multiple']['multiple_to'] += array(
+      '#process' => array('views_process_dependency'),
+      '#dependency' => array('edit-options-multiple-group' => array(TRUE)),
+    );
+  }
+  
+  $form['repeat'] = array(
+    '#access' => $field['repeat'],
+    '#weight' => 7,
+  );
+  if (isset($options['repeat']) && isset($options['repeat']['show_repeat_rule'])) {
+    $default = $options['repeat']['show_repeat_rule'];
+  }
+  else {
+    $default = 'show';
+  }
+  $form['repeat']['show_repeat_rule'] = array(
+    '#type' => 'select',
+    '#options' => array(
+      'show' => t('Display repeat rule'), 
+      'hide' => t('Hide repeat rule')),
+    '#default_value' => $default,
+  );
+
+  if (!$views_form) {
+    $form['field'] = array(
+      '#type' => 'value',
+      '#value' => $field,
+      );
+    $form['type_name'] = array(
+      '#type' => 'value',
+      '#value' => $type_name,
+      );  
+    $form['context'] = array(
+      '#type' => 'value',
+      '#value' => $context,
+      );  
+  }
+  return $form;
+}
