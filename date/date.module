@@ -570,8 +570,18 @@ function date_prepare_node($node, $field, $type_name, $context, $options) {
   // If there are options to limit multiple values, 
   // alter the node values to match. 
   $field_name = $field['field_name'];
-  if (!empty($options['multiple']['multiple_from']) || !empty($options['multiple']['multiple_to']) || !empty($options['multiple']['multiple_number'])) {
-    $max_count = $options['multiple']['multiple_number'];
+  
+  $max_count = $options['multiple']['multiple_number'];
+    
+  // If no results should be shown, empty the values and return.
+  if (is_numeric($max_count) && $max_count == 0) {
+    $node->{$field_name} = array();
+    $prepared_node[$field_name] = $node;
+    return $node;
+  }
+  
+  // Otherwise removed values that should not be displayed.
+  if (!empty($options['multiple']['multiple_from']) || !empty($options['multiple']['multiple_to']) || !empty($max_count)) {
     $format = date_type_format($field['type']);
     include_once(drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
     $date_handler = new date_sql_handler($field);

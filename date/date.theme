@@ -72,6 +72,17 @@ function theme_date_display_combination($element) {
       }
     }
   }
+
+  $output = '';
+    
+  // Check the formatter settings to see if the repeat rule should be
+  // displayed. Show it only with the first multiple value date.
+  if (!in_array($node->nid, $repeating_ids) && module_exists('date_repeat') 
+  && !empty($item['rrule']) && $options['repeat']['show_repeat_rule'] == 'show') {
+    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
+    $output .= theme('date_repeat_display', $field, $item, $node);
+    $repeating_ids[] = $node->nid;
+  }
    
   // If this is a full node or a pseudo node created by grouping
   // multiple values, see exactly which values are supposed to be visible.
@@ -79,28 +90,17 @@ function theme_date_display_combination($element) {
     $node = date_prepare_node($node, $field, $type_name, $context, $options);
     // Did the current value get removed by formatter settings?
     if (empty($node->{$field_name}[$item['#delta']])) {
-      return;
+      return $output;
     }
     // Adjust the $element values to match the changes.
     $element['#node'] = $node;
   }
-    
-  $output = '';
     
   // Call the right theme for this formatter.
   // Update the element with values that might have been altered by 
   // date_prepare_node() and figure out which values to display.
   $dates = date_formatter_process($element);
 
-  // Check the formatter settings to see if the repeat rule should be
-  // displayed. Show it only with the first multiple value date.
-  if (!in_array($node->nid, $repeating_ids) && module_exists('date_repeat') 
-  && !empty($item['rrule']) && $options['repeat']['show_repeat_rule'] == 'show') {
-    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
-    $output .= theme('date_repeat_display', $field, $item, $node, $dates);
-    $repeating_ids[] = $node->nid;
-  }
-  
   switch ($options['fromto']['fromto']) {
     case 'value':
       $date1 = $dates['value']['formatted'];
@@ -240,10 +240,10 @@ function theme_date_time_ago($start_date, $end_date) {
  * add in ways to store the description in the date so it isn't regenerated
  * over and over and find a way to allow description to be shown or hidden.
  */
-function theme_date_repeat_display($field, $item, $node = NULL, $dates) {
+function theme_date_repeat_display($field, $item, $node = NULL) {
   $output = '';
   if (!empty($item['rrule'])) {
-    $output = date_repeat_rrule_description($item['rrule'], $dates['value']['local']['object']);
+    $output = date_repeat_rrule_description($item['rrule']);
     $output = '<div>'. $output .'</div>';
   }
   return $output;
