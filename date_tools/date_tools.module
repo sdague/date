@@ -531,7 +531,6 @@ function date_tools_wizard_create_content_type($name, $type_name, $description, 
 
 
 function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_handling, $overrides = array()) {
-  dsm($overrides);
   date_tools_wizard_include();
   
   $field_name = $overrides['field_name'];
