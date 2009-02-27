@@ -598,7 +598,7 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
   
   $overrides = $base_overrides + $overrides;
   $overrides['widget'] = $widget_overrides + $overrides['widget'];
-  
+    
   // Get field default values for this combination of field and widget type,
   // using a helper function in the Date module.
   $field = date_field_default_values($field_type, $widget_type, $tz_handling, $overrides);

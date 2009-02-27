@@ -554,6 +554,8 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
       }
     }
   }
+  // Make sure multiple gets set correctly for repeating dates.
+  if ($field['repeat']) $field['multiple'] = 1;
   
   // Reset columns and db_storage, which may need to be 
   // adjusted to the new values.

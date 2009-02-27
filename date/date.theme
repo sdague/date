@@ -62,7 +62,7 @@ function theme_date_display_combination($element) {
   if (!empty($node->date_info) && !empty($node->date_info->formatter_settings)) {
     $options = $node->date_info->formatter_settings;
   }
-  
+    
   // If date_id is set for this field and the delta doesn't match, don't display it.
   if (!empty($node->date_id)) {
     foreach ((array) $node->date_id as $key => $id) {
