@@ -4,6 +4,10 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #386406 Date filter was not picking up right default value in some situations.
+
+Version 6.2.0
+=================
 - #376880 Move back/next symbols back into link.
 - Exposed filter was not testing empty values correctly.
 - Add Advanced help for new formatter settings.

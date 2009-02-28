@@ -419,7 +419,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
 
     // If there is no value, do no filtering.
-    $value_parts = (array) $this->value[$prefix];
+    $value_parts = !is_array($this->value[$prefix]) ? array($this->value[$prefix]) : $this->value[$prefix];
     foreach ($value_parts as $part) {
       if (empty($part)) {
         if (empty($this->options['exposed'])) {
@@ -430,9 +430,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         }
       }
     }
-    
     $this->add_date_field($field);
-    
     $granularity = $this->options['granularity'];
     $date_handler = $query_field['date_handler'];
     $this->format = $date_handler->views_formats($granularity, 'sql');
@@ -473,7 +471,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->date_handler = $date_handler;
         
     if ($this->date_handler->granularity == 'week') {
-      $format = DATE_FORMAT_DATETIME;
+      $this->format = DATE_FORMAT_DATETIME;
     }
     switch ($prefix) {
       case 'min':
