@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #386124 Updates that test for Views version should work even if Views is not installed.
 - #386406 Date filter was not picking up right default value in some situations.
 
 Version 6.2.0
