@@ -259,24 +259,29 @@ function _date_field_settings($op, $field) {
       // Swap in the date multiple value handler for 
       // CCK's regular multiple value handler.
       $data[$table_alias][$field['field_name'] .'_value']['field']['handler'] = 'date_handler_field_multiple';
-
+      
       // Unset the filter and argument handlers, dates can use the generic 
       // date argument and filter handlers created by the Date API.
       unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
       unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
-      
+     
       // Add in another set of fields for the To date.
       if (!empty($field['todate'])) {
-        $data[$table_alias][$field['field_name'] .'_value']['title'] .= ' - value';
-        $data[$table_alias][$field['field_name'] .'_value']['title short'] .= ' - value';
-        $data[$table_alias][$field['field_name'] .'_value']['field']['title'] .= ' - value';
-        $data[$table_alias][$field['field_name'] .'_value']['field']['title short'] .= ' - value';
-        
+        $data[$table_alias][$field['field_name'] .'_value']['field']['title'] = $data[$table_alias][$field['field_name'] .'_value']['title'];
+        $data[$table_alias][$field['field_name'] .'_value']['field']['title short'] = $data[$table_alias][$field['field_name'] .'_value']['title short'];
+
         $data[$table_alias][$field['field_name'] .'_value2'] = $data[$table_alias][$field['field_name'] .'_value'];
-        $data[$table_alias][$field['field_name'] .'_value2']['title'] .= '2';
-        $data[$table_alias][$field['field_name'] .'_value2']['title short'] .= '2';
-        $data[$table_alias][$field['field_name'] .'_value2']['field']['title'] .= '2';
-        $data[$table_alias][$field['field_name'] .'_value2']['field']['title short'] .= '2';
+
+        $data[$table_alias][$field['field_name'] .'_value']['title'] .= ' - ' . t('From date');
+        $data[$table_alias][$field['field_name'] .'_value']['title short'] .= ' - ' . t('From date');
+        $data[$table_alias][$field['field_name'] .'_value']['field']['title'] .= ' - ' . t('From date');
+        $data[$table_alias][$field['field_name'] .'_value']['field']['title short'] .= ' - ' . t('From date');
+        
+        $data[$table_alias][$field['field_name'] .'_value2']['title'] .= ' - ' . t('To date');
+        $data[$table_alias][$field['field_name'] .'_value2']['title short'] .= ' - ' . t('To date');
+        $data[$table_alias][$field['field_name'] .'_value2']['field']['title'] .= ' - ' . t('To date');
+        $data[$table_alias][$field['field_name'] .'_value2']['field']['title short'] .= ' - ' . t('To date');
+
         $data[$table_alias][$field['field_name'] .'_value2']['field']['field'] .= '2';
         $data[$table_alias][$field['field_name'] .'_value2']['sort']['field'] .= '2';
       }
