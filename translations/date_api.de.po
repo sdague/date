@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2009-03-07 19:12+0100\n"
-"PO-Revision-Date: 2009-03-08 11:35+0100\n"
+"PO-Revision-Date: 2009-03-08 15:17+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,7 @@ msgstr "!date_nav Vorherige|Nächste|Heute"
 
 #: date_api.module:627
 msgid "!month-name |January|February|March|April|May|June|July|August|September|October|November|December"
-msgstr "!month-name |Januar|Februar|März|April|Mai|Juni|July|August|September|Oktober|November|Dezember"
+msgstr "!month-name |Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember"
 
 #: date_api.module:628
 msgid "!month-abbreviation |Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec"
