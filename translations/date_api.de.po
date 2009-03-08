@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2009-03-07 19:12+0100\n"
-"PO-Revision-Date: 2009-03-08 15:28+0100\n"
+"PO-Revision-Date: 2009-03-08 15:43+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgstr "Der Datumsformattyp %format wurde entfernt."
 #: date_api.admin.inc:231
 #, fuzzy
 msgid "!type date format"
-msgstr "!type-Datumsformat"
+msgstr "Datumsformat (!type)"
 
 #: date_api_elements.inc:404
 msgid "The year must be a number between %min and %max."
