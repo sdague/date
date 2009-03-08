@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2009-03-07 19:12+0100\n"
-"PO-Revision-Date: 2009-03-07 19:56+0100\n"
+"PO-Revision-Date: 2009-03-08 15:22+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: date_repeat/date_repeat_form.inc:134;145;156
 msgid "-- Any"
-msgstr "-- Jeder"
+msgstr "-- Jeden"
 
 #: date_repeat/date_repeat_form.inc:143
 msgid "Day of Month"
