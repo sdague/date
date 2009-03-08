@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2009-03-07 19:12+0100\n"
-"PO-Revision-Date: 2009-03-08 15:17+0100\n"
+"PO-Revision-Date: 2009-03-08 15:28+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -197,9 +197,8 @@ msgid "!date_order Every|First|Second|Third|Fourth|Fifth"
 msgstr "!date_order Jeden|Ersten|Zweiten|Dritten|Vierten|Fünften"
 
 #: date_api.module:623
-#, fuzzy
 msgid "!date_order |Last|Next to last|Third from last|Fourth from last|Fifth from last"
-msgstr "!date_order |Letzter|Nächster zum Letzten|Dritter vom Letzten|Vierter vom Letzten|Fünfter vom Letzten"
+msgstr "!date_order |Letzten|Vorletzten|Drittvorletzten|Viertvorletzten|Fünftvorletzten"
 
 #: date_api.module:624
 #, fuzzy
