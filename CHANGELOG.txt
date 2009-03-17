@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #360967 Add method for deleting a custom default calendar.
 - #376224 Add 'From date' and 'To date' to Views titles.
 - #375864 Make sure date_limit_format() doesn't keep formats that are only escaped strings.
 - #386124 Updates that test for Views version should work even if Views is not installed.
