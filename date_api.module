@@ -970,9 +970,9 @@ function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DAT
       case 'seconds':
         return $diff;
       case 'minutes':
-        return $diff * 60;
+        return $diff / 60;
       case 'hours':
-        return $diff * 24 * 60;
+        return $diff / 3600;
       case 'years':
         return $year_diff;
 
@@ -2274,6 +2274,9 @@ function date_querystring($view, $extra_params = array()) {
 }
 
 function date_block_identifier($view) {
+  if (!empty($view->block_identifier)) {
+    return $view->block_identifier;
+  }
   return isset($view->date_info->block_identifier) ? $view->date_info->block_identifier : NULL;
 }
 
