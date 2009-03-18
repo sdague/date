@@ -236,7 +236,7 @@ function date_tools_wizard_form() {
     '#options' => date_tools_wizard_field_types(),
     '#default_value' => 'datetime',
     '#title' => t('Date field type'),
-    '#description' => t("The recommend type is datetime except for historical dates or dates with only year or month granularity."),
+    '#description' => t("The recommend type is Datetime, except for historical dates or dates with only year or month granularity. Older or incomplete dates should use the Date type (an ISO date)."),
     );
   $form['field']['advanced']['granularity'] = array(
     '#type' => 'select',
