@@ -35,7 +35,7 @@ class DateAPITestCase extends DrupalWebTestCase {
     $this->assertEqual(TRUE, date_part_extract($value, 'month'), "Test date_part_extract(". $value .", mon), results ". date_part_extract($value, 'month'));
     $this->assertEqual(TRUE, date_part_extract($value, 'day'), "Test date_part_extract(". $value .", mday), results ". date_part_extract($value, 'day'));
 
-    $this->assertEqual(TRUE, date_is_valid($value), "Test date_is_valid(". $value .")");
+    $this->assertEqual(FALSE, date_is_valid($value), "Test date_is_valid(". $value .")");
     $value = '2007-00-00 00:00';
     $this->assertNotEqual(TRUE, date_is_valid($value), "Test for invalid date_is_valid(". $value .")");
     $value = '0000-00-00 00:00';
@@ -46,13 +46,13 @@ class DateAPITestCase extends DrupalWebTestCase {
     $this->assertEqual(TRUE, date_is_valid($value, DATE_ISO), "Test ISO exception to date_is_valid(". $value .", DATE_ISO)");
 
     $expected = 28;
-    $value = date_days_in_month(2, 2005);
+    $value = date_days_in_month(2005, 2);
     $this->assertEqual($expected, $value, 'Test date_days_in_month(2, 2005), results '.$value);
     $expected = 29;
-    $value = date_days_in_month(2, 2004);
+    $value = date_days_in_month(2004, 2);
     $this->assertEqual($expected, $value, 'Test date_days_in_month(2, 2004), results '.$value);
     $expected = 28;
-    $value = date_days_in_month(2, 2003);
+    $value = date_days_in_month(2003, 2);
     $this->assertEqual($expected, $value, 'Test date_days_in_month(2, 2003), results '.$value);
 
     $dates = array(
