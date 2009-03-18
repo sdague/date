@@ -211,7 +211,7 @@ function date_tools_wizard_form() {
     '#title' => t('Date field type'),
     );
   $form['widget_type'] = array(
-    '#type' => 'radios',
+    '#type' => 'select',
     '#options' => date_tools_wizard_widget_types(),
     '#default_value' => 'date_select',
     '#title' => t('Date widget type'),
@@ -221,6 +221,7 @@ function date_tools_wizard_form() {
     '#options' => date_granularity_names(),
     '#default_value' => array('month', 'day', 'year', 'hour', 'minute'),
     '#title' => t('Granularity'),
+    '#multiple' => TRUE,
     );  
   $form['tz_handling'] = array(
     '#type' => 'value',
@@ -274,14 +275,21 @@ function date_tools_wizard_form_validate(&$form, &$form_state) {
   if (db_result(db_query("SELECT field_name FROM {content_node_field_instance} WHERE field_name='%s' AND type_name='%s'", $field_name, $type_name))) {
     form_set_error('field_name', t('This field name already exists.'));
   }
+  if (!date_has_time($form_state['values']['granularity']) && $form_state['values']['tz_handling'] != 'none') {
+    form_set_error('tz_handling', t('Timezone handling must be none for granularity without time.'));
+  }
 }
 
 function date_tools_wizard_form_submit(&$form, &$form_state) {
   $view_name = date_tools_wizard_build($form_state['values']);
   menu_rebuild();
-  drupal_set_message(t('Change the calendar as needed and save the view.'), 'error');
-  $form['#redirect'] = 'admin/build/views/edit/'. $view_name;
-  //$form['#redirect'] = 'admin/content/node-type/'. str_replace('_', '-', $form_state['values']['type_name']) .'/fields';
+  if (!empty($view_name)) {
+    drupal_set_message(t('Change the calendar as needed and save the view.'), 'error');
+    $form['#redirect'] = 'admin/build/views/edit/'. $view_name;
+  }
+  else {
+    $form['#redirect'] = 'admin/content/node-type/'. str_replace('_', '-', $form_state['values']['type_name']) .'/fields';
+  }
 }
 
 function date_tools_wizard_build($form_values) {
@@ -327,7 +335,7 @@ function date_tools_wizard_build($form_values) {
     $location_field = date_tools_wizard_create_location_field($type_name);
     $location_field_name = $location_field['field_name'];
   }
-  
+  $view_name = '';
   if (!empty($calendar)) {
     $view_name = date_tools_wizard_create_calendar($name, $type_name, $date_field, $location_field);
     if (!empty($blocks)) {
@@ -526,7 +534,7 @@ function date_tools_wizard_disabled_modules($options = array()) {
 function date_tools_wizard_field_types() {
   $field_types = array();  
   foreach (date_field_info() as $name => $info) {
-    $field_types[$name] = $info['label'] .' - '. $info['description'];
+    $field_types[$name] = $info['label']; //.' - '. $info['description'];
   }
   return $field_types;  
 }
@@ -534,7 +542,7 @@ function date_tools_wizard_field_types() {
 function date_tools_wizard_widget_types() {
   $widget_types = array();  
   foreach (date_widget_info() as $name => $info) {
-    if (!strstr($name, '_repeat') && $name != 'date_text') {
+    if (!strstr($name, '_repeat')) {
       $widget_types[$name] = $info['label'];
     }
   }
@@ -573,6 +581,7 @@ function date_tools_wizard_create_content_type($name, $type_name, $description, 
     'custom' => '1',
     'modified' => '1',
     'locked' => '0',
+    'url_str' => str_replace('_', '-', $type_name),
   );
   
   // Allow overrides of these values.
@@ -667,8 +676,8 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
     'label_position' => 'above',
   );
   
-  $overrides = $base_overrides + $overrides;
-  $overrides['widget'] = $widget_overrides + $overrides['widget'];
+  $overrides = array_merge($base_overrides, $overrides);
+  $overrides['widget'] = array_merge($widget_overrides, $overrides['widget']);
     
   // Get field default values for this combination of field and widget type,
   // using a helper function in the Date module.
