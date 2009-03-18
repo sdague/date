@@ -15,7 +15,7 @@ function date_tools_help($section, $arg) {
         drupal_set_message(t('The following modules are required for the wizard to work:') .'<ul><li>'. implode('</li><li>', $disabled_modules) .'</li></ul>', 'error');
       }
       $output =        
-      t('Fill out the following form to auto-create a date content type, with a datetime field and matching pre-configured calendar. A calendar and upcoming events block will be created, an ical feed will be added to the calendar, and the mini calendar, calendar legend, and upcoming events blocks will be added to the sidebar of the default theme. Nodes created from this new content type will include a link to the calendar, and the calendar will have a link to the \'add new date\' form. If the Signup module is enabled, Signups will also be enabled for this field.') .
+      t('Fill out the following form to auto-create a date content type, with a datetime field and matching pre-configured calendar. A calendar and upcoming events block will be created, an ical feed will be added to the calendar, and the mini calendar, calendar legend, and upcoming events blocks will be added to the sidebar of the default theme. Nodes created from this new content type will include a link to the calendar, and the calendar will have a link to the \'add new date\' form. If the Signup module is enabled, Signups will also be enabled for this field. You can also add new date fields to an existing content type by entering the existing content type name instead of creating a new one.') .
       '</p><p>'.
       t('Only a limited set of options are displayed here to make this easy to set up. Once the date has been created you will be able to make other changes to the date settings and add other fields to your new content type on the Manage fields screen, and make changes to the calendar on the Views edit page.') .
       '</p>';
@@ -173,68 +173,85 @@ function date_tools_remove_form_submit($form, &$form_state) {
 function date_tools_wizard_form() {
   
   $form = array();
-  $form['type_name'] = array(
+  $form['type'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Content type'),
+    );
+  $form['type']['type_name'] = array(
     '#type' => 'textfield',
     '#default_value' => 'date',
     '#title' => t('Content type name'),
-    '#description' => t('Machine-readable name. Allowed values: (a-z, 0-9, _). Must not be an existing content type name.'),
+    '#description' => t('Machine-readable name. Allowed values: (a-z, 0-9, _). If this is not an existing content type, the content type will be created.'),
     ); 
-  $form['name'] = array(
+  $form['type']['name'] = array(
     '#type' => 'textfield',
     '#default_value' => t('Date'),
     '#title' => t('Content type label'),
-    '#description' => t('The human-readable name for this content type.'),
+    '#description' => t('The human-readable name for this content type. Only needed when creating a new content type.'),
     ); 
-  $form['type_description'] = array(
+  $form['type']['type_description'] = array(
     '#type' => 'textarea',
     '#default_value' => t('A date content type that is linked to a Views calendar.'),
     '#title' => t('Content type description'),
+    '#description' => t('A description for the content type. Only needed when creating a new content type.'),
     );      
-  $form['field_name'] = array(
+  $form['field'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Date field'),
+    );
+  $form['field']['field_name'] = array(
     '#type' => 'textfield',
     '#default_value' => 'date',
     '#field_prefix' => 'field_',
     '#title' => t('Date field name'),
     '#description' => t('Machine-readable name. Allowed values: (a-z, 0-9, _) Must not be an existing field name.'),
     );
-  $form['label'] = array(
+  $form['field']['label'] = array(
     '#tree' => TRUE,
     '#type' => 'textfield',
     '#default_value' => t('Date'),
     '#title' => t('Date field label'),
     '#description' => t('The human-readable label for this field.'),
     );
-  $form['field_type'] = array(
-    '#type' => 'value',
-    '#options' => date_tools_wizard_field_types(),
-    '#default_value' => 'datetime',
-    '#title' => t('Date field type'),
-    );
-  $form['widget_type'] = array(
+  $form['field']['widget_type'] = array(
     '#type' => 'select',
     '#options' => date_tools_wizard_widget_types(),
     '#default_value' => 'date_select',
     '#title' => t('Date widget type'),
     );
-  $form['granularity'] = array(
-    '#type' => 'value',
-    '#options' => date_granularity_names(),
-    '#default_value' => array('month', 'day', 'year', 'hour', 'minute'),
-    '#title' => t('Granularity'),
-    '#multiple' => TRUE,
-    );  
-  $form['tz_handling'] = array(
-    '#type' => 'value',
-    '#options' => date_tools_wizard_tz_handling(),
-    '#default_value' => 'site',
-    '#title' => t('Date timezone handling'),
-    );
-  $form['repeat'] = array(
+  $form['field']['repeat'] = array(
     '#type' => 'select',
     '#default_value' => 0,
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#title' => t('Show repeating date options'),
     );  
+  $form['field']['advanced'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#title' => t('Advanced options'),
+    );
+  $form['field']['advanced']['field_type'] = array(
+    '#type' => 'select',
+    '#options' => date_tools_wizard_field_types(),
+    '#default_value' => 'datetime',
+    '#title' => t('Date field type'),
+    '#description' => t("The recommend type is datetime except for historical dates or dates with only year or month granularity."),
+    );
+  $form['field']['advanced']['granularity'] = array(
+    '#type' => 'select',
+    '#options' => date_granularity_names(),
+    '#default_value' => array('month', 'day', 'year', 'hour', 'minute'),
+    '#title' => t('Granularity'),
+    '#multiple' => TRUE,
+    );  
+  $form['field']['advanced']['tz_handling'] = array(
+    '#type' => 'select',
+    '#options' => date_tools_wizard_tz_handling(),
+    '#default_value' => 'site',
+    '#title' => t('Date timezone handling'),
+    '#description' => t("Timezone handling should be set to 'none' for granularity without time elements.")
+    );
   $form['calendar'] = array(
     '#type' => 'select',
     '#default_value' => 1,
@@ -270,7 +287,7 @@ function date_tools_wizard_form_validate(&$form, &$form_state) {
   $type_name = $form_state['values']['type_name'];
   $field_name = 'field_'. $form_state['values']['field_name'];
   if (db_result(db_query("SELECT type FROM {node_type} WHERE type='%s'", $type_name))) {
-    form_set_error('type_name', t('This content type name already exists.'));
+    drupal_set_message(t('This content type name already exists, adding new field to existing content type.'));
   }
   if (db_result(db_query("SELECT field_name FROM {content_node_field_instance} WHERE field_name='%s' AND type_name='%s'", $field_name, $type_name))) {
     form_set_error('field_name', t('This field name already exists.'));
@@ -301,6 +318,10 @@ function date_tools_wizard_build($form_values) {
     $widget_type .= '_repeat';
   }
   
+  // Create a node type if it doesn't already exist.
+  // This makes it possible to add additional date fields to 
+  // an existing type.
+  $types = node_get_types('names');
   $type_settings = array();
   if (!empty($signup)) {
     $type_settings['signup_node_default_state'] = 'enabled_on';
@@ -309,8 +330,20 @@ function date_tools_wizard_build($form_values) {
     variable_set("signup_date_field_$type_name", $field_name);
     variable_set('signup_node_default_state_'. $type_name, 'enabled_on');
   }
-  
-  date_tools_wizard_create_content_type($name, $type_name, $type_description, $type_settings);
+  if (!array_key_exists($type_name, $types)) {
+    date_tools_wizard_create_content_type($name, $type_name, $type_description, $type_settings);
+  }
+  else {
+    $types = node_get_types();
+    $type = $types[$type_name];
+    if (!empty($type_settings)) {
+      foreach ($type_settings as $key => $setting) {
+        $type->$key = $setting;
+      }
+      node_type_save($type);
+    }
+    $name = $type->name;
+  }
   
   $field_settings = array(
     'field_name' => $field_name,
