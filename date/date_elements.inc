@@ -458,7 +458,7 @@ function date_combo_validate($element, &$form_state) {
     $from_date = date_input_value($field, $element[$from_field]);
     $to_date = date_input_value($field, $element[$to_field]);
     
-    if ($from_date > $to_date) {
+    if (!empty($field['todate']) && $from_date > $to_date) {
       form_set_value($element[$to_field], $to_date, $form_state);
       $errors[] = t('The To date must be greater than the From date.');
     }
