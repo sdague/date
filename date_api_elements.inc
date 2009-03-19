@@ -131,14 +131,15 @@ function date_timezone_process($element, $edit, $form_state, $form) {
 function date_text_process($element, $edit, $form_state, $form) {
   $date = NULL;
   $granularity = date_format_order($element['#date_format']);
-  if (!empty($edit)) {
+  
+  if (!empty($edit) && !empty($edit['date'])) {
     $datetime = date_convert_from_custom($edit['date'], $element['#date_format']);
     $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
-
+  
   $element['#tree'] = TRUE;
 
   $element['date']['#type'] = 'textfield';

@@ -769,7 +769,11 @@ function date_now($timezone = NULL) {
  *    dates so they pass validation and don't get reset to 'now'.
  */
 function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granularity = array('year', 'month', 'day', 'hour', 'minute')) {
-  
+  // No value or one that can't be used.
+  if (empty($date) || is_array($date)) {
+    return NULL;
+  }
+
   // Special handling for partial dates that don't need precision.
   $max_granularity = array_pop($granularity);
   if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {

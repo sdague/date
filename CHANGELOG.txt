@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #398258 Fix problems handling blank text widget values and general form processing cleanup.
 - #405408 Update simpletests.
 - #397420 Fix miscalculation errors in date_difference.
 - #360967 Add method for deleting a custom default calendar.
