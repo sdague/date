@@ -787,7 +787,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
   if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  if (!date_is_valid($date, $type, $granularity) || empty($date)) {
+  if (!date_is_valid($date, $type, $granularity)) {
     $date = 'now';
   }
   if (!empty($timezone) && !empty($date)) {

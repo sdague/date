@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #354989 Make sure year-only date does not regress to YYYY-00-00 00:00:00, which will end up as previous year.
 - #398258 Fix problems handling blank text widget values and general form processing cleanup.
 - #405408 Update simpletests.
 - #397420 Fix miscalculation errors in date_difference.
