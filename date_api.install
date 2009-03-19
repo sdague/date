@@ -55,7 +55,7 @@ function date_api_schema() {
       'type' => array(
         'description' => 'The date format type, e.g. medium.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 200,
         'not null' => TRUE,
       ),
       'title' => array(
@@ -87,13 +87,13 @@ function date_api_schema() {
       'format' => array(
         'description' => 'The date format string.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 100,
         'not null' => TRUE,
       ),
       'type' => array(
         'description' => 'The date format type, e.g. medium.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 200,
         'not null' => TRUE,
       ),
       'locked' => array(
@@ -105,7 +105,7 @@ function date_api_schema() {
       ),
     ),
     'primary key' => array('dfid'),
-    'unique keys' => array('format' => array('format')),
+    'unique keys' => array('format' => array('format', 'type')),
   );
 
   $schema['date_format_locale'] = array(
@@ -114,13 +114,13 @@ function date_api_schema() {
       'format' => array(
         'description' => 'The date format string.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 100,
         'not null' => TRUE,
       ),
       'type' => array(
         'description' => 'The date format type, e.g. medium.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 200,
         'not null' => TRUE,
       ),
       'language' => array(
@@ -380,7 +380,7 @@ function date_api_update_6002() {
       ),
     ),
     'primary key' => array('dfid'),
-    'unique keys' => array('format' => array('format')),
+    'unique keys' => array('format' => array('format', 'type')),
   );
 
   $schema['date_format_locale'] = array(
@@ -409,5 +409,17 @@ function date_api_update_6002() {
   db_create_table($ret, 'date_format', $schema['date_format']);
   db_create_table($ret, 'date_format_locale', $schema['date_format_locale']);
 
+  return $ret;
+}
+
+function date_api_update_6003() {
+  $ret = array();
+  db_change_field($ret, 'date_format_types', 'type', 'type', array('type' => 'varchar', 'length' => 200, 'not null' => TRUE));
+  db_change_field($ret, 'date_format', 'type', 'type', array('type' => 'varchar', 'length' => 200, 'not null' => TRUE));
+  db_change_field($ret, 'date_format', 'format', 'format', array('type' => 'varchar', 'length' => 100, 'not null' => TRUE));
+  db_change_field($ret, 'date_format_locale', 'type', 'type', array('type' => 'varchar', 'length' => 200, 'not null' => TRUE));
+  db_change_field($ret, 'date_format_locale', 'format', 'format', array('type' => 'varchar', 'length' => 100, 'not null' => TRUE));
+  db_drop_unique_key($ret, 'date_format', 'format');
+  db_add_unique_key($ret, 'date_format', 'format', array('format', 'type'));
   return $ret;
 }

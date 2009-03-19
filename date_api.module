@@ -1859,7 +1859,7 @@ function date_format_save($date_format) {
     drupal_write_record('date_format', $format);
   }
   else {
-    drupal_write_record('date_format', $format, 'format');
+    drupal_write_record('date_format', $format, array('format', 'type'));
   }
 
   $languages = language_list('enabled');

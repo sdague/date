@@ -131,6 +131,13 @@ function date_api_date_format_form_elements(&$form) {
   }
 }
 
+function date_api_date_time_settings_validate($form, &$form_state) {
+  $formats = date_get_formats('custom');
+  if (!empty($formats) && in_array($form_state['values']['add_date_format'], array_keys($formats))) {
+    form_set_error('add_date_format', t('This format already exists.  Please enter a unique format string.'));
+  }
+}
+
 function date_api_date_time_settings_submit($form, &$form_state) {
   if (!empty($form_state['values']['add_date_format'])) {
     $format = array();
