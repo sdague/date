@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #385880 Add non-node date handling for Views arguments and filters.
 - #400992 Add time and datetime tokens.
 - #408176 Fix token handling of empty values.
 - #399180 Test for Views tables before uninstalling them.

@@ -122,26 +122,31 @@ function date_api_views_plugins() {
 function date_api_views_data() {
   $data = array();
   
-  // The flexible date argument.
-  $data['node']['date_argument'] = array(
-    'group' => t('Date'),
-    'title' => t('Date'),
-    'help' => t('Filter any Views date field by a date argument, using any common ISO date/period format (i.e. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, etc).'),
-    'argument' => array(
-      'handler' => 'date_api_argument_handler',
-      'empty name field' => t('Undated'),
-    ),
-  );  
-  // The flexible date filter.
-  $data['node']['date_filter'] = array(
-    'group' => t('Date'),
-    'title' => t('Date'),
-    'help' => t('Filter any Views date field.'),
-    'filter' => array(
-      'handler' => 'date_api_filter_handler',
-      'empty name field' => t('Undated'),
-    ),
-  ); 
+  // TODO Try to get date filters and arguments working on non-nodes.
+  $tables = array('node', 'users', 'comments');
+  //$tables = array('node');
+  foreach ($tables as $base_table) {
+    // The flexible date argument.
+    $data[$base_table]['date_argument'] = array(
+      'group' => t('Date'),
+      'title' => t('Date'),
+      'help' => t('Filter any Views date field by a date argument, using any common ISO date/period format (i.e. YYYY, YYYY-MM, YYYY-MM-DD, YYYY-W99, YYYY-MM-DD--P3M, P90D, etc).'),
+      'argument' => array(
+        'handler' => 'date_api_argument_handler',
+        'empty name field' => t('Undated'),
+      ),
+    );  
+    // The flexible date filter.
+    $data[$base_table]['date_filter'] = array(
+      'group' => t('Date'),
+      'title' => t('Date'),
+      'help' => t('Filter any Views date field.'),
+      'filter' => array(
+        'handler' => 'date_api_filter_handler',
+        'empty name field' => t('Undated'),
+      ),
+    ); 
+  }
   return $data;
 }
 
