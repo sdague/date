@@ -264,6 +264,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
     
     $type = $this->options['form_type'];
+    if ($type == 'date_popup' && !module_exists('date_popup')) {
+      $type = 'date_text';
+    }
     $format = $this->date_handler->views_formats($this->options['granularity'], 'sql');
     $granularity = array_keys($this->date_handler->date_parts($this->options['granularity']));
     
