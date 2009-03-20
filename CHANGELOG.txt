@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #408176 Fix token handling of empty values.
 - #399180 Test for Views tables before uninstalling them.
 - #369811 Fix problems with duplicate date formats in new format system.
 - #354989 Make sure year-only date does not regress to YYYY-00-00 00:00:00, which will end up as previous year.

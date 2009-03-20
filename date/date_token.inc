@@ -39,25 +39,25 @@ function date_token_values($type, $object = NULL) {
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone_name();
     $timezone_db = !empty($item['timezone_db']) ? $item['timezone_db'] : 'UTC';
     $date = date_make_date($item['value'], $timezone_db, $item_type);
-    if ($timezone_db != $timezone) {
+    if (!empty($date) && $timezone_db != $timezone) {
       date_timezone_set($date, timezone_open($timezone));
     }
         
     $tokens['value']          = $item['value'];
     $tokens['view']           = $item['view'];
-    $tokens['timestamp']      = date_format_date($date, 'custom', 'U');
-    $tokens['yyyy']           = date_format_date($date, 'custom', 'Y');
-    $tokens['yy']             = date_format_date($date, 'custom', 'y');
-    $tokens['month']          = date_format_date($date, 'custom', 'F');
-    $tokens['mon']            = date_format_date($date, 'custom', 'M');
-    $tokens['mm']             = date_format_date($date, 'custom', 'm');
-    $tokens['m']              = date_format_date($date, 'custom', 'n');
-    $tokens['ww']             = date_format_date($date, 'custom', 'W');
-    $tokens['date']           = date_format_date($date, 'custom', DATE_FORMAT_DATE);
-    $tokens['day']            = date_format_date($date, 'custom', 'l');
-    $tokens['ddd']            = date_format_date($date, 'custom', 'D');
-    $tokens['dd']             = date_format_date($date, 'custom', 'd');
-    $tokens['d']              = date_format_date($date, 'custom', 'j');
+    $tokens['timestamp']      = !empty($date) ? date_format_date($date, 'custom', 'U') : '';
+    $tokens['yyyy']           = !empty($date) ? date_format_date($date, 'custom', 'Y') : '';
+    $tokens['yy']             = !empty($date) ? date_format_date($date, 'custom', 'y') : '';
+    $tokens['month']          = !empty($date) ? date_format_date($date, 'custom', 'F') : '';
+    $tokens['mon']            = !empty($date) ? date_format_date($date, 'custom', 'M') : '';
+    $tokens['mm']             = !empty($date) ? date_format_date($date, 'custom', 'm') : '';
+    $tokens['m']              = !empty($date) ? date_format_date($date, 'custom', 'n') : '';
+    $tokens['ww']             = !empty($date) ? date_format_date($date, 'custom', 'W') : '';
+    $tokens['date']           = !empty($date) ? date_format_date($date, 'custom', DATE_FORMAT_DATE) : '';
+    $tokens['day']            = !empty($date) ? date_format_date($date, 'custom', 'l') : '';
+    $tokens['ddd']            = !empty($date) ? date_format_date($date, 'custom', 'D') : '';
+    $tokens['dd']             = !empty($date) ? date_format_date($date, 'custom', 'd') : '';
+    $tokens['d']              = !empty($date) ? date_format_date($date, 'custom', 'j') : '';
 
     if (!empty($item['value2'])) {
 
@@ -69,19 +69,19 @@ function date_token_values($type, $object = NULL) {
 
       $tokens['to-value']          = $item['value2'];
       $tokens['to-view']           = $item['view'];
-      $tokens['to-timestamp']      = date_format_date($date, 'custom', 'U');
-      $tokens['to-yyyy']           = date_format_date($date, 'custom', 'Y');
-      $tokens['to-yy']             = date_format_date($date, 'custom', 'y');
-      $tokens['to-month']          = date_format_date($date, 'custom', 'F');
-      $tokens['to-mon']            = date_format_date($date, 'custom', 'M');
-      $tokens['to-mm']             = date_format_date($date, 'custom', 'm');
-      $tokens['to-m']              = date_format_date($date, 'custom', 'n');
-      $tokens['to-ww']             = date_format_date($date, 'custom', 'W');
-      $tokens['to-date']           = date_format_date($date, 'custom', DATE_FORMAT_DATE);
-      $tokens['to-day']            = date_format_date($date, 'custom', 'l');
-      $tokens['to-ddd']            = date_format_date($date, 'custom', 'D');
-      $tokens['to-dd']             = date_format_date($date, 'custom', 'd');
-      $tokens['to-d']              = date_format_date($date, 'custom', 'j');
+      $tokens['to-timestamp']      = !empty($date) ? date_format_date($date, 'custom', 'U') : '';
+      $tokens['to-yyyy']           = !empty($date) ? date_format_date($date, 'custom', 'Y') : '';
+      $tokens['to-yy']             = !empty($date) ? date_format_date($date, 'custom', 'y') : '';
+      $tokens['to-month']          = !empty($date) ? date_format_date($date, 'custom', 'F') : '';
+      $tokens['to-mon']            = !empty($date) ? date_format_date($date, 'custom', 'M') : '';
+      $tokens['to-mm']             = !empty($date) ? date_format_date($date, 'custom', 'm') : '';
+      $tokens['to-m']              = !empty($date) ? date_format_date($date, 'custom', 'n') : '';
+      $tokens['to-ww']             = !empty($date) ? date_format_date($date, 'custom', 'W') : '';
+      $tokens['to-date']           = !empty($date) ? date_format_date($date, 'custom', DATE_FORMAT_DATE) : '';
+      $tokens['to-day']            = !empty($date) ? date_format_date($date, 'custom', 'l') : '';
+      $tokens['to-ddd']            = !empty($date) ? date_format_date($date, 'custom', 'D') : '';
+      $tokens['to-dd']             = !empty($date) ? date_format_date($date, 'custom', 'd') : '';
+      $tokens['to-d']              = !empty($date) ? date_format_date($date, 'custom', 'j') : '';
     }
     return $tokens;
   }
