@@ -30,6 +30,7 @@ function _date_api_fields($base = 'node') {
     $type = '';
     
     // For cck fields, get the date type.
+    $custom = array();
     if (isset($handler->content_field)) {
       if ($handler->content_field['type'] == 'date') {
         $type = 'cck_string';
