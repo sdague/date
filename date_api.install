@@ -208,11 +208,14 @@ function date_api_uninstall() {
     variable_del($variable);
   }
 
-  $displays = array(
-    'date_nav', 
+  if (db_table_exists('views_display')) {
+    $displays = array(
+      'date_nav', 
     );
-  db_query("DELETE FROM {views_display} WHERE display_plugin IN ('". implode("','", $displays) ."')");
-  db_query("DELETE FROM {cache_views}");
+    db_query("DELETE FROM {views_display} WHERE display_plugin IN ('". implode("','", $displays) ."')");
+    db_query("DELETE FROM {cache_views}");
+  }
+
   drupal_uninstall_schema('date_api');
   return $ret;
 }
