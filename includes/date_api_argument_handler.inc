@@ -276,8 +276,18 @@ class date_api_argument_handler extends views_handler_argument_date {
   function query() {
     $block_identifier = date_block_identifier($this->view);
     if (!empty($this->view->block_identifier) || isset($_GET[$block_identifier])) {
+      // Retrieve the block arguments in a way that will work for
+      // urls like user/%/calendar/2009-04.
       if (!empty($_GET[$block_identifier])) {
-        $mini_args = explode('/', str_replace($this->view->get_path() .'/', '', $_GET[$block_identifier]));
+        $path_args = explode('/', $this->view->get_path());
+        $mini_args = explode('/', $_GET[$block_identifier]);
+        foreach ($path_args as $pos => $key) {
+          if ($path_args[$pos] != '%') {
+            unset($mini_args[$pos]);
+          }
+        }
+        // Get rid of gaps in the array caused by embedded args.
+        $mini_args = array_values($mini_args);
         $this->view->args = $mini_args;
       }
       $i = 0;
@@ -289,7 +299,6 @@ class date_api_argument_handler extends views_handler_argument_date {
         $i++;
       }
     }
-    
     $parts = $this->date_handler->arg_parts($this->argument);
     
     foreach ($parts as $type) {

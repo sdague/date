@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+= #406876 Adapt Views block argument handling to adapt to arguments like user/%/calendar/2009-05.
 - #385880 Add non-node date handling for Views arguments and filters.
 - #400992 Add time and datetime tokens.
 - #408176 Fix token handling of empty values.
