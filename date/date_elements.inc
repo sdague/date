@@ -358,6 +358,18 @@ function date_combo_process($element, $edit, &$form_state, $form) {
   return $element;
 }
 
+function date_element_empty($element, &$form_state) {
+  $item = array();
+  $item['value'] = NULL;
+  $item['value2']   = NULL;
+  $item['timezone']   = NULL;
+  $item['offset'] = NULL;
+  $item['offset2'] = NULL;
+  $item['rrule'] = NULL;
+  form_set_value($element, $item, $form_state);
+  return $item;
+}
+
 /**
  * Validate and update a combo element.
  * Don't try this if there were errors before reaching this point.
@@ -409,17 +421,15 @@ function date_combo_validate($element, &$form_state) {
     }
   }
   if ($empty) {
-    $item[$from_field] = NULL;
-    $item[$to_field]   = NULL;
-    $item[$tz_field]   = NULL;
-    $item[$offset_field] = NULL;
-    $item[$offset_field2] = NULL;
-    form_set_value($element, $item, $form_state);
+    $item = date_element_empty($element, $form_state);
     if (!$element['#required']) {
       return;
     }
   }
-  else {
+  // Don't look for further errors if errors are already flagged
+  // because otherwise we'll show errors on the nested elements
+  // more than once.
+  elseif (!form_get_errors()) {
                 
     // Check todate input for blank values and substitute in fromdate
     // values where needed, then re-compute the todate with those values.
@@ -463,7 +473,13 @@ function date_combo_validate($element, &$form_state) {
       $to_date = $from_date;
     }
     
-    if (!empty($field['todate']) && $from_date > $to_date) {
+    // Neither the from date nor the to date should be empty at this point
+    // unless they held values that couldn't be evaluated.
+    if (!$field['required'] && (empty($from_date) || empty($to_date))) {
+      $item = date_element_empty($element, $form_state);
+      $errors[] = t('The dates are invalid.');
+    }
+    elseif (!empty($field['todate']) && $from_date > $to_date) {
       form_set_value($element[$to_field], $to_date, $form_state);
       $errors[] = t('The To date must be greater than the From date.');
     }
