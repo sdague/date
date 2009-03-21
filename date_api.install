@@ -340,7 +340,7 @@ function date_api_update_6002() {
     'fields' => array(
       'type' => array(
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 200,
         'not null' => TRUE,
       ),
       'title' => array(
@@ -367,12 +367,12 @@ function date_api_update_6002() {
       ),
       'format' => array(
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 100,
         'not null' => TRUE,
       ),
       'type' => array(
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 200,
         'not null' => TRUE,
       ),
       'locked' => array(
@@ -395,7 +395,7 @@ function date_api_update_6002() {
       ),
       'type' => array(
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 200,
         'not null' => TRUE,
       ),
       'language' => array(
