@@ -327,7 +327,13 @@ function date_parts_element($element, $date, $format) {
       }
     }
   }
-
+ 
+  // Views exposed filters are treated as submitted even if not,
+  // so force the #default value in that case.  
+  if (!empty($element[$field]['#force_value'])) {
+    $sub_element[$field]['#value'] = $sub_element[$field]['#default_value'];
+  }
+  
   if (($hours_format == 'g' || $hours_format == 'h') && date_has_time($granularity)) {
     $sub_element['ampm'] = array(
       '#type' => 'select',

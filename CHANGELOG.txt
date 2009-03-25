@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #411496 Select widget in Views was not getting forced to the right value when using 'now+' defaults.
 - #395156 Hide errors during multiple passes of date_format creation.
 - #395156 Update new format table definitions to be sure indexes are not too long for MYSQL to create the tables.
 - #365771 Make sure date filter doesn't try to use Date popup widget if that module is disabled.
