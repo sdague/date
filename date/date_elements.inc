@@ -257,6 +257,10 @@ function _date_elements() {
  * Process an individual date element.
  */
 function date_combo_process($element, $edit, &$form_state, $form) {
+  if (isset($element['#access']) && empty($element['#access'])) {
+    return;
+  }
+
   $field_name = $element['#field_name'];
   $field = $form['#field_info'][$field_name];
   $delta = $element['#delta'];
@@ -336,7 +340,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     $element[$from_field]['#description'] = $description;
   }
   
-  // Creat label for error messages that make sense in multiple values
+  // Create label for error messages that make sense in multiple values
   // and when the title field is left blank.
   if (!empty($field['multiple']) && empty($field['repeat'])) {
     $element[$from_field]['#date_title'] = t('@field_name From date value #@delta', array('@field_name' => $field['widget']['label'], '@delta' => $delta + 1));
