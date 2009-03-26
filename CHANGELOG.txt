@@ -4,6 +4,9 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Broke un-exposed filters when fixing exposed filters, fixing them again.
+- Non-node date fields need better descriptions and field limits.
+
 Version 6.2.1
 =============
 - #411496 Select widget in Views was not getting forced to the right value when using 'now+' defaults.
