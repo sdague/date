@@ -10,6 +10,10 @@
  *    the hook_date_api_fields() for the core date fields.
  */
 function _date_api_fields($base = 'node') {
+  // Make sure $base is never empty.
+  if (empty($base)) {
+    $base = 'node';
+  }
   $cid = 'date_api_fields_'. $base;
   cache_clear_all($cid, 'cache_views');
   
