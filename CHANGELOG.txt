@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #409476 Make sure empty UNTIL date is not parsed into RRULE.
 - Make sure $base is never empty when identifying date fields for date filter and argument.
 - #317105 Update Isreal DST rules.
 - #408770 Abort date_combo processing when user has no #access.
