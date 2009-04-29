@@ -138,12 +138,14 @@ if (!function_exists('date_format')) {
               $date_string .= $dow;
             }
             elseif ($c == 'l') {
-              $days = date_week_days();
-             $date_string .= $days[$dow];
+              $days = date_week_days_untranslated();
+              $date_string .= $days[$dow];
             }
             elseif ($c == 'D') {
+              // There is no date_week_days_abbr_untranslated(). 
+              // This rule works for English, untranslated day names.
               $days = date_week_days_abbr();
-              $date_string .= $days[$dow];
+              $date_string .= substr($days[$dow], 0, 3);
             }
             break;
           case 'L':
@@ -151,8 +153,8 @@ if (!function_exists('date_format')) {
             break;
           case 'z':
             $date_string .= date_calc_julian_date(date_part_extract($date->value, 'day'),
-              date_part_extract($date->value, 'month'),
-              date_part_extract($date->value, 'year'));
+            date_part_extract($date->value, 'month'),
+            date_part_extract($date->value, 'year'));
             break;
           case 'N':
             $w = date_date('w', $timestamp, $date->timezone);
@@ -172,10 +174,10 @@ if (!function_exists('date_format')) {
             $date_string .= sprintf('%s%02d:%02d', (date_offset_get($date) < 0 ? '-' : '+'), abs(date_offset_get($date) / 3600), abs(date_offset_get($date) % 3600) / 60);
             break;
           case 'e':
-            $date .= $date->timezone;
+            $date_string .= $date->timezone;
             break;
           case 'Z':
-            $date .= date_offset_get($date);
+            $date_string .= date_offset_get($date);
             break;
           case '\\':
             $date_string .= $format[++$i];

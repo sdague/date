@@ -692,7 +692,7 @@ function date_format_date($date, $type = 'medium', $format = '', $langcode = NUL
       // The timezone name translations can use t().  
       case 'e':
       case 'T':
-        $datestring .= t($c);
+        $datestring .= t(date_format($date, $c));
         break;
       // Remaining date parts need no translation.
       case 'O':
@@ -1529,7 +1529,7 @@ function date_limit_format($format, $granularity) {
         $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[s])';
         break;
       case 'timezone':
-        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[OZPe])';
+        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[TOZPe])';
         break;
     
     }
