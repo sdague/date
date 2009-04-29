@@ -134,7 +134,7 @@ function theme_date_display_combination($element) {
     $output .= '<span class="date-display-single">'. $date1 . $timezone .'</span>';
   }
   // Same day, different times, don't repeat the date but show both From and To times.
-  elseif ($dates['value']['formatted_date'] == $dates['value2']['formatted_date']) {
+  elseif (date_has_time($field['granularity']) && $dates['value']['formatted_date'] == $dates['value2']['formatted_date']) {
     // Replace the original time with the from/to time in the formatted start date.  
     // Make sure that parentheses or brackets wrapping the time will be retained in the
     // final result.
