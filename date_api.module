@@ -2455,3 +2455,10 @@ function date_range_string($years) {
   }
   return $min .':'. $max;
 }
+
+/**
+ * Implement hook_date_api_tables().
+ */
+function date_api_date_api_tables() {
+  return array('node', 'comment', 'users');
+}

@@ -122,9 +122,8 @@ function date_api_views_plugins() {
 function date_api_views_data() {
   $data = array();
   
-  // TODO Try to get date filters and arguments working on non-nodes.
-  $tables = array('node', 'users', 'comments');
-  //$tables = array('node');
+  $tables = module_invoke_all('date_api_tables');
+  
   foreach ($tables as $base_table) {
     // The flexible date argument.
     $data[$base_table]['date_argument'] = array(
