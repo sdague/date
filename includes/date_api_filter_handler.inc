@@ -350,7 +350,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($this->options['date_fields'])) {
       $output = array();
       foreach ($this->options['date_fields'] as $field) {
-        $output[] = $fields['name'][$field]['label'];
+        if (array_key_exists($field, $fields['name'])) {
+          $output[] = $fields['name'][$field]['label'];
+        }
       }
     }
     $field = implode('<br />'. $this->options['date_method'] .' ', $output);

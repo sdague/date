@@ -155,7 +155,8 @@ function date_api_views_data() {
  *  Identify all potential date/timestamp fields and cache the data.
  */
 function date_api_fields($base = 'node', $reset = TRUE) {
-  static $fields;
+  static $fields = array();
+  $empty = array('name' => array(), 'alias' => array());
   require_once('./'. drupal_get_path('module', 'date_api') .'/includes/date_api_fields.inc');
   if (empty($fields[$base]) || $reset) {
     $cid = 'date_api_fields_'. $base;
@@ -166,7 +167,8 @@ function date_api_fields($base = 'node', $reset = TRUE) {
       $fields[$base] = _date_api_fields($base);
     }
   }
-  return $fields[$base];
+  // Make sure that empty values will be arrays in he expected format.
+  return !empty($fields) && !empty($fields[$base]) ? $fields[$base] : $empty;
 }
 
 /**

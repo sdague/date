@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #428828 Make sure date $fields array always has expected format, even when empty.
 - #341463 Repeating date with no To date was missing form label.
 - #404866 Make sure labels are translated.
 - #442526 Add missing space to navigation template.
