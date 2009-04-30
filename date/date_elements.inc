@@ -574,7 +574,7 @@ function theme_date_combo($element) {
   }
   // Group from/to items together in fieldset.
   $fieldset = array(
-    '#title' => $field['widget']['label'] .' '. ($element['#delta'] > 0 ? intval($element['#delta'] + 1) : ''),
+    '#title' => t($field['widget']['label']) .' '. ($element['#delta'] > 0 ? intval($element['#delta'] + 1) : ''),
     '#value' => $element['#children'],
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,

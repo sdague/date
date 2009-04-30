@@ -309,6 +309,7 @@ function date_popup_validate($element, &$form_state) {
   $date_granularity = array_intersect($granularity, array('month', 'day', 'year'));
   $time_granularity = array_intersect($granularity, array('hour', 'minute', 'second'));
   $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
+  $label = t($label);
   
   // If the field is empty and not required, set it to empty and return.
   // If the field is empty and required, set error message and return.
