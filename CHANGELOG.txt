@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #442526 Add missing space to navigation template.
 - #375864 Clean up date_limit_format() to handle more odd formats.
 - #447616 Allow custom tables as well as custom fields to use Date argument and filter.
 - #338253 Fixes to translation of timezone names.

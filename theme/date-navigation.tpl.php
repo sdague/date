@@ -43,7 +43,7 @@
   </div>
   <div class="date-next">&nbsp;
     <?php if (!empty($next_url)) : ?>
-      <span class="next"> <?php print l(($block ? '' : date_t('Next', 'date_nav')) . '»', $next_url, $next_options); ?></span>
+      <span class="next"> <?php print l(($block ? '' : date_t('Next', 'date_nav')) . ' »', $next_url, $next_options); ?></span>
     <?php endif; ?>  
   </div>
 </div>
