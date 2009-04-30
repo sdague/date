@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #414446 Avoid php errors when context is missing.
 - #444272 by Darren Oh, add Date views conversion from Views 1 to Views 2.
 - #428828 Make sure date $fields array always has expected format, even when empty.
 - #341463 Repeating date with no To date was missing form label.
