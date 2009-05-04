@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #369020 Fix bug when finding first or last Mon/Tue/Wed/Thu/Fri/Sat/Sun of month.
 - #427830 Postgres can't handle \T.
 - #414446 Avoid php errors when context is missing.
 - #444272 by Darren Oh, add Date views conversion from Views 1 to Views 2.
