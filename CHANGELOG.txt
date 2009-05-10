@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #381370 Remove escaping for colon and double quote per ical spec.
 - #426810 Fix HTML syntax in advanced help files.
 - #456460 Break out simple themes for date_display_single and date_display_double for easier control by themers of separator and other html.
 - #384258 Fix broken handling of 24 hour time in Date Popup.

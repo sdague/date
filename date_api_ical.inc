@@ -585,10 +585,13 @@ function date_ical_date($ical_date, $to_tz = FALSE) {
  */
 function date_ical_escape_text($text) {
   //$text = strip_tags($text);
-  $text = str_replace('"', '\"', $text);
+  // TODO Per #38130 the iCal specs don't want : and " escaped
+  // but there was some reason for adding this in. Need to watch
+  // this and see if anything breaks.
+  //$text = str_replace('"', '\"', $text);
+  //$text = str_replace(":", "\:", $text);
   $text = str_replace("\\", "\\\\", $text);
   $text = str_replace(",", "\,", $text);
-  $text = str_replace(":", "\:", $text);
   $text = str_replace(";", "\;", $text);
   $text = str_replace("\n", "\n ", $text);
   return trim($text);
