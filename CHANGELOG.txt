@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #423710 Make date navigation more accessible with titles.
 - #424388 Pass #attributes from element to Date Popup.
 - #381370 Remove escaping for colon and double quote per ical spec.
 - #426810 Fix HTML syntax in advanced help files.
