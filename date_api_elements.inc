@@ -305,8 +305,10 @@ function date_parts_element($element, $date, $format) {
       $sub_element[$field]['#theme'] = 'date_textfield_element';
       $sub_element[$field]['#size'] = 7;
       if ($element['#date_label_position'] == 'within') {
-        $sub_element[$field]['#options'] = array(
-          '-'. $label => '-'. $label) + $sub_element[$field]['#options'];
+        if (is_array($sub_element[$field]['#options'])) {
+          $sub_element[$field]['#options'] = array(
+            '-'. $label => '-'. $label) + $sub_element[$field]['#options'];
+        }
         if (empty($sub_element[$field]['#default_value'])) {
           $sub_element[$field]['#default_value'] = '-'. $label;
         }
