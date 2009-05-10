@@ -267,7 +267,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
 
   $spinner_text = array(t('Now'), t('Previous field'), t('Next field'), t('Increment'), t('Decrement'));
   $settings = array(
-    'show24Hours' => strpos($element['#date_format'], 'H') ? TRUE : FALSE,
+    'show24Hours' => strpos($element['#date_format'], 'H') !== FALSE ? TRUE : FALSE,
     'showSeconds' => (in_array('second', $granularity) ? TRUE : FALSE),
     'timeSteps' => array(1, intval($element['#date_increment']), (in_array('second', $granularity) ? $element['#date_increment'] : 0)),
     'spinnerImage' => '',
