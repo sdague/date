@@ -572,6 +572,7 @@ function theme_date_combo($element) {
   if (!$field['todate']) {
     return $element['#children'];
   }
+  
   // Group from/to items together in fieldset.
   $fieldset = array(
     '#title' => t($field['widget']['label']) .' '. ($element['#delta'] > 0 ? intval($element['#delta'] + 1) : ''),
