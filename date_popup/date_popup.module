@@ -245,6 +245,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     '#id' => $id,    
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
+    '#attributes' => $element['#attributes'],
     );
   // Views exposed filters are treated as submitted even if not,
   // so force the #default value in that case.  
