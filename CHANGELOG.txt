@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #444960 Fix Date Tools permissions.
 - #315443 Make sure 'within' labels don't break when used in text fields.
 - #423710 Make date navigation more accessible with titles.
 - #424388 Pass #attributes from element to Date Popup.

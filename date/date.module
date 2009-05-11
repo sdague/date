@@ -262,7 +262,7 @@ function date_theme() {
       'arguments' => array()),
     'date_display_single' => array(
       'arguments' => array('date' => NULL, 'timezone' => NULL)),
-    'date_display_double' => array(
+    'date_display_range' => array(
       'arguments' => array('date1' => NULL, 'date2' => NULL, 'timezone' => NULL)),
     'date_time_ago' => array(
       'arguments' => array('start_date' => NULL, 'end_date' => NULL)),  
