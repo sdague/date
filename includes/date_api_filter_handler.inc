@@ -161,7 +161,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * Add the selectors to the value form using the date handler.
    */
   function value_form(&$form, &$form_state) {
-    
     // We use different values than the parent form, so we must
     // construct our own form element.
     $form['value'] = array();
@@ -411,7 +410,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       }
     }
   }
-
+  
   function date_filter($prefix, $query_field, $operator) {
     $field = $query_field['field'];
     // Handle the simple operators first.
@@ -439,6 +438,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         }
       }
     }
+    
     $this->add_date_field($field);
     $granularity = $this->options['granularity'];
     $date_handler = $query_field['date_handler'];

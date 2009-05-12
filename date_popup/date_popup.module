@@ -201,7 +201,6 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $date_granularity = array_intersect($granularity, array('month', 'day', 'year'));
   $time_granularity = array_intersect($granularity, array('hour', 'minute', 'second'));
   $date_format = (date_limit_format($element['#date_format'], $date_granularity));
-
   if (empty($date_granularity)) return array();
   
   // The datepicker can't handle zero or negative values like 0:+1
