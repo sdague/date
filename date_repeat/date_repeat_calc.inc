@@ -484,10 +484,16 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
       // current month, so we can catch the first of the month.
       date_modify($date, '-1 day');
     }
+    
     if (empty($day)) {
-      $day = 'days';
+      date_modify($date, $direction . $count .' days');
     }
-    date_modify($date, $direction . $count .' '. $day);
+    else {
+      // Use the English text for order, like First Sunday
+      // instead of +1 Sunday to overcome PHP5 bug, (see #369020).
+      $order = date_order();
+      date_modify($date, $order[$direction . $count] .' '. $day);
+    }
     
     // If that takes us outside the current month, don't go there.
     if (date_format($date, 'n') == $current_month) {
@@ -524,10 +530,16 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
       // current year, so we can catch the first of the year.
       date_modify($date, '-1 day');
     }
+    
     if (empty($day)) {
-      $day = 'days';
+      date_modify($date, $direction . $count .' days');
     }
-    date_modify($date, $direction . $count .' '. $day);
+    else {
+      // Use the English text for order, like First Sunday
+      // instead of +1 Sunday to overcome PHP5 bug, (see #369020).
+      $order = date_order();
+      date_modify($date, $order[$direction . $count] .' '. $day);
+    }
     
     // If that takes us outside the current year, don't go there.
     if (date_format($date, 'Y') == $current_year) {

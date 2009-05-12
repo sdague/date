@@ -389,6 +389,14 @@ if (!function_exists('date_modify')) {
   function date_modify(&$date, $change) { 
     $cdate = $date->value;
     $time = substr($date->value, 11, 8);
+   
+    // We have to use strings like 'First Sunday' instead of
+    // +1 Sunday to overcome a PHP5 bug (see #369020).
+    // Swap those values out here and go back to '+1 Sunday',
+    // the code that works in PHP4.
+    $replace = array_flip(date_order());
+    $change = strtr($change, $replace);
+    
     $change = trim($change);   
     //Date is too old for strtotime(), or looking for custom +/- values, use date_calc instead.
     if (substr($change, 0, 1) != '+' && substr($change, 0, 1) != '-'
