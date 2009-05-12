@@ -375,6 +375,21 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     return $output;
   }
  
+   // Views treats the form as though it has already been submitted
+  // even when it hasn't, so we when it is really not submitted we 
+  // have to adjust the values to match what should have been the default.
+  // Overriding exposed_submit() will ensure that the $input value
+  // used by Views has been adjusted to the right value.
+  function exposed_submit(&$form, &$form_state) { 
+    if ($this->force_value) {
+      $default = array();
+      foreach (array('value', 'min', 'max') as $prefix) {
+        $default[$prefix] = $this->default_value($prefix);
+      }
+      $form_state['values'][$this->options['expose']['identifier']] = $default;
+    }
+  }
+   
   /**
    * Custom implementation of query() so we can get the
    * AND and OR methods in the right places.
@@ -386,16 +401,17 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
         $sql = '';
+        $sql_parts = array();
         switch ($this->operator) {
           case 'between':
-            $min = $this->date_filter('min', $query_field, '>=');
-            $max = $this->date_filter('max', $query_field, '<=');
-            $sql = !empty($min) && !empty($max) ? "($min AND $max)" : '';
+            $sql_parts[] = $this->date_filter('min', $query_field, '>=');
+            $sql_parts[] = $this->date_filter('max', $query_field, '<=');
+            $sql = implode(' AND ', array_filter($sql_parts));
             break;
           case 'not between':
-            $min = $this->date_filter('min', $query_field, '<');
-            $max = $this->date_filter('max', $query_field, '>');
-            $sql = !empty($min) && !empty($max) ? "($min OR $max)" : '';
+            $sql_parts[] = $this->date_filter('min', $query_field, '<');
+            $sql_parts[] = $this->date_filter('max', $query_field, '>');
+            $sql = implode(' OR ', array_filter($sql_parts));
             break;
           default:
             $sql = $this->date_filter('value', $query_field, $this->operator);
