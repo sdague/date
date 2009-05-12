@@ -429,8 +429,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // query to match what should have been the default.
     $value_parts = !is_array($this->value[$prefix]) ? array($this->value[$prefix]) : $this->value[$prefix];
     foreach ($value_parts as $part) {
-      if (!empty($this->force_value)) {
-        $this->value[$prefix] = $this->default_value($prefix);
+      $default = $this->default_value($prefix);
+      if (!empty($this->force_value) && !empty($default)) {
+        $this->value[$prefix] = $default;
       }
       else {
         if (empty($part)) {

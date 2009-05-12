@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #432368 Don't force default value in exposed filter if default is empty.
 - #369020 Switch '+1 Sunday' to 'First Sunday' to over PHP5 bug.
 - #444960 Fix Date Tools permissions.
 - #315443 Make sure 'within' labels don't break when used in text fields.
