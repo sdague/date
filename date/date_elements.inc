@@ -193,7 +193,7 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
     $default_value = $field['widget']['default_value2'];
     $default_value_code = $field['widget']['default_value_code2'];
   }
-  if (empty($item[$part])) {
+  if (empty($item) || empty($item[$part])) {
     if (empty($default_value) || $default_value == 'blank' || $delta > 0) {
       return NULL;
     }
@@ -216,7 +216,7 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
   }
   else {
     $value = $item[$part];
-      
+     
     // Special case for ISO dates to create a valid date object for formatting.
     if ($field['type'] == DATE_ISO) {
       $value = date_fuzzy_datetime($value);
@@ -226,6 +226,9 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
       $value = date_convert($value, $field['type'], DATE_DATETIME, $db_timezone);
     }
     $date = date_make_date($value, date_get_timezone_db($field['tz_handling']), DATE_DATETIME, $field['granularity']);
+    if (empty($date)) {
+      return NULL;
+    }
     date_timezone_set($date, timezone_open($timezone));
   }
   if (is_object($date) && empty($item[$part]) && $default_value == 'strtotime' && !empty($default_value_code)) {
