@@ -7,6 +7,7 @@ Version 6.2-dev
 Version 6.2.2
 =============
 
+- Remove date_install_clear() function, a leftover from an earlier version no longer needed.
 - #451858 Fix date_timezone_set() when date is empty while adding new item.
 -  Fix date_limit_format() to be sure the 'T' is stripped out of ISO dates with only date or only time.
 - #432368 Don't force default value in exposed filter if default is empty.
