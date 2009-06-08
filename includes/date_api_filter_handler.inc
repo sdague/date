@@ -354,10 +354,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         }
       }
     }
-    $field = implode('<br />'. $this->options['date_method'] .' ', $output);
+    $field = implode(' '. $this->options['date_method'] .' ', $output);
     $output = "$field ". check_plain($this->operator) . ' ';
     $parts = $handler->date_parts();
-    
     $widget_options = $this->widget_options();
     // If the filter is exposed, display the granularity.
     if ($this->options['exposed']) {
