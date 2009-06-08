@@ -434,10 +434,7 @@ function date_help($path, $arg) {
  * Make sure date information gets updated.
  */
 function date_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'views_edit_view') {
-    cache_clear_all('date_', 'cache', '*');
-  }
-  elseif ($form_id == 'content_display_overview_form') {
+  if ($form_id == 'content_display_overview_form') {
     date_content_display_form($form, $form_state);
   }
 }
