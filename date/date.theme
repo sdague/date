@@ -50,7 +50,7 @@ function theme_date_display_combination($element) {
   
   $node = $element['#node'];
   $field_name = $element['#field_name'];
-  $context = !empty($node->content) && !empty($node->content[$field_name]) ? $node->content[$field_name]['#context'] : '';
+  $context = !empty($node->content) && !empty($node->content[$field_name]) ? $node->content[$field_name]['#context'] : 'full';
   $type_name = $element['#type_name'];
   $fields = content_fields();
   $field = $fields[$field_name];
@@ -178,7 +178,7 @@ function theme_date_display_range($date1, $date2, $timezone = NULL) {
 function theme_date_format_interval($element) {
   $node = $element['#node'];
   $field_name = $element['#field_name'];
-  $context = !empty($node->content) ? $node->content[$field_name]['#context'] : '';
+  $context = !empty($node->content) ? $node->content[$field_name]['#context'] : 'full';
   $type_name = $element['#type_name'];
   $fields = content_fields();
   $field = $fields[$field_name];

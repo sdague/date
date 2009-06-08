@@ -573,7 +573,7 @@ function date_views_api() {
 /**
  * Helper function to adapt node date fields to formatter settings.
  */
-function date_prepare_node($node, $field, $type_name, $context, $options) {
+function date_prepare_node(&$node, $field, $type_name, $context, $options) {
   static $prepared_node = array();
   
   // No need to do this over and over for every item in a normal node view.

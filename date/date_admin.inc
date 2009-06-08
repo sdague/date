@@ -578,8 +578,9 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
  */
 function _date_formatter_settings($form_state = NULL, $field, $options = array(), $views_form = FALSE) {
   $field_name = $field['field_name'];
-  $type_name = isset($options['type_name']) ? $options['type_name'] : NULL;
-  $context = isset($options['context']) ? $options['context'] : NULL;
+  $field = content_fields($field_name);
+  $type_name = isset($options['type_name']) ? $options['type_name'] : $field['type_name'];
+  $context = isset($options['context']) ? $options['context'] : 'full';
   if (empty($options['fromto'])) {
     $options = date_formatter_get_settings($field_name, $type_name, $context);
   }
