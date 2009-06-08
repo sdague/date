@@ -7,6 +7,7 @@ Version 6.2-dev
 Version 6.2.2
 =============
 
+- #473308 Add handling for year-only date stored in timestamp field.
 - #482436 Remove deprecated code to remove empty field values, CCK does that now.
 - #421258 Don't cache prepared node, it may need to change by context and/or content type.
 - #421258 Make sure formatter settings context is never empty.
