@@ -362,6 +362,9 @@ function theme_date_part_label_timezone($part_type, $element) {
  * format as a calendar page date. The calendar styling is created in css.
  */
 function theme_date_calendar_day($date) {
+  if (empty($date)) {
+    return NULL;
+  }
   return '<div class="date-calendar-day">' .
     '<span class="month">' . date_format_date($date, 'custom', 'M') . '</span>' .
     '<span class="day">' . date_format_date($date, 'custom', 'j') . '</span>' .
@@ -370,6 +373,11 @@ function theme_date_calendar_day($date) {
 }
 
 function theme_date_time_ago($start_date, $end_date, $interval = 2) {
+  // If no date is sent, then return nothing
+  if (empty($start_date) || empty($end_date)){
+    return NULL;
+  }
+
   // Time to compare dates to
   $now = date_format(date_now(), DATE_FORMAT_DATETIME);
   $start = date_format($start_date, DATE_FORMAT_DATETIME);

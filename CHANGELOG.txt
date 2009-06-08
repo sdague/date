@@ -7,6 +7,7 @@ Version 6.2-dev
 Version 6.2.2
 =============
 
+- #452934 Make sure format_interval doesn't try to do anything with empty dates.
 - #483682 and #395156 Have to alter the collation of the format fields in MYSQL so they don't do case-insensitive searches and indexes. Fixing table name at the same time to fix another sporatic problem where 'date_format' is treated as an invalid table name and the table is not created.
 - #342357 Make jQuery Timepicker optional.
 - #466222 Fix Dutch translations.
