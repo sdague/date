@@ -573,16 +573,8 @@ function date_views_api() {
 /**
  * Helper function to adapt node date fields to formatter settings.
  */
-function date_prepare_node(&$node, $field, $type_name, $context, $options) {
-  static $prepared_node = array();
+function date_prepare_node($node, $field, $type_name, $context, $options) {
   
-  // No need to do this over and over for every item in a normal node view.
-  if (empty($node->view) && isset($node->content) && !empty($prepared_node) && 
-    array_key_exists($field['field_name'], $prepared_node) && 
-    $prepared_node[$field['field_name']]->nid == $node->nid) {
-    return $prepared_node[$field['field_name']];
-  }
-    
   // If there are options to limit multiple values, 
   // alter the node values to match. 
   $field_name = $field['field_name'];
@@ -592,7 +584,6 @@ function date_prepare_node(&$node, $field, $type_name, $context, $options) {
   // If no results should be shown, empty the values and return.
   if (is_numeric($max_count) && $max_count == 0) {
     $node->{$field_name} = array();
-    $prepared_node[$field_name] = $node;
     return $node;
   }
   
@@ -633,7 +624,6 @@ function date_prepare_node(&$node, $field, $type_name, $context, $options) {
       }
     }
   }
-  $prepared_node[$field['field_name']] = $node;
   return $node;
 }
 
