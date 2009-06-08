@@ -54,15 +54,10 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
 
   $values = $items;
   foreach ($values as $delta => $item) {
-    // Don't save empty values.
-    if (empty($item['value']) && $delta !== 0) {
-      unset($items[$delta]);
-      continue;
-    }
 
     // Special case for ISO dates which may have been given artificial values for
     // some date parts to make them into valid dates.
-    if ($field['type'] == DATE_ISO) {
+    if (!empty($item['value']) && $field['type'] == DATE_ISO) {
       $items[$delta]['value'] = date_limit_value($items[$delta]['value'], date_granularity($field), $field['type']);
       if ($field['todate']) {
         $items[$delta]['value2'] = date_limit_value($items[$delta]['value2'], date_granularity($field), $field['type']);
