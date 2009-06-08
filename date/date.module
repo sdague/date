@@ -264,8 +264,6 @@ function date_theme() {
       'arguments' => array('date' => NULL, 'timezone' => NULL)),
     'date_display_range' => array(
       'arguments' => array('date1' => NULL, 'date2' => NULL, 'timezone' => NULL)),
-    'date_time_ago' => array(
-      'arguments' => array('start_date' => NULL, 'end_date' => NULL)),  
     'date_text_parts' => array(
       'arguments' => array('element' => NULL)),
     'date' => array(
@@ -276,6 +274,9 @@ function date_theme() {
     'date_formatter_format_interval' => $base + array(
       'arguments' => array('element' => NULL), 
       'function' => 'theme_date_format_interval'),
+    'date_formatter_format_calendar_day' => $base + array(
+      'arguments' => array('element' => NULL), 
+      'function' => 'theme_date_format_calendar_day'),
     'date_repeat_display' => $base + array(
       'arguments' => array('field' => NULL, 
       'item' => NULL, 'node' => NULL, 'dates' => NULL),
@@ -365,6 +366,9 @@ function date_formatter_process($element) {
       if (is_object($date)) {
         if ($format == 'format_interval') {
            $dates[$processed]['interval'] = date_format_interval($date);
+        }
+        elseif ($format == 'format_calendar_day') {
+           $dates[$processed]['interval'] = date_format_calendar_day($date);
         } 
         elseif (!empty($format)) {
           $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format);

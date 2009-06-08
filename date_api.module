@@ -1691,7 +1691,8 @@ function date_api_theme() {
     'date_views_filter_form' => $base + array(
       'template' => 'date-views-filter-form',
       'arguments' => array('form' => NULL)),
-    );
+    'date_calendar_day' => $base + array('arguments' => array('date' => NULL)),  
+    'date_time_ago' => $base + array('arguments' => array('start_date' => NULL, 'end_date' => NULL, 'interval' => NULL)));
 }
 
 /**

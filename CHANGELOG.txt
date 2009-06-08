@@ -7,6 +7,7 @@ Version 6.2-dev
 Version 6.2.2
 =============
 
+- Add new calendar-day theme to format date like a calendar day page, move basic theme date_time_ago() from Date module to Date API so other modules can use it.
 - Remove date_format_options() from Date API, no longer used with new format system. Move it to Date Popup, which is the only module still using it with TODO to maybe get rid of it.
 - Remove old views code from Date module.
 - Remove date_install_clear() function, a leftover from an earlier version no longer needed.
