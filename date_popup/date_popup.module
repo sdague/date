@@ -406,6 +406,40 @@ function date_popup_formats() {
 }
 
 /**
+ * Store personalized format options for each user.
+ *
+ * TODO see what is needed to remove this completely.
+ * It is now only used by Date Popup and not really needed there.
+ *
+ * @return array
+ */
+function date_format_options() {
+  global $user;
+  $options = array();
+  $formats = date_get_formats();
+  $options = array();
+  module_load_include('inc', 'date', 'date_admin');
+  $now = date_example_date();
+  if (!empty($now)) {
+    foreach ($formats as $type => $format_types) {
+      foreach ($format_types as $format => $format_attributes) {
+        // Create an option that shows date only without time, along with the
+        // default string which has both date and time.
+        $no_time = date_limit_format($format, array('month', 'day', 'year'));
+        $zones = array('', 'O', 'P', 'e');
+        foreach ($zones as $zone) {
+          $time_format = !empty($zone) ? $format .' '. $zone : $format;
+          $options[$no_time] = date_format_date($now, 'custom', $no_time);
+          $options[$time_format] = date_format_date($now, 'custom', $time_format);
+        }
+      }
+    }
+    asort($options);
+  }
+  return $options;
+}
+
+/**
  * Recreate a date format string so it has the values popup expects.
  *
  * @param string $format
