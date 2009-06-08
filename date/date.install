@@ -712,9 +712,9 @@ function date_install_create_format($field, $title, $name, $format) {
   }
   variable_set('date_format_'. $name, $format);
   db_query("INSERT INTO {date_format_types} (type, title, locked) VALUES('%s', '%s', 0)", $name, $title);
-  if (!db_result(db_query("SELECT dfid FROM {date_format} WHERE format='%s' AND type='%s'", $format, 'custom'))) {
-    db_query("INSERT INTO {date_format} (format, type, locked) VALUES('%s', '%s', 0)", $format, 'custom');
-  }
+  if (!db_result(db_query("SELECT dfid FROM {date_formats} WHERE format='%s' AND type='%s'", $format, $type))) {
+    db_query("INSERT INTO {date_formats} (format, type, locked) VALUES('%s', '%s', 0)", $format, 'custom'); 
+  } 
 }
 
 function date_db_integrity($name) {

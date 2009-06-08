@@ -1782,7 +1782,7 @@ function date_get_formats($type = NULL, $reset = FALSE) {
  *   Array of date format details.
  */
 function date_get_format($dfid) {
-  $result = db_query('SELECT df.dfid, df.format, df.type, df.locked FROM {date_format} df WHERE df.dfid = %d', $dfid);
+  $result = db_query('SELECT df.dfid, df.format, df.type, df.locked FROM {date_formats} df WHERE df.dfid = %d', $dfid);
   return db_fetch_array($result);
 }
 
@@ -1864,7 +1864,7 @@ function date_format_type_save($date_format_type) {
  *   The date format type name.
  */
 function date_format_type_delete($date_format_type) {
-  db_query("DELETE FROM {date_format} WHERE type = '%s'", $date_format_type);
+  db_query("DELETE FROM {date_formats} WHERE type = '%s'", $date_format_type);
   db_query("DELETE FROM {date_format_types} WHERE type = '%s'", $date_format_type);
   db_query("DELETE FROM {date_format_locale} WHERE type = '%s'", $date_format_type);
 }
@@ -1932,7 +1932,7 @@ function date_format_save($date_format) {
  *   The date format string identifier.
  */
 function date_format_delete($date_format_id) {
-  db_query("DELETE FROM {date_format} WHERE dfid = '%d'", $date_format_id);
+  db_query("DELETE FROM {date_formats} WHERE dfid = '%d'", $date_format_id);
 }
 
 /**
@@ -2038,7 +2038,7 @@ function _date_formats_build() {
   }
 
   // Get custom formats added to the database by the end user.
-  $result = db_query('SELECT df.dfid, df.format, df.type, df.locked, dfl.language FROM {date_format} df LEFT JOIN {date_format_types} dft ON df.type = dft.type LEFT JOIN {date_format_locale} dfl ON df.format = dfl.format AND df.type = dfl.type ORDER BY df.type, df.format');
+  $result = db_query('SELECT df.dfid, df.format, df.type, df.locked, dfl.language FROM {date_formats} df LEFT JOIN {date_format_types} dft ON df.type = dft.type LEFT JOIN {date_format_locale} dfl ON df.format = dfl.format AND df.type = dfl.type ORDER BY df.type, df.format');
   while ($object = db_fetch_object($result)) {
     // If this format type isn't set, initialise the array.
     if (!isset($date_formats[$object->type])) {
