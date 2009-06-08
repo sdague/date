@@ -37,7 +37,9 @@ function date_popup_load() {
   else {
     drupal_add_js($path .'/lib/ui.datepicker.js');
   }
-  drupal_add_js($path .'/lib/jquery.timeentry.pack.js');
+  if (variable_get('date_popup_timepicker', 'default') == 'default') {
+    drupal_add_js($path .'/lib/jquery.timeentry.pack.js');
+  }
   $loaded = TRUE;
 }
 
@@ -46,7 +48,9 @@ function date_popup_load() {
  */
 function date_popup_init() {
   drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/datepicker.css');
-  drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/timeentry.css');
+  if (variable_get('date_popup_timepicker', 'default') == 'default') {
+    drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/timeentry.css');
+  }
 }
 
  /**
@@ -529,4 +533,37 @@ function theme_date_popup($element) {
     $output = $element['#children'];
   }
   return '<div class="'. $class .'">'. theme('form_element', $element, $output) .'</div>';
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function date_popup_menu() {
+  $items = array();
+
+  $items['admin/settings/date_popup'] = array(
+    'title' => 'Date Popup',
+    'description' => 'Allows the user to configure the Date Popup settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('date_popup_settings'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+/**
+ * General configuration form for controlling the Date Popup behaviour.
+ */
+function date_popup_settings() {
+
+  $form['date_popup_timepicker'] = array(
+    '#type' => 'select',
+    '#options' => array('default' => t('Use default jQuery timepicker'), 'none' => t('Manual time entry, no jQuery timepicker')),
+    '#title' => t('Timepicker'),
+    '#default_value' => variable_get('date_popup_timepicker', 'default'),
+    '#description' => t("Choose the jQuery timepicker to user."),
+  );
+
+  return system_settings_form($form);
 }
