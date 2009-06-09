@@ -100,7 +100,6 @@ function theme_date_display_combination($element) {
   // Update the element with values that might have been altered by 
   // date_prepare_node() and figure out which values to display.
   $dates = date_formatter_process($element);
-  
   switch ($options['fromto']['fromto']) {
     case 'value':
       $date1 = $dates['value']['formatted'];

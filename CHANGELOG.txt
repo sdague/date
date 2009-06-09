@@ -7,6 +7,7 @@ Version 6.2-dev
 Version 6.2.2
 =============
 
+- #418174 Timestamp format should not be run through date_limit_format().
 - #456308 We do not have to reset the date_api_fields cache over and over!
 - #424006 Add flexibility to date filter options by passing them directly to date_create() for PHP versions > 5.2.
 - #465870 Make sure date_repeat_form.inc is included in validation.

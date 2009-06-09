@@ -368,8 +368,14 @@ function date_formatter_process($element) {
            $dates[$processed]['interval'] = date_format_interval($date);
         }
         elseif ($format == 'format_calendar_day') {
-           $dates[$processed]['interval'] = date_format_calendar_day($date);
+           $dates[$processed]['calendar_day'] = date_format_calendar_day($date);
         } 
+        elseif ($format == 'U') {
+          $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format);
+          $dates[$processed]['formatted_date'] = date_format_date($date, 'custom', $format);
+          $dates[$processed]['formatted_time'] = '';
+          $dates[$processed]['formatted_timezone'] = '';
+        }
         elseif (!empty($format)) {
           $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format);
           $dates[$processed]['formatted_date'] = date_format_date($date, 'custom', date_limit_format($format, array('year', 'month', 'day')));
@@ -551,6 +557,7 @@ function date_formatter_format($formatter, $field_name) {
       $format = variable_get('date_format_'. $formatter, $default);
       break;
   }
+ 
   if (empty($format)) {
     $format = $default_format;
   }
