@@ -1885,13 +1885,13 @@ function date_format_save($date_format) {
   $format['type'] = $date_format['type'];
   $format['format'] = $date_format['format'];
   $format['locked'] = $date_format['locked'];
-
+  
   // Update date_format table.
   if (isset($date_format['is_new']) && !empty($date_format['is_new'])) {
-    drupal_write_record('date_format', $format);
+    drupal_write_record('date_formats', $format);
   }
   else {
-    drupal_write_record('date_format', $format, array('format', 'type'));
+    drupal_write_record('date_formats', $format, array('format', 'type'));
   }
 
   $languages = language_list('enabled');
