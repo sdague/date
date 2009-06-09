@@ -54,6 +54,7 @@ function _date_repeat_widget(&$element, $field, $items, $delta) {
  * Lots more work needed here.
  */
 function _date_repeat_widget_validate($element, &$form_state) {
+  require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_form.inc');
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
   $fields = content_fields();
