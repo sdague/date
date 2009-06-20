@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2009-03-07 19:12+0100\n"
-"PO-Revision-Date: 2009-06-20 17:21+0100\n"
+"PO-Revision-Date: 2009-06-20 17:24+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -305,7 +305,7 @@ msgstr "Auf der Startseite"
 
 #: date_tools/date_tools.module:865
 msgid "Sticky at top of lists"
-msgstr "Am Anfang von Listen"
+msgstr "Oben in Listen"
 
 #: date_tools/date_tools.module:868
 msgid "Create new revision"
