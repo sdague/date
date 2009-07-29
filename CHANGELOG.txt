@@ -4,6 +4,9 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+Version 6.2.3
+=============
+
 - #494350 Add 'c' format.
 - #352975 Remove filter:mask in datepicker css and add help in settings on how to add back in theme.
 - #352975 Add hook_requirements warning to suggest using jQuery UI for datepicker.
