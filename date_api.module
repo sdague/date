@@ -708,7 +708,7 @@ function date_format_date($date, $type = 'medium', $format = '', $langcode = NUL
         $datestring .= $format[++$i];
         break;
       default:
-        if (strpos('BdgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
+        if (strpos('BdcgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
           $datestring .= date_format($date, $c);
         }
         else if ($c == 'r') {
