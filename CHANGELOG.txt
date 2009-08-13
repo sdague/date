@@ -3,6 +3,8 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
+- Exposed filter querystring must be appended in normal views.
+
 
 Version 6.2.3
 =============
