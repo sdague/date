@@ -3,6 +3,7 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
+- We sometimes get $edit without $edit['date'] from Views exposed filters, fix processing for that possibility.
 - Exposed filter querystring must be appended in normal views.
 
 

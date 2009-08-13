@@ -131,6 +131,9 @@ function date_timezone_process($element, $edit, $form_state, $form) {
 function date_text_process($element, $edit, $form_state, $form) {
   $date = NULL;
   $granularity = date_format_order($element['#date_format']);
+  
+  // We sometimes get $edit without $edit['date'] from
+  // Views exposed filters.
   if (!empty($edit) && is_array($edit) && !empty($edit['date'])) {
     $datetime = date_convert_from_custom($edit['date'], $element['#date_format']);
     $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
