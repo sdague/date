@@ -3,6 +3,9 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
+
+- #535008 Prevent possible PostgreSQL problem by re-arranging timing of dropping the key.
+- #535270 Fix install test for update 6005 that kept it from completing.
 - We sometimes get $edit without $edit['date'] from Views exposed filters, fix processing for that possibility.
 - Exposed filter querystring must be appended in normal views.
 

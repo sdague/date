@@ -491,8 +491,8 @@ function date_api_update_6004() {
   }
   // Rename existing table and index.
   else {
+    db_drop_unique_key($ret, 'date_format', 'format');
     db_rename_table($ret, 'date_format', 'date_formats');
-    db_drop_unique_key($ret, 'date_formats', 'format');
     db_add_unique_key($ret, 'date_formats', 'formats', array('format', 'type'));
   }
 
