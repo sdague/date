@@ -256,7 +256,7 @@ function _date_elements() {
  */
 function date_combo_process($element, $edit, &$form_state, $form) {
   if (isset($element['#access']) && empty($element['#access'])) {
-    return;
+    return $element;
   }
 
   $field_name = $element['#field_name'];

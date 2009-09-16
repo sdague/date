@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #408770, by vkareh, Make sure dates with access control retain values during processing.
+- #574876, by stella, Fix odd logic when forcing views dates in date elements.
 - #385688, by noahb, a fix for using relationships with date filters and arguments. Thanks!
 - #535008 Prevent possible PostgreSQL problem by re-arranging timing of dropping the key.
 - #535270 Fix install test for update 6005 that kept it from completing.
