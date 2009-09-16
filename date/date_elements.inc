@@ -283,7 +283,6 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     '#weight'        => $field['widget']['weight'],
     '#required'      => ($field['required'] && $delta == 0) ? 1 : 0,
     '#default_value' => isset($element['#value'][$from_field]) ? $element['#value'][$from_field] : '',
-    '#field'         => $field,
     '#delta'         => $delta,
     '#date_timezone' => $element['#date_timezone'],
     '#date_format'      => date_limit_format(date_input_format($element, $field), $field['granularity']),
