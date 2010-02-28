@@ -1,5 +1,6 @@
 <?php
 //$Id$
+
 /**
  * Implementation of hook_requirements().
  * Added to be sure the Date API version matches this code so invalid

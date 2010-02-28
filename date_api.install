@@ -1,25 +1,21 @@
 <?php
 // $Id$
+
 function date_api_set_variables() {
-  /**
-   * Set absolute minimum and maximum year for dates on this site.
-   *
-   * There is actually no maximum and minimum year in PHP 5, but a date with
-   * a year less than 0 would result in negative ISO and DATETIME dates,
-   * like -1250-01-01T00:00:00, which probably won't make sense or work
-   * correctly anywhere.
-   * 
-   * The odd construct of using variable_get() instead of variable_set()
-   * is so we don't accidentally write over an existing value. If
-   * no value is set, variable_get() will set it.
-   */
+  // Set absolute minimum and maximum year for dates on this site.
+  // There is actually no maximum and minimum year in PHP 5, but a date with
+  // a year less than 0 would result in negative ISO and DATETIME dates,
+  // like -1250-01-01T00:00:00, which probably won't make sense or work
+  // correctly anywhere.
+  // 
+  // The odd construct of using variable_get() instead of variable_set()
+  // is so we don't accidentally write over an existing value. If
+  // no value is set, variable_get() will set it.
   variable_get('date_max_year', 4000);
   variable_get('date_min_year', 1);
   variable_get('date_php_min_year', 1901);
 
-  /**
-   * Set an API version in a way that other modules can test for compatibility.
-   */
+  // Set an API version in a way that other modules can test for compatibility.
   variable_set('date_api_version', '5.2');
  
   if (version_compare(PHP_VERSION, '5.2', '<') && !module_exists('date_php4')) {
@@ -31,17 +27,15 @@ function date_api_set_variables() {
     module_enable(array('date_timezone'));
   }
 
-  /**
-   * NULL is used for the default setting of date_default_timezone_name
-   * to have a way to tell that no site timezone name has been implemented.
-   * Otherwise, many functions would use 'UTC' incorrectly and
-   * produce unreliable and odd results. This way functions can test for a
-   * value and not use this if it is empty.
-   * 
-   * The odd construct of using variable_get() instead of variable_set()
-   * is so we don't accidentally write over an existing value. If
-   * no value is set, variable_get() will set it to NULL.
-   */
+  // NULL is used for the default setting of date_default_timezone_name
+  // to have a way to tell that no site timezone name has been implemented.
+  // Otherwise, many functions would use 'UTC' incorrectly and
+  // produce unreliable and odd results. This way functions can test for a
+  // value and not use this if it is empty.
+  // 
+  // The odd construct of using variable_get() instead of variable_set()
+  // is so we don't accidentally write over an existing value. If
+  // no value is set, variable_get() will set it to NULL.
   variable_get('date_default_timezone_name', NULL);
 }
 
@@ -188,10 +182,10 @@ function date_api_install() {
  * Implementation of hook_enable().
  */
 function date_api_enable() {
-  /* When module is enabled, build the list of date formats and types.  This
-   * includes those provided by this module and other contrib modules.  As the
-   * date_format tables are created but the schema hasn't been updated, force
-   * a refresh so we can use the schema API. */
+  // When module is enabled, build the list of date formats and types.  This
+  // includes those provided by this module and other contrib modules.  As the
+  // date_format tables are created but the schema hasn't been updated, force
+  // a refresh so we can use the schema API. 
   drupal_get_schema('', TRUE);
   // Ensure schema has been installed - order of things gets out of sync because
   // date_api_set_variables() in date_api_install() enables the 'date_timezone'
@@ -264,31 +258,8 @@ function date_api_requirements($phase) {
   return $requirements;
 }
 
-
-/**
- * Implementation of hook_update().
- */
-function date_api_update_5000() {
-  $ret = array();
-  $ret[] = update_sql("ALTER TABLE {users} ADD timezone_name varchar(50) NOT NULL default ''");
-  return $ret;
-}
-
-/**
- * Make sure all the appropriate modules get enabled.
- */
-function date_api_update_5200() {
-  $ret = array();
-  return $ret;
-}
-
-/**
- * Make sure all the appropriate modules get enabled.
- * Repeated again in the 5.2 version.
- */
-function date_api_update_5201() {
-  $ret = array();
-  return $ret;
+function date_api_update_last_removed() {
+  return 5201;
 }
 
 /**
