@@ -1719,10 +1719,10 @@ function date_api_set_db_timezone($offset = '+00:00') {
  */
 function date_get_timezone($handling, $timezone = '') {
   switch ($handling) {
-    case('date'):
+    case ('date'):
       $timezone = !empty($timezone) ? $timezone : date_default_timezone_name();
       break;
-    case('utc'):
+    case ('utc'):
       $timezone = 'UTC';
       break;
     default:
@@ -1736,7 +1736,7 @@ function date_get_timezone($handling, $timezone = '') {
  */
 function date_get_timezone_db($handling, $timezone = '') {
   switch ($handling) {
-    case('none'):
+    case ('none'):
       $timezone = date_default_timezone_name();
       break;
     default:

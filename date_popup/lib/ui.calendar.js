@@ -289,8 +289,8 @@ $.extend(PopUpCal.prototype, {
 	   @param  target  element - the input field attached to the calendar
 	   @return void */
 	showFor: function(target) {
-		var input = (target.nodeName && target.nodeName.toLowerCase() == 'input' ? target : this);
-		if (input.nodeName.toLowerCase() != 'input') { // find from button/image trigger
+		var input = (target.nodeName && target.nodeName.toLowercase () == 'input' ? target : this);
+		if (input.nodeName.toLowercase () != 'input') { // find from button/image trigger
 			input = $('input', input.parentNode)[0];
 		}
 		if (popUpCal._lastInput == input) { // already here
@@ -848,7 +848,7 @@ $.fn.calendar = function(settings) {
 				}
 			}
 		}
-		var nodeName = this.nodeName.toLowerCase();
+		var nodeName = this.nodeName.toLowercase ();
 		if (nodeName == 'input') {
 			var instSettings = (inlineSettings ? $.extend($.extend({}, settings || {}),
 				inlineSettings || {}) : settings); // clone and customise
