@@ -50,6 +50,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $options['granularity'] = array('default' => 'month');
 
     return $options;
+  }
 
   /**
    * Add a form element to select date_fields for this argument.
