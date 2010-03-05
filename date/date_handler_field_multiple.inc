@@ -28,7 +28,8 @@ class date_handler_field_multiple extends content_handler_field_multiple {
       )
     );
 
-    return $options;  }
+    return $options;  
+  }
   
   /**
    * Provide 'group multiple values' option,
