@@ -8,7 +8,10 @@ function date_tools_help($section, $arg) {
   switch ($section) {
     case 'admin/content/date/tools':
       return '<p>'. t('Tools for creating and importing dates and calendars.') .'</p>';
-       
+
+    case 'admin/content/date/tools/change':
+      return '<p>'. t('Change a date field from one type to another. Very experimental, use at your own risk!') .'</p>';
+            
     case 'admin/content/date/tools/date_wizard':
       $disabled_modules = date_tools_wizard_disabled_modules(array('popup', 'repeat', 'linked'));
       if (!empty($disabled_modules)) {
@@ -84,6 +87,16 @@ function date_tools_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('date_tools_remove_form', 3),
     'type' => MENU_CALLBACK,
+  );
+  $items['admin/content/date/tools/change'] = array(
+    'title'    => 'Change',
+    'access arguments'   => array('administer date tools'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('date_tools_change_type_form'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 3,
+    'file' => 'date_tools.change_type.inc',
+    'path' => drupal_get_path('module', 'date_tools'),
   );
   return $items;
 }
