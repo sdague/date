@@ -105,14 +105,18 @@ function date_tools_change_type_form_submit($form, &$form_state) {
   $date_handler->date_type = $old_type;
   
   $new_columns = array();
-  $old_columns = array();
+  $old_columns = array('nid', 'vid');
+  $new_columns[] = $temp_table . '.nid AS nid';
+  $new_columns[] = $temp_table . '.vid AS vid';
+  if ($field->multiple) {
+    $new_columns[] = $temp_table . '.delta AS delta';
+    $old_columns[] = 'delta';
+  }
   foreach ($columns as $column => $info) {
-    $old_columns[] = $info['column'];
     if ($column != 'value' && $column != 'value2') {
-      $new_columns[] = $info['column'];
       continue;
     }
-       
+    $old_columns[] = $info['column'];   
     $db_field = $date_handler->sql_field($temp_table . '.' . $info['column'], 0);
     switch ($old_type) {
       case 'date':
@@ -147,6 +151,7 @@ function date_tools_change_type_form_submit($form, &$form_state) {
         break;  
     }
   }
+  
   
   $sql = 'REPLACE INTO {'. $table .'} ('. implode(', ', $old_columns) .') '.
     ' SELECT '. implode(', ', $new_columns) .' FROM {'. $temp_table .'}';
