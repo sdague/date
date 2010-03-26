@@ -34,9 +34,9 @@
 /**
  * Generate the repeat setting form.
  */
-function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
-  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
-  
+function _date_repeat_rrule_process($element, $form_state, $form) {
+  module_load_include('inc', 'date_api', 'date_api_ical');
+
   if (empty($element['#date_repeat_widget'])) {
     $element['#date_repeat_widget'] = module_exists('date_popup') ? 'date_popup' : 'date_select';
   }
@@ -54,7 +54,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   $parts = date_repeat_split_rrule($rrule);
   $rrule = $parts[0];
   $exceptions = $parts[1];
-  $timezone = !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name();
+  $timezone = !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone();
   $merged_values = date_repeat_merge($rrule, $element);
   
   $UNTIL = '';
@@ -63,16 +63,6 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     date_timezone_set($until_date, timezone_open($timezone));
     $UNTIL = date_format($until_date, DATE_FORMAT_DATETIME);
   }
-  $parent_collapsed = !empty($rrule['INTERVAL']) || !empty($rrule['FREQ']) ? 0 : (!empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0);
-  $element['#type'] = 'fieldset';
-  $element['#title'] = t('Repeat');
-  $element['#description'] = theme('advanced_help_topic', 'date_api', 'date-repeat-form') . t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
-  $element['#collapsible'] = TRUE;
-  $element['#collapsed'] = $parent_collapsed;
-  
-  // Make sure we don't get floating parts where we don't want them.
-  $element['#prefix'] = '<div class="date-clear">';
-  $element['#suffix'] = '</div>';
   
   $element['INTERVAL'] = array(
     '#type' => 'select',
@@ -82,7 +72,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     '#prefix' => '<div class="date-repeat-input">',
     '#suffix' => '</div>',
   );
-
+  
   $element['FREQ'] = array(
     '#type' => 'select',
     //'#title' => t('Frequency'),
@@ -116,13 +106,13 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
   if (!empty($merged_values['BYDAY']) || !empty($merged_values['BYMONTH'])) {
     $collapsed = FALSE;
   }
-	// start the advanced fieldset
+  // start the advanced fieldset
   $element['advanced'] = array(
     '#type' => 'fieldset',
     '#title' => t('Advanced'),
     '#collapsible' => TRUE,
     '#collapsed' => $collapsed,
-    '#description' => t("If no advanced options are selected, the date will repeat on the day of week of the start date for weekly repeats, otherwise on the month and day of the start date. Use the options below to override that behavior to select specific months and days to repeat on. Use the 'Except' box to input dates that should be omitted from the results.") .' ',
+    '#description' => t("If no advanced options are selected, the date will repeat on the day of week of the start date for weekly repeats, otherwise on the month and day of the start date. Use the options below to override that behavior to select specific months and days to repeat on. Use the 'Except' box to input dates that should be omitted from the results.") . ' ',
     '#prefix' => '<div class="date-clear">',
     '#suffix' => '</div>',
     );
@@ -181,7 +171,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
       'datetime' => array(
         '#type' => $element['#date_repeat_widget'],
         '#default_value' => $EXCEPT,
-        '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name(),
+        '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone(),
         '#date_format' => !empty($element['#date_format']) ? $element['#date_format'] : 'Y-m-d',
         '#date_text_parts'  => !empty($element['#date_text_parts']) ? $element['#date_text_parts'] : array(),
         '#date_year_range'  => !empty($element['#date_year_range']) ? $element['#date_year_range'] : '-3:+3',
@@ -192,6 +182,8 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
       'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
       );
   }
+  $element['#date_repeat_collapsed'] = !empty($rrule['INTERVAL']) || !empty($rrule['FREQ']) ? 0 : (!empty($element['#date_repeat_collapsed']) ? $element['#date_repeat_collapsed'] : 0);
+  
   return $element;
 }
 
@@ -214,13 +206,13 @@ function date_repeat_merge($form_values, $element) {
   if (array_key_exists('BYMONTHDAY', $form_values)) unset($form_values['BYMONTHDAY']['']);
       
   if (is_array($form_values['UNTIL']['datetime'])) {
-    $function = $element['#date_repeat_widget'] .'_input_value';
+    $function = $element['#date_repeat_widget'] . '_input_value';
     $until_element = $element;
     $until_element['#value'] = $form_values['UNTIL']['datetime'];
     $form_values['UNTIL']['datetime'] = $function($until_element);
   }
   if (isset($form_values['EXDATE']) && is_array($form_values['EXDATE'])) {
-    $function = $element['#date_repeat_widget'] .'_input_value';
+    $function = $element['#date_repeat_widget'] . '_input_value';
     $exdate_element = $element;
     foreach ($form_values['EXDATE'] as $delta => $value) {
       if (is_array($value['datetime'])) {
@@ -236,10 +228,13 @@ function date_repeat_merge($form_values, $element) {
  * Build a RRULE out of the form values.
  */
 function date_repeat_rrule_validate($element, &$form_state) {
-  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  module_load_include('inc', 'date_api', 'date_api_ical');
+
   $form_values = $form_state['values'];
-  $field_name = $element['#parents'][0];
-  $item = $form_values[$field_name]['rrule'];
+  $item = $form_values;
+  foreach ($element['#parents'] as $key) {
+    $item = $item[$key];
+  }
   $item = date_repeat_merge($item, $element);
   $rrule = date_api_ical_build_rrule($item);
   form_set_value($element, $rrule, $form_state);
@@ -248,19 +243,33 @@ function date_repeat_rrule_validate($element, &$form_state) {
 /**
  * Theme the exception list as a table so the buttons line up
  */
-function theme_date_repeat_current_exceptions($rows = array()) {
+function theme_date_repeat_current_exceptions($vars) {
+  $rows = $vars['rows'];
   $rows_info = array();
   foreach ($rows as $key => $value) {
     if (substr($key, 0, 1) != '#') {
       $rows_info[] = array(drupal_render($value['action']), drupal_render($value['display']));
     }
   }
-  return theme('table', array(t('Delete'), t('Current exceptions')), $rows_info);
+  return theme('table', array('header' => array(t('Delete'), t('Current exceptions')), 'rows' => $rows_info));
 }
 
 /**
- * Themes the date repeat element.
+ * Wrapper fieldset for repeat rule.
  */
-function theme_date_repeat($element) {
-  return theme('form_element', $element, '<div class="container-inline">'. drupal_render($element). '</div>');
+function theme_date_repeat_rrule($vars) {
+  $element = $vars['element'];
+  $class = $element['#date_repeat_collapsed'] ? array('collapsible', 'collapsed') : array('collapsible');
+  $fieldset = array(
+    '#title' => t('Repeat'),
+    '#value' => '',
+    '#description' => theme('advanced_help_topic', 'date_api', 'date-repeat-form') . t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.'),
+    '#attributes' => array('class' => $class),
+    '#children' => $element['#children'],
+  );
+  // Make sure we don't get floating parts where we don't want them.
+  $element['#prefix'] = '<div class="date-clear">';
+  $element['#suffix'] = '</div>';
+
+  return theme('fieldset', array('element' => $fieldset));
 }
