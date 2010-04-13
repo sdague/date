@@ -499,7 +499,7 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
     'default_value_code' => '', 
     'default_value2' => 'same',
     'default_value_code2' => '', 
-    'input_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
+    'input_format' => date_default_format($widget_type),
     'input_format_custom' => '', 
     'increment' => 1,
     'text_parts' => array (),

@@ -197,6 +197,18 @@ function date_widget_info() {
   return $info;
 }
 
+function date_default_format($type) {
+  if (stristr($type, 'date_popup') && module_exists('date_popup')) {
+    $formats = date_popup_formats();
+    $default_format = array_shift($formats);
+  }
+  else {
+    // example input formats must show all possible date parts, so add seconds.
+    $default_format = str_replace('i', 'i:s', variable_get('date_format_short', 'm/d/Y - H:i'));
+  }
+  return $default_format;
+}
+
 function date_input_value($field, $element) {
   switch ($field['widget']['type']) {
     case 'date_text':
@@ -559,7 +571,7 @@ function date_formatter_format($formatter, $field_name) {
   }
  
   if (empty($format)) {
-    $format = $default_format;
+    $format = $default;
   }
   // A selected format might include timezone information.
   $granularity = date_granularity($field);

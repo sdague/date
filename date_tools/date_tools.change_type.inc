@@ -152,7 +152,10 @@ function date_tools_change_type_form_submit($form, &$form_state) {
     }
   }
   
+  // Make sure database timezone is set to UTC.
+  $date_handler->set_db_timezone();
   
+  // Make the replacement.  
   $sql = 'REPLACE INTO {'. $table .'} ('. implode(', ', $old_columns) .') '.
     ' SELECT '. implode(', ', $new_columns) .' FROM {'. $temp_table .'}';
   db_query($sql);
