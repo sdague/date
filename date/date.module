@@ -486,6 +486,7 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
       return _date_field_validate($op, $node, $field, $items, $teaser, $page);
       break;
 
+    case 'presave':
     case 'insert':
     case 'update':
       require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
