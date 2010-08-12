@@ -463,8 +463,13 @@ function date_api_update_6004() {
   // Rename existing table and index.
   else {
     db_drop_unique_key($ret, 'date_format', 'format');
-    db_rename_table($ret, 'date_format', 'date_formats');
-    db_add_unique_key($ret, 'date_formats', 'formats', array('format', 'type'));
+    if (db_table_exists('date_formats')) {
+      db_drop_table($ret, 'date_format');
+    } 
+    else {
+      db_rename_table($ret, 'date_format', 'date_formats');
+      db_add_unique_key($ret, 'date_formats', 'formats', array('format', 'type'));
+    }    
   }
 
   return $ret;  
