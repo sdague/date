@@ -194,6 +194,7 @@ function date_select_process($element, $edit, $form_state, $form) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
+  
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
@@ -204,7 +205,7 @@ function date_select_process($element, $edit, $form_state, $form) {
   foreach (date_nongranularity($granularity) as $field) {
     if ($field != 'timezone') {
       $element[$field] = array(
-        '#type' => 'hidden',
+        '#type' => 'value',
         '#value' => 0,
         );
     }
@@ -215,6 +216,7 @@ function date_select_process($element, $edit, $form_state, $form) {
   else {
     $element['#element_validate'] = array('date_select_validate');
   }
+
   return $element;
 }
 
@@ -331,9 +333,12 @@ function date_parts_element($element, $date, $format) {
     }
  
     // Views exposed filters are treated as submitted even if not,
-    // so force the #default value in that case.  
-    if (!empty($element[$field]['#force_value'])) {
-      $sub_element[$field]['#value'] = $sub_element[$field]['#default_value'];
+    // so force the #default value in that case. Make sure we set
+    // a default that is in the option list.
+    if (!empty($element['#force_value'])) {
+      $options = $sub_element[$field]['#options'];
+      $default = !empty($sub_element[$field]['#default_value']) ? $sub_element[$field]['#default_value'] : array_shift($options);
+      $sub_element[$field]['#value'] = $default;
     }
   }
   
@@ -352,6 +357,7 @@ function date_parts_element($element, $date, $format) {
       $sub_element['ampm']['#title'] = theme('date_part_label_ampm', 'ampm', $element);
     }
   }
+
   return $sub_element;
 }
 

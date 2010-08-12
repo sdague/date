@@ -50,6 +50,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (empty($this->options['exposed']) || (isset($this->options['expose']['identifier']) && !isset($_GET[$this->options['expose']['identifier']]))) {
       $this->force_value = TRUE;
     }
+
   }
 
   // Set default values for the date filter.
@@ -276,6 +277,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($form_state['exposed'])) {
       $default_date = $this->default_value($prefix);
     }
+   
     $form[$prefix] = array(
       '#type' => $type,
       '#title' => $name,
