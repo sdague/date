@@ -4,6 +4,33 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #819678 by jonathan1055, fix url on admin page to work without clean urls enabled.
+- #553884 by divinehawk, fix pgsql timezone support.
+- #320765 by joelstein, fix order of timezone name list.
+- #552154 by Ian Ward, make date_first_day defaults consistent.
+- #477868 Exposed select filter widget sometimes gives 'illegal choice' errors.
+-  #385688 by Gribnif, adding a set_relationship() function to date filter and date argument to try to fix broken relationships problems.
+- #580178, Remove http://drupal.org/cvs?commit=263582, might be a problem.
+- Fix default values for date_fields, should be array.
+- Rename incorrectly named views definition.
+- #313704 Add timezone information earlier so that auto_nodetitle has it, patch by Kars-T.
+- #554546 Don't put translated timezone names in cache, patch by alex.k
+- #491954 Make sure translation works in date changer, patch by Bodo Maass and cyp25.
+- #675234 Try to convert deprecated timezones in ical, patch by David Goode.
+- #535270 Test for existing date format tables before update, patch by anarcat and Owen Barton.
+- #545466 Fix bid placeholder in date wizard, patch by colinsherry.
+- Be sure to set timezone when changing date type. Clean up unused parts of code from Date Wizard.
+- More work on repeating dates.
+- Adding experimental tool to change the date type.
+- Move event import and date wizard into separate files.
+- #698522 Make Views code work with Views 2 and Views 3, patch by rjbrown99, Ahqar, tauno, dagmar, perusio.
+- Coder review fixes.
+- Install file cleanup.
+- #489494, by poiu, Some RTL css fixes.
+
+Version 6.2.4
+=============
+
 - #565830, by bengtan, Fix Postgres handling of hour '0'.
 - #408770, by vkareh, Make sure dates with access control retain values during processing.
 - #574876, by stella, Fix odd logic when forcing views dates in date elements.
