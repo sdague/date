@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #599484 by Gribnif, avoid infinite date repeat in PHP4.
 - #529734 by raintonr, reduce number of requires for PHP4.
 - #875978 by mikeryan, avoid notices when updating nodes with empty datefields.
 - #548866 by siritree, fix cannot use scalar value as array by testing that $item is an array.
