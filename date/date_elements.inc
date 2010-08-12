@@ -560,8 +560,7 @@ function date_input_format($element, $field) {
  *  Theme from/to date combination on form.
  */
 function theme_date_combo($element) {
-  $fields = content_fields();
-  $field = $fields[$element['#field_name']];
+  $field = content_fields($element['#field_name'], $element['#type_name']);
   if (!$field['todate']) {
     return $element['#children'];
   }
