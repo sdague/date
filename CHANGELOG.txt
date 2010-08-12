@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #460776 by Mr. Chips, fix ordinality in Date Repeat string.
 - #635778 by dagmar, fix typo keeping comment dates from showing up.
 - #819678 by jonathan1055, fix url on admin page to work without clean urls enabled.
 - #553884 by divinehawk, fix pgsql timezone support.
