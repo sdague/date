@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #774182 by keinstein, fix some strict error handling errors.
 - #702922 by rupl, add missing class to date popup.
 - #660776 by neilnz, fix postgresql sequence update.
 - #645936 by markus_petrux, allow other modules to add #afterbuild to user forms.
