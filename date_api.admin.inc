@@ -45,7 +45,7 @@ function date_api_configure_custom_date_formats() {
 
   }
   else {
-    $output = t('No custom formats configured. Please <a href="@link">add</a> some.', array('@link' => base_path() . 'admin/settings/date-time/formats/add'));
+    $output = t('No custom formats configured. Please <a href="@link">add</a> some.', array('@link' => url('admin/settings/date-time/formats/add')));
   }
 
   return $output;
