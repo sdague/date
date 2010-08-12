@@ -55,6 +55,7 @@ function date_tools_wizard_form() {
     '#default_value' => 0,
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#title' => t('Show repeating date options'),
+    '#access' => module_exists('date_repeat'),
     );  
   $form['field']['advanced'] = array(
     '#type' => 'fieldset',
@@ -88,12 +89,14 @@ function date_tools_wizard_form() {
     '#default_value' => 1,
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#title' => t('Create a calendar for this date field'),
+    '#access' => module_exists('calendar'),
     ); 
   $form['blocks'] = array(
     '#type' => 'select',
     '#options' => array(0 => t('No'), 1 => t('Yes')),
     '#default_value' => 0,
     '#title' => t('Add calendar blocks to the current theme'),
+    '#access' => module_exists('calendar'),
     );   
      
   $form['submit'] = array(
@@ -198,11 +201,17 @@ function date_tools_wizard_include() {
 }
 
 function date_tools_wizard_options($options = array()) {
-  $default_options = array(
-    'popups', // Use popup features like Date Popup and Calendar Popup?
-    'repeat', // Use repeating dates?
-    'linked',  // Create links between calendars and dates?
-    );
+  $default_options = array();
+  if (module_exists('date_popup')) {
+    $default_options[] = 'popups';
+  } 
+  if (module_exists('date_repeat')) {
+    $default_options[] = 'repeat';
+  } 
+  if (module_exists('calendar')) {
+    $default_options[] = 'linked';
+  }
+
   // Allow override of default options.
   if (!empty($options)) {
     return $options;
@@ -219,8 +228,10 @@ function date_tools_wizard_required_modules($options = array()) {
   $options = date_tools_wizard_options($options);
   $modules = array(
     'date_timezone', 'date_api', 'content', 'date', 
-    'calendar', 'views', 'views_ui',
   );
+  if (module_exists('calendar')) {
+    $modules = array_merge($modules, array('calendar', 'views', 'views_ui'));
+  }  
   if (in_array('popups', $options)) {
     $modules = array_merge($modules, array('date_popup', 'jcalendar'));
   }
