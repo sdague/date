@@ -401,12 +401,14 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    */
   function query() {
     $this->get_query_fields();
-    $this->table = $this->query_fields[0]['field']['table_name'];
-    $this->ensure_my_table();
+    // From http://drupal.org/cvs?commit=263582, might be a problem.
+    //$this->table = $this->query_fields[0]['field']['table_name'];
+    //$this->ensure_my_table();
     if (!empty($this->query_fields)) {
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
-        $query_field['field']['fullname'] = $this->table_alias. '.' .$field['field_name'];
+        // From http://drupal.org/cvs?commit=263582, might be a problem.
+        //$query_field['field']['fullname'] = $this->table_alias. '.' .$field['field_name'];
         $sql = '';
         $sql_parts = array();
         switch ($this->operator) {
