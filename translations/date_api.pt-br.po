@@ -201,7 +201,7 @@ msgstr "!date_nav Anterior|Próximo|Hoje"
 
 #: date_api.module:627
 msgid "!month-name |January|February|March|April|May|June|July|August|September|October|November|December"
-msgstr "!month-name |Janeiro|Fevereiro|Março|Abril|Maio|Junho|Agosto|Setembro|Outubro|Novembro|Dezembro"
+msgstr "!month-name |Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro"
 
 #: date_api.module:628
 msgid "!month-abbreviation |Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec"
