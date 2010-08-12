@@ -491,9 +491,11 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
     case 'presave':
     case 'insert':
     case 'update':
-      require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
+      require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');     
       $items = $additions[$field['field_name']];
-      $node->$field['field_name'] = $additions;
+      if ($additions[$field['field_name']]) {
+        $node->$field['field_name'] = $additions;
+      }
       return _date_field_update($op, $node, $field, $items, $teaser, $page);
       break;
 
