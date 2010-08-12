@@ -4,12 +4,13 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #635778 by dagmar, fix typo keeping comment dates from showing up.
 - #819678 by jonathan1055, fix url on admin page to work without clean urls enabled.
 - #553884 by divinehawk, fix pgsql timezone support.
 - #320765 by joelstein, fix order of timezone name list.
 - #552154 by Ian Ward, make date_first_day defaults consistent.
 - #477868 Exposed select filter widget sometimes gives 'illegal choice' errors.
--  #385688 by Gribnif, adding a set_relationship() function to date filter and date argument to try to fix broken relationships problems.
+- #385688 by Gribnif, adding a set_relationship() function to date filter and date argument to try to fix broken relationships problems.
 - #580178, Remove http://drupal.org/cvs?commit=263582, might be a problem.
 - Fix default values for date_fields, should be array.
 - Rename incorrectly named views definition.
