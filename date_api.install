@@ -493,3 +493,18 @@ function date_api_update_6005() {
   }
   return $ret;
 }
+
+
+/**
+ * Rename the date_format_dfid_seq to date_formats_dfid_seq, as this was missed in 6004
+ * and causes inserts via the UI to fail on PostgreSQL.
+ */
+function date_api_update_6006() {
+  global $db_type;
+  $ret = array();
+  if ($db_type == 'pgsql' && db_table_exists('date_format_dfid_seq')) {
+    $sql = "ALTER SEQUENCE {date_format}_dfid_seq RENAME TO {date_formats}_dfid_seq";
+    $ret[] = update_sql($sql);
+  }
+  return $ret;
+}

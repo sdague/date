@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #660776 by neilnz, fix postgresql sequence update.
 - #645936 by markus_petrux, allow other modules to add #afterbuild to user forms.
 - #406976 by dopry, Check both the field name and type name to get the right label for shared fields.
 - #599744 by anarcat, don't rename table to one that already exists.
