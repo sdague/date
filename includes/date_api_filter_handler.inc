@@ -396,19 +396,30 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
    
   /**
+   * Called just prior to query(), this lets us set up table aliases for
+   * relationships. This can't be done in pre_query(), because the relationship
+   * isn't defined yet.
+   */
+  function set_relationship() {
+    parent::set_relationship();
+    $this->get_query_fields();
+    if (!empty($this->query_fields)) {
+      foreach ($this->query_fields as $query_field) {
+        $field = $query_field['field'];
+        $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+      }
+    }
+  }
+ 
+  /**
    * Custom implementation of query() so we can get the
    * AND and OR methods in the right places.
    */
   function query() {
     $this->get_query_fields();
-    // From http://drupal.org/cvs?commit=263582, might be a problem.
-    //$this->table = $this->query_fields[0]['field']['table_name'];
-    //$this->ensure_my_table();
     if (!empty($this->query_fields)) {
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
-        // From http://drupal.org/cvs?commit=263582, might be a problem.
-        //$query_field['field']['fullname'] = $this->table_alias. '.' .$field['field_name'];
         $sql = '';
         $sql_parts = array();
         switch ($this->operator) {
