@@ -472,9 +472,11 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
   $additions[$field['field_name']] = $items;
   foreach ($items as $delta => $item) {
     $timezone = isset($item['timezone']) ? $item['timezone'] : '';
-    $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
-    $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
-    $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
+    if (is_array($additions[$field['field_name']][$delta])) {
+      $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
+      $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
+      $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
+    }
   }
   switch ($op) {
     case 'load':

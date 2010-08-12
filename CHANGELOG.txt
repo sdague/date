@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #548866 by siritree, fix cannot use scalar value as array by testing that $item is an array.
 - #706006 by Gribnif, fix broken logic for every Nth DAY.
 - #460776 by Mr. Chips, fix ordinality in Date Repeat string.
 - #635778 by dagmar, fix typo keeping comment dates from showing up.
