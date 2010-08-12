@@ -44,7 +44,7 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function option_definition() {
     $options = parent::option_definition();
-    $options['date_fields'] = array('default' => '');
+    $options['date_fields'] = array('default' => array());
     $options['year_range'] = array('default' => '-3:+3');
     $options['date_method'] = array('default' => 'OR');
     $options['granularity'] = array('default' => 'month');
