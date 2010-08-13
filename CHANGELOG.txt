@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #848644 by Crell, make sure ical_parse_rrule can handle embedded timezones.
 - #784652 by keinstein, fix 'r' format.
 - #679224 by brianV, add defaults for month and year for latest jQuery UI datepicker.
 - #518816 by dww, avoid 'date_format() expects parameter 1 to be DateTime' errors by checking for date class.
