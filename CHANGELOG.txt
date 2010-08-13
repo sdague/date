@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #408190 Fix mini calendar title link so it doesn't always link to current date.
 - #630972 by bec, make sure a default system timezone is set to make PHP 5.3 happy.
 - #641344 by arlinsandbulte, add option to use ISO weeks instead of calendar weeks.
 - #697144 by tstoeckler, date_format_date formatter fixes.
