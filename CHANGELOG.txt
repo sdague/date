@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #785708 by bdurbin and locomo, update jquery timeentry to latest version.
 - #390012 by joachim, Make sure view args are sorted when creating navigation links.
 - #408190 Fix mini calendar title link so it doesn't always link to current date.
 - #630972 by bec, make sure a default system timezone is set to make PHP 5.3 happy.
