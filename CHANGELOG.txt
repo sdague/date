@@ -3,7 +3,11 @@ Date Module 6.x
 =================
 Version 6.2-dev
 =================
-NOTE: The included copy of the jQuery UI datepicker has been removed. It is now necessary to install the jQuery UI module (http://drupal.org/project/jquery_ui) for the datepicker to work!
+
+Version 6.2.5
+=============
+
+NOTE: The included copy of the jQuery UI datepicker in the Date Popups module has been removed. It is now necessary to install the jQuery UI module (http://drupal.org/project/jquery_ui) for the Date Popups datepicker to work!
 
 - #802046 by t3hk0d3, fix date parsing to better handle unicode characters.
 - #475926 by hawleyal, clean html out of ical export.
