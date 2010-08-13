@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #518816 by dww, avoid 'date_format() expects parameter 1 to be DateTime' errors by checking for date class.
 - #772180 by recrit and dww, make sure date descriptions always use valid dates for format examples.
 - #642018 by slip and KarenS, make sure to eliminate spaces before AM/PM in date popup timepicker.
 - #582982 by yahn, make sure date_all_day gets the most significant date element.
