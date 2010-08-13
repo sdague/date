@@ -496,6 +496,8 @@ function timepicker_format_replacements() {
     'G' => 'H',
     'g' => 'h',
     'a' => 'A',
+    ' a' => 'A',
+    ' A' => 'A',
     );
 }
 
