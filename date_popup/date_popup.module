@@ -22,8 +22,6 @@
 
 /**
  * Load needed files.
- * 
- * Play nice with jQuery UI, if it is installed.
  */
 function date_popup_load() {
   static $loaded = FALSE;
@@ -33,9 +31,6 @@ function date_popup_load() {
   $path = drupal_get_path('module', 'date_popup');
   if (module_exists('jquery_ui')) {
     jquery_ui_add('ui.datepicker');
-  }
-  else {
-    drupal_add_js($path .'/lib/ui.datepicker.js');
   }
   if (variable_get('date_popup_timepicker', 'default') == 'default') {
     drupal_add_js($path .'/lib/jquery.timeentry.pack.js');
@@ -47,6 +42,11 @@ function date_popup_load() {
  * Implementation of hook_init().
  */
 function date_popup_init() {
+  global $user;
+  if (!module_exists('jquery_ui') && $user->uid == 1) {
+    drupal_set_message(t('The Date Popup module now requires the <a href="@link">jQuery UI module</a> as a source for the datepicker. Please install it immediately.', array('@link' => 'http://drupal.org/project/jquery_ui')), 'error');
+    return;
+  }
   drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/datepicker.css');
   if (variable_get('date_popup_timepicker', 'default') == 'default') {
     drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/timeentry.css');
