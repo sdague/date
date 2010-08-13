@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #641344 by arlinsandbulte, add option to use ISO weeks instead of calendar weeks.
 - #697144 by tstoeckler, date_format_date formatter fixes.
 - #774182 by keinstein, fix some strict error handling errors.
 - #702922 by rupl, add missing class to date popup.

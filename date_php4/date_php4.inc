@@ -186,8 +186,14 @@ if (!function_exists('date_format')) {
             $date_string .= date_calc_days_in_month(date_part_extract($date->value, 'month'),
               date_part_extract($date->value, 'year'));
             break;
+          case 'W':
+            $result = date_calc_gregorian_to_ISO(date_part_extract($date->value, 'day'),
+              date_part_extract($date->value, 'month'),
+              date_part_extract($date->value, 'year'));
+            $result = explode('-', $result);  
+            $date_string .= $result[1];  
           default:
-            if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuWwYyZz', $c) !== FALSE) {
+            if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuwYyZz', $c) !== FALSE) {
               $date_string .= date_date($c, $timestamp, $date->timezone);
             }
             else {
