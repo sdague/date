@@ -98,3 +98,21 @@ function date_popup_disable() {
     content_clear_type_cache(TRUE);
   }
 }
+
+/**
+ * Update default path for date popup css
+ */
+function date_popup_update_6001() {
+  $ret = array();
+  $version = jquery_ui_get_version();
+  switch ($version) {
+    case '1.6':
+      $path = drupal_get_path('module', 'date_popup') . '/themes/datepicker.css';
+      break;
+    default:
+      $path = drupal_get_path('module', 'date_popup') . '/themes/datepicker.1.7.css';
+      break;
+  }
+  variable_set('date_popup_css_file', $path);
+  return $ret;
+}
