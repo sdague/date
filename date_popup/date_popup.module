@@ -313,7 +313,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
   $id = date_popup_js_settings_id($element['#id'], 'timeEntry', $settings);
   $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => (!empty($element['#value']['time']) || !empty($edit['time'])) && is_object($date) ? date_format($date, $time_format) : '',
+    '#default_value' => (!empty($element['#value']['time']) || !empty($edit['time'])) && is_object($date) ? date_format_date($date, 'custom', $time_format) : '',
     '#id' => $id,
     '#size' => 10,
     '#maxlength' => 10,
@@ -324,7 +324,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
     $sub_element['#value'] = $sub_element['#default_value'];
   }
   // TODO, figure out exactly when we want this description. In many places it is not desired.
-  $sub_element['#description'] = t('Format: @date', array('@date' => date($time_format, time())));
+  $sub_element['#description'] = t('Format: @date', array('@date' => date_format_date(date_now(), 'custom', $time_format)));
   return ($sub_element);
 }
 
