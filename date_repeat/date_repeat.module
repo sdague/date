@@ -283,7 +283,7 @@ function date_repeat_split_rrule($rrule) {
     elseif (strstr($part, 'RDATE')) {
       $RDATE = str_replace('RDATE:', '', $part);
       $additions = (array) date_ical_parse_exceptions('RDATE:', $RDATE);
-      unset($rdate['DATA']);
+      unset($additions['DATA']);
     }
   }
   return array($rrule, $exceptions, $additions);
