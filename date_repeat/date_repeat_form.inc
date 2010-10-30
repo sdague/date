@@ -169,7 +169,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     '#collapsed' => empty($exceptions) ? TRUE : FALSE,
     '#title' => t('Except'),
     '#description' => t('Dates to omit from the list of repeating dates.'),
-    '#prefix' => '<div class="date-repeat">',
+    '#prefix' => '<div id="date-repeat-exceptions" class="date-repeat">',
     '#suffix' => '</div>',
     );
   $max = !empty($exceptions) ? sizeof($exceptions) : 0;
@@ -202,7 +202,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     '#collapsed' => empty($additions) ? TRUE : FALSE,
     '#title' => t('Additional'),
     '#description' => t('Dates to add to the list of repeating dates.'),
-    '#prefix' => '<div class="date-repeat">',
+    '#prefix' => '<div id="date-repeat-additions" class="date-repeat">',
     '#suffix' => '</div>',
     );
   $max = !empty($additions) ? sizeof($additions) : 0;
@@ -227,7 +227,77 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
       'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
       );
   }
+
+  // Create an "Add another" button for the exceptions.
+  $field_name = $element['#parents'][0];
+  $element['exceptions']['exceptions_addmore'] = array(
+    '#type' => 'button',
+    '#value' => t('Add more exceptions'),
+    '#ahah' => array(
+      'event' => 'click',
+      'path' => 'date_repeat_get_exception_form_ajax/exceptions/' . $field_name,
+      'wrapper' => 'date-repeat-exceptions',
+      'method' => 'replace',
+      'effect' => 'fade'
+    )
+  );
+  // Create an "Add another" button for the additions.
+  $field_name = $element['#parents'][0];
+  $element['additions']['additions_addmore'] = array(
+    '#type' => 'button',
+    '#value' => t('Add more additions'),
+    '#ahah' => array(
+      'event' => 'click',
+      'path' => 'date_repeat_get_exception_form_ajax/additions/' . $field_name,
+      'wrapper' => 'date-repeat-additions',
+      'method' => 'replace',
+      'effect' => 'fade'
+    )
+  );
+  
   return $element;
+}
+
+/**
+ * Ajax callback to get the exceptions form.  This is needed to
+ * implement the "Add another" button for the date repeat exceptions.
+ * 
+ * @param $type - 'exceptions' or 'additions'.
+ * @param $field_name - The name of the date field.
+ */
+function date_repeat_get_exception_form_ajax($type, $field_name) {
+  // Get the cached form.  
+  $form_state = array('storage' => NULL, 'submitted' => FALSE);
+  if( !($form = form_get_cache($_POST['form_build_id'], $form_state)) ) {
+    drupal_json(array('status' => FALSE, 'data' => ''));
+    exit();
+  }
+
+  // Set the form state values.
+  $form_state = array_merge($form_state, array('values' => $_POST));
+
+  // Set the new form rrule value.
+  $form[$field_name]['rrule']['#value'] = $form_state['values'][$field_name]['rrule'];
+
+  // Cache the new form state.
+  form_set_cache($_POST['form_build_id'], $form, $form_state);
+
+  // Rebuild the form.
+  $form_state = array();
+  $form['#post'] = array();
+  $form = form_builder($form['form_id']['#value'] , $form, $form_state);
+
+  // Force a rebuild of the Drupal.settings javascript object.
+  //   - Borrowed from content.node_form.inc, content_add_more_js function
+  $javascript = drupal_add_js(NULL, NULL);
+  $output_js = isset($javascript['setting']) ? '<script type="text/javascript">jQuery.extend(Drupal.settings, '. drupal_to_js(call_user_func_array('array_merge_recursive', $javascript['setting'])) .');</script>' : '';
+
+  // Create our output.
+  $output = drupal_render($form[$field_name]['rrule'][$type]) . $output_js;
+
+  // Set the new exceptions form.
+  drupal_json(array('status' => TRUE, 'data' => $output));
+  exit();
 }
 
 /**

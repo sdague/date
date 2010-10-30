@@ -26,6 +26,21 @@ function date_repeat_elements() {
   return $type;
 }
 
+/**
+ * Implementation of hook_menu.
+ */
+function date_repeat_menu() {
+  $items = array();
+  $items['date_repeat_get_exception_form_ajax'] = array(
+    'page callback' => 'date_repeat_get_exception_form_ajax',
+    'page arguments' => array(1, 2),
+    'file' => 'date_repeat_form.inc',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items; 
+}
+
 function date_repeat_theme() {
   return array(
     'date_repeat' => array('arguments' => array('element' => NULL)),
