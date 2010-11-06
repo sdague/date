@@ -262,8 +262,10 @@ function _date_field_settings($op, $field) {
       
       // Unset the filter and argument handlers, dates can use the generic 
       // date argument and filter handlers created by the Date API.
-      unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
-      unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
+      //unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
+      //unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
+      $data[$table_alias][$field['field_name'] .'_value']['argument']['handler'] = 'date_api_argument_handler';
+      $data[$table_alias][$field['field_name'] .'_value']['filter']['handler'] = 'date_api_filter_handler';
      
       // Add in another set of fields for the To date.
       if (!empty($field['todate'])) {
