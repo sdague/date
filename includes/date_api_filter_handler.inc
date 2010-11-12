@@ -430,6 +430,9 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     if (!empty($this->query_fields)) {
       foreach ((array) $this->query_fields as $query_field) {
         $field = $query_field['field'];
+        $table_alias = !empty($this->related_table_alias) ? $this->related_table_alias : $field['table_name'];
+        $query_field['field']['fullname'] = $table_alias .'.'. $query_field['field']['field_name'];
+        
         $sql = '';
         $sql_parts = array();
         switch ($this->operator) {
@@ -459,6 +462,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   
   function date_filter($prefix, $query_field, $operator) {
     $field = $query_field['field'];
+    
     // Handle the simple operators first.
     if ($operator == 'empty') {
       $this->add_date_field($field);
@@ -539,6 +543,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         $value = date_format($date, $this->format);
         break;
     }
+    
     if ($this->date_handler->granularity != 'week') {
       $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
     }
