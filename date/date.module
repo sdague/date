@@ -15,6 +15,7 @@ function date_init() {
     require_once('./'. drupal_get_path('module', 'date') .'/date_token.inc');
   }
 }
+
 /**
  * Implementation of hook_menu().
  */
