@@ -14,14 +14,18 @@ Drupal.behaviors.date_popup = function (context) {
             $(this)
               .datepicker(datePopup.settings)
               .addClass('date-popup-init')
-              .focus();
+            $(this).click(function(){
+              $(this).focus();
+            });
             break;
 
           case 'timeEntry':
             $(this)
               .timeEntry(datePopup.settings)
               .addClass('date-popup-init')
-              .focus();
+            $(this).click(function(){
+              $(this).focus();
+            });
             break;
         }
       }
