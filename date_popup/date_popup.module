@@ -39,13 +39,26 @@ function date_popup_load() {
 }
 
 function date_popup_css_default() {
-  return drupal_get_path('module', 'date_popup') .'/themes/datepicker.css';
+  if (!module_exists('jquery_ui')) {
+    return '';
+  }
+  $version = jquery_ui_get_version();
+  $jquery_ui_path = drupal_get_path('module', 'jquery_ui');
+  switch ($version) {
+    case '1.6':
+      return drupal_get_path('module', 'date_popup') .'/themes/datepicker.css';
+    default:
+      return drupal_get_path('module', 'date_popup') .'/themes/datepicker.1.7.css';
+  }
 }
 
 function date_popup_css_options() {
+  $paths = array();
+  if (!module_exists('jquery_ui')) {
+    return $paths;
+  }
   $version = jquery_ui_get_version();
   $jquery_ui_path = drupal_get_path('module', 'jquery_ui');
-  $paths = array();
   switch ($version) {
     case '1.6':
       $paths[drupal_get_path('module', 'date_popup') .'/themes/datepicker.css'] = t('Date Popup default');
