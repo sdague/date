@@ -533,14 +533,11 @@ function date_combo_validate($element, &$form_state) {
  * Handle widget processing.
  */
 function date_widget_validate($element, &$form_state) {
-  $form_values = $form_state['values'];
-  $field_name = $element['#field_name'];
-  $fields = content_fields();
   $field = $form_state['#field_info'][$element['#field_name']];
-  if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
-    require_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
+  if (module_exists('date_repeat') && $field['repeat'] == 1) {
+    module_load_include('inc', 'date', 'date_repeat');
     return _date_repeat_widget_validate($element, $form_state);
-  }
+  }  
 }
 
 /**
