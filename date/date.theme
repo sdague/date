@@ -245,6 +245,7 @@ function theme_date_repeat_display($field, $item, $node = NULL) {
  * @return formatted date.
  */
 function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $view = NULL) {
+
   if (empty($date1) || !is_object($date1) || $format == 'format_interval') {
     return;
   }
@@ -252,48 +253,15 @@ function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $vie
     $date2 = $date1;
   }
   
-  $tmp = date_format_order($format);
-  $granularity = array_intersect(array_keys(date_granularity_names()), date_format_order($format));
-  $granularity = array_pop($granularity);
-  if (empty($field['granularity'])) {
-    $field['granularity'] = $tmp;
-  }
-
-  $increment = isset($field['widget']['increment']) ? $field['widget']['increment'] : 1;
-  $tmp = date_seconds('s', TRUE, $increment);
-  $max_seconds = array_pop($tmp);
-  $tmp = date_minutes('i', TRUE, $increment);
-  $max_minutes = array_pop($tmp);
-  
-  switch ($granularity) {
-    case 'second':
-      $min_comp = date_format($date1, 'H:i:s') == '00:00:00';
-      $max_comp = date_format($date2, 'H:i:s') == '00:00:00' || date_format($date2, 'H:i:s') == '23:'. $max_minutes .':'. $max_seconds;
-      break;
-    case 'minute':
-      $min_comp = date_format($date1, 'H:i') == '00:00';
-      $max_comp = date_format($date2, 'H:i:s') == '00:00:00' || date_format($date2, 'H:i') == '23:'. $max_minutes;
-      break;
-    case 'hour':
-      $min_comp = date_format($date1, 'H') == '00';
-      $max_comp = date_format($date2, 'H:i:s') == '00:00:00' || date_format($date2, 'H') == '23';
-      break;
-    default:
-      $min_comp = TRUE;
-      $max_comp = FALSE;
-  }
-  
-  // Time runs from midnight to the maximum time -- call it 'All day'.
-  if (date_has_time($field['granularity']) && $min_comp && $max_comp) {
-    $format = date_limit_format($format, array('year', 'month', 'day'));
-    return trim(date_format_date($$which, 'custom', $format) .' '. theme('date_all_day_label'));
-  }
-  // There is no time, use neither 'All day' nor time.
-  elseif (!date_has_time($field['granularity'])) {
+  if (!date_has_time($field['granularity'])) {
     $format = date_limit_format($format, array('year', 'month', 'day'));
     return date_format_date($$which, 'custom', $format);
   }
-  // Normal formatting.
+  
+  if ($all_day = date_all_day($field, $date1, $date2)) {
+    $format = date_limit_format($format, array('year', 'month', 'day'));
+    return trim(date_format_date($$which, 'custom', $format) .' '. theme('date_all_day_label'));
+  }
   else {
     return date_format_date($$which, 'custom', $format);
   }
