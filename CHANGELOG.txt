@@ -4,7 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
-
+- Add functions to get a granularity precision from a granularity array or an array from a precision.
 - #760284 by skwashd, arithmetric clean up ical rfc compliance.
 - #939152 by amelfe add z-index to datepicker 1.7.
 - #826458 by troynt Keep date popup from popping up on page load.

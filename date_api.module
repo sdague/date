@@ -505,6 +505,31 @@ function date_granularity_precision($granularity_array) {
   return array_pop($input);
 }
 
+
+/**
+ * Construct an appropriate DATETIME format string for the granularity of an item.
+ */
+function date_granularity_format($granularity) {
+  if (is_array($granularity)) {
+    $granularity = date_granularity_precision($granularity);
+  }
+  $format = 'Y-m-d H:i:s';
+  switch ($granularity) {
+    case 'year':
+      return substr($format, 0, 1);
+    case 'month':
+      return substr($format, 0, 3);
+    case 'day':
+      return substr($format, 0, 5);
+    case 'hour';
+      return substr($format, 0, 7);
+    case 'minute':
+      return substr($format, 0, 9);
+    default:
+      return $format;
+  } 
+}
+
 /**
  * A translated array of timezone names.
  * Cache the untranslated array, make the translated array a static variable.
