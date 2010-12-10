@@ -357,6 +357,32 @@ class DateRepeatTestCase extends DrupalWebTestCase {
     $result = implode(', ', $dates);
     $this->assertEqual($result, $shouldbe, $rule .'; Starting '.$start .';  results: '. $result);
 
+    //Every Sunday in January, every other year, forever:
+    $start = "1997-01-05 09:00:00";
+    $end = "2001-02-01 09:00:00";
+    $rule = 'RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU';
+    //  ==> (1997 9:00 AM EDT)January 5,12,19,26
+    //      (1999 9:00 AM EDT)January 3,10,17,24,31
+    //      (2001 9:00 AM EDT)January 7,14,21,28
+    $dates = date_repeat_calc($rule, $start, $end, array());
+    $shouldbe = '1997-01-05 09:00:00, 1997-01-12 09:00:00, 1997-01-19 09:00:00, 1997-01-26 09:00:00, 1999-01-03 09:00:00, 1999-01-10 09:00:00, 1999-01-17 09:00:00, 1999-01-24 09:00:00, 1999-01-31 09:00:00, 2001-01-07 09:00:00, 2001-01-14 09:00:00, 2001-01-21 09:00:00, 2001-01-28 09:00:00';
+    $result = implode(', ', $dates);
+    $this->assertEqual($result, $shouldbe, $rule .'; Starting '.$start .';  results: '. $result);
+
+return;
+
+    //Every Thanksgiving, forever:
+    $start = "1997-01-01 09:00:00";
+    $end = "2001-02-01 09:00:00";
+    $rule = 'RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=11;BYDAY=4TH';
+    //  ==> (1997 9:00 AM EDT)Nov
+    //      (1999 9:00 AM EDT)Nov
+    //      (2001 9:00 AM EDT)Nov
+    $dates = date_repeat_calc($rule, $start, $end, array());
+    $shouldbe = '';
+    $result = implode(', ', $dates);
+    $this->assertEqual($result, $shouldbe, $rule .'; Starting '.$start .';  results: '. $result);
+
 // TODO:
 // BYYEARDAY, BYSETPOS,
 // BYHOUR, BYMINUTE, HOURLY, MINUTELY, SECONDLY
