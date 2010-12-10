@@ -133,7 +133,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
             $period_finished = TRUE;
           }
           // Back up to first of month and jump.
-          $current_day = date_repeat_set_month_day($current_day, NULL, 1, '+', $timezone));
+          $current_day = date_repeat_set_month_day($current_day, NULL, 1, '+', $timezone);
           date_modify($current_day, '+'. $jump);
         }
         // If it's yearly, break out of the loop at the
@@ -144,14 +144,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
           }
           else {
             // Back up to first of month and jump.
-            $current_day = date_repeat_set_month_day($current_day, NULL, 1, '+', $timezone));
+            $current_day = date_repeat_set_month_day($current_day, NULL, 1, '+', $timezone);
             date_modify($current_day, '+1 month');
           }
         }
       }
       if ($rrule['FREQ'] == 'YEARLY') {
         // Back up to first of year and jump.
-        $current_day = date_repeat_set_year_day($current_day, NULL, 1, '+', $timezone));
+        $current_day = date_repeat_set_year_day($current_day, NULL, 1, '+', $timezone);
         date_modify($current_day, '+'. $jump);
       }
       $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
