@@ -370,7 +370,7 @@ function date_field_settings_form($field) {
     '#title' => t('Default Display'),
     '#default_value' => !empty($field['default_format']) ? $field['default_format'] : 'medium',
     '#options' => $format_types,
-    '#description' => t('Select a default format type to be used for the date display. Visit the <a href="@date-time-page">Date and time date format page</a> to add and edit format types.', array('@date-time-page' => base_path() .'admin/settings/date-time/formats')),
+    '#description' => t('Select a default format type to be used for the date display. Visit the <a href="@date-time-page">Date and time date format page</a> to add and edit format types.', array('@date-time-page' => url('admin/settings/date-time/formats'))),
     );
 
   $description = t('Select the timezone handling method to be used for this date field.');
