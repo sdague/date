@@ -12,7 +12,7 @@ class DateTestCase extends DrupalWebTestCase {
 
   function setUp() {
     // Load the date_api module.
-    parent::setUp('content', 'date_api', 'date_timezone', 'date', 'date_popup');
+    parent::setUp('content', 'date_api', 'date_timezone', 'date', 'date_popup', 'jquery_ui');
 
     // Create and log in our privileged user.
     $this->privileged_user = $this->drupalCreateUser(array(
@@ -118,7 +118,7 @@ class DateTestCase extends DrupalWebTestCase {
     }
     elseif ($options == 'popup') {
       // The default format for a popup is an odd one.
-      $edit['field_test[0][value][date]'] = '07.10.2010';
+      $edit['field_test[0][value][date]'] = '10/07/2010';
       $edit['field_test[0][value][time]'] = '10:30';
     }
     $this->drupalPost('node/add/story', $edit, t('Save'));

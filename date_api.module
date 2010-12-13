@@ -1344,6 +1344,11 @@ function date_fuzzy_datetime($date) {
   if (empty($date['day'])) {
     $date['day'] = 1;
   }
+  foreach(array('hour', 'minute', 'second') as $part) {
+    if (empty($date[$part])) {
+      $date[$part] = 0;
+    }
+  }
   $value = date_pad($date['year'], 4) .'-'. date_pad($date['month']) .'-'. 
     date_pad($date['day']) .' '. date_pad($date['hour']) .':'. 
     date_pad($date['minute']) .':'. date_pad($date['second']);
