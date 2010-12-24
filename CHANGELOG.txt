@@ -4,6 +4,10 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Fix a strict warning for use of is_a().
+- #882980 Fix WSOD in PHP4 from date_format process to create a new date.
+- #998498 Don't try to use jquery_ui function in update if it isn't installed, add a warning message.
+- #993148 Use url() for link to date format page in date widget settings so it works without clean urls.
 - Add more date repeat tests and fix date repeat handling of day of month > 5.
 - #784854 by akeemw, fix broken date repeat handling of negative by-day computations.
 - Add functions to get a granularity precision from a granularity array or an array from a precision.
