@@ -707,11 +707,11 @@ function date_t_strings(&$replace, $langcode) {
  *   A translated date string in the requested format.
  */
 function date_format_date($date, $type = 'medium', $format = '', $langcode = NULL) {
+  if (get_class($date) != 'DateTime') {
+    $date = date_make_date($date);
+  }
   if (empty($date)) {
     return '';
-  }
-  if (get_Class($date) != 'DateTime') {
-    $date = new DateTime($date);
   }
   
   switch ($type) {
