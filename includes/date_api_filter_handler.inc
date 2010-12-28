@@ -411,8 +411,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    */
   function set_relationship() {
     parent::set_relationship();
+    $this->get_query_fields();
     if (!empty($this->relationship)) {
-      $this->get_query_fields();
       if (!empty($this->query_fields)) {
         foreach ($this->query_fields as $query_field) {
           $field = $query_field['field'];
