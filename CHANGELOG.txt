@@ -5,7 +5,6 @@ Version 6.2-dev
 =================
 
 - #575770 Fix handling of empty vs zero date parts in the date combo processing.
-- #792012 by nhck, Differentiate between DATE_ISO and DATE_DATETIME in date_is_valid().
 - #385688 by jcmarco, Make sure we don't set relationships where there should be none.
 - Fix a strict warning for use of is_a().
 - #882980 Fix WSOD in PHP4 from date_format process to create a new date.

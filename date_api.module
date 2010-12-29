@@ -1455,8 +1455,7 @@ function date_is_valid($date, $type = DATE_DATETIME, $granularity = array('year'
   // Remember that DATE_UNIX can have a valid value of '0', which is 'empty'.
   if (empty($date) && $type != DATE_UNIX) return FALSE;
   if ($type == DATE_OBJECT && !is_object($date)) return FALSE;
-  if ($type == DATE_ISO && (!is_string($date) || !preg_match(DATE_REGEX_ISO, $date))) return FALSE;
-  if ($type == DATE_DATETIME && (!is_string($date) || !preg_match(DATE_REGEX_DATETIME, $date))) return FALSE;
+  if (($type == DATE_ISO || $type == DATE_DATETIME) && (!is_string($date) || !preg_match(DATE_REGEX_LOOSE, $date))) return FALSE;
   if ($type == DATE_UNIX and !is_numeric($date)) return FALSE;
   if ($type == DATE_ARRAY and !is_array($date)) return FALSE;
 
