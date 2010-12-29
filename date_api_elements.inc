@@ -476,7 +476,6 @@ function date_select_validate($element, &$form_state) {
     array_unshift($errors, t('Field %field has errors.', array('%field' => $label)));
     form_set_error($error_field, implode(' ', $errors));
   }
-  
   // If there are no errors and the value is valid, set it.
   if (empty($errors) && !empty($value)) {
     form_set_value($element, $value, $form_state);
