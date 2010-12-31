@@ -4,6 +4,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #549042 The date_week() function should return an integer even when using ISO weeks.
 - #575770 Fix handling of empty vs zero date parts in the date combo processing.
 - #385688 by jcmarco, Make sure we don't set relationships where there should be none.
 - Fix a strict warning for use of is_a().

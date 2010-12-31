@@ -1190,7 +1190,7 @@ function date_week($date) {
   
   // If we are using ISO weeks, this is easy.
   if (variable_get('date_api_use_iso8601', FALSE)) {
-    return date_format($date, 'W');
+    return intval(date_format($date, 'W'));
   }
   
   $year_date = date_make_date($parts[0] . '-01-01 12:00:00', 'UTC');
