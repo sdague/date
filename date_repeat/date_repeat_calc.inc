@@ -263,12 +263,11 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
       $current_day = drupal_clone($start_date);
       $format = $rrule['FREQ'] == 'YEARLY' ? 'Y' : 'n';
       $current_period = date_format($current_day, $format);
-
       // Back up to the beginning of the week in case we are somewhere in the
       // middle of the possible week days, needed so we don't prematurely
       // jump to the next week. The date_repeat_add_dates() function will
       // keep dates outside the range from getting added.
-      if (date_format($current_day, 'l') != $day) {  
+      if (date_format($current_day, 'l') != $day_names[$day]) {  
         date_modify($current_day, '-1 '. $week_start_day);
       }
       while (!$finished) {
