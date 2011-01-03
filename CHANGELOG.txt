@@ -4,6 +4,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+Version 6.2.7
+=============
 - #514242 Day repeated every two weeks was broken by wrong day comparison value.
 - Fix a bug in the calculation of the week days when using ISO weeks.
 - #549042 The date_week() function should return an integer even when using ISO weeks.
