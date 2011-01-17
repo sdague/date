@@ -348,6 +348,34 @@ class DateAPITestCase extends DrupalWebTestCase {
     $expected = '0';
     $value = date_offset_get($date);
     $this->assertEqual($expected, $value, "The current offset should be $expected, found $value.");       
+
+     // Create year-only date.
+    $input = '2009-00-00T00:00:00';
+    $timezone = NULL;
+    $granularity = array('year');
+    $date = date_make_date($input, $timezone, DATE_DATETIME, $granularity);
+    $value = date_format($date, 'Y');
+    $expected = '2009';
+    $this->assertEqual($expected, $value, "Test date_make_date($input, $timezone, DATE_DATETIME, array('year')): should be $expected, found $value.");
+
+     // Create month and year-only date.
+    $input = '2009-10-00T00:00:00';
+    $timezone = NULL;
+    $granularity = array('year', 'month');
+    $date = date_make_date($input, $timezone, DATE_DATETIME, $granularity);
+    $value = date_format($date, 'Y-m');
+    $expected = '2009-10';
+    $this->assertEqual($expected, $value, "Test date_make_date($input, $timezone, DATE_DATETIME, array('year', 'month')): should be $expected, found $value.");
+
+     // Create time-only date.
+    $input = '0000-00-00T10:30:00';
+    $timezone = NULL;
+    $granularity = array('hour', 'minute', 'second');
+    $date = date_make_date($input, $timezone, DATE_DATETIME, $granularity);
+    $value = date_format($date, 'H:i:s');
+    $expected = '10:30:00';
+    $this->assertEqual($expected, $value, "Test date_make_date($input, $timezone, DATE_DATETIME, array('hour', 'minute', 'second')): should be $expected, found $value.");
+
    
    }
  
