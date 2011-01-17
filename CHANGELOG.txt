@@ -4,10 +4,11 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- #1011184 Add function to sort granularity array and use it in date_make_date().
 - #1014664 Fix timezone shifts when computing UNTIL date.
 - #1014818 Fix bug that only affects old versions of php to show all dates as the current date. Those old versions cannot be made to work the same way, fall back to a less robust workaround.
 - #580176 Fix alias handling when dates from multiple content types are used in same view.
-- Add tests.
+- Add more tests.
 
 Version 6.2.7
 =============
