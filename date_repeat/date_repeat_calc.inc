@@ -49,16 +49,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
   // Create a date object for the start and end dates.
   $start_date = date_make_date($start, $timezone);
   $end_date = date_make_date($end, $timezone);
-  
+
   // If the rule has an UNTIL, see if that is earlier than the end date.
   if (!empty($rrule['UNTIL'])) {
-    $until_date = date_ical_date($rrule['UNTIL']);
-    date_timezone_set($until_date, timezone_open($timezone));
+    $until_date = date_ical_date($rrule['UNTIL'], $timezone);
     if (date_format($until_date, 'U') < date_format($end_date, 'U')) {
       $end_date = $until_date;
     }
   }
-    
   // Get an integer value for the interval, if none given, '1' is implied.
   $interval = max(1, isset($rrule['INTERVAL']) ? $rrule['INTERVAL'] : 1);
   $count = isset($rrule['COUNT']) ? $rrule['COUNT'] : NULL;

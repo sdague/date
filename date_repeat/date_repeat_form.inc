@@ -362,10 +362,11 @@ function date_repeat_rrule_validate($element, &$form_state) {
   $item = $form_values[$field_name]['rrule'];
   $item = date_repeat_merge($item, $element);
   if (!empty($item['UNTIL']['datetime'])) {
-    $date = date_make_date($item['UNTIL']['datetime'], $element['#date_timezone']);
+    $date = date_make_date($item['UNTIL']['datetime'], $item['UNTIL']['tz']);
     date_time_set($date, 23, 59, 59);
     date_timezone_set($date, timezone_open('UTC'));
     $item['UNTIL']['datetime'] = date_format($date, DATE_FORMAT_DATETIME);
+    $item['UNTIL']['tz'] = 'UTC';
   }
   $rrule = date_api_ical_build_rrule($item);
   form_set_value($element, $rrule, $form_state);
