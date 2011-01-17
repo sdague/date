@@ -271,7 +271,7 @@ function date_tools_copy_type_form($target = TRUE) {
 
   // Find out what content types contain date fields and set them up as target options.
   foreach ($fields as $field_name => $field) {
-    if ($field['type'] == 'date' || $field['type'] == 'datestamp') {
+    if ($field['type'] == 'date' || $field['type'] == 'datestamp' || $field['type'] == 'datetime') {
       $type_options[$field['type_name']] = $node_types[$field['type_name']];
     }
   }
@@ -322,7 +322,7 @@ function date_tools_copy_type_fields_form($type, $extended = FALSE) {
   // Find out what content types contain date fields and set them up as target options.
   foreach ($fields as $field_name => $field) {
     if ($field['type_name'] == $type) {
-      if ($field['type'] == 'date' || $field['type'] == 'datestamp') {
+      if ($field['type'] == 'date' || $field['type'] == 'datestamp' || $field['type'] == 'datetime') {
         $date_options[$field_name] = $field['widget']['label'];
       }
       if ($field['type'] == 'text') {
