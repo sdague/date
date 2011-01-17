@@ -269,24 +269,6 @@ class date_api_argument_handler extends views_handler_argument_date {
   }
   
   /**
-   * Called just prior to query(), this lets us set up table aliases for
-   * relationships. This can't be done in pre_query(), because the relationship
-   * isn't defined yet.
-   */
-  function set_relationship() {
-    parent::set_relationship();
-    $this->get_query_fields();
-    if (!empty($this->relationship)) {
-      if (!empty($this->query_fields)) {
-        foreach ($this->query_fields as $query_field) {
-          $field = $query_field['field'];
-          $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
-        }
-      }
-    }
-  }
-  
-  /**
    * Set up the query for this argument.
    *
    * The argument sent may be found at $this->argument.
@@ -357,6 +339,9 @@ class date_api_argument_handler extends views_handler_argument_date {
       $this->query->set_where_group($this->options['date_method'], 'date');
       foreach ($this->query_fields as $query_field) {
         $field = $query_field['field'];
+        if ($field['table_name'] != $this->table || !empty($this->relationship)) {
+          $this->related_table_alias = $this->query->queue_table($field['table_name'], $this->relationship);
+        }
         $date_handler = $query_field['date_handler'];
         $table_alias = !empty($this->related_table_alias) ? $this->related_table_alias : $field['table_name'];
         $from_field = str_replace($field['table_name'] .'_', $table_alias .'.', $field['fromto'][0]);
