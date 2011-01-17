@@ -266,7 +266,7 @@ function user_timezone($abbreviation = '', $offset = -1, $is_daylight_saving_tim
   // An abbreviation of "0" passed in the callback arguments should be 
   // interpreted as the empty string.
   $abbreviation = $abbreviation ? $abbreviation : '';
-  $timezone = timezone_name_from_abbr($abbreviation, intval($offset), $is_daylight_saving_time);
+  $timezone = function_exists('timezone_name_from_abbr') ? timezone_name_from_abbr($abbreviation, intval($offset), $is_daylight_saving_time) : 'UTC';
   // The client date is passed in for debugging purposes.
   $date = isset($_GET['date']) ? $_GET['date'] : '';
   // Log a debug message.
