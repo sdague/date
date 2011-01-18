@@ -174,7 +174,7 @@ function date_tools_copy_convert_events( $source_type, $target_type, $date_field
     $event_timezone = !empty($event->timezone) ? $timezones[$event->timezone] : date_default_timezone_name();
     // If this is a deprecated timezone, replace it.
     $event_timezone = _date_timezone_replacement($event_timezone);
-    
+
     if ($event_version == 1) {
       // Version 1 stores the UTC value in the database as a timestamp.
       $date = array(0 => array());

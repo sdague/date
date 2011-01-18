@@ -124,7 +124,6 @@ Version 6.2.4
 - We sometimes get $edit without $edit['date'] from Views exposed filters, fix processing for that possibility.
 - Exposed filter querystring must be appended in normal views.
 
-
 Version 6.2.3
 =============
 
@@ -152,7 +151,6 @@ Version 6.2.3
 - Remove deprecated date_format_options().
 - Remove deprecated Views code.
 - Remove deprecated date_install_clear() function.
-
 
 Version 6.2.2
 =============
@@ -656,7 +654,7 @@ Version 6.2-beta3
 - Get rid of date_ical_export(). The ical export code has been moved into a template and pre_processor.
 - Make Date API changes needed to get iCal export working in Calendar.
 - #251830 Replace D5 function name with D6 function name, content_alter_db_field() is D5 only.
- 
+
 Version 6.2 beta2
 =================
 - Fix computation of week range computed from views arguments.
@@ -726,5 +724,3 @@ Version 6.2 beta
 - #240980 coder compliance fixups.
 - #225738 Add special case handling for year only or year and month only ISO dates.
 - #244025 make the jquery calendar code more efficient.
-
-  

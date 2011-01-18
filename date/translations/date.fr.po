@@ -561,4 +561,3 @@ msgstr "Date"
 #: date/date.info:0
 msgid "Defines CCK date/time fields and widgets."
 msgstr "Définit des champs et widgets CCK date/heure"
-

@@ -53,4 +53,3 @@ msgstr "Datums-Lokale"
 #: date_locale/date_locale.info:0
 msgid "Allows the site admin to configure multiple formats for date/time display to taylor dates for a specific locale or audience."
 msgstr "Ermöglicht einem Website-Verwalter mehrere Formate für die Datum/Zeit-Anzeige zu konfigurieren, um Termine für eine spezielle Lokale oder Zielgruppen maßzuschneidern."
-

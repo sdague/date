@@ -59,4 +59,3 @@ msgstr "date_php4"
 #: date_php4/date_php4.info:0
 msgid "Emulate PHP 5.2 date functions in PHP 4.x, PHP 5.0, and PHP 5.1. Required when using the Date API with PHP versions less than PHP 5.2."
 msgstr "Emular las funciones de PHP 5.2 en PHP4.x, PHP 5.0 y PHP 5.1. Requerido cuando se usa Date API con versiones de PHP inferiores a PHP 5.2"
-

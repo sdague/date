@@ -6,11 +6,11 @@
  * Creates a special attachment for this purpose only. 
  */
 class date_plugin_display_attachment extends views_plugin_display_attachment {
-  
+
   // Require the date_nav style. That style has a date_nav type
   // so it won't show up as a style option on any other display.
   function get_style_type() { return 'date_nav'; }
-  
+
   // No options to set style, force it to the right value.
   function defaultable_sections($section = NULL) {
     if (in_array($section, array('row_options', 'row_plugin', 'items_per_page'))) {
@@ -33,4 +33,3 @@ class date_plugin_display_attachment extends views_plugin_display_attachment {
     return $options;
   } 
 }
-

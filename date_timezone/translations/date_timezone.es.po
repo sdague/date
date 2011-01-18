@@ -1610,4 +1610,3 @@ msgstr "Date Timezone"
 #: date_timezone/date_timezone.info:0
 msgid "Needed when using Date API. Overrides site and user timezone handling to set timezone names instead of offsets."
 msgstr "Requerido cuando se usa Date API. Modifica la gestión de zona horaria del sitio y del usuario para usar nombres de zonas horarias en vez de un desplazamiento."
-

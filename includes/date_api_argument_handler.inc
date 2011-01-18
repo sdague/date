@@ -17,16 +17,16 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function init(&$view, $options) {
     parent::init($view, $options);
-    
+
     // Identify the type of display we're using.
     $this->display_handler = $view->display_handler->definition['handler'];
-    
+
     // Add a date handler to the display.
     $date_handler = $this->date_handler;
     $date_handler->granularity = $this->options['granularity'];
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
-    
+
     if (empty($this->view->date_info)) $this->view->date_info = new stdClass();
 
     // Set the view range, do this only if not already set in case there are multiple date arguments.
@@ -77,19 +77,19 @@ class date_api_argument_handler extends views_handler_argument_date {
       '#default_value' => $this->options['year_range'],
       '#description' => t("Set the allowable minimum and maximum year range for this argument, either a -X:+X offset from the current year, like '-3:+3' or an absolute minimum and maximum year, like '2005:2010'. When the argument is set to a date outside the range, the page will be returned as 'Page not found (404)'."),
     );
-    
+
     $fields = date_api_fields($this->definition['base']);
     $options = array();
     foreach ($fields['name'] as $name => $field) {
       $options[$name] = $field['label'];
     }
-    
+
     // If this argument was added as a CCK field argument and no other date field
     // has been chosen, update the default with the right date.
     if (empty($this->options['date_fields']) && $this->field != 'date_argument') {
       $this->options['date_fields'] = array($this->table .'.'. $this->field);
     }
-    
+
     $form['date_fields'] = array(
       '#title' => t('Date field(s)'),
       '#type' => 'checkboxes',
@@ -105,13 +105,13 @@ class date_api_argument_handler extends views_handler_argument_date {
       '#default_value' => $this->options['date_method'],
       '#description' => t('Method of handling multiple date fields in the same query. Return items that have any matching date field (date = field_1 OR field_2), or only those with matches in all selected date fields (date = field_1 AND field_2).'),
       );
-    
+
   }
-    
+
   function options_validate($form, &$form_state) {
     // It is very important to call the parent function here:
     parent::options_validate($form, $form_state);
-    
+
     if ($form_state['values']['form_id'] == 'views_ui_config_item_form') {
       $check_fields = array_filter($form_state['values']['options']['date_fields']);
       if (empty($check_fields)) {
@@ -122,16 +122,16 @@ class date_api_argument_handler extends views_handler_argument_date {
       }
     }
   }
-  
+
   function options_submit($form, &$form_state) {
     // It is very important to call the parent function here:
     parent::options_submit($form, $form_state);
-    
+
     if ($form_state['values']['form_id'] == 'views_ui_config_item_form') {
       $form_state['values']['options']['date_fields'] = array_filter($form_state['values']['options']['date_fields']);
     }
   }
-  
+
   // Update the summary values to show selected granularity.
   function admin_summary() {
     $fields = date_api_fields($this->definition['base']);
@@ -167,7 +167,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       return parent::get_default_argument($raw);
     }
   }
-    
+
   function format() {
     if (!empty($this->options['granularity'])) {
       $date_handler = new date_sql_handler();
@@ -177,7 +177,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       return !empty($this->options[$this->option_name]) ? $this->options[$this->option_name] : 'Y-m';
     }
   }
-    
+
   /**
    * Provide a link to the next level of the view from the summary.
    */
@@ -202,7 +202,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $range = $this->date_handler->arg_range($value);
     return date_format_date($range[0], 'custom', $format);
   }
-  
+
   /**
    * Provide a link to the next level of the view from the argument.
    */
@@ -220,23 +220,23 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function summary_query() {
     $this->get_query_fields();
-    
+
     // No way to do summaries on more than one field at a time.
     if (count($this->query_fields) > 1) {
       return;
     }
-    
+
     $field = $this->query_fields[0]['field'];
     $date_handler = $this->query_fields[0]['date_handler'];
-      
+
     // Get the SQL format for this granularity, like Y-m,
     // and use that as the grouping value.
     $format = $date_handler->views_formats($this->options['granularity'], 'sql');
     $this->formula = $date_handler->sql_format($format, $date_handler->sql_field($field['fullname']));
-    
+
     // Add the computed field.
     $this->base_alias = $this->name_alias = $this->query->add_field(NULL, $this->formula, $field['query_name']);
-       
+
     return $this->summary_basics(FALSE);
   }
 
@@ -258,7 +258,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       }
     }
   }
- 
+
   /**
    * Make sure the date field is added to the query.
    * 
@@ -275,7 +275,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       }
     }
   }
-  
+
   /**
    * Set up the query for this argument.
    *
@@ -308,7 +308,7 @@ class date_api_argument_handler extends views_handler_argument_date {
       }
     }
     $parts = $this->date_handler->arg_parts($this->argument);
-    
+
     foreach ($parts as $type) {
       foreach ($type as $part) {
         foreach ($part as $key => $value) {
@@ -321,20 +321,20 @@ class date_api_argument_handler extends views_handler_argument_date {
         }
       }
     }
-    
+
     $range = $this->date_handler->arg_range($this->argument);
     $min_date = $range[0];
     $max_date = $range[1];
     $this->min_date = $min_date;
     $this->max_date = $max_date;
-    
+
     // See if we're outside the allowed date range for our argument.
     if (date_format($min_date, 'Y') < $this->view->date_info->min_allowed_year || date_format($max_date, 'Y') > $this->view->date_info->max_allowed_year) {
       $this->forbid = TRUE;
       $this->query->add_where('date', "0=1");
       return;
     }
-    
+
     // The second option seems to work better in the block view if 
     // set to something other than the original value. 
     // Need to keep an eye on this to be sure nothing else breaks.
@@ -354,7 +354,7 @@ class date_api_argument_handler extends views_handler_argument_date {
         $table_alias = !empty($this->related_table_alias) ? $this->related_table_alias : $field['table_name'];
         $from_field = str_replace($field['table_name'] .'_', $table_alias .'.', $field['fromto'][0]);
         $to_field = str_replace($field['table_name'] .'_', $table_alias .'.', $field['fromto'][1]);
-        
+
         if ($this->granularity != 'week') {
           $from = $date_handler->sql_where_format($format, $from_field, '<=', date_format($max_date, $format));
           $to   = $date_handler->sql_where_format($format, $to_field, '>=', date_format($min_date, $format));

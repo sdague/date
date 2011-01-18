@@ -131,7 +131,7 @@ function date_timezone_process($element, $edit, $form_state, $form) {
 function date_text_process($element, $edit, $form_state, $form) {
   $date = NULL;
   $granularity = date_format_order($element['#date_format']);
-  
+
   // We sometimes get $edit without $edit['date'] from
   // Views exposed filters.
   if (!empty($edit) && is_array($edit) && !empty($edit['date'])) {
@@ -148,7 +148,7 @@ function date_text_process($element, $edit, $form_state, $form) {
   $element['date']['#default_value'] = is_object($date) ? date_format_date($date , 'custom', $element['#date_format']) : '';
   $element['date']['#attributes'] = array('class' => (isset($element['#attributes']['class']) ? $element['#attributes']['class'] : '') .' date-date');
   $element['date']['#description'] = ' '. t('Format: @date', array('@date' => date_format_date(date_now(), 'custom', $element['#date_format'])));
-  
+
   // Keep the system from creating an error message for the sub-element.
   // We'll set our own message on the parent element.
   //$element['date']['#required'] = $element['#required'];
@@ -194,11 +194,11 @@ function date_select_process($element, $edit, $form_state, $form) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
-  
+
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
-  
+
   // Store a hidden value for all date parts not in the current display.
   $granularity = date_format_order($element['#date_format']);
   $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j', 'hour' => 'H', 'minute' => 'i', 'second' => 's');
@@ -260,7 +260,7 @@ function date_parts_element($element, $date, $format) {
         $range = date_range_years($element['#date_year_range'], $date);
         $min_year = $range[0];
         $max_year = $range[1];
-        
+
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 'Y') : '';
         if ($part_type == 'select') {
           $sub_element[$field]['#options'] = drupal_map_assoc(date_years($min_year, $max_year, $part_required));
@@ -331,7 +331,7 @@ function date_parts_element($element, $date, $format) {
         $sub_element[$field]['#title'] = $label;
       }
     }
- 
+
     // Views exposed filters are treated as submitted even if not,
     // so force the #default value in that case. Make sure we set
     // a default that is in the option list.
@@ -341,7 +341,7 @@ function date_parts_element($element, $date, $format) {
       $sub_element[$field]['#value'] = $default;
     }
   }
-  
+
   if (($hours_format == 'g' || $hours_format == 'h') && date_has_time($granularity)) {
     $sub_element['ampm'] = array(
       '#type' => 'select',
@@ -410,11 +410,11 @@ function date_select_validate($element, &$form_state) {
       $element['#value'][$field] = '';
     }
   }
- 
+
   $error_field = implode('][', $element['#parents']);
   $errors = array();
   $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
-  
+
   if (in_array('year', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['year']))) {
     if ($element['#value']['year'] < variable_get('date_min_year', 1) || $element['#value']['year'] > variable_get('date_max_year', 4000)) {
       $errors[] = t('The year must be a number between %min and %max.', array(
@@ -514,7 +514,7 @@ function date_text_validate($element, &$form_state) {
   $parents = $element['#parents'];
   $label = !empty($element['#date_title']) ? $element['#date_title'] : (!empty($element['#title']) ? $element['#title'] : '');
   $value = date_text_input_value($element);
-  
+
   if (empty($value) && !empty($element['#required'])) {
     form_error($element, t('A valid date is required for %title.', array('%title' => $label))); 
   }
@@ -557,7 +557,6 @@ function date_text_input_value($element) {
 function date_timezone_validate($element, &$form_state) {
   form_set_value($element, $element['#value']['timezone'], $form_state);
 }
-
 
 /**
  * Convert a date input in a custom format to a standard date type
@@ -602,7 +601,7 @@ function date_convert_from_custom($date, $format) {
   $regex2 = str_replace('a', '(am|pm)', $regex2);
   preg_match('`^'. $regex2 .'$`', $date, $values);
   array_shift($values);
-  
+
   // if we did not find all the values for the patterns in the format, abort
   if (count($letters) != count($values)) {
     return  NULL;

@@ -292,4 +292,3 @@ function date_locale_locale_format_save($langcode, $type, $format) {
   }
 
 }
-

@@ -121,9 +121,9 @@ function date_api_views_plugins() {
  */
 function date_api_views_data() {
   $data = array();
-  
+
   $tables = module_invoke_all('date_api_tables');
-  
+
   foreach ($tables as $base_table) {
     // The flexible date argument.
     $data[$base_table]['date_argument'] = array(

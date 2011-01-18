@@ -33,11 +33,11 @@
  */
 function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions) {
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
-  
+
   if (empty($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  
+
   // Make sure the 'EXCEPTIONS' string isn't appended to the rule.
   $parts = explode("\n", $rrule);
   if (count($parts)) {
@@ -45,7 +45,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
   }
   // Get the parsed array of rule values.
   $rrule = date_ical_parse_rrule('RRULE:', $rrule);
-  
+
   // Create a date object for the start and end dates.
   $start_date = date_make_date($start, $timezone);
   $end_date = date_make_date($end, $timezone);
@@ -60,7 +60,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
   // Get an integer value for the interval, if none given, '1' is implied.
   $interval = max(1, isset($rrule['INTERVAL']) ? $rrule['INTERVAL'] : 1);
   $count = isset($rrule['COUNT']) ? $rrule['COUNT'] : NULL;
-  
+
   if (empty($rrule['FREQ'])) {
     $rrule['FREQ'] = 'DAILY';
   }
@@ -72,7 +72,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
   else if (!empty($rrule['BYDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'WEEKLY', 'YEARLY'))) {
     $rrule['FREQ'] = 'WEEKLY';
    }
-  
+
   // Find the time period to jump forward between dates.
   switch ($rrule['FREQ']) {
    case 'DAILY':
@@ -278,7 +278,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
             // function is insufficient to test whether to include this date
             // if we are using a rule like 'every other month', so we must
             // explicitly test it here.
-            
+
             // If we're already on the right day, don't jump or we
             // will prematurely move into the next week.
             if (date_format($current_day, 'l') != $day) {
@@ -290,13 +290,13 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
             }
           }
           $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
-          
+
           // Make sure we don't get stuck in endless loop if the current
           // day never got changed above.
           if (!$moved) {
             date_modify($current_day, '+1 day');
           }
-                      
+
           // If this is a WEEKLY frequency, stop after each week,
           // otherwise, stop when we've moved outside the current period.
           // Jump to the end of the week, then test the period.
@@ -307,14 +307,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
             $period_finished = TRUE;
           }
         }
-        
+
         if ($finished) {
           continue;
         }
-        
+
         // We'll be at the end of a week, month, or year when 
         // we get to this point in the code.
-        
+
         // Go back to the beginning of this period before we jump, to
         // ensure we jump to the first day of the next period.
         switch ($rrule['FREQ']) {
@@ -338,12 +338,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
       }
     }
   }
-  
+
   // add additional dates
   foreach($additions as $addition) {
     $days[] = date_format($addition, DATE_FORMAT_DATETIME);
   }
-  
+
   sort($days);
   return $days;
 }
@@ -359,7 +359,7 @@ function date_repeat_adjust_rrule($rrule, $start_date) {
 
   // RFC 2445 says if no day or monthday is specified when creating repeats for
   // weeks, months, or years, impute the value from the start date.
-  
+
   if (empty($rrule['BYDAY']) && $rrule['FREQ'] == 'WEEKLY') {
     $rrule['BYDAY'] = array(date_repeat_dow2day(date_format($start_date, 'w')));
   }
@@ -471,7 +471,7 @@ function date_repeat_is_finished($current_day, $days, $count, $end_date) {
 function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+', $timezone = 'UTC') {
   if (is_object($date_in)) {
     $current_month = date_format($date_in, 'n');
-    
+
     // Reset to the start of the month.
     // We should be able to do this with date_date_set(), but
     // for some reason the date occasionally gets confused if run
@@ -489,7 +489,7 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
       // current month, so we can catch the first of the month.
       date_modify($date, '-1 day');
     }
-    
+
     if (empty($day)) {
       date_modify($date, $direction . $count .' days');
     }
@@ -500,7 +500,7 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
       $step = $count <= 5 ? $order[$direction . $count] : $count;
       date_modify($date, $step . ' ' . $day);
     }
-    
+
     // If that takes us outside the current month, don't go there.
     if (date_format($date, 'n') == $current_month) {
       return $date;
@@ -521,7 +521,7 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
 function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', $timezone = 'UTC') {
   if (is_object($date_in)) {
     $current_year = date_format($date_in, 'Y');
-    
+
     // Reset to the start of the month.
     // See note above.
     $datetime = date_format($date_in, DATE_FORMAT_DATETIME);
@@ -536,7 +536,7 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
       // current year, so we can catch the first of the year.
       date_modify($date, '-1 day');
     }
-    
+
     if (empty($day)) {
       date_modify($date, $direction . $count .' days');
     }
@@ -547,7 +547,7 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
       $step = $count <= 5 ? $order[$direction . $count] : $count;
       date_modify($date, $step . ' ' . $day);
     }
-    
+
     // If that takes us outside the current year, don't go there.
     if (date_format($date, 'Y') == $current_year) {
       return $date;
