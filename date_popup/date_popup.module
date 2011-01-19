@@ -295,19 +295,23 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
 
   // Create a unique id for each set of custom settings.
   $id = date_popup_js_settings_id($element['#id'], 'datepicker', $settings);
+  
+  // Manually build this element and set the value - this will prevent corrupting
+  // the parent value
+  $parents = array_merge($element['#parents'], array('date'));
   $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => (!empty($element['#value']['date']) || !empty($edit['date'])) && is_object($date) ? date_format_date($date, 'custom', $date_format) : '',
     '#id' => $id,    
+    '#input' => FALSE,
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
     '#attributes' => $element['#attributes'],
-    );
-  // Views exposed filters are treated as submitted even if not,
-  // so force the #default value in that case.  
-  if (!empty($element['#force_value'])) {
-    $sub_element['#value'] = $sub_element['#default_value'];
-  }
+    '#parents' => $parents,
+    '#name' => array_shift($parents) . '['. implode('][', $parents) .']'
+  );
+  $sub_element['#value'] = $sub_element['#default_value'];
+
   // TODO, figure out exactly when we want this description. In many places it is not desired.
   $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date_format_date(date_now(), 'custom', $date_format)));
   return $sub_element;
@@ -333,18 +337,22 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
 
   // Create a unique id for each set of custom settings.
   $id = date_popup_js_settings_id($element['#id'], 'timeEntry', $settings);
+  
+  // Manually build this element and set the value - this will prevent corrupting
+  // the parent value
+  $parents = array_merge($element['#parents'], array('time'));
   $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => (!empty($element['#value']['time']) || !empty($edit['time'])) && is_object($date) ? date_format_date($date, 'custom', $time_format) : '',
     '#id' => $id,
+    '#input' => FALSE,
     '#size' => 10,
     '#maxlength' => 10,
-    );
-  // Views exposed filters are treated as submitted even if not,
-  // so force the #default value in that case.  
-  if (!empty($element['#force_value'])) {
-    $sub_element['#value'] = $sub_element['#default_value'];
-  }
+    '#parents' => $parents,
+    '#name' => array_shift($parents) . '['. implode('][', $parents) .']'
+  );
+  $sub_element['#value'] = $sub_element['#default_value'];
+
   // TODO, figure out exactly when we want this description. In many places it is not desired.
   $sub_element['#description'] = t('Format: @date', array('@date' => date_format_date(date_now(), 'custom', $time_format)));
   return ($sub_element);
