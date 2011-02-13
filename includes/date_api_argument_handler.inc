@@ -220,11 +220,15 @@ class date_api_argument_handler extends views_handler_argument_date {
    */
   function summary_query() {
     $this->get_query_fields();
-
+    
     // No way to do summaries on more than one field at a time.
     if (count($this->query_fields) > 1) {
       return;
     }
+
+    // Cause query->ensure_table to perform the correct join.
+    $this->table = $this->query_fields[0]['field']['table_name'];
+    $this->ensure_my_table();
 
     $field = $this->query_fields[0]['field'];
     $date_handler = $this->query_fields[0]['date_handler'];
