@@ -120,7 +120,8 @@ function date_api_date_format_form_elements(&$form) {
     foreach ($formats as $f => $format) {
       $choices[$f] = date_format_date(date_now(), 'custom', $f);
     }
-    $default = variable_get('date_format_' . $type, array_shift(array_keys($formats)));
+    $keys = array_keys($formats);
+    $default = variable_get('date_format_' . $type, array_shift($keys));
 
     // Get format type info for this format type.
     $type_info = date_get_format_types($type);
