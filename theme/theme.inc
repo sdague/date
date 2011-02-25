@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  *  Preprocessor to construct back and next navigation from the date argument.
  */

@@ -1,4 +1,3 @@
-// $Id$
 /**
  * Set the client's system time zone as default values of form fields.
  */

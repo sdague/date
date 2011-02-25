@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * Calculates and manipulates dates with no reliance on 32-bit system
  * timestamps, to work on dates before 1970 and after 2038.

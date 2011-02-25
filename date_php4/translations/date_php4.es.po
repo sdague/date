@@ -1,5 +1,4 @@
 # translation of date_php4.po to
-# $Id$
 # LANGUAGE translation of Drupal (date_php4)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:

@@ -1,5 +1,4 @@
 # translation of date_locale.po to
-# $Id$
 # LANGUAGE translation of Drupal (date_locale)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:

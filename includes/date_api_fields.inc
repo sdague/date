@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  *  Identify all potential date/timestamp fields.
  *

@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  *  A helper function to do cross-database concatation of date parts

@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Date Library, extended date functions.

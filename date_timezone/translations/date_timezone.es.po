@@ -1,6 +1,5 @@
 # translation of date_timezone.es.po to
 # translation of date_timezone.po to
-# $Id$
 # LANGUAGE translation of Drupal (date_timezone)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:

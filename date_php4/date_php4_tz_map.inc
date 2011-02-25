@@ -1,5 +1,4 @@
 <?php
-//$Id$
 /**
  * @file
  * Map timezone names to zid and dst_region as used in Event module and previous timezone handling.

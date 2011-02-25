@@ -1,5 +1,4 @@
 <?php
-//$Id$
 /**
  * Timezone data for PHP 4.
  *   This huge arrays is serialized and included only when needed for PHP 4 timezone compatibility.

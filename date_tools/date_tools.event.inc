@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  *  Event import form.

@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function date_timezone_install() {
   $ret = array();

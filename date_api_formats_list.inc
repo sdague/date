@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Initialize the list of date formats and their locales.

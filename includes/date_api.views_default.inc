@@ -1,5 +1,4 @@
 <?php
-//$Id$
 function date_api_views_default_views() {
 
 $view = new view;

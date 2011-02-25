@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function date_api_set_variables() {
   // Set absolute minimum and maximum year for dates on this site.

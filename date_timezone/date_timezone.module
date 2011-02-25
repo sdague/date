@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * This module will make the alter the user and site timezone forms to

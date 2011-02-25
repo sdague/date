@@ -1,4 +1,3 @@
-; $Id$
 name = Date Locale
 description = Allows the site admin to configure multiple formats for date/time display to tailor dates for a specific locale or audience.
 package = Date/Time

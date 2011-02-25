@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Enable different locales to have their own date formats.
