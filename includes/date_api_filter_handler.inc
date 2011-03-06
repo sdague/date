@@ -58,12 +58,12 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function option_definition() {
     $options = parent::option_definition();
     $options['date_fields'] = array('default' => array());
-    $options['date_method'] = array('default' => 'OR');
-    $options['granularity'] = array('default' => 'day');
-    $options['form_type'] = array('default' => 'date_select');
-    $options['default_date'] = array('default' => '');
-    $options['default_to_date'] = array('default' => '');
-    $options['year_range'] = array('default' => '-3:+3');
+    $options['date_method'] = array('default' => 'OR', 'export' => 'export_plugin');
+    $options['granularity'] = array('default' => 'day', 'export' => 'export_plugin');
+    $options['form_type'] = array('default' => 'date_select', 'export' => 'export_plugin');
+    $options['default_date'] = array('default' => '', 'export' => 'export_plugin');
+    $options['default_to_date'] = array('default' => '', 'export' => 'export_plugin');
+    $options['year_range'] = array('default' => '-3:+3', 'export' => 'export_plugin');
     return $options;
   }
 
