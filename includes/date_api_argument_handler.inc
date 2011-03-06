@@ -49,7 +49,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $options['year_range'] = array('default' => array('-3:+3'));
     $options['date_method'] = array('default' => array('OR'));
     $options['granularity'] = array('default' => array('month'));
-
+    $options['default_argument_type'] = array('default' => array('date'));
     return $options;
   }
 
