@@ -58,13 +58,27 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   function option_definition() {
     $options = parent::option_definition();
     $options['date_fields'] = array('default' => array());
-    $options['date_method'] = array('default' => array('OR'));
-    $options['granularity'] = array('default' => array('day'));
-    $options['form_type'] = array('default' => array('date_select'));
-    $options['default_date'] = array('default' => array(''));
-    $options['default_to_date'] = array('default' => array(''));
-    $options['year_range'] = array('default' => array('-3:+3'));
+    $options['date_method'] = array('default' => 'OR');
+    $options['granularity'] = array('default' => 'day');
+    $options['form_type'] = array('default' => 'date_select');
+    $options['default_date'] = array('default' => '');
+    $options['default_to_date'] = array('default' => '');
+    $options['year_range'] = array('default' => '-3:+3');
     return $options;
+  }
+
+  /**
+   * Make sure our custom options get exported.
+   * Handle the options we know about, pass the rest to the parent plugin.
+   */
+  function export_plugin($indent, $prefix, $storage, $option, $definition, $parents) {
+    $output = '';
+    if (in_array($option, array('date_method', 'granularity', 'form_type', 'default_date', 'default_to_date', 'year_range'))) {
+      $name = $this->options[$option];
+      $output .= $indent . $prefix . "['$option'] = '$name';\n";
+      return $output;
+    }
+    return parent::export_plugin($indent, $prefix, $storage, $option, $definition, $parents);
   }
 
   /**

@@ -46,11 +46,25 @@ class date_api_argument_handler extends views_handler_argument_date {
   function option_definition() {
     $options = parent::option_definition();
     $options['date_fields'] = array('default' => array());
-    $options['year_range'] = array('default' => array('-3:+3'));
-    $options['date_method'] = array('default' => array('OR'));
-    $options['granularity'] = array('default' => array('month'));
-    $options['default_argument_type'] = array('default' => array('date'));
+    $options['year_range'] = array('default' => '-3:+3');
+    $options['date_method'] = array('default' => 'OR');
+    $options['granularity'] = array('default' => 'month');
+    $options['default_argument_type'] = array('default' => 'date');
     return $options;
+  }
+
+  /**
+   * Make sure our custom options get exported.
+   * Handle the options we know about, pass the rest to the parent plugin.
+   */
+  function export_plugin($indent, $prefix, $storage, $option, $definition, $parents) {
+    $output = '';
+    if (in_array($option, array('year_range', 'granularity', 'default_argument_type', 'date_method'))) {
+      $name = $this->options[$option];
+      $output .= $indent . $prefix . "['$option'] = '$name';\n";
+      return $output;
+    }
+    return parent::export_plugin($indent, $prefix, $storage, $option, $definition, $parents);
   }
 
   /**
