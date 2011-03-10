@@ -14,6 +14,7 @@ Version 6.2-dev
 - #1014664 Fix timezone shifts when computing UNTIL date for repeating dates.
 - #1014818 Fix bug that only affects old versions of php to show all dates as the current date. Those old versions cannot be made to work the same way, fall back to a less robust workaround.
 - #580176 Fix alias handling when dates from multiple content types are used in same view.
+- #1013662 by developer-x: Remove check for start and end date - this prevented multiday-all day events from showing 'All Day'
 - Add more tests.
 
 Version 6.2.7
