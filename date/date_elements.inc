@@ -484,6 +484,7 @@ function date_combo_validate($element, &$form_state) {
       // or UNIX instead of the DATETIME format used in element processing.
       $timezone = !empty($item[$tz_field]) ? $item[$tz_field] : $element['#date_timezone'];
       $timezone_db = date_get_timezone_db($field['tz_handling']);
+
       $item[$tz_field] = $timezone;
 
       $from_date = date_make_date($from_date, $timezone);
@@ -492,7 +493,6 @@ function date_combo_validate($element, &$form_state) {
       $to_date = date_make_date($to_date, $timezone);
       $test_from = date_format($from_date, 'r');
       $test_to = date_format($to_date, 'r');
-
       $item[$offset_field2] = date_offset_get($to_date);
       date_timezone_set($from_date, timezone_open($timezone_db));
       date_timezone_set($to_date, timezone_open($timezone_db));
@@ -502,17 +502,24 @@ function date_combo_validate($element, &$form_state) {
         $item['rrule'] = $form_values[$field['field_name']]['rrule'];
       }
 
-      // Test a roundtrip back to the original timezone to catch
+      // If the db timezone is not the same as the display timezone
+      // and we are using a date with time granularity,
+      // test a roundtrip back to the original timezone to catch
       // invalid dates, like 2AM on the day that spring daylight savings
-      // time begins in the US.
-      date_timezone_set($from_date, timezone_open($timezone));
-      date_timezone_set($to_date, timezone_open($timezone));
-      if ($test_from != date_format($from_date, 'r')) {
-        $errors[] = t('The From date is invalid.');
+      // time begins in the US.  
+      $granularity = date_format_order($element[$from_field]['#date_format']);
+      if ($timezone != $db_timezone && date_has_time($granularity)) {
+        date_timezone_set($from_date, timezone_open($timezone));
+        date_timezone_set($to_date, timezone_open($timezone));
+
+        if ($test_from != date_format($from_date, 'r')) {
+          $errors[] = t('The From date is invalid.');
+        }
+        if ($test_to != date_format($to_date, 'r')) {
+          $errors[] = t('The To date is invalid.');
+        }
       }
-      if ($test_to != date_format($to_date, 'r')) {
-        $errors[] = t('The To date is invalid.');
-      }
+
       if (empty($errors)) {
         form_set_value($element, $item, $form_state);
       }
