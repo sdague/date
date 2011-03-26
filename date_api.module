@@ -710,13 +710,13 @@ function date_t_strings(&$replace, $langcode) {
  *   A translated date string in the requested format.
  */
 function date_format_date($date, $type = 'medium', $format = '', $langcode = NULL) {
-  if (function_exists('timezone_name_from_abbr') && get_class($date) != 'DateTime') {
-    $date = date_make_date($date);
-  }
   if (empty($date)) {
     return '';
   }
 
+  if (function_exists('timezone_name_from_abbr') && get_class($date) != 'DateTime') {
+    $date = date_make_date($date);
+  }
   switch ($type) {
     case 'small':
     case 'short':
