@@ -305,10 +305,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
 
             // If we're already on the right day, don't jump or we
             // will prematurely move into the next week.
+            $before = date_format($current_day, "U");
             if (date_format($current_day, 'l') != $day) {
               date_modify($current_day, '+1 ' . $day . $modify_time);
-              $moved = TRUE;
+              if (date_format($current_day, "U") != $before) {
+                $moved = TRUE;
+              }
             }
+
             if ($rrule['FREQ'] == 'WEEKLY' || date_format($current_day, $format) == $current_period) {
               date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
             }
