@@ -128,7 +128,7 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
     $rrule = date_api_ical_build_rrule($values);
   }
   elseif (empty($values)) {
-    $values = date_ical_parse($rrule);
+    $values = date_ical_parse_rrule(NULL, $rrule);
   }
 
   // By the time we get here, the start and end dates have been 

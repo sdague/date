@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1159404 by mikeryan, Fix incorrect call to parse an rrule in date_repeat_build_dates().
 - Issue #1160614 by joelstein, Make sure date repeat rule gets split correctly no matter which line endings were used.
 - #1018412 by omerida: get_class() called without object
 - #1054458: Move date_increment_round() function into Date API module so it is always available.
