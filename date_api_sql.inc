@@ -470,13 +470,8 @@ class date_sql_handler {
    * @return 
    *   SQL for the where clause for this operation.
    */
-  function sql_where_extract($part, $field, $operator, $value) {
-    if ($this->local_timezone != $this->db_timezone) {
-      $field = $this->sql_field($field);
-    }
-    else {
-      $field = $this->sql_field($field, 0);
-    }
+  function sql_where_extract($part, $field, $operator, $value, $adjustment = 0) {
+    $field = $this->sql_field($field, $adjustment);
     return $this->sql_extract($part, $field) ." $operator $value";
   }
 
@@ -495,13 +490,8 @@ class date_sql_handler {
    * @return 
    *   SQL for the where clause for this operation.
    */
-  function sql_where_format($format, $field, $operator, $value) {
-    if ($this->local_timezone != $this->db_timezone) {
-      $field = $this->sql_field($field);
-    }
-    else {
-      $field = $this->sql_field($field, 0);
-    }
+  function sql_where_format($format, $field, $operator, $value, $adjustment = 0) {
+    $field = $this->sql_field($field, $adjustment);
     return $this->sql_format($format, $field) ." $operator '$value'";
   }
 

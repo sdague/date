@@ -14,6 +14,7 @@
  */
 class date_api_filter_handler extends views_handler_filter_numeric {
   var $date_handler = NULL;
+  var $offset = NULL;
 
   // Add a date handler to the filter.
   function construct() {
@@ -424,6 +425,11 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
   }
 
+  function pre_query() {
+    // Setting the offset to avoid trying to use timezone adjustments for dates that don't need it.
+    $this->offset = in_array($this->date_handler->granularity, array('hour', 'minute', 'sec')) ? NULL : 0;
+  }
+
   /**
    * Custom implementation of query() so we can get the
    * AND and OR methods in the right places.
@@ -553,10 +559,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
 
     if ($this->date_handler->granularity != 'week') {
-      $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
+      $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value, $this->offset);
     }
     else {
-      $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value);
+      $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value, $this->offset);
     }
     return $sql;
   }
