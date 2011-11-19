@@ -171,7 +171,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     if (!$raw && $this->options['default_argument_type'] == 'date') {
       if ($granularity == 'week') {
         $now = date_now();
-        $week = date_week($now);
+        $week = date_week(date_format($now, 'Y-m-d'));
         return date_format($now, 'Y') .'-W'. $week;
       } 
       else {
