@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1038482 by somanyfish, iCal import failing due to colon instead of semi-colon
 - Issue #1052586 by jpsolero, Problem with Date API when using Calendar with argument set to "Week" granularity and "current date" default argument
 - Issue #307274 by ksenzee and arlinsandbulte: Limit the selectable date range using absolute values instead of only the relative Years back and forward:
 - Issue #742146, Add option to remove X-WR-CALNAME if VEVENT is not a feed.
