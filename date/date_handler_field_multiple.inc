@@ -18,6 +18,9 @@ class date_handler_field_multiple extends content_handler_field_multiple {
     );  
     $options['multiple'] = array(
       'contains' => array(
+        'group' => array('default' => TRUE),
+        'multiple_number' => array('default' => ''),
+        'multiple_from' => array('default' => ''),
         'multiple_to' => array('default' => ''),
       )
     );
@@ -180,3 +183,4 @@ class date_handler_field_multiple extends content_handler_field_multiple {
   }
 
 }
+
