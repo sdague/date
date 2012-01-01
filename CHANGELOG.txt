@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1391374 & #1302052 by benjifisher, CRLF line endings cause problems with git apply
 - Issue #1101284 by pfournier, Expand regex for Month names to catch more possible variations.
 - Issue #1086100 by ayalon, Group Multiple Value functionality is broken
 - Issue #752550 by Fonant, Week number gets printed twice
