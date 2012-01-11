@@ -365,7 +365,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
 
   // add additional dates
   foreach ($additions as $addition) {
-    $date = date_make_date($addition . ' ' . $start_date->format('H:i:s'), $timezone);
+    $date = date_make_date($addition . ' ' . date_format($start_date, 'H:i:s'), $timezone);
     $days[] = date_format($date, DATE_FORMAT_DATETIME);
   }
 
