@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Date Views filter handler.
+ */
 
 /**
  * A flexible, configurable date filter.
@@ -106,7 +110,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
   function year_range() {
     $year_range = explode(':', $this->options['year_range']);
-    if (substr($this->options['year_range'], 0, 1) == '-' || $year_range[0] < 0) {
+    if (drupal_substr($this->options['year_range'], 0, 1) == '-' || $year_range[0] < 0) {
       $this_year = date_format(date_now(), 'Y');
       $year_range[0] = $this_year + $year_range[0];
       $year_range[1] = $this_year + $year_range[1];
@@ -301,7 +305,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
     $form[$prefix] = array(
       '#type' => $type,
-      '#title' => $name,
+      '#title' => check_plain($name),
       '#size' => 20,
       '#default_value' => !empty($this->value[$prefix]) ? $this->value[$prefix] : $default_date,
       '#date_format' => date_limit_format($format, $granularity),

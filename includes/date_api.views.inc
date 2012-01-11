@@ -49,7 +49,7 @@ function date_api_views_handlers() {
 }
 
 /**
- * Implementation of hook_views_plugins
+ * Implementation of hook_views_plugins().
  */
 function date_api_views_plugins() {
   $path = drupal_get_path('module', 'date_api');
@@ -116,7 +116,7 @@ function date_api_views_plugins() {
 }
 
 /**
- * Implementation of hook_views_data()
+ * Implementation of hook_views_data().
  */
 function date_api_views_data() {
   $data = array();
@@ -252,7 +252,7 @@ function date_views_real_url($view, $args) {
   foreach ($parts as $delta => $part) {
     // If one of the args is buried in the url, add it here and adjust
     // the delta values we'll compare the calendar arg positions to.
-    if (substr($part, 0, 1) == '$') {
+    if (drupal_substr($part, 0, 1) == '$') {
       $parts[$delta] = array_shift($args);
       $bump++;
     }

@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Views argument handler.
+ */
+
+/**
  * Date API argument handler.
  */
 class date_api_argument_handler extends views_handler_argument_date {

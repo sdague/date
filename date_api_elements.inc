@@ -374,7 +374,7 @@ function date_select_validate($element, &$form_state) {
   }
   // Strip field labels out of the results.
   foreach ($element['#value'] as $field => $field_value) {
-    if (substr($field_value, 0, 1) == '-') {
+    if (drupal_substr($field_value, 0, 1) == '-') {
       $element['#value'][$field] = '';
     }
   }
@@ -599,7 +599,7 @@ function date_convert_from_custom($date, $format) {
       case 'y':
         $year = $value;
         // if no century, we add the current one ("06" => "2006")
-        $final_date['year'] = str_pad($year, 4, substr(date("Y"), 0, 2), STR_PAD_LEFT);
+        $final_date['year'] = str_pad($year, 4, drupal_substr(date("Y"), 0, 2), STR_PAD_LEFT);
         break;
       case 'a':
       case 'A':

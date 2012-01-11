@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Code to change the type of a date.
+ */
 
 /**
  * A form to change the type of date used in date fields.

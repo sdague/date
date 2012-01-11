@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @file
+ * SQL date functions.
+ */
 /**
  *  A helper function to do cross-database concatation of date parts
  *
@@ -129,7 +132,7 @@ class date_sql_handler {
       elseif ($type == 'pgsql') {
         db_query("SET TIME ZONE INTERVAL '$offset' HOUR TO MINUTE");
       }
-      $already_set = true;
+      $already_set = TRUE;
     }
   }
 
@@ -160,7 +163,7 @@ class date_sql_handler {
    *   An appropriate SQL string for the db type and field type.
    */
   function sql_field($field, $offset = NULL) {
-    if (strtoupper($field) == 'NOW') {
+    if (drupal_strtoupper($field) == 'NOW') {
       // NOW() will be in UTC since that is what we set the db timezone to.
       $this->local_timezone = 'UTC';
       return $this->sql_offset('NOW()', $offset);
@@ -236,7 +239,7 @@ class date_sql_handler {
    *   like SECOND, MINUTE, DAY, HOUR.
    */
   function sql_date_math($field, $direction, $count, $granularity) {
-    $granularity = strtoupper($granularity);
+    $granularity = drupal_strtoupper($granularity);
     switch ($this->db_type) {
       case 'mysql':
       case 'mysqli':
@@ -255,8 +258,8 @@ class date_sql_handler {
           case 'SUB':
             return "($field - INTERVAL '$count $granularity')";
         }
-     }
-     return $field;
+    }
+    return $field;
   }
 
   /**
@@ -364,7 +367,7 @@ class date_sql_handler {
   function sql_extract($extract_type, $field) {
     // Note there is no space after FROM to avoid db_rewrite problems
     // see http://drupal.org/node/79904.
-    switch (strtoupper($extract_type)) {
+    switch (drupal_strtoupper($extract_type)) {
     case ('DATE'):
       return $field;
     case ('YEAR'):
@@ -426,8 +429,8 @@ class date_sql_handler {
    *   SQL for the where clause for this operation.
    */
   function sql_where_date($type, $field, $operator, $value, $adjustment = 0) {
-    $type = strtoupper($type);
-    if (strtoupper($value) == 'NOW') {
+    $type = drupal_strtoupper($type);
+    if (drupal_strtoupper($value) == 'NOW') {
       $value = $this->sql_field('NOW', $adjustment);
     }
     elseif ($type == 'FIELD') {
@@ -640,7 +643,7 @@ class date_sql_handler {
       case 'week':
         if ($value < 0 || $value > 53) return FALSE;
     }
-    return true;
+    return TRUE;
   }
 
   function views_formats($granularity, $type = 'sql') {
@@ -874,5 +877,5 @@ class date_sql_handler {
      // Intercept invalid info and fall back to the current date.
     $now = date_now();
     return array($now, $now);
- }
+  }
 }

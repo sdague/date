@@ -257,7 +257,7 @@ function _date_date($format, $timestamp = FALSE, $timezone = FALSE) {
       $gmt = date_get_gmt_diff_ts($timestamp, $timezone);
       $dates .= sprintf(' %s%04d', ($gmt >= 0) ? '+' : '-', abs($gmt) / 36); break;
     case 'Y': $dates .= date_pad($year, 4); break;
-    case 'y': $dates .= substr($year, strlen($year)-2, 2); break;
+    case 'y': $dates .= drupal_substr($year, strlen($year)-2, 2); break;
     // MONTH
     case 'm': if ($month<10) $dates .= '0'. $month; else $dates .= $month; break;
     case 'Q': $dates .= ($month + 3)>>2; break;

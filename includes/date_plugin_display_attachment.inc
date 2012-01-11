@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Views attachment display handler.
+ */
+
+/**
  * The plugin that handles date navigation attachments.
  *
  * Creates a special attachment for this purpose only.

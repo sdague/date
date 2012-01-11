@@ -521,15 +521,15 @@ function date_granularity_format($granularity) {
   $format = 'Y-m-d H:i:s';
   switch ($granularity) {
     case 'year':
-      return substr($format, 0, 1);
+      return drupal_substr($format, 0, 1);
     case 'month':
-      return substr($format, 0, 3);
+      return drupal_substr($format, 0, 3);
     case 'day':
-      return substr($format, 0, 5);
+      return drupal_substr($format, 0, 5);
     case 'hour';
-      return substr($format, 0, 7);
+      return drupal_substr($format, 0, 7);
     case 'minute':
-      return substr($format, 0, 9);
+      return drupal_substr($format, 0, 9);
     default:
       return $format;
   }
@@ -735,7 +735,7 @@ function date_format_date($date, $type = 'medium', $format = '', $langcode = NUL
     default:
       $format = variable_get('date_format_medium', 'D, m/d/Y - H:i');
   }
-  $max = strlen($format);
+  $max = drupal_strlen($format);
   $datestring = '';
   for ($i = 0; $i < $max; $i++) {
     $c = $format[$i];
@@ -1187,7 +1187,7 @@ function date_weeks_in_year($year) {
  * @return int calendar week number.
  */
 function date_week($date) {
-  $date = substr($date, 0, 10);
+  $date = drupal_substr($date, 0, 10);
   $parts = explode('-', $date);
   $date = date_make_date($date . ' 12:00:00', 'UTC');
 
@@ -1426,9 +1426,9 @@ function date_part_extract($date, $part, $type = DATE_DATETIME, $tz = 'UTC') {
       return (integer) array_key_exists($part, $date) ? $date[$part] : NULL;
     case DATE_DATETIME:
     case DATE_ISO:
-      return (integer) substr($date, $positions[$part], $part == 'year' ? 4 : 2);
+      return (integer) drupal_substr($date, $positions[$part], $part == 'year' ? 4 : 2);
     case DATE_ICAL:
-      return (integer) substr($date, $ipositions[$part], $part == 'year' ? 4 : 2);
+      return (integer) drupal_substr($date, $ipositions[$part], $part == 'year' ? 4 : 2);
     case DATE_UNIX:
       // Special case when creating dates with timestamps.
       // The date_create() function will assume date is UTC value
@@ -1439,7 +1439,7 @@ function date_part_extract($date, $part, $type = DATE_DATETIME, $tz = 'UTC') {
     case DATE_OBJECT:
       return date_format($date, $formats[$part]);
   }
- }
+}
 
 /**
  *  Functions to test the validity of a date in various formats.
@@ -1581,10 +1581,10 @@ function date_has_date($granularity) {
  * @return
  *   the date with the unwanted parts reset to zeros (or ones if zeros are
  *   invalid for that date type).
-*/
+ */
 function date_limit_value($date, $granularity, $type = DATE_DATETIME) {
   if (!date_is_valid($date, $type, $granularity) || !$nongranularity = date_nongranularity($granularity)) {
-   return $date;
+    return $date;
   }
   else {
     $date = date_convert($date, $type, DATE_ARRAY);
@@ -1605,7 +1605,7 @@ function date_limit_value($date, $granularity, $type = DATE_DATETIME) {
         case 'day':
           $date['day'] = $type != DATE_ISO ? 1 : 0;
           break;
-       }
+      }
     }
     return date_convert($date, DATE_ARRAY, $type);
   }
@@ -1723,7 +1723,7 @@ function date_limit_format($format, $granularity) {
 function date_format_order($format) {
   $order = array();
   if (empty($format)) return $order;
-  $max = strlen($format);
+  $max = drupal_strlen($format);
   for ($i = 0; $i <= $max; $i++) {
     if (!isset($format[$i])) break;
     $c = $format[$i];
@@ -2518,7 +2518,7 @@ function date_api_form_system_date_time_settings_alter(&$form, $form_state, $for
   $formats_form = date_api_date_formats_form($form_state);
   $form['date_formats'] = $formats_form['date_formats'];
   foreach ($form['date_formats'] as $key => $value) {
-    if (substr($key, 0, 1) != '#') {
+    if (drupal_substr($key, 0, 1) != '#') {
       $form['date_formats'][$key]['#type'] = 'value';
     }
     else {

@@ -438,7 +438,7 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
   if (is_array($element['#value']) && !empty($element['#value']['date'])) {
     $date = date_convert_from_custom(trim(!empty($element['#value']['date']) ? $element['#value']['date'] : ''), $date_format);
     $time = date_convert_from_custom(trim(!empty($element['#value']['time']) ? $element['#value']['time'] : ''), $time_format);
-    $value = trim(substr($date, 0, 10) .' '. substr($time, 11, 8));
+    $value = trim(drupal_substr($date, 0, 10) .' '. drupal_substr($time, 11, 8));
   }
 
   if (date_is_valid($value, DATE_DATETIME, $granularity)) {

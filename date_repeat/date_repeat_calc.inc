@@ -96,22 +96,22 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additi
   }
   elseif (!empty($rrule['BYDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'WEEKLY', 'YEARLY'))) {
     $rrule['FREQ'] = 'WEEKLY';
-   }
+  }
 
   // Find the time period to jump forward between dates.
   switch ($rrule['FREQ']) {
-   case 'DAILY':
-     $jump = $interval . ' days';
-     break;
-   case 'WEEKLY':
-     $jump = $interval . ' weeks';
-     break;
-   case 'MONTHLY':
-     $jump = $interval . ' months';
-     break;
-   case 'YEARLY':
-     $jump = $interval . ' years';
-     break;
+    case 'DAILY':
+      $jump = $interval . ' days';
+      break;
+    case 'WEEKLY':
+      $jump = $interval . ' weeks';
+      break;
+    case 'MONTHLY':
+      $jump = $interval . ' months';
+      break;
+    case 'YEARLY':
+      $jump = $interval . ' years';
+      break;
   }
   $rrule = date_repeat_adjust_rrule($rrule, $start_date);
 
@@ -403,7 +403,7 @@ function date_repeat_adjust_rrule($rrule, $start_date) {
 
   elseif (!empty($rrule['BYDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'YEARLY'))) {
     foreach ($rrule['BYDAY'] as $delta => $BYDAY) {
-      $rrule['BYDAY'][$delta] = substr($BYDAY, -2);
+      $rrule['BYDAY'][$delta] = drupal_substr($BYDAY, -2);
     }
   }
 
@@ -434,7 +434,7 @@ function date_repeat_add_dates(&$days, $current_day, $start_date, $end_date, $ex
   if (!empty($rrule['BYDAY'])) {
     $BYDAYS = $rrule['BYDAY'];
     foreach ($BYDAYS as $delta => $BYDAY) {
-      $BYDAYS[$delta] = substr($BYDAY, -2);
+      $BYDAYS[$delta] = drupal_substr($BYDAY, -2);
     }
     if (!in_array(date_repeat_dow2day(date_format($current_day, 'w')), $BYDAYS)) {
       return FALSE;
@@ -503,7 +503,7 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
     // through this function multiple times. It seems to work
     // reliably if we create a new object each time.
     $datetime = date_format($date_in, DATE_FORMAT_DATETIME);
-    $datetime = substr_replace($datetime, '01', 8, 2);
+    $datetime = drupal_substr_replace($datetime, '01', 8, 2);
     $date = date_make_date($datetime, $timezone);
     if ($direction == '-') {
       // For negative search, start from the end of the month.
@@ -550,7 +550,7 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
     // Reset to the start of the month.
     // See note above.
     $datetime = date_format($date_in, DATE_FORMAT_DATETIME);
-    $datetime = substr_replace($datetime, '01-01', 5, 5);
+    $datetime = drupal_substr_replace($datetime, '01-01', 5, 5);
     $date = date_make_date($datetime, $timezone);
     if ($direction == '-') {
       // For negative search, start from the end of the year.

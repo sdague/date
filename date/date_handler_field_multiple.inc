@@ -116,7 +116,7 @@ class date_handler_field_multiple extends content_handler_field_multiple {
 
     // By this time $values is a pseudo node that will be passed
     // to the theme. Add view information to it.
-    $values->date_info = !empty($this->view->date_info) ? $this->view->date_info : new StdClass();
+    $values->date_info = !empty($this->view->date_info) ? $this->view->date_info : new stdClass();
     $values->date_info->date_handler_fields = date_handler_fields($this->view);
 
     // Add the formatter settings to the pseudo node.

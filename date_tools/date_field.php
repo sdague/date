@@ -1,4 +1,4 @@
-$content[type]  = array (
+$content[type]  = array(
   'name' => 'Event',
   'type' => 'event',
   'description' => 'Events have a start date and an optional end date.',
@@ -7,7 +7,7 @@ $content[type]  = array (
   'min_word_count' => '0',
   'help' => '',
   'node_options' =>
-  array (
+  array(
     'status' => true,
     'promote' => true,
     'sticky' => false,
@@ -21,9 +21,9 @@ $content[type]  = array (
   'modified' => '1',
   'locked' => '0',
 );
-$content[fields]  = array (
+$content[fields]  = array(
   0 =>
-  array (
+  array(
     'label' => 'Date',
     'field_name' => 'field_event_date',
     'type' => 'date',
@@ -39,10 +39,10 @@ $content[fields]  = array (
     'year_range' => '-3:+3',
     'increment' => '15',
     'advanced' =>
-    array (
+    array(
       'label_position' => 'above',
       'text_parts' =>
-      array (
+      array(
         'year' => 0,
         'month' => 0,
         'day' => 0,
@@ -53,7 +53,7 @@ $content[fields]  = array (
     ),
     'label_position' => 'above',
     'text_parts' =>
-    array (
+    array(
     ),
     'description' => '',
     'group' => false,
@@ -62,7 +62,7 @@ $content[fields]  = array (
     'repeat' => 0,
     'todate' => 'optional',
     'granularity' =>
-    array (
+    array(
       'year' => 'year',
       'month' => 'month',
       'day' => 'day',
@@ -84,57 +84,57 @@ $content[fields]  = array (
     'module' => 'date',
     'widget_module' => 'date',
     'columns' =>
-    array (
+    array(
       'value' =>
-      array (
+      array(
         'type' => 'varchar',
         'length' => 20,
         'not null' => false,
         'sortable' => true,
       ),
       'value2' =>
-      array (
+      array(
         'type' => 'varchar',
         'length' => 20,
         'not null' => false,
         'sortable' => true,
       ),
       'timezone' =>
-      array (
+      array(
         'type' => 'varchar',
         'length' => 50,
         'not null' => false,
         'sortable' => true,
       ),
       'offset' =>
-      array (
+      array(
         'type' => 'int',
         'not null' => false,
         'sortable' => true,
       ),
       'offset2' =>
-      array (
+      array(
         'type' => 'int',
         'not null' => false,
         'sortable' => true,
       ),
     ),
     'display_settings' =>
-    array (
+    array(
       'label' =>
-      array (
+      array(
         'format' => 'above',
       ),
       'teaser' =>
-      array (
+      array(
         'format' => 'default',
       ),
       'full' =>
-      array (
+      array(
         'format' => 'default',
       ),
       4 =>
-      array (
+      array(
         'format' => 'default',
       ),
     ),

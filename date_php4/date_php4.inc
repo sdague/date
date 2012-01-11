@@ -64,9 +64,9 @@ if (!function_exists('date_create')) {
       // Create a current date for an empty value or 'now'.
       $date_out = date_date('Y-m-d H:i:s', (time()), $timezone);
     }
-    elseif (substr($date_in, 0, 1) == '@' && is_numeric(substr($date_in, 1))) {
+    elseif (drupal_substr($date_in, 0, 1) == '@' && is_numeric(drupal_substr($date_in, 1))) {
       // An number prefixed with '@' is interpreted as a timestamp.
-      $date_out = date_date('Y-m-d H:i', substr($date_in, 1), $timezone);
+      $date_out = date_date('Y-m-d H:i', drupal_substr($date_in, 1), $timezone);
     }
     elseif (preg_match(DATE_REGEX_LOOSE, $date_in, $regs)) {
       $year = date_pad(isset($regs[1]) ? $regs[1] : 0, 4);
@@ -89,7 +89,7 @@ if (!function_exists('date_create')) {
     if (empty($date_out)) {
       return NULL;
     }
-    $date = new StdClass();
+    $date = new stdClass();
     $date->value = $date_out;
     $date->timestamp = date_datetime2timestamp($date->value, $timezone);
     $date->timezone = $timezone;
@@ -144,7 +144,7 @@ if (!function_exists('date_format')) {
               // There is no date_week_days_abbr_untranslated().
               // This rule works for English, untranslated day names.
               $days = date_week_days_abbr();
-              $date_string .= substr($days[$dow], 0, 3);
+              $date_string .= drupal_substr($days[$dow], 0, 3);
             }
             break;
           case 'L':
@@ -222,9 +222,9 @@ if (!function_exists('date_format')) {
  */
 if (!function_exists('date_date_set')) {
   function date_date_set(&$date, $year, $month, $day) {
-    $new_date = substr_replace($date->value, date_pad($year, 4), 0, 4);
-    $new_date = substr_replace($new_date, date_pad($month), 5, 2);
-    $new_date = substr_replace($new_date, date_pad($day), 8, 2);
+    $new_date = drupal_substr_replace($date->value, date_pad($year, 4), 0, 4);
+    $new_date = drupal_substr_replace($new_date, date_pad($month), 5, 2);
+    $new_date = drupal_substr_replace($new_date, date_pad($day), 8, 2);
     $date = date_create($new_date, $date->timezone);
     return $date;
   }
@@ -247,9 +247,9 @@ if (!function_exists('date_date_set')) {
  */
 if (!function_exists('date_time_set')) {
   function date_time_set(&$date, $hour, $minute, $second) {
-    $new_date = substr_replace($date->value, date_pad($hour), 11, 2);
-    $new_date = substr_replace($new_date, date_pad($minute), 14, 2);
-    $new_date = substr_replace($new_date, date_pad($second), 16, 2);
+    $new_date = drupal_substr_replace($date->value, date_pad($hour), 11, 2);
+    $new_date = drupal_substr_replace($new_date, date_pad($minute), 14, 2);
+    $new_date = drupal_substr_replace($new_date, date_pad($second), 16, 2);
     $date = date_create($new_date, $date->timezone);
     return $date;
   }
@@ -394,7 +394,7 @@ if (!function_exists('date_modify')) {
  */
   function date_modify(&$date, $change) {
     $cdate = $date->value;
-    $time = substr($date->value, 11, 8);
+    $time = drupal_substr($date->value, 11, 8);
 
     // We have to use strings like 'First Sunday' instead of
     // +1 Sunday to overcome a PHP5 bug (see #369020).
@@ -405,13 +405,13 @@ if (!function_exists('date_modify')) {
 
     $change = trim($change);
     //Date is too old for strtotime(), or looking for custom +/- values, use date_calc instead.
-    if (substr($change, 0, 1) != '+' && substr($change, 0, 1) != '-'
+    if (drupal_substr($change, 0, 1) != '+' && drupal_substr($change, 0, 1) != '-'
     && 1971 < date_part_extract($cdate, 'year')
     && date_part_extract($cdate, 'year') < 2038) {
       $cdate = strtotime($change, strtotime($cdate .' UTC'));
       // strtotime will sometimes end up with a bogus adjustment for daylight
       // savings time, so compute the date and force them time back to the original.
-      $date->value = substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
+      $date->value = drupal_substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
     }
     else {
       $days = date_week_days_untranslated();
@@ -423,8 +423,8 @@ if (!function_exists('date_modify')) {
       if (empty($results) || empty($item)) {
         return;
       }
-      if (substr($item, -1) == 's') {
-        $item = substr($item, 0, strlen($item) - 1);
+      if (drupal_substr($item, -1) == 's') {
+        $item = drupal_substr($item, 0, strlen($item) - 1);
       }
       // Process +/- Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
       if (in_array($item, $days)) {
@@ -563,13 +563,13 @@ if (!function_exists('timezone_abbreviations_list')) {
  *
  * Expanded array looks like:
  * array(
- *   'cdt' => array (
- *     0 => array (
+ *   'cdt' => array(
+ *     0 => array(
  *      'dst' => true,
  *      'offset' => -18000,
  *      'timezone_id' => 'America/Chicago',
  *     ),
- *     1 => array (
+ *     1 => array(
  *      'dst' => true,
  *      'offset' => -14400,
  *      'timezone_id' => 'America/Havana',
@@ -981,7 +981,7 @@ function date_get_gmt_diff_ts($timestamp, $timezone = NULL) {
   elseif (empty($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  $date = new StdClass();
+  $date = new stdClass();
   $date->timestamp = $timestamp;
   $date->timezone = $timezone;
   return date_offset_get($date);

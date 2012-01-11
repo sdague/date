@@ -89,7 +89,7 @@
 function date_ical_import($filename) {
   // Fetch the iCal data. If file is a URL, use drupal_http_request. fopen
   // isn't always configured to allow network connections.
-  if (substr($filename, 0, 4) == 'http') {
+  if (drupal_substr($filename, 0, 4) == 'http') {
     // Fetch the ical data from the specified network location
     $icaldatafetch = drupal_http_request($filename);
     // Check the return result
@@ -240,7 +240,7 @@ function date_ical_parse($icaldatafolded = array()) {
       // Split up the line into nice pieces for PROPERTYNAME,
       // PROPERTYATTRIBUTES, and PROPERTYVALUE
       preg_match('/([^;:]+)(?:;([^:]*))?:(.+)/', $line, $matches);
-      $name = !empty($matches[1]) ? strtoupper(trim($matches[1])) : '';
+      $name = !empty($matches[1]) ? drupal_strtoupper(trim($matches[1])) : '';
       $field = !empty($matches[2]) ? $matches[2] : '';
       $data = !empty($matches[3]) ? $matches[3] : '';
       $parse_result = '';
@@ -375,23 +375,23 @@ function date_ical_parse_date($field, $data) {
   if (isset($properties['VALUE'])) {
     switch ($properties['VALUE']) {
       case 'DATE':
-        preg_match (DATE_REGEX_ICAL_DATE, $data, $regs);
+        preg_match(DATE_REGEX_ICAL_DATE, $data, $regs);
         $datetime = date_pad($regs[1]) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]); // Date
         break;
       case 'DATE-TIME':
-        preg_match (DATE_REGEX_ICAL_DATETIME, $data, $regs);
+        preg_match(DATE_REGEX_ICAL_DATETIME, $data, $regs);
         $datetime = date_pad($regs[1]) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]); // Date
         $datetime .= ' '. date_pad($regs[4]) .':'. date_pad($regs[5]) .':'. date_pad($regs[6]); // Time
-        $has_time = true;
+        $has_time = TRUE;
         break;
     }
   }
   // If no format is specified, attempt a loose match
   else {
-    preg_match (DATE_REGEX_LOOSE, $data, $regs);
+    preg_match(DATE_REGEX_LOOSE, $data, $regs);
     $datetime = date_pad($regs[1]) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]); // Date
     if (isset($regs[4])) {
-      $has_time = true;
+      $has_time = TRUE;
         $has_time = TRUE;
         $datetime .= ' ' . (!empty($regs[5]) ? date_pad($regs[5]) : '00') .
          ':' . (!empty($regs[6]) ? date_pad($regs[6]) : '00') .
@@ -421,7 +421,7 @@ function date_ical_parse_date($field, $data) {
   }
 
   $items['datetime'] = $datetime;
-  $items['all_day'] = $has_time ? FALSE : true;
+  $items['all_day'] = $has_time ? FALSE : TRUE;
   $items['tz'] = $tz;
   return $items;
 }
@@ -467,13 +467,13 @@ function date_ical_parse_rrule($field, $data) {
  *   an array of date value arrays.
  */
 function date_ical_parse_exceptions($field, $data) {
-  $data = str_replace($field.':', '', $data);
+  $data = str_replace($field .':', '', $data);
   $items = array('DATA' => $data);
   $ex_dates = explode(',', $data);
   foreach ($ex_dates as $ex_date) {
     $items[] = date_ical_parse_date('', $ex_date);
   }
- return $items;
+  return $items;
 }
 
 /**
@@ -606,7 +606,7 @@ function date_ical_escape_text($text) {
   // this and see if anything breaks.
   //$text = str_replace('"', '\"', $text);
   //$text = str_replace(":", "\:", $text);
-  $text = preg_replace("/\\\b/","\\\\", $text);
+  $text = preg_replace("/\\\b/", "\\\\", $text);
   $text = str_replace(",", "\,", $text);
   $text = str_replace(";", "\;", $text);
   $text = str_replace("\n", "\\n ", $text);

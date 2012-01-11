@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Date navigation style handler.
+ */
+
+/**
  * Style plugin to create date back/next navigation.
  *
  * The style plugin passes some argument values to the theme, and

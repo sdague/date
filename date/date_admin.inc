@@ -475,12 +475,12 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
   module_load_include('inc', 'content', 'includes/content.crud');
   $repeat_widgets = array('date_select_repeat', 'date_text_repeat', 'date_popup_repeat');
 
-  $base_field_values = array (
+  $base_field_values = array(
     'field_name' => '',
     'type_name' => '',
     'multiple' => in_array($widget_type, $repeat_widgets) ? 1 : 0,
     'module' => 'date',
-    'granularity' => array (
+    'granularity' => array(
       'year' => 'year',
       'month' => 'month',
       'day' => 'day',
@@ -494,7 +494,7 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
     'repeat_collapsed' => 0,
     'default_format' => 'medium',
     );
-  $base_widget_values = array (
+  $base_widget_values = array(
     'label' => '',
     'default_value' => 'now',
     'default_value_code' => '',
@@ -503,7 +503,7 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
     'input_format' => date_default_format($widget_type),
     'input_format_custom' => '',
     'increment' => 1,
-    'text_parts' => array (),
+    'text_parts' => array(),
     'year_range' => '-3:+3',
     'label_position' => 'above',
     'weight' => 0,

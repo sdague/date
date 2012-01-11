@@ -1,5 +1,10 @@
 <?php
 /**
+ * @file
+ * Theme functions for Date.
+ */
+
+/**
  *  Preprocessor to construct back and next navigation from the date argument.
  */
 function template_preprocess_date_navigation(&$vars) {
@@ -85,8 +90,8 @@ function template_preprocess_date_navigation(&$vars) {
 
   $link = FALSE;
   // Month navigation titles are used as links in the block view.
-	if (!empty($view->date_info->block) && $view->date_info->granularity == 'month') {
-	  $link = TRUE;
+  if (!empty($view->date_info->block) && $view->date_info->granularity == 'month') {
+    $link = TRUE;
   }
 
   $nav_title = theme('date_nav_title', $view->date_info->granularity, $view, $link);
@@ -114,15 +119,15 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
       $date_arg = $view->date_info->year .'-'. date_pad($view->date_info->month) .'-'. date_pad($view->date_info->day);
       break;
     case 'week':
-    	$format = !empty($format) ? $format : (empty($view->date_info->mini) ? 'F j Y' : 'F j');
+      $format = !empty($format) ? $format : (empty($view->date_info->mini) ? 'F j Y' : 'F j');
       $title = t('Week of @date', array('@date' => date_format_date($view->date_info->min_date, 'custom', $format)));
-    	$date_arg = $view->date_info->year .'-W'. date_pad($view->date_info->week);
-    	break;
+      $date_arg = $view->date_info->year .'-W'. date_pad($view->date_info->week);
+      break;
   }
   if (!empty($view->date_info->mini) || $link) {
-  	// Month navigation titles are used as links in the mini view.
+    // Month navigation titles are used as links in the mini view.
     $attributes = array('title' => t('View full page month'));
-  	$url = date_real_url($view, $granularity, $date_arg, TRUE);
+    $url = date_real_url($view, $granularity, $date_arg, TRUE);
     return l($title, $url, array('attributes' => $attributes));
   }
   else {

@@ -323,12 +323,12 @@ function date_theme() {
  *
  * @return array that holds the From and To date objects
  *  Each date object looks like:
- *       date [value] => array (
- *         [db] => array (  // the value stored in the database
+ *       date [value] => array(
+ *         [db] => array(  // the value stored in the database
  *           [object] => the datetime object
  *           [datetime] => 2007-02-15 20:00:00
  *         )
- *         [local] => array (  // the local representation of that value
+ *         [local] => array(  // the local representation of that value
  *           [object] => the datetime object
  *           [datetime] => 2007-02-15 14:00:00
  *           [timezone] => US/Central
@@ -665,11 +665,11 @@ function date_handler_fields($view) {
     if ($field->definition['handler'] == 'date_handler_field_multiple') {
       $name = $field->field;
       $group = $field->options['multiple'];
-      if (substr($name, -7) == '_value2') {
-        $field_name = substr($name, 0, strlen($name) - 7);
+      if (drupal_substr($name, -7) == '_value2') {
+        $field_name = drupal_substr($name, 0, strlen($name) - 7);
       }
-      elseif (substr($name, -6) == '_value') {
-        $field_name = substr($name, 0, strlen($name) - 6);
+      elseif (drupal_substr($name, -6) == '_value') {
+        $field_name = drupal_substr($name, 0, strlen($name) - 6);
       }
       else {
         $field_name = '';
@@ -809,7 +809,7 @@ function date_content_display_form(&$form, &$form_state) {
     }
   }
   foreach ($form as $field_name => $element) {
-    if (substr($field_name, 0, 6) == 'field_') {
+    if (drupal_substr($field_name, 0, 6) == 'field_') {
       if (array_key_exists($field_name, $date_fields)) {
         $field = $date_fields[$field_name];
         foreach ($element as $context => $value) {

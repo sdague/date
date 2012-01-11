@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Date Wizard code.
+ */
 
 function date_tools_wizard_form() {
 
@@ -311,7 +315,7 @@ function date_tools_wizard_create_content_type($name, $type_name, $description, 
   date_tools_wizard_include();
 
   // Create the content type.
-  $values  = array (
+  $values  = array(
     'name' => $name,
     'type' => $type_name,
     'description' => $description,
@@ -320,7 +324,7 @@ function date_tools_wizard_create_content_type($name, $type_name, $description, 
     'min_word_count' => '0',
     'help' => '',
     'node_options' =>
-    array (
+    array(
       'status' => 1,
       'promote' => 1,
       'sticky' => 0,
@@ -384,7 +388,7 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
     'default_format' => 'long',
 
     // Set the date granularity.
-    'granularity' => array (
+    'granularity' => array(
       'year' => 'year',
       'month' => 'month',
       'day' => 'day',
@@ -395,7 +399,7 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
     // Shall this date include a 'To date'?, can be blank, 'optional', or 'required'
     'todate' => 'optional',
 
-   );
+  );
 
    // Widget overrides:
    $widget_overrides = array(
@@ -418,7 +422,7 @@ function date_tools_wizard_create_date_field($field_type, $widget_type, $tz_hand
 
     // Optional array of date parts that should be textfields in select widgets,
     // can be any combination of year, month, day, hour, minute, second.
-    'text_parts' => array (),
+    'text_parts' => array(),
 
     // The number of years to go back and forward in drop-down year selectors.
     'year_range' => '0:+1',
