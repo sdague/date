@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Make sure the value passed to set the starting nid for converting events is an integer.
 - Explicitly turn 'date_popup_timepicker' to 'none' in tests to avoid Date Popup test failures.
 - Issue #1300274, Backport all the fixes for date_repeat_build_dates() from D7 so additions will work righ in PHP 5.3.
 - Issue #1130814, Backport all the fixes for Date Repeat Calc from D7 so PHP 5.3 will work right and tests will pass.

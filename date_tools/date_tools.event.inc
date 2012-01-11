@@ -132,6 +132,8 @@ function date_tools_copy_convert_events( $source_type, $target_type, $date_field
 
   $rows = array();
   if ($start_nid) {
+    // We're skipping the placeholders so make sure this is an integer.
+    $start_nid = intval($start_nid);
     $where = " AND n.nid >= $start_nid ";
   }
   if (!$result = db_query_range("SELECT * FROM {event} e INNER JOIN {node} n ON e.nid=n.nid WHERE n.type = '%s' $where ORDER BY n.nid", array($source_type, $start_nid), $start, $limit)) {
