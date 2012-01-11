@@ -16,7 +16,7 @@ class DateAPITestCase extends DrupalWebTestCase {
    */
   public function setUp() {
     // Load the date_api module.
-    parent::setUp('date_api');
+    parent::setUp('date_api', 'date_timezone');
     variable_set('date_api_use_iso8601', FALSE);
     variable_set('date_first_day', 1);
   }

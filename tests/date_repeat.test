@@ -16,7 +16,7 @@ class DateRepeatTestCase extends DrupalWebTestCase {
    */
   function setUp() {
     // Load the date_repeat module.
-    parent::setUp('date_repeat');
+    parent::setUp('date_api', 'date_timezone', 'date_repeat', 'jquery_ui');
   }
 
   public function testDateRepeat() {
