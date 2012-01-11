@@ -22,6 +22,7 @@ class DateTestCase extends DrupalWebTestCase {
 
     variable_set('date_format_long', 'D, m/d/Y - H:i');
     variable_set('date_format_short', 'm/d/Y - H:i');
+    variable_set('date_popup_timepicker', 'none');
   }
 
   function testDate() {  
