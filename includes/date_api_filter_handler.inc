@@ -274,7 +274,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    */
   function date_parts_form($form_state, $prefix, $source, $which, $operator_values) {
     require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
-    switch($prefix) {
+    switch ($prefix) {
       case 'min':
         $name = t('From date');
         break;

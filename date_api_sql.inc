@@ -623,22 +623,22 @@ class date_sql_handler {
    */
   function part_is_valid($value, $type) {
     if ( !preg_match('/^[0-9]*$/', $value) ) {
-      return false;
+      return FALSE;
     }
     $value = intval($value);
-    if ($value <= 0) return false;
+    if ($value <= 0) return FALSE;
     switch ($type) {
       case 'year':
-        if ($value < DATE_MIN_YEAR) return false;
+        if ($value < DATE_MIN_YEAR) return FALSE;
         break;
       case 'month':
-        if ($value < 0 || $value > 12) return false;
+        if ($value < 0 || $value > 12) return FALSE;
         break;
       case 'day':
-        if ($value < 0 || $value > 31) return false;
+        if ($value < 0 || $value > 31) return FALSE;
         break;
       case 'week':
-        if ($value < 0 || $value > 53) return false;
+        if ($value < 0 || $value > 53) return FALSE;
     }
     return true;
   }

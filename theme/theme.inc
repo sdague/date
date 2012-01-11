@@ -58,7 +58,7 @@ function template_preprocess_date_navigation(&$vars) {
   $next_title = '';
 
   // Build next/prev link titles.
-  switch($view->date_info->granularity) {
+  switch ($view->date_info->granularity) {
     case 'year':
       $prev_title = t('Navigate to previous year');
       $next_title = t('Navigate to next year');
@@ -375,7 +375,7 @@ function theme_date_calendar_day($date) {
 
 function theme_date_time_ago($start_date, $end_date, $interval = 2) {
   // If no date is sent, then return nothing
-  if (empty($start_date) || empty($end_date)){
+  if (empty($start_date) || empty($end_date)) {
     return NULL;
   }
 

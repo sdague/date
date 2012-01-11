@@ -267,7 +267,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
 function date_repeat_get_exception_form_ajax($type, $field_name) {
   // Get the cached form.
   $form_state = array('storage' => NULL, 'submitted' => FALSE);
-  if( !($form = form_get_cache($_POST['form_build_id'], $form_state)) ) {
+  if (!($form = form_get_cache($_POST['form_build_id'], $form_state))) {
     drupal_json(array('status' => FALSE, 'data' => ''));
     exit();
   }

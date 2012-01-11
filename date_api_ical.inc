@@ -95,7 +95,7 @@ function date_ical_import($filename) {
     // Check the return result
     if ($icaldatafetch->error) {
       watchdog('date ical', 'HTTP Request Error importing %filename: @error', array('%filename' => $filename, '@error' => $icaldatafetch->error));
-      return false;
+      return FALSE;
     }
     // Break the return result into one array entry per lines
     $icaldatafolded = explode("\n", $icaldatafetch->data);
@@ -104,13 +104,13 @@ function date_ical_import($filename) {
     $icaldatafolded = @file($filename, FILE_IGNORE_NEW_LINES);
     if ($icaldatafolded === FALSE) {
       watchdog('date ical', 'Failed to open file: %filename', array('%filename' => $filename));
-      return false;
+      return FALSE;
     }
   }
   // Verify this is iCal data
   if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
     watchdog('date ical', 'Invalid calendar file: %filename', array('%filename' => $filename));
-    return false;
+    return FALSE;
   }
   return date_ical_parse($icaldatafolded);
 }
@@ -131,7 +131,7 @@ function date_ical_parse($icaldatafolded = array()) {
   // Verify this is iCal data
   if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
     watchdog('date ical', 'Invalid calendar file.');
-    return false;
+    return FALSE;
   }
 
   // "unfold" wrapped lines
@@ -164,12 +164,12 @@ function date_ical_parse($icaldatafolded = array()) {
         array_push($parents, $type);
         array_push($subgroups, array());
       }
-      else if ($closure == 'END') {
+      elseif ($closure == 'END') {
         end($subgroups);
         $subgroup =& $subgroups[key($subgroups)];
         switch ($type) {
           case 'VCALENDAR':
-            if (prev($subgroups) == false) {
+            if (prev($subgroups) == FALSE) {
               $items[] = array_pop($subgroups);
             }
             else {
@@ -359,7 +359,7 @@ function date_ical_parse_date($field, $data) {
   $field_parts = preg_split('/[;:]/', $field);
   $properties = array();
   foreach ($field_parts as $part) {
-    if (strpos($part, '=') !== false) {
+    if (strpos($part, '=') !== FALSE) {
       $tmp = explode('=', $part);
       $properties[$tmp[0]] = $tmp[1];
     }
@@ -369,7 +369,7 @@ function date_ical_parse_date($field, $data) {
   $data = trim($data);
 
   // Record if a time has been found
-  $has_time = false;
+  $has_time = FALSE;
 
   // If a format is specified, parse it according to that format
   if (isset($properties['VALUE'])) {
@@ -412,7 +412,7 @@ function date_ical_parse_date($field, $data) {
     }
   }
   // If declared as UTC with terminating 'Z', use that timezone
-  else if (strpos($data, 'Z') !== false) {
+  elseif (strpos($data, 'Z') !== FALSE) {
     $tz = 'UTC';
   }
   // Otherwise this date is floating...
@@ -421,7 +421,7 @@ function date_ical_parse_date($field, $data) {
   }
 
   $items['datetime'] = $datetime;
-  $items['all_day'] = $has_time ? false : true;
+  $items['all_day'] = $has_time ? FALSE : true;
   $items['tz'] = $tz;
   return $items;
 }

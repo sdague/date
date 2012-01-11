@@ -321,7 +321,7 @@ function date_combo_process($element, $edit, &$form_state, $form) {
     $element[$to_field] = $element[$from_field];
     $element[$to_field]['#title'] = t('To date');
     $element[$to_field]['#default_value'] = isset($element['#value'][$to_field]) ? $element['#value'][$to_field] : '';
-    $element[$to_field]['#required'] = false;
+    $element[$to_field]['#required'] = FALSE;
     $element[$to_field]['#weight'] += .1;
     if ($field['widget']['type'] == 'date_select') {
       $description .= ' '. t("Empty 'To date' values will use the 'From date' values.");

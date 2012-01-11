@@ -157,7 +157,7 @@ function date_calc_format($day, $month, $year, $format = DATE_CALC_FORMAT) {
 }
 
 /**
- * Returns true for valid date, false for invalid date.
+ * Returns true for valid date, FALSE for invalid date.
  * Renamed this function because we already have a similar function that
  * expects a full date as a parameter.
  *
@@ -172,12 +172,12 @@ function date_calc_format($day, $month, $year, $format = DATE_CALC_FORMAT) {
  */
 function date_calc_is_valid($day, $month, $year) {
   if ($year > variable_get('date_max_year', 4000) || $year < variable_get('date_min_year', 1)) {
-    return false;
+    return FALSE;
   }
   if (!checkdate($month, $day, $year)) {
     // Checkdate won't work on very old dates in PHP 4, need more testing.
     if (!date_gmmktime(0, 0, 0, $month, $day, $year)) {
-      return false;
+      return FALSE;
     }
   }
   return true;
@@ -984,7 +984,7 @@ function date_calc_next_weekday($day = 0, $month = 0, $year = 0, $format = DATE_
  *   The date in the desired format.
  */
 function date_calc_prev_day_of_week($dow, $day = 0, $month = 0, $year = 0,
-  $format = DATE_CALC_FORMAT, $on_or_before = false) {
+  $format = DATE_CALC_FORMAT, $on_or_before = FALSE) {
   if (empty($year)) {
     $year = date_calc_get_year();
   }
@@ -1030,7 +1030,7 @@ function date_calc_prev_day_of_week($dow, $day = 0, $month = 0, $year = 0,
  * @return string  the date in the desired format
  */
 function date_calc_next_day_of_week($dow, $day = 0, $month = 0, $year = 0,
-  $format = DATE_CALC_FORMAT, $on_or_after = false) {
+  $format = DATE_CALC_FORMAT, $on_or_after = FALSE) {
   if (empty($year)) {
     $year = date_calc_get_year();
   }
@@ -1402,7 +1402,7 @@ function date_calc_is_future_date($day, $month, $year) {
       }
     }
   }
-  return false;
+  return FALSE;
 }
 
 /**
@@ -1434,7 +1434,7 @@ function date_calc_is_past_date($day, $month, $year) {
       }
     }
   }
-  return false;
+  return FALSE;
 }
 
 /**

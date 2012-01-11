@@ -691,7 +691,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
           $dstend = strtotime("-1 sunday GMT", strtotime("12 october $year GMT"))+ 7200;
           break;
         default:
-          return false;
+          return FALSE;
       }
       break;
     case 6: // Lebanon, Kirgizstan
@@ -868,14 +868,14 @@ require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc')
  * @param $timezone name
  *   Use 'UTC' to avoid timezone conversion.
  */
-function date_getdate($timestamp = false, $timezone = false) {
+function date_getdate($timestamp = FALSE, $timezone = FALSE) {
   return _date_getdate($timestamp, $timezone);
 }
 
 /**
  * Like date_getdate with no GMT conversion.
  */
-function date_gmgetdate($timestamp = false) {
+function date_gmgetdate($timestamp = FALSE) {
   if (!$timestamp) return array();
   $array    = date_getdate($timestamp, 'UTC');
   $array[0] = $timestamp;
@@ -892,12 +892,12 @@ function date_gmgetdate($timestamp = false) {
  * @param $timezone name
  *   Use 'UTC' to avoid timezone conversion.
  */
-function date_date($format, $timestamp = false, $timezone = false) {
+function date_date($format, $timestamp = FALSE, $timezone = FALSE) {
   // date($format) will adjust to the server timezone, which may
   // not be right, but we don't use it in this module anywhere and
   // there is no easy way to get it working right without creating
   // circular code.
-  if ($timestamp === false) return ($is_gmt)? @gmdate($format): @date($format);
+  if ($timestamp === FALSE) return ($is_gmt)? @gmdate($format): @date($format);
   if ($timezone === FALSE) {
     $timezone = date_default_timezone_name();
   }
@@ -919,7 +919,7 @@ function date_date($format, $timestamp = false, $timezone = false) {
 /**
  * Like date_date with no GMT conversion.
  */
-function date_gmdate($format, $timestamp = false, $test = false) {
+function date_gmdate($format, $timestamp = FALSE, $test = FALSE) {
   return date_date($format, $timestamp, 'UTC', $test);
 }
 
@@ -933,7 +933,7 @@ function date_gmdate($format, $timestamp = false, $test = false) {
  * lower level functions to make sure we adjust to the right timezone
  * (native 'date' functions use the server timezone).
  */
-function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false, $timezone = false) {
+function date_mktime($hr, $min, $sec, $mon = FALSE, $day = FALSE, $year = FALSE, $timezone = FALSE) {
   if ($timezone === FALSE) {
     $timezone = date_default_timezone_name();
   }
@@ -941,7 +941,7 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false,
   $hr = intval($hr);
   $min = intval($min);
   $sec = intval($sec);
-  if ($mon === false && $is_gmt) {
+  if ($mon === FALSE && $is_gmt) {
     return @gmmktime($hr, $min, $sec);
   }
   $mon = intval($mon) > 0 ? intval($mon) : date('n');
@@ -965,7 +965,7 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false,
 /**
  * Like date_mktime with no GMT conversion.
 */
-function date_gmmktime($hr, $min, $sec, $mon = false, $day = false, $year = false) {
+function date_gmmktime($hr, $min, $sec, $mon = FALSE, $day = FALSE, $year = FALSE) {
   return date_mktime($hr, $min, $sec, $mon, $day, $year, 'UTC');
 }
 
@@ -1033,7 +1033,7 @@ function date_dow($day, $month, $year) {
       $greg_correction = 0;
   } else
     $greg_correction = 0;
-  if($month > 2)
+  if ($month > 2)
       $month -= 2;
   else {
       $month += 10;
@@ -1049,14 +1049,14 @@ function date_dow($day, $month, $year) {
 }
 
 /**
- * Returns true for a leap year, else false. Works outside normal date range.
+ * Returns true for a leap year, else FALSE. Works outside normal date range.
  *
  * @param int  $year
  * @return boolean
  */
 function date_is_leap_year($year) {
   if ($year < 1000) {
-    return false;
+    return FALSE;
   }
   if ($year < 1582) { // pre Gregorio XIII - 1582
     return ($year % 4 == 0);

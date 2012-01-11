@@ -487,7 +487,7 @@ function date_granularity_sorted($granularity) {
  */
 function date_granularity_array_from_precision($precision) {
   $granularity_array = array('year', 'month', 'day', 'hour', 'minute', 'second');
-  switch(($precision)) {
+  switch (($precision)) {
     case 'year':
       return array_slice($granularity_array, -6);
     case 'month':
@@ -800,12 +800,12 @@ function date_format_date($date, $type = 'medium', $format = '', $langcode = NUL
  */
 function date_format_interval($date, $granularity = 2) {
   // If no date is sent, then return nothing
-  if (empty($date)){
+  if (empty($date)) {
     return NULL;
   }
 
   $interval = time() - date_format($date, 'U');
-  if($interval > 0 ) {
+  if ($interval > 0 ) {
     return t('!time ago', array('!time' => format_interval($interval, $granularity)));
   }
   else {
@@ -1078,8 +1078,8 @@ function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DAT
           $item_diff = 12 - $item1;
           $item_diff += intval(($year_diff - 1) * 12);
           return $item_diff + $item2;
-       }
-       break;
+        }
+        break;
 
       case 'days':
         $format = 'z';
@@ -1095,8 +1095,8 @@ function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DAT
             $item_diff += date_days_in_year($date1);
           }
           return $item_diff + $item2;
-       }
-       break;
+        }
+        break;
 
       case 'weeks':
         $week_diff = date_format($date2, 'W') - date_format($date1, 'W');
@@ -1207,7 +1207,7 @@ function date_week($date) {
     date_modify($last_date, '-7 days');
     $week = date_format($last_date, 'W') + 1;
   }
-  else if ($date_year < intval($parts[0])) {
+  elseif ($date_year < intval($parts[0])) {
     $week = 0;
   }
 
@@ -1347,7 +1347,7 @@ function date_fuzzy_datetime($date) {
   if (empty($date['day'])) {
     $date['day'] = 1;
   }
-  foreach(array('hour', 'minute', 'second') as $part) {
+  foreach (array('hour', 'minute', 'second') as $part) {
     if (empty($date[$part])) {
       $date[$part] = 0;
     }
@@ -1497,7 +1497,7 @@ function date_is_valid($date, $type = DATE_DATETIME, $granularity = array('year'
       return FALSE;
     }
   }
-  elseif(!date_valid_year($year) || !date_valid_month($month) || date_valid_day($day, $month, $year)) {
+  elseif (!date_valid_year($year) || !date_valid_month($month) || date_valid_day($day, $month, $year)) {
     // Unix and datetime are expected to have at least a year, month, and day.
     return FALSE;
   }
@@ -2795,7 +2795,7 @@ function &date_get_nested_elements(&$form, $field_name) {
     if ($key === $field_name) {
       $elements[] = &$form[$key];
     }
-    else if (is_array($form[$key])) {
+    elseif (is_array($form[$key])) {
       $nested_form = &$form[$key];
       if ($sub_elements = &date_get_nested_elements($nested_form, $field_name)) {
         $elements = array_merge($elements, $sub_elements);

@@ -106,7 +106,7 @@ function date_content_is_empty($item, $field) {
   if (empty($item['value'])) {
     return TRUE;
   }
-  elseif($field['todate'] == 'required' && empty($item['value2'])) {
+  elseif ($field['todate'] == 'required' && empty($item['value2'])) {
     return TRUE;
   }
   return FALSE;
