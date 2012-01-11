@@ -6,7 +6,7 @@ $content[type]  = array (
   'body_label' => 'Body',
   'min_word_count' => '0',
   'help' => '',
-  'node_options' => 
+  'node_options' =>
   array (
     'status' => true,
     'promote' => true,
@@ -22,7 +22,7 @@ $content[type]  = array (
   'locked' => '0',
 );
 $content[fields]  = array (
-  0 => 
+  0 =>
   array (
     'label' => 'Date',
     'field_name' => 'field_event_date',
@@ -38,10 +38,10 @@ $content[fields]  = array (
     'input_format_custom' => '',
     'year_range' => '-3:+3',
     'increment' => '15',
-    'advanced' => 
+    'advanced' =>
     array (
       'label_position' => 'above',
-      'text_parts' => 
+      'text_parts' =>
       array (
         'year' => 0,
         'month' => 0,
@@ -52,7 +52,7 @@ $content[fields]  = array (
       ),
     ),
     'label_position' => 'above',
-    'text_parts' => 
+    'text_parts' =>
     array (
     ),
     'description' => '',
@@ -61,7 +61,7 @@ $content[fields]  = array (
     'multiple' => '0',
     'repeat' => 0,
     'todate' => 'optional',
-    'granularity' => 
+    'granularity' =>
     array (
       'year' => 'year',
       'month' => 'month',
@@ -83,57 +83,57 @@ $content[fields]  = array (
     'op' => 'Save field settings',
     'module' => 'date',
     'widget_module' => 'date',
-    'columns' => 
+    'columns' =>
     array (
-      'value' => 
+      'value' =>
       array (
         'type' => 'varchar',
         'length' => 20,
         'not null' => false,
         'sortable' => true,
       ),
-      'value2' => 
+      'value2' =>
       array (
         'type' => 'varchar',
         'length' => 20,
         'not null' => false,
         'sortable' => true,
       ),
-      'timezone' => 
+      'timezone' =>
       array (
         'type' => 'varchar',
         'length' => 50,
         'not null' => false,
         'sortable' => true,
       ),
-      'offset' => 
+      'offset' =>
       array (
         'type' => 'int',
         'not null' => false,
         'sortable' => true,
       ),
-      'offset2' => 
+      'offset2' =>
       array (
         'type' => 'int',
         'not null' => false,
         'sortable' => true,
       ),
     ),
-    'display_settings' => 
+    'display_settings' =>
     array (
-      'label' => 
+      'label' =>
       array (
         'format' => 'above',
       ),
-      'teaser' => 
+      'teaser' =>
       array (
         'format' => 'default',
       ),
-      'full' => 
+      'full' =>
       array (
         'format' => 'default',
       ),
-      4 => 
+      4 =>
       array (
         'format' => 'default',
       ),

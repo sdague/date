@@ -46,7 +46,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $this->definition['allow empty'] = TRUE;
 
     // If no value has been submitted on an exposed filter it is treated as
-    // a submitted value. Send a flag to the date widget processors so they 
+    // a submitted value. Send a flag to the date widget processors so they
     // know to set '#value' instead of '#default_value' in that case.
     $this->force_value = FALSE;
     if (empty($this->options['exposed']) || (isset($this->options['expose']['identifier']) && !isset($_GET[$this->options['expose']['identifier']]))) {
@@ -89,18 +89,18 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
   /**
    * Date selection options.
-   * 
+   *
    * TODO Only select widget is working right now.
    */
   function widget_options() {
     $options = array(
-      'date_select' => t('Select'), 
-      'date_text' => t('Text'), 
+      'date_select' => t('Select'),
+      'date_text' => t('Text'),
       'date_popup' => t('Popup'),
       );
     if (!module_exists('date_popup')) {
       unset($options['date_popup']);
-    }  
+    }
     return $options;
   }
 
@@ -252,7 +252,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       unset($form['value']['value']['#prefix']);
     }
 
-    $form['value']['#theme'] = 'date_views_filter_form';  
+    $form['value']['#theme'] = 'date_views_filter_form';
   }
 
   /**
@@ -333,7 +333,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // This is a date that needs to be constructed from options like 'now'.
     $default_option = $prefix == 'max' ? $options['default_to_date'] : $options['default_date'];
     if (!empty($default_option)) {
-      // For PHP 5.2+, take advantage of any strings that native PHP 
+      // For PHP 5.2+, take advantage of any strings that native PHP
       // date_create() can handle. For older versions use strtotime().
       if (version_compare(PHP_VERSION, '5.2', '<')) {
         $now = strtotime($default_option .' UTC');
@@ -353,16 +353,16 @@ class date_api_filter_handler extends views_handler_filter_numeric {
 
   /**
    * Value validation.
-   * 
+   *
    * TODO add in more validation.
-   * 
+   *
    * We are setting an extra option using a value form
-   * because it makes more sense to set it there. 
+   * because it makes more sense to set it there.
    * That's not the normal method, so we have to manually
    * transfer the selected value back to the option.
    */
   function value_validate(&$form, &$form_state) {
-    if (($form_state['values']['options']['operator'] == 'between' || $form_state['values']['options']['operator'] == 'not between') && 
+    if (($form_state['values']['options']['operator'] == 'between' || $form_state['values']['options']['operator'] == 'not between') &&
     !empty($form_state['values']['options']['value']['default_date']) && empty($form_state['values']['options']['value']['default_to_date'])) {
       form_error($form['value']['default_to_date'], t('Please set a default value for the To date as well as the From date when using default values with the Between or Not between operators.'));
     }
@@ -411,11 +411,11 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   }
 
    // Views treats the form as though it has already been submitted
-  // even when it hasn't, so we when it is really not submitted we 
+  // even when it hasn't, so we when it is really not submitted we
   // have to adjust the values to match what should have been the default.
   // Overriding exposed_submit() will ensure that the $input value
   // used by Views has been adjusted to the right value.
-  function exposed_submit(&$form, &$form_state) { 
+  function exposed_submit(&$form, &$form_state) {
     if ($this->force_value) {
       $default = array();
       foreach (array('value', 'min', 'max') as $prefix) {
@@ -465,7 +465,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
             break;
         }
         if (!empty($sql)) {
-          // Use set_where_group() with the selected date_method 
+          // Use set_where_group() with the selected date_method
           // of 'AND' or 'OR' to combine the field WHERE clauses.
           $this->query->set_where_group($this->options['date_method'], 'date');
           $this->query->add_where('date', $sql);
@@ -517,7 +517,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       switch ($operator) {
         case '>':
         case '>=':
-          $range[1] = date_make_date(date_pad($year_range[1], 4) .'-12-31 23:59:59');  
+          $range[1] = date_make_date(date_pad($year_range[1], 4) .'-12-31 23:59:59');
           if ($operator == '>') {
             date_modify($range[0], '+1 second');
           }
@@ -529,7 +529,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
             date_modify($range[1], '-1 second');
           }
           break;
-      }      
+      }
     }
 
     $min_date = $range[0];

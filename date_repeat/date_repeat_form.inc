@@ -260,12 +260,12 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
 /**
  * Ajax callback to get the exceptions form.  This is needed to
  * implement the "Add another" button for the date repeat exceptions.
- * 
+ *
  * @param $type - 'exceptions' or 'additions'.
  * @param $field_name - The name of the date field.
  */
 function date_repeat_get_exception_form_ajax($type, $field_name) {
-  // Get the cached form.  
+  // Get the cached form.
   $form_state = array('storage' => NULL, 'submitted' => FALSE);
   if( !($form = form_get_cache($_POST['form_build_id'], $form_state)) ) {
     drupal_json(array('status' => FALSE, 'data' => ''));

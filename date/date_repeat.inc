@@ -102,7 +102,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
       if (empty($item[$key])) {
         $item[$key] = '';
       }
-    }    
+    }
     $value = date_repeat_build_dates($rrule, $values, $field, $item);
     form_set_value($element, $value, $form_state);
   }

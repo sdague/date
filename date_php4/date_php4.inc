@@ -141,7 +141,7 @@ if (!function_exists('date_format')) {
               $date_string .= $days[$dow];
             }
             elseif ($c == 'D') {
-              // There is no date_week_days_abbr_untranslated(). 
+              // There is no date_week_days_abbr_untranslated().
               // This rule works for English, untranslated day names.
               $days = date_week_days_abbr();
               $date_string .= substr($days[$dow], 0, 3);
@@ -189,8 +189,8 @@ if (!function_exists('date_format')) {
             $result = date_calc_gregorian_to_ISO(date_part_extract($date->value, 'day'),
               date_part_extract($date->value, 'month'),
               date_part_extract($date->value, 'year'));
-            $result = explode('-', $result);  
-            $date_string .= $result[1];  
+            $result = explode('-', $result);
+            $date_string .= $result[1];
           default:
             if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuwYyZz', $c) !== FALSE) {
               $date_string .= date_date($c, $timestamp, $date->timezone);
@@ -392,7 +392,7 @@ if (!function_exists('date_modify')) {
  *   the date that matches the phrase.
  *
  */
-  function date_modify(&$date, $change) { 
+  function date_modify(&$date, $change) {
     $cdate = $date->value;
     $time = substr($date->value, 11, 8);
 
@@ -403,7 +403,7 @@ if (!function_exists('date_modify')) {
     $replace = array_flip(date_order());
     $change = strtr($change, $replace);
 
-    $change = trim($change);   
+    $change = trim($change);
     //Date is too old for strtotime(), or looking for custom +/- values, use date_calc instead.
     if (substr($change, 0, 1) != '+' && substr($change, 0, 1) != '-'
     && 1971 < date_part_extract($cdate, 'year')
@@ -894,8 +894,8 @@ function date_gmgetdate($timestamp = false) {
  */
 function date_date($format, $timestamp = false, $timezone = false) {
   // date($format) will adjust to the server timezone, which may
-  // not be right, but we don't use it in this module anywhere and 
-  // there is no easy way to get it working right without creating 
+  // not be right, but we don't use it in this module anywhere and
+  // there is no easy way to get it working right without creating
   // circular code.
   if ($timestamp === false) return ($is_gmt)? @gmdate($format): @date($format);
   if ($timezone === FALSE) {
@@ -925,7 +925,7 @@ function date_gmdate($format, $timestamp = false, $test = false) {
 
 /**
  * Return a timestamp given a local time.
- * 
+ *
  * @param $timezone name
  *   Use 'UTC' to avoid timezone conversion.
  *
@@ -950,7 +950,7 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false,
 
   // Don't use native handling for any values that could create negative
   // timestamp, Windows does not support them at all in PHP 4, and
-  // the adodb date library notes that since RedHat 7.3, negative 
+  // the adodb date library notes that since RedHat 7.3, negative
   // timestamps are not supported in glibc either.
   // Step in one year on either side of allowable 1970-2038 window
   // to be sure timezone adjustments and month and day additions
@@ -971,7 +971,7 @@ function date_gmmktime($hr, $min, $sec, $mon = false, $day = false, $year = fals
 
 /**
  * Get local time zone offset from GMT.
- * 
+ *
  * @return timezone offset in seconds
  */
 function date_get_gmt_diff_ts($timestamp, $timezone = NULL) {

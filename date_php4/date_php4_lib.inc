@@ -285,7 +285,7 @@ function _date_date($format, $timestamp = false, $timezone = false) {
       break;
     case 'O':
       $gmt = date_get_gmt_diff_ts($timestamp, $timezone);
-      $dates .= sprintf('%s%04d', ($gmt<0)?'+':'-', abs($gmt)/36); 
+      $dates .= sprintf('%s%04d', ($gmt<0)?'+':'-', abs($gmt)/36);
       break;
     case 'H':
       if ($hour < 10) $dates .= '0'. $hour;

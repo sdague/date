@@ -37,7 +37,7 @@ function date_repeat_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK
   );
-  return $items; 
+  return $items;
 }
 
 function date_repeat_theme() {
@@ -170,11 +170,11 @@ function date_repeat_rrule_description($rrule, $format = 'D M d Y') {
 
   // Make sure there will be an empty description for any unused parts.
   $description = array(
-    '!interval' => '', 
-    '!byday' => '', 
-    '!bymonth' => '', 
+    '!interval' => '',
+    '!byday' => '',
+    '!bymonth' => '',
     '!count' => '',
-    '!until' => '', 
+    '!until' => '',
     '!except' => '',
     '!additional' => '',
     '!week_starts_on' => '',

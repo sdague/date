@@ -4,8 +4,8 @@
  *
  *  @return
  *    array with fieldname, type, and table.
- *  @see 
- *    date_api_date_api_fields() which implements 
+ *  @see
+ *    date_api_date_api_fields() which implements
  *    the hook_date_api_fields() for the core date fields.
  */
 function _date_api_fields($base = 'node') {
@@ -26,7 +26,7 @@ function _date_api_fields($base = 'node') {
     $alias = str_replace('.', '_', $name);
 
     if (!$handler = views_get_handler($table_name, $field_name, 'field')) {
-      continue; 
+      continue;
     }
 
     $handler_name = $handler->definition['handler'];

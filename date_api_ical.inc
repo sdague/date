@@ -210,7 +210,7 @@ function date_ical_parse($icaldatafolded = array()) {
             // is always available even when you are working with only
             // a portion of the VEVENT array, like in Feed API parsers.
             $subgroup['all_day'] = FALSE;
-            if (!empty($subgroup['DTSTART']) && (!empty($subgroup['DTSTART']['all_day']) || 
+            if (!empty($subgroup['DTSTART']) && (!empty($subgroup['DTSTART']['all_day']) ||
             (empty($subgroup['DTEND']) && empty($subgroup['RRULE']) && empty($subgroup['RRULE']['COUNT'])))) {
               // Many programs output DTEND for an all day event as the
               // following day, reset this to the same day for internal use.
@@ -536,13 +536,13 @@ function date_ical_parse_text($field, $data) {
 
 /**
  * Parse location elements.
- * 
+ *
  * Catch situations like the upcoming.org feed that uses
  * LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/104/":111 First Street...
  * or more normal LOCATION;UID=123:111 First Street...
  * Upcoming feed would have been improperly broken on the ':' in http://
  * so we paste the $field and $data back together first.
- * 
+ *
  * Use non-greedy check for ':' in case there are more of them in the address.
  */
 function date_ical_parse_location($field, $data) {
@@ -550,7 +550,7 @@ function date_ical_parse_location($field, $data) {
     $location = array();
     $location['UID'] = $matches[1];
     $location['DESCRIPTION'] = stripslashes($matches[2]);
-    return $location;  
+    return $location;
   }
   else {
     // Remove other escaping

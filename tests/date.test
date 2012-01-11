@@ -25,7 +25,7 @@ class DateTestCase extends DrupalWebTestCase {
     variable_set('date_popup_timepicker', 'none');
   }
 
-  function testDate() {  
+  function testDate() {
     // Creates select list date field stored as a date with default settings.
     $this->createDateField($type = 'date', $widget = 'date_select');
     $edit = array();

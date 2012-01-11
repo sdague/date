@@ -43,13 +43,13 @@ function template_preprocess_date_navigation(&$vars) {
     $vars['next_options'] = $vars['prev_options'] = array();
   }
 
-  // Check whether navigation links would point to 
+  // Check whether navigation links would point to
   // a date outside the allowed range.
   if (!empty($next_date) && !empty($vars['next_url']) && date_format($next_date, 'Y') > $view->date_info->max_allowed_year) {
-    $vars['next_url'] = '';    
+    $vars['next_url'] = '';
   }
   if (!empty($prev_date) && !empty($vars['prev_url']) && date_format($prev_date, 'Y') < $view->date_info->min_allowed_year) {
-    $vars['prev_url'] = '';    
+    $vars['prev_url'] = '';
   }
 
   $vars['prev_options'] += array('attributes' => array());
@@ -70,7 +70,7 @@ function template_preprocess_date_navigation(&$vars) {
     case 'week':
       $prev_title = t('Navigate to previous week');
       $next_title = t('Navigate to next week');
-      break;      
+      break;
     case 'day':
       $prev_title = t('Navigate to previous day');
       $next_title = t('Navigate to next day');
@@ -127,12 +127,12 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
   }
   else {
     return $title;
-  }  
+  }
 }
 
 /**
  *  Preprocessor to construct an ical vcalendar
- * 
+ *
  * @param $events
  *   An array of events where each event is an array keyed on the uid:
  *    'start'
@@ -149,7 +149,7 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
  *      ID of the event for use by calendaring program, usually the url of the node
  *    'url'
  *      URL of event information
- * 
+ *
  *    'alarm'
  *      sub-array of alarm information for the event, including:
  *      - 'action' - the action to take, either 'DISPLAY' or 'EMAIL'
@@ -163,7 +163,7 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
  *
  * @param $calname
  *   Name of the calendar.  Use site name if none is specified.
- * 
+ *
  */
 function template_preprocess_date_vcalendar(&$vars) {
 
@@ -218,7 +218,7 @@ function template_preprocess_date_vcalendar(&$vars) {
     }
   }
 
-  $vars['events'] = $events;  
+  $vars['events'] = $events;
 }
 
 /**
@@ -260,7 +260,7 @@ function theme_date_timezone($element) {
 function theme_date_select($element) {
   $output = '';
   $class = 'container-inline-date';
-  // Add #date_float to allow date parts to float together on the same line. 
+  // Add #date_float to allow date parts to float together on the same line.
   if (empty($element['#date_float'])) {
     $class .= ' date-clear-block';
   }
@@ -282,7 +282,7 @@ function theme_date_select($element) {
 function theme_date_text($element) {
   $output = '';
   $class = 'container-inline-date';
-  // Add #date_float to allow date parts to float together on the same line. 
+  // Add #date_float to allow date parts to float together on the same line.
   if (empty($element['#date_float'])) {
     $class .= ' date-clear-block';
   }
@@ -359,7 +359,7 @@ function theme_date_part_label_timezone($part_type, $element) {
 
 /**
  * Theme for a date block that looks like a mini calendar day.
- * Pass in a date object already set to the right timezone, 
+ * Pass in a date object already set to the right timezone,
  * format as a calendar page date. The calendar styling is created in css.
  */
 function theme_date_calendar_day($date) {
