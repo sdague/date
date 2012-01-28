@@ -863,7 +863,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
   }
 
   // Special handling for partial dates that don't need precision.
-  $max_granularity = array_pop(date_granularity_sorted($granularity));
+  $max_granularity = end(date_granularity_sorted($granularity));
   if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
     if ($type == DATE_UNIX) {
       $date = date_convert($date, $type, DATE_DATETIME);
