@@ -503,7 +503,7 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
     // through this function multiple times. It seems to work
     // reliably if we create a new object each time.
     $datetime = date_format($date_in, DATE_FORMAT_DATETIME);
-    $datetime = drupal_substr_replace($datetime, '01', 8, 2);
+    $datetime = substr_replace($datetime, '01', 8, 2);
     $date = date_make_date($datetime, $timezone);
     if ($direction == '-') {
       // For negative search, start from the end of the month.
@@ -550,7 +550,7 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
     // Reset to the start of the month.
     // See note above.
     $datetime = date_format($date_in, DATE_FORMAT_DATETIME);
-    $datetime = drupal_substr_replace($datetime, '01-01', 5, 5);
+    $datetime = substr_replace($datetime, '01-01', 5, 5);
     $date = date_make_date($datetime, $timezone);
     if ($direction == '-') {
       // For negative search, start from the end of the year.

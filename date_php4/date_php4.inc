@@ -222,9 +222,9 @@ if (!function_exists('date_format')) {
  */
 if (!function_exists('date_date_set')) {
   function date_date_set(&$date, $year, $month, $day) {
-    $new_date = drupal_substr_replace($date->value, date_pad($year, 4), 0, 4);
-    $new_date = drupal_substr_replace($new_date, date_pad($month), 5, 2);
-    $new_date = drupal_substr_replace($new_date, date_pad($day), 8, 2);
+    $new_date = substr_replace($date->value, date_pad($year, 4), 0, 4);
+    $new_date = substr_replace($new_date, date_pad($month), 5, 2);
+    $new_date = substr_replace($new_date, date_pad($day), 8, 2);
     $date = date_create($new_date, $date->timezone);
     return $date;
   }
@@ -247,9 +247,9 @@ if (!function_exists('date_date_set')) {
  */
 if (!function_exists('date_time_set')) {
   function date_time_set(&$date, $hour, $minute, $second) {
-    $new_date = drupal_substr_replace($date->value, date_pad($hour), 11, 2);
-    $new_date = drupal_substr_replace($new_date, date_pad($minute), 14, 2);
-    $new_date = drupal_substr_replace($new_date, date_pad($second), 16, 2);
+    $new_date = substr_replace($date->value, date_pad($hour), 11, 2);
+    $new_date = substr_replace($new_date, date_pad($minute), 14, 2);
+    $new_date = substr_replace($new_date, date_pad($second), 16, 2);
     $date = date_create($new_date, $date->timezone);
     return $date;
   }
@@ -411,7 +411,7 @@ if (!function_exists('date_modify')) {
       $cdate = strtotime($change, strtotime($cdate .' UTC'));
       // strtotime will sometimes end up with a bogus adjustment for daylight
       // savings time, so compute the date and force them time back to the original.
-      $date->value = drupal_substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
+      $date->value = substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
     }
     else {
       $days = date_week_days_untranslated();

@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1407064 by nairb: Fixed undefined function drupal_substr_replace().
 - Issue #1162962 by mikeryan: Fixed E_STRICT notices in date_make_date().
 - Issue #554546 by master-of-magic: Fix Timezone list translation
 - Finally found why tests are failing on d.o. Some of the needed modules aren't getting set up in the test.
