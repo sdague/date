@@ -362,7 +362,7 @@ function date_update_6005() {
   }
   // Clear any caches that may have old formats in them.
   content_clear_type_cache();
-  drupal_set_message(t('Date display formats are now included with the system date and time settings. Please visit <a href="@date-time-page">the Date and time format page</a> to see the new format types.', array('@date-time-page' => base_path() .'admin/settings/date-time/formats')));
+  drupal_set_message(t('Date display formats are now included with the system date and time settings. Please visit <a href="@date-time-page">the Date and time format page</a> to see the new format types.', array('@date-time-page' => url('admin/settings/date-time/formats'))));
   return $ret;
 }
 
@@ -454,3 +454,4 @@ function date_db_integrity($name) {
   content_clear_type_cache();
   return $ret;
 }
+
