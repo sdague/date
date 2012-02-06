@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #232954 by rho_, arlinsandbulte: Fixed text 'Empty 'To date' values will use the 'From date' values' is always visibl under the second row of selectboxes ('date - to').
 - Issue #536832 by aturetta: Fixed Date format types not translated in admin pages.
 - Issue #488078 by emmajane: Fixed Broken link.
 - Issue #1017216 by tim.plunkett, arlinsandbulte: Added custom date format without time shows 'all day'.
