@@ -57,16 +57,27 @@ function date_popup_css_options() {
     return $paths;
   }
   $version = jquery_ui_get_version();
-  $jquery_ui_path = drupal_get_path('module', 'jquery_ui');
+  $jquery_ui_path = jquery_ui_get_path();
   switch ($version) {
     case '1.6':
       $paths[drupal_get_path('module', 'date_popup') .'/themes/datepicker.css'] = t('Date Popup default');
-      $paths[$jquery_ui_path .'/jquery.ui/themes/default/ui.datepicker.css'] = t('jQuery UI default');
+      $paths[$jquery_ui_path .'/themes/default/ui.datepicker.css'] = t('jQuery UI default');
       break;
     default:
       $paths[drupal_get_path('module', 'date_popup') .'/themes/datepicker.1.7.css'] = t('Date Popup default');
-      $paths[$jquery_ui_path .'/jquery.ui/themes/base/ui.datepicker.css'] = t('jQuery UI default');
+      $paths[$jquery_ui_path .'/themes/base/ui.datepicker.css'] = t('jQuery UI default');
       break;
+  }
+  // Populate options array with available themes from jQuery UI.
+  // Each theme must be placed in its own subdirectory of jquery.ui/themes/,
+  // e.g., jquery.ui/themes/cupertino, jquery.ui/themes/ui-lightness, etc.
+  // All themes can be downloaded from
+  // http://jquery-ui.googlecode.com/files/jquery-ui-themes-1.7.zip
+  foreach (scandir($jquery_ui_path .'/themes/') as $dir) {
+    $full_dir_path = $jquery_ui_path .'/themes/'. $dir;
+    if (is_dir($full_dir_path) && $dir != '.' && $dir != '..' && $dir != 'base') {
+      $paths[$full_dir_path .'/ui.datepicker.css'] = t('jQuery UI @theme', array('@theme' => $dir));
+    }
   }
   return $paths;
 }
@@ -81,7 +92,18 @@ function date_popup_init() {
     return;
   }
 
-  drupal_add_css(variable_get('date_popup_css_file', date_popup_css_default()));
+  $date_popup_css_file = variable_get('date_popup_css_file', date_popup_css_default());
+
+  // Force loading base jquery-ui.css when using date_popup default theme,
+  // otherwise the popup calendar will be displayed with no theme at all.
+  if ($date_popup_css_file == date_popup_css_default()) {
+    drupal_add_css(jquery_ui_get_path() .'/themes/base/jquery-ui.css');
+  }
+  // Otherwise, load the CSS file in the corresponding theme directory.
+  else {
+    drupal_add_css(dirname($date_popup_css_file) .'/jquery-ui.css');
+  }
+  drupal_add_css($date_popup_css_file);
 
   if (variable_get('date_popup_timepicker', 'default') == 'default') {
     drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/jquery.timeentry.css');
