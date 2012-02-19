@@ -248,8 +248,7 @@ function date_popup_process($element, $edit, $form_state, $form) {
   $granularity = date_format_order($element['#date_format']);
 
   if (!empty($edit) && is_array($edit) && !empty($edit['date'])) {
-    $input = $edit['date'] . (!empty($edit['time']) ? ' '. $edit['time'] : '');
-    $datetime = date_convert_from_custom($input, $element['#date_format']);
+    $datetime = date_popup_input_value($element);
     $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   elseif (!empty($element['#value'])) {
