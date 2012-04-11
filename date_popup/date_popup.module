@@ -87,8 +87,10 @@ function date_popup_css_options() {
  */
 function date_popup_init() {
   global $user;
-  if (!module_exists('jquery_ui') && $user->uid == 1) {
-    drupal_set_message(t('The Date Popup module now requires the <a href="@link">jQuery UI module</a> as a source for the datepicker. Please install it immediately.', array('@link' => 'http://drupal.org/project/jquery_ui')), 'error');
+  if (!module_exists('jquery_ui')) {
+    if ($user->uid == 1) {
+      drupal_set_message(t('The Date Popup module now requires the <a href="@link">jQuery UI module</a> as a source for the datepicker. Please install it immediately.', array('@link' => 'http://drupal.org/project/jquery_ui')), 'error');
+    }
     return;
   }
 
