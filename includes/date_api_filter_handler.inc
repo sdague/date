@@ -429,11 +429,6 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
   }
 
-  function pre_query() {
-    // Setting the offset to avoid trying to use timezone adjustments for dates that don't need it.
-    $this->offset = in_array($this->date_handler->granularity, array('hour', 'minute', 'sec')) ? NULL : 0;
-  }
-
   /**
    * Custom implementation of query() so we can get the
    * AND and OR methods in the right places.
@@ -593,3 +588,4 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
   }
 }
+

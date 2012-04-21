@@ -298,8 +298,6 @@ class date_api_argument_handler extends views_handler_argument_date {
         unset($this->view->args[$this->position]);
       }
     }
-    // Setting the offset to avoid trying to use timezone adjustments for dates that don't need it.
-    $this->offset = in_array($this->date_handler->granularity, array('hour', 'minute', 'sec')) ? NULL : 0;
   }
 
   /**
