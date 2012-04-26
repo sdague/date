@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Clean up to eliminate PHP notices when running tests on PHP 5.3.
 - Issue #1408216 follow up, Need to be sure that NULL is the default state for the sql functions.
 - Issue #337666, Make sure the UNTIL date for repeating dates is inclusive.
 - Backport the D7 version of date_ical.ical.inc to D6 so we can keep D6 and D7 synched up more easily.
