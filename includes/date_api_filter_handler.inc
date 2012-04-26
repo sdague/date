@@ -365,7 +365,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    * That's not the normal method, so we have to manually
    * transfer the selected value back to the option.
    */
-  function value_validate(&$form, &$form_state) {
+  function value_validate($form, &$form_state) {
     if (($form_state['values']['options']['operator'] == 'between' || $form_state['values']['options']['operator'] == 'not between') &&
     !empty($form_state['values']['options']['value']['default_date']) && empty($form_state['values']['options']['value']['default_to_date'])) {
       form_error($form['value']['default_to_date'], t('Please set a default value for the To date as well as the From date when using default values with the Between or Not between operators.'));

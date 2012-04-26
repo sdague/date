@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1463438 by hyrcan, Fix some 5.3 notices.
 - Issue #1513396 by JoeMcGuire, Fix failing Date Popup test.
 - Clean up to eliminate PHP notices when running tests on PHP 5.3.
 - Issue #1408216 follow up, Need to be sure that NULL is the default state for the sql functions.
