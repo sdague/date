@@ -558,10 +558,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     }
 
     if ($this->date_handler->granularity != 'week') {
-      $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value, $this->offset);
+      $sql = $date_handler->sql_where_format($this->format, $field['fullname'], $operator, $value);
     }
     else {
-      $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value, $this->offset);
+      $sql = $date_handler->sql_where_date('DATE', $field['fullname'], $operator, $value);
     }
     return $sql;
   }

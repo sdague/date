@@ -256,7 +256,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     // Get the SQL format for this granularity, like Y-m,
     // and use that as the grouping value.
     $format = $date_handler->views_formats($this->options['granularity'], 'sql');
-    $this->formula = $date_handler->sql_format($format, $date_handler->sql_field($field['fullname'], $this->offset));
+    $this->formula = $date_handler->sql_format($format, $date_handler->sql_field($field['fullname']));
 
     // Add the computed field.
     $this->base_alias = $this->name_alias = $this->query->add_field(NULL, $this->formula, $field['query_name']);
@@ -380,13 +380,13 @@ class date_api_argument_handler extends views_handler_argument_date {
         $to_field = str_replace($field['table_name'] .'_', $table_alias .'.', $field['fromto'][1]);
 
         if ($this->granularity != 'week') {
-          $from = $date_handler->sql_where_format($format, $from_field, '<=', date_format($max_date, $format), $this->offset);
-          $to   = $date_handler->sql_where_format($format, $to_field, '>=', date_format($min_date, $format), $this->offset);
+          $from = $date_handler->sql_where_format($format, $from_field, '<=', date_format($max_date, $format));
+          $to   = $date_handler->sql_where_format($format, $to_field, '>=', date_format($min_date, $format));
         }
         else {
           $format = DATE_FORMAT_DATETIME;
-          $from = $date_handler->sql_where_date('DATE', $from_field, '<=', date_format($max_date, $format), $this->offset);
-          $to   = $date_handler->sql_where_date('DATE', $to_field, '>=', date_format($min_date, $format), $this->offset);
+          $from = $date_handler->sql_where_date('DATE', $from_field, '<=', date_format($max_date, $format));
+          $to   = $date_handler->sql_where_date('DATE', $to_field, '>=', date_format($min_date, $format));
         }
         $sql = str_replace('***table***', $field['table_name'], "($from AND $to)");
         if ($sql) {
