@@ -1250,6 +1250,12 @@ function date_convert($date, $from_type, $to_type, $tz = 'UTC') {
   switch ($from_type) {
     case DATE_ARRAY:
       if (!is_array($date)) return NULL;
+      // Make sure all parts exist to avoid PHP notices.
+      foreach (array('month', 'day', 'hour', 'minute', 'second') as $part) {
+        if (!isset($date[$part])) {
+          $date[$part] = '';
+        }
+      }
       if (isset($date['ampm'])) {
         if ($date['ampm'] == 'pm' && $date['hour'] < 12) $date['hour'] += 12;
         if ($date['ampm'] == 'am' && $date['hour'] == 12) $date['hour'] -= 12;
