@@ -30,6 +30,10 @@ function date_popup_load() {
   $path = drupal_get_path('module', 'date_popup');
   if (module_exists('jquery_ui')) {
     jquery_ui_add('ui.datepicker');
+    global $language;
+    if ($language->language != 'en') {
+      jquery_ui_add("i18n/ui.datepicker-{$language->language}");
+    }
   }
   if (variable_get('date_popup_timepicker', 'default') == 'default') {
     drupal_add_js($path .'/lib/jquery.timeentry.pack.js');

@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #975320 by mvc, Add translation to jQuery date picker.
 - Issue #1408216, Remove remaining references to ->offset, which is no longer defined, nor needed. The timezone defaults should be properly set by date_views_set_timezone().
 - Issue #1408216 by technicalknockout, artkon, tangent: Fixed Events no longer appearing in calendar (regression introduced in Issue #1017866).
 - Issue #1360672, Fix limit format code to remove leftover non-ascii text as well as leftover ascii text.
