@@ -109,10 +109,9 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
       '#date_label_position' => !empty($element['#date_label_position']) ? $element['#date_label_position'] : 'within',
       ),
     'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
-    'all_day' => array('#type' => 'hidden', '#value' => 1),
-    'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
+    'all_day' => array('#type' => 'hidden', '#value' => isset($merged_values['UNTIL']['all_day']) ? $merged_values['UNTIL']['all_day'] : 1),
+    'granularity' => array('#type' => 'hidden', '#value' => isset($merged_values['UNTIL']['granularity']) ? $merged_values['UNTIL']['granularity'] : serialize(array('year', 'month', 'day'))),
     );
-
   $collapsed = TRUE;
   if (!empty($merged_values['BYDAY']) || !empty($merged_values['BYMONTH'])) {
     $collapsed = FALSE;
@@ -324,7 +323,10 @@ function date_repeat_merge($form_values, $element) {
     $until_element = $element;
     $until_element['#value'] = $form_values['UNTIL']['datetime'];
     $until_element['#date_format'] = date_limit_format($element['#date_format'], array('year', 'month', 'day'));
-    $form_values['UNTIL']['datetime'] = $function($until_element);
+    $form_values['UNTIL']['datetime'] = $function($until_element, 0, 10);
+    $form_values['UNTIL']['datetime'] = substr($form_values['UNTIL']['datetime'], 0, 10);
+    $form_values['UNTIL']['granularity'] = serialize(drupal_map_assoc(array('year', 'month', 'day', 'hour')));
+    $form_values['UNTIL']['all_day'] = TRUE;
   }
   if (array_key_exists('EXDATE', $form_values) && is_array($form_values['EXDATE'])) {
     $function = $element['#date_repeat_widget'] .'_input_value';

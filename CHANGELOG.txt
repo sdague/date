@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #337666, Make sure the UNTIL date for repeating dates is inclusive.
 - Backport the D7 version of date_ical.ical.inc to D6 so we can keep D6 and D7 synched up more easily.
 - Issue #975320 by mvc, Add translation to jQuery date picker.
 - Issue #1408216, Remove remaining references to ->offset, which is no longer defined, nor needed. The timezone defaults should be properly set by date_views_set_timezone().

@@ -712,10 +712,11 @@ function date_api_ical_build_rrule($form_values) {
     // We only collect a date for UNTIL, but we need it to be inclusive, so
     // force it to a full datetime element at the last second of the day.
     if (!is_object($form_values['UNTIL']['datetime'])) {
-      // The following adjustments are in the D7 version but don't work as expected in D6.
-      //$form_values['UNTIL']['datetime'] .= ' 23:59:59';
-      //$form_values['UNTIL']['granularity'] = serialize(drupal_map_assoc(array('year', 'month', 'day', 'hour', 'minute', 'second')));
-      //$form_values['UNTIL']['all_day'] = 0;
+      if (strlen($form_values['UNTIL']['datetime']) < 11) {
+        $form_values['UNTIL']['datetime'] .= ' 23:59:59';
+        $form_values['UNTIL']['granularity'] = serialize(drupal_map_assoc(array('year', 'month', 'day', 'hour', 'minute', 'second')));
+        $form_values['UNTIL']['all_day'] = FALSE;
+      }
       $until = date_ical_date($form_values['UNTIL'], 'UTC');
     }
     else {
