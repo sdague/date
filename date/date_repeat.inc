@@ -170,7 +170,7 @@ function date_repeat_build_dates($rrule = NULL, $rrule_values = NULL, $field, $i
   $exceptions = array();
   foreach ($parsed_exceptions as $exception) {
     if (strlen($exception['datetime']) < 11) {
-      $exception['datetime'] .= ' 23:59:59';
+      $exception['datetime'] .= ' 00:00:00';
     }
     $date = date_ical_date($exception, $timezone);
     $exceptions[] = date_format($date, 'Y-m-d');
@@ -180,7 +180,7 @@ function date_repeat_build_dates($rrule = NULL, $rrule_values = NULL, $field, $i
   $additions = array();
   foreach ($parsed_rdates as $rdate) {
     if (strlen($rdate['datetime']) < 11) {
-      $rdate['datetime'] .= ' 23:59:59';
+      $rdate['datetime'] .= ' 00:00:00';
     }
     $date = date_ical_date($rdate, $timezone);
     $additions[] = date_format($date, 'Y-m-d');
