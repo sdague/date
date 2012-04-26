@@ -428,7 +428,7 @@ class date_sql_handler {
    * @return
    *   SQL for the where clause for this operation.
    */
-  function sql_where_date($type, $field, $operator, $value, $adjustment = 0) {
+  function sql_where_date($type, $field, $operator, $value, $adjustment = NULL) {
     $type = drupal_strtoupper($type);
     if (drupal_strtoupper($value) == 'NOW') {
       $value = $this->sql_field('NOW', $adjustment);
@@ -473,7 +473,7 @@ class date_sql_handler {
    * @return
    *   SQL for the where clause for this operation.
    */
-  function sql_where_extract($part, $field, $operator, $value, $adjustment = 0) {
+  function sql_where_extract($part, $field, $operator, $value, $adjustment = NULL) {
     $field = $this->sql_field($field, $adjustment);
     return $this->sql_extract($part, $field) ." $operator $value";
   }
@@ -493,7 +493,7 @@ class date_sql_handler {
    * @return
    *   SQL for the where clause for this operation.
    */
-  function sql_where_format($format, $field, $operator, $value, $adjustment = 0) {
+  function sql_where_format($format, $field, $operator, $value, $adjustment = NULL) {
     $field = $this->sql_field($field, $adjustment);
     return $this->sql_format($format, $field) ." $operator '$value'";
   }
