@@ -655,6 +655,9 @@ function date_prepare_node($node, $field, $type_name, $context, $options) {
 function date_handler_fields($view) {
   $field_names = array();
   if (empty($view->date_info->date_fields)) {
+    if (empty($view->date_info)) {
+      $view->date_info = new stdClass;
+    }
     $view->date_info->date_fields = array();
   }
   foreach ($view->field as $field) {
