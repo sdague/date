@@ -1,7 +1,8 @@
 Date Module 6.x
 =================
-Version 6.2-dev
-=================
+
+Version 6.2.8
+=============
 
 - Issue #1005968 by jcmarco, dnotes: Added Ajax for date navigation attachment views.
 - Issue #1545254, Use remember in filter only if a value exists.
