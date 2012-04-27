@@ -195,12 +195,24 @@ function template_preprocess_date_vcalendar(&$vars) {
       }
       $date_format = ($row->calendar_all_day == TRUE) ? DATE_FORMAT_ICAL_DATE : DATE_FORMAT_ICAL;
       $events[$uid]['start'] = date_format($event['start'], $date_format);
+
+      // According to RFC 2445 (clarified in RFC 5545) the DTEND value is
+      // non-inclusive.  When it is a DATE rather than a DATETIME, this means
+      // that we should add one day to its value.
+      if ($row->calendar_all_day) {
+        if (empty($event['end'])) {
+          $event['end'] = $event['start'];
+        }
+        date_modify($event['end'], "+1 day");
+      }
+
       if ($event['start'] && $event['end']) {
         $events[$uid]['end'] = date_format($event['end'], $date_format);
       }
       else {
         $events[$uid]['end'] = $events[$uid]['start'];
       }
+
       foreach ($event as $key => $value) {
         if (is_string($value)) {
           $event[trim($key)] = trim($value);
