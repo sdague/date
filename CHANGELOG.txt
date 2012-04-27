@@ -3,6 +3,8 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #606658 by johnmunro and KarenS, Make sure ical import processes multi-day all-day events correctly.
+- Issue #1282538 by benjifisher, crifi, and KarenS, Make sure ical feed for all day events adds 1 day to the end date to comply with the spec.
 - Issue #1463438 by hyrcan, Fix some 5.3 notices.
 - Issue #1513396 by JoeMcGuire, Fix failing Date Popup test.
 - Clean up to eliminate PHP notices when running tests on PHP 5.3.
