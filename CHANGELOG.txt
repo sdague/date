@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1517548 by joachim, Fix incorrect documentation for date_default_timezone_name().
 - Issue #884310 by AlexisWilke, Postgres earlier than 8.3 needs different syntax in date update.
 - Issue #606658 by johnmunro and KarenS, Make sure ical import processes multi-day all-day events correctly.
 - Issue #1282538 by benjifisher, crifi, and KarenS, Make sure ical feed for all day events adds 1 day to the end date to comply with the spec.

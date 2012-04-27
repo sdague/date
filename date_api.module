@@ -919,7 +919,7 @@ function date_default_timezone_name($check_user = TRUE) {
 /**
  * A timezone object for the default timezone.
  *
- * @return a timezone name
+ * @return a timezone object
  *   Identify the default timezone for a user, if available, otherwise the site.
  */
 function date_default_timezone($check_user = TRUE) {
