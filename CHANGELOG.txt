@@ -3,6 +3,7 @@ Date Module 6.x
 Version 6.2-dev
 =================
 
+- Issue #1545254, Use remember in filter only if a value exists.
 - Add a test for force_value to the code that checks the default value for the exposed filter. In some cases the relative value wasn't overriding a fixed value as it should have been doing.
 - Issue #1223956 by mikeytown2 and hyrcan, Fix undefined index in date_handler_fields().
 - Issue #1517548 by joachim, Fix incorrect documentation for date_default_timezone_name().

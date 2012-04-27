@@ -332,7 +332,10 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     // If this is a remembered value, use the value from the SESSION.
     if (!empty($this->options['expose']['remember'])) {
       $display_id = ($this->view->display_handler->is_defaulted('filters')) ? 'default' : $this->view->current_display;
-      return $_SESSION['views'][$this->view->name][$display_id]['date_filter'][$prefix];
+      $value = $_SESSION['views'][$this->view->name][$display_id]['date_filter'][$prefix];
+      if (!empty($value)) {
+        return $value;
+      }
     }
 
     // This is a date that needs to be constructed from options like 'now'.
