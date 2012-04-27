@@ -307,7 +307,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       '#type' => $type,
       '#title' => check_plain($name),
       '#size' => 20,
-      '#default_value' => !empty($this->value[$prefix]) ? $this->value[$prefix] : $default_date,
+      '#default_value' => empty($this->force_value) && !empty($this->value[$prefix]) ? $this->value[$prefix] : $default_date,
       '#date_format' => date_limit_format($format, $granularity),
       '#date_label_position' => 'within',
       '#date_year_range' => $this->options['year_range'],
@@ -319,6 +319,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       );
       $form[$prefix] += $dependency;
     }
+
     return $form;
   }
 
