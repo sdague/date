@@ -501,7 +501,7 @@ function date_api_update_6006() {
   global $db_type;
   $ret = array();
   if ($db_type == 'pgsql' && db_table_exists('date_format_dfid_seq')) {
-    $sql = "ALTER SEQUENCE {date_format}_dfid_seq RENAME TO {date_formats}_dfid_seq";
+    $sql = "ALTER TABLE {date_format}_dfid_seq RENAME TO {date_formats}_dfid_seq";
     $ret[] = update_sql($sql);
   }
   return $ret;
